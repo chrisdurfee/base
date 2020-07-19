@@ -354,7 +354,8 @@ export class Router
 		let href = target.getAttribute('href'); 
 		if(typeof href !== 'undefined')
 		{ 
-			let path = href.replace(this.baseURI, ''); 
+			let baseUri = this.baseURI,
+			path = (baseUri !== '/')? href.replace(baseUri, '') : href; 
 			this.navigate(path);
 
 			evt.preventDefault(); 

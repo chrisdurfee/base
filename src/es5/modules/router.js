@@ -384,7 +384,8 @@
 			var href = target.getAttribute('href'); 
 			if(typeof href !== 'undefined')
 			{ 
-				var path = href.replace(this.baseURI, ''); 
+				var baseUri = this.baseURI,
+				path = (baseUri !== '/')? href.replace(baseUri, '') : href; 
 				this.navigate(path);
 
 				evt.preventDefault(); 
