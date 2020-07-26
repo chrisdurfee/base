@@ -297,7 +297,7 @@ export class DataBinder
 		return false;
 	}
 
-	sBlocked(evt)
+	isBlocked(evt)
 	{
 		if(evt.type !== 'keyup')
 		{
