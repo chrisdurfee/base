@@ -1,154 +1,154 @@
 /* base framework module */
 (function()
 {
-	"use strict"; 
-	
+	"use strict";
+
 	/**
 	 * DataPubSub
-	 * 
-	 * This is a pub sub class to allow subscribers to 
-	 * listen for updates when published by publishers. 
-	 * @class 
+	 *
+	 * This is a pub sub class to allow subscribers to
+	 * listen for updates when published by publishers.
+	 * @class
 	 */
 	var DataPubSub = base.Class.extend(
-	{ 
+	{
 		/**
 		 * @constructor
 		 */
 		constructor: function()
-		{ 
+		{
 			/**
 			 * @member {object} callBacks
 			 * @protected
 			 */
-			this.callBacks = {}; 
-			
+			this.callBacks = {};
+
 			/**
 			 * @member {int} lastToken
 			 * @protected
 			 */
-			this.lastToken = -1; 
-		}, 
+			this.lastToken = -1;
+		},
 
 		/**
-		 * This will get a subscriber array. 
-		 * 
-		 * @param {string} msg 
+		 * This will get a subscriber array.
+		 *
+		 * @param {string} msg
 		 * @return {array}
 		 */
-		get: function(msg) 
-		{ 
+		get: function(msg)
+		{
 			var callBacks = this.callBacks;
 			return (callBacks[msg] || (callBacks[msg] = []));
 		},
 
 		/**
-		 * This will reset pub sub. 
+		 * This will reset pub sub.
 		 */
-		reset: function() 
-		{ 
-			this.callBacks = {}; 
+		reset: function()
+		{
+			this.callBacks = {};
 			this.lastToken = -1;
-		}, 
+		},
 
 		/**
-		 * This will add a subscriber. 
-		 * 
-		 * @param {string} msg 
-		 * @param {function} callBack 
-		 * @return {string} The subscriber token. 
+		 * This will add a subscriber.
+		 *
+		 * @param {string} msg
+		 * @param {function} callBack
+		 * @return {string} The subscriber token.
 		 */
-		on: function(msg, callBack) 
-		{ 
-			var token = (++this.lastToken); 
+		on: function(msg, callBack)
+		{
+			var token = (++this.lastToken);
 			var list = this.get(msg);
 			list.push({
-				token: token, 
+				token: token,
 				callBack: callBack
 			});
-			return token; 
-		}, 
-		
+			return token;
+		},
+
 		/**
-		 * This will remove a subscriber. 
-		 * 
-		 * @param {string} msg 
-		 * @param {string} token 
+		 * This will remove a subscriber.
+		 *
+		 * @param {string} msg
+		 * @param {string} token
 		 */
-		off: function(msg, token) 
-		{ 
+		off: function(msg, token)
+		{
 			var list = this.callBacks[msg] || false;
 			if(list === false)
 			{
-				return false; 
+				return false;
 			}
-			
-			var length = list.length; 
-			for (var i = 0; i < length; i++ ) 
+
+			var length = list.length;
+			for (var i = 0; i < length; i++ )
 			{
-				var item = list[i]; 
+				var item = list[i];
 				if(item.token === token)
 				{
 					list.splice(i, 1);
 					break;
 				}
 			}
-		}, 
-		
+		},
+
 		/**
-		 * This will delete a message. 
-		 * 
-		 * @param {string} msg 
+		 * This will delete a message.
+		 *
+		 * @param {string} msg
 		 */
-		remove: function(msg) 
-		{ 
-			var callBacks = this.callBacks; 
+		remove: function(msg)
+		{
+			var callBacks = this.callBacks;
 			if(callBacks[msg])
-			{ 
-				delete callBacks[msg]; 
+			{
+				delete callBacks[msg];
 			}
-		}, 
-		
+		},
+
 		/**
-		 * This will publish a message. 
-		 * 
-		 * @param {string} msg 
+		 * This will publish a message.
+		 *
+		 * @param {string} msg
 		 * @param {string} value
 		 * @param {object} committer
 		 */
-		publish: function(msg) 
-		{ 
+		publish: function(msg)
+		{
 			var i, length,
-			list = this.callBacks[msg] || false; 
+			list = this.callBacks[msg] || false;
 			if(list === false)
-			{ 
-				return false; 
-			}
-			
-			var args = Array.prototype.slice.call(arguments, 1);
-			
-			length = list.length;
-			for (i = 0; i < length; i++) 
 			{
-				var item = list[i]; 
+				return false;
+			}
+
+			var args = Array.prototype.slice.call(arguments, 1);
+
+			length = list.length;
+			for (i = 0; i < length; i++)
+			{
+				var item = list[i];
 				if(!item)
 				{
-					continue; 
+					continue;
 				}
 				item.callBack.apply(this, args);
 			}
 		}
 	});
-	
-	var pubSub = new DataPubSub(); 
+
+	var pubSub = new DataPubSub();
 	base.extend.DataPubSub = DataPubSub;
-	
+
 	/**
 	 * Source
-	 * 
-	 * This will create a new source to use with 
-	 * a connection. 
-	 * @class 
+	 *
+	 * This will create a new source to use with
+	 * a connection.
+	 * @class
 	 */
 	var Source = base.Class.extend(
 	{
@@ -156,77 +156,77 @@
 		 * @constructor
 		 */
 		constructor: function()
-		{ 
+		{
 			/**
 			 * @member {string} msg
 			 * @protected
 			 */
-			this.msg = null; 
+			this.msg = null;
 
 			/**
 			 * @member {string} token
 			 */
-			this.token = null; 
-		}, 
-		
+			this.token = null;
+		},
+
 		/**
-		 * This will set the token. 
-		 * 
-		 * @param {string} token 
+		 * This will set the token.
+		 *
+		 * @param {string} token
 		 */
 		setToken: function(token)
 		{
-			this.token = token; 
+			this.token = token;
 		}
-	}); 
-	
+	});
+
 	/**
-	 * OneWaySource 
-	 * 
-	 * This will create a one way source to use with 
-	 * a connection. 
+	 * OneWaySource
+	 *
+	 * This will create a one way source to use with
+	 * a connection.
 	 * @class
 	 * @augments Source
 	 */
 	var OneWaySource = Source.extend(
 	{
 		/**
-		 * This will setup the data source. 
-		 * 
-		 * @param {object} data 
+		 * This will setup the data source.
+		 *
+		 * @param {object} data
 		 */
 		constructor: function(data)
-		{ 
-			Source.call(this);  
-			this.data = data; 
-		}, 
-		
+		{
+			Source.call(this);
+			this.data = data;
+		},
+
 		/**
-		 * This will subscribe to a message. 
-		 * 
-		 * @param {string} msg 
-		 * @param {function} callBack 
+		 * This will subscribe to a message.
+		 *
+		 * @param {string} msg
+		 * @param {function} callBack
 		 */
 		subscribe: function(msg, callBack)
 		{
-			this.msg = msg; 
-			this.token = this.data.on(msg, callBack); 
-		}, 
-		
+			this.msg = msg;
+			this.token = this.data.on(msg, callBack);
+		},
+
 		/**
-		 * This will unsubscribe from the message. 
+		 * This will unsubscribe from the message.
 		 */
 		unsubscribe: function()
 		{
-			this.data.off(this.msg, this.token); 
+			this.data.off(this.msg, this.token);
 		}
 	});
-	
+
 	/**
-	 * TwoWaySource 
-	 * 
-	 * This will create a two way source to use with 
-	 * a connection. 
+	 * TwoWaySource
+	 *
+	 * This will create a two way source to use with
+	 * a connection.
 	 * @class
 	 * @augments Source
 	 */
@@ -235,34 +235,34 @@
 		/**
 		 * @member {function} callBack
 		 */
-		callBack: null, 
-		
+		callBack: null,
+
 		/**
 		 * This will subscribe to a message.
-		 * 
-		 * @param {string} msg 
+		 *
+		 * @param {string} msg
 		 */
 		subscribe: function(msg)
 		{
-			this.msg = msg; 
-			var callBack = base.bind(this, this.callBack); 
-			this.token = pubSub.on(msg, callBack); 
-		}, 
-		
+			this.msg = msg;
+			var callBack = base.bind(this, this.callBack);
+			this.token = pubSub.on(msg, callBack);
+		},
+
 		/**
-		 * This will unsubscribe from a message. 
+		 * This will unsubscribe from a message.
 		 */
 		unsubscribe: function()
 		{
-			pubSub.off(this.msg, this.token); 
+			pubSub.off(this.msg, this.token);
 		}
 	});
-	
+
 	/**
-	 * DataSource 
-	 * 
-	 * This will create a data source to use with 
-	 * a connection. 
+	 * DataSource
+	 *
+	 * This will create a data source to use with
+	 * a connection.
 	 * @class
 	 * @augments TwoWaySource
 	 */
@@ -270,54 +270,54 @@
 	{
 		/**
 		 * @constructor
-		 * @param {object} data 
-		 * @param {string} prop 
+		 * @param {object} data
+		 * @param {string} prop
 		 */
 		constructor: function(data, prop)
 		{
-			TwoWaySource.call(this); 
-			this.data = data;  
-			this.prop = prop;   
-		}, 
-		
+			TwoWaySource.call(this);
+			this.data = data;
+			this.prop = prop;
+		},
+
 		/**
-		 * This will set the data value. 
-		 * 
-		 * @param {*} value 
+		 * This will set the data value.
+		 *
+		 * @param {*} value
 		 */
 		set: function(value)
 		{
-			this.data.set(this.prop, value); 
-		}, 
-		
+			this.data.set(this.prop, value);
+		},
+
 		/**
-		 * This will get the data value. 
+		 * This will get the data value.
 		 */
 		get: function()
 		{
 			return this.data.get(this.prop);
-		}, 
-		
+		},
+
 		/**
-		 * The callBack when updated. 
-		 * 
-		 * @param {*} value 
-		 * @param {object} committer 
+		 * The callBack when updated.
+		 *
+		 * @param {*} value
+		 * @param {object} committer
 		 */
-		callBack: function(value, committer) 
+		callBack: function(value, committer)
 		{
-			if(this.data !== committer) 
+			if(this.data !== committer)
 			{
-				this.data.set(this.prop, value, committer); 
+				this.data.set(this.prop, value, committer);
 			}
 		}
-	}); 
-	
+	});
+
 	/**
-	 * ElementSource 
-	 * 
-	 * This will create an element source to use with 
-	 * a connection. 
+	 * ElementSource
+	 *
+	 * This will create an element source to use with
+	 * a connection.
 	 * @class
 	 * @augments TwoWaySource
 	 */
@@ -325,53 +325,53 @@
 	{
 		/**
 		 * @constructor
-		 * @param {object} element 
-		 * @param {string} attr 
-		 * @param {(string|function)} [filter] 
+		 * @param {object} element
+		 * @param {string} attr
+		 * @param {(string|function)} [filter]
 		 */
 		constructor: function(element, attr, filter)
 		{
-			TwoWaySource.call(this);   
-			this.element = element; 
-			this.attr = this.getAttrBind(attr); 
-			
+			TwoWaySource.call(this);
+			this.element = element;
+			this.attr = this.getAttrBind(attr);
+
 			if(typeof filter === 'string')
 			{
-				filter = this.setupFilter(filter);  
+				filter = this.setupFilter(filter);
 			}
-			this.filter = filter; 
-		}, 
-		
+			this.filter = filter;
+		},
+
 		/**
-		 * This will get the bind attribute. 
-		 * 
-		 * @param {string} [customAttr] 
+		 * This will get the bind attribute.
+		 *
+		 * @param {string} [customAttr]
 		 * @return {string}
 		 */
 		getAttrBind: function(customAttr)
 		{
-			/* this will setup the custom attr if the prop 
-			has specified one. */ 
+			/* this will setup the custom attr if the prop
+			has specified one. */
 			if(customAttr)
 			{
-				return customAttr; 
+				return customAttr;
 			}
-			
+
 			var attr = 'textContent';
-			/* if no custom attr has been requested we will get the 
-			default attr of the element */ 
-			var element = this.element; 
-			if(!(element && typeof element === 'object')) 
-			{ 
-				return attr; 
-			}
-			
-			var tagName = element.tagName.toLowerCase();
-			if (tagName === "input" || tagName === "textarea" || tagName === "select") 
+			/* if no custom attr has been requested we will get the
+			default attr of the element */
+			var element = this.element;
+			if(!(element && typeof element === 'object'))
 			{
-				var type = element.type; 
-				if(type) 
-				{ 
+				return attr;
+			}
+
+			var tagName = element.tagName.toLowerCase();
+			if (tagName === "input" || tagName === "textarea" || tagName === "select")
+			{
+				var type = element.type;
+				if(type)
+				{
 					switch(type)
 					{
 						case 'checkbox':
@@ -384,18 +384,18 @@
 							attr = 'value';
 					}
 				}
-				else 
-				{ 
+				else
+				{
 					attr = 'value';
 				}
-			} 
-			return attr; 
-		}, 
-		
+			}
+			return attr;
+		},
+
 		/**
-		 * This will setup a filter callBack. 
-		 * 
-		 * @param {string} filter 
+		 * This will setup a filter callBack.
+		 *
+		 * @param {string} filter
 		 * @return {function}
 		 */
 		setupFilter: function(filter)
@@ -404,38 +404,38 @@
 			return function(value)
 			{
 				return filter.replace(pattern, value);
-			}; 
-		}, 
-		
+			};
+		},
+
 		/**
-		 * This will set a value on an element. 
-		 * 
-		 * @param {*} value 
+		 * This will set a value on an element.
+		 *
+		 * @param {*} value
 		 */
-		set: function(value) 
-		{ 
-			var element = this.element; 
-			if(!element || typeof element !== 'object') 
-			{ 
-				return false; 
+		set: function(value)
+		{
+			var element = this.element;
+			if(!element || typeof element !== 'object')
+			{
+				return false;
 			}
-				
-			/* this will check to apply the option filter before 
-			setting the value */ 
+
+			/* this will check to apply the option filter before
+			setting the value */
 			if(this.filter)
 			{
-				value = this.filter(value); 
-			} 
+				value = this.filter(value);
+			}
 
-			var attr = this.attr, 
-			type = element.type; 
-			if(type) 
-			{ 
+			var attr = this.attr,
+			type = element.type;
+			if(type)
+			{
 				switch(type)
 				{
 					case 'checkbox':
 						value = (value == 1);
-						break; 
+						break;
 					case 'radio':
 						element.checked = (element.value === value);
 						return true;
@@ -444,36 +444,36 @@
 
 			if(attr.substr(4, 1) === '-')
 			{
-				base.setAttr(element, attr, value); 
+				base.setAttr(element, attr, value);
 			}
-			else 
+			else
 			{
-				element[attr] = value; 
-			} 
-		}, 
+				element[attr] = value;
+			}
+		},
 
 		/**
-		 * This will get the value from an element. 
+		 * This will get the value from an element.
 		 */
-		get: function() 
-		{ 
+		get: function()
+		{
 			var element = this.element;
-			if(!element || typeof element !== 'object') 
-			{ 
-				return ''; 
+			if(!element || typeof element !== 'object')
+			{
+				return '';
 			}
-				
-			var attr = this.attr; 
+
+			var attr = this.attr;
 			return (attr.substr(4, 1) === '-')? base.getAttr(element, attr) : element[attr];
-		}, 
-		
+		},
+
 		/**
-		 * The callBack when updated. 
-		 * 
-		 * @param {*} value 
-		 * @param {object} committer 
+		 * The callBack when updated.
+		 *
+		 * @param {*} value
+		 * @param {object} committer
 		 */
-		callBack: function(value, committer) 
+		callBack: function(value, committer)
 		{
 			if(committer !== this.element)
 			{
@@ -481,29 +481,29 @@
 			}
 		}
 	});
-	
+
 	/**
 	 * Connection
-	 * 
-	 * This will create a connection. 
-	 * @class 
+	 *
+	 * This will create a connection.
+	 * @class
 	 */
 	var Connection = base.Class.extend(
 	{
 		/**
-		 * This will be used to unsubscribe. 
+		 * This will be used to unsubscribe.
 		 */
 		unsubscribe: function()
 		{
-			
+
 		}
-	}); 
-	
+	});
+
 	/**
 	 * OneWayConnection
-	 * 
-	 * This will create a one way connection. 
-	 * @class 
+	 *
+	 * This will create a one way connection.
+	 * @class
 	 * @augments Connection
 	 */
 	var OneWayConnection = Connection.extend(
@@ -516,35 +516,35 @@
 			/**
 			 * @member {object} source
 			 */
-			this.source = null; 
-		}, 
-		
+			this.source = null;
+		},
+
 		/**
-		 * This will setup the connection source. 
-		 * 
-		 * @param {object} data 
+		 * This will setup the connection source.
+		 *
+		 * @param {object} data
 		 * @return {object}
 		 */
 		addSource: function(data)
 		{
-			return (this.source = new OneWaySource(data)); 
-		}, 
-		
+			return (this.source = new OneWaySource(data));
+		},
+
 		/**
-		 * This will be used to unsubscribe. 
+		 * This will be used to unsubscribe.
 		 * @override
 		 */
 		unsubscribe: function()
 		{
-			this.source.unsubscribe();  
-			this.source = null; 
+			this.source.unsubscribe();
+			this.source = null;
 		}
 	});
-	
+
 	/**
 	 * TwoWayConnection
-	 * 
-	 * This will setup a two way connection. 
+	 *
+	 * This will setup a two way connection.
 	 * @class
 	 * @augments Connection
 	 */
@@ -555,156 +555,156 @@
 		 */
 		constructor: function()
 		{
-			this.element = null; 
-			this.data = null; 
-		}, 
-		
+			this.element = null;
+			this.data = null;
+		},
+
 		/**
-		 * This will add the element source. 
-		 * 
-		 * @param {object} element 
-		 * @param {string} attr 
-		 * @param {(string|function)} filter 
+		 * This will add the element source.
+		 *
+		 * @param {object} element
+		 * @param {string} attr
+		 * @param {(string|function)} filter
 		 * @return {object}
 		 */
 		addElement: function(element, attr, filter)
 		{
-			return (this.element = new ElementSource(element, attr, filter)); 
-		}, 
-		
+			return (this.element = new ElementSource(element, attr, filter));
+		},
+
 		/**
-		 * This will add the data source. 
-		 * 
-		 * @param {object} data 
-		 * @param {string} prop 
+		 * This will add the data source.
+		 *
+		 * @param {object} data
+		 * @param {string} prop
 		 * @return {object}
 		 */
 		addData: function(data, prop)
 		{
-			return (this.data = new DataSource(data, prop));  
-		}, 
-		
+			return (this.data = new DataSource(data, prop));
+		},
+
 		/**
-		 * This will unsubscribe from a source. 
-		 * 
-		 * @param {object} source 
+		 * This will unsubscribe from a source.
+		 *
+		 * @param {object} source
 		 */
 		unsubscribeSource: function(source)
 		{
 			if(source)
 			{
-				source.unsubscribe(); 
+				source.unsubscribe();
 			}
-		}, 
-		
+		},
+
 		/**
-		 * This will be used to unsubscribe. 
+		 * This will be used to unsubscribe.
 		 * @override
 		 */
 		unsubscribe: function()
 		{
-			this.unsubscribeSource(this.element); 
-			this.unsubscribeSource(this.data); 
-			
-			this.element = null; 
+			this.unsubscribeSource(this.element);
+			this.unsubscribeSource(this.data);
+
+			this.element = null;
 			this.data = null;
 		}
 	});
-	
+
 	/**
 	 * ConnectionTracker
-	 * 
-	 * This will create a new connection tracker to track active 
-	 * connections in the data binder. 
+	 *
+	 * This will create a new connection tracker to track active
+	 * connections in the data binder.
 	 * @class
 	 */
 	var ConnectionTracker = base.Class.extend(
-	{ 
+	{
 		/**
 		 * @constructor
 		 */
-		constructor: function() 
-		{  
+		constructor: function()
+		{
 			/**
 			 * @member {object} connections
 			 */
-			this.connections = {};  
-		},  
-		
+			this.connections = {};
+		},
+
 		/**
-		 * This will add a new connection to be tracked. 
-		 * 
-		 * @param {string} id 
-		 * @param {string} attr 
-		 * @param {object} connection 
+		 * This will add a new connection to be tracked.
+		 *
+		 * @param {string} id
+		 * @param {string} attr
+		 * @param {object} connection
 		 * @return {object}
 		 */
 		add: function(id, attr, connection)
 		{
-			var connections = this.find(id); 
-			return (connections[attr] = connection);  
-		}, 
-		
+			var connections = this.find(id);
+			return (connections[attr] = connection);
+		},
+
 		/**
-		 * This will get a connection. 
-		 * 
-		 * @param {string} id 
-		 * @param {string} attr 
+		 * This will get a connection.
+		 *
+		 * @param {string} id
+		 * @param {string} attr
 		 * @return {(object|bool)}
 		 */
 		get: function(id, attr)
 		{
-			var connections = this.connections[id]; 
+			var connections = this.connections[id];
 			if(connections)
 			{
-				return (connections[attr] || false); 
+				return (connections[attr] || false);
 			}
-			return false; 
-		}, 
-		
+			return false;
+		},
+
 		/**
-		 * This will find a connection. 
-		 * 
-		 * @param {string} id 
+		 * This will find a connection.
+		 *
+		 * @param {string} id
 		 * @return {object}
 		 */
 		find: function(id)
 		{
-			var connections = this.connections; 
+			var connections = this.connections;
 			return (connections[id] || (connections[id] = {}));
 		},
-		
+
 		/**
-		 * This will remove a connection or all connections by id. 
-		 * @param {string} id 
-		 * @param {string} [attr] 
+		 * This will remove a connection or all connections by id.
+		 * @param {string} id
+		 * @param {string} [attr]
 		 */
 		remove: function(id, attr)
 		{
-			var connections = this.connections[id]; 
+			var connections = this.connections[id];
 			if(!connections)
 			{
-				return false; 
+				return false;
 			}
 
-			var connection; 
+			var connection;
 			if(attr)
 			{
-				connection = connections[attr]; 
+				connection = connections[attr];
 				if(connection)
 				{
-					connection.unsubscribe(); 
-					delete connections[attr]; 
+					connection.unsubscribe();
+					delete connections[attr];
 				}
-				
-				/* this will remove the msg from the elements 
-				if no elements are listed under the msg */ 
+
+				/* this will remove the msg from the elements
+				if no elements are listed under the msg */
 				if(base.isEmpty(connections))
 				{
-					delete this.connections[id]; 
+					delete this.connections[id];
 				}
-			} 
-			else 
+			}
+			else
 			{
 				for(var prop in connections)
 				{
@@ -713,11 +713,11 @@
 						connection = connections[prop];
 						if(connection)
 						{
-							connection.unsubscribe(); 
+							connection.unsubscribe();
 						}
-					} 
+					}
 				}
-				
+
 				delete this.connections[id];
 			}
 		}
@@ -725,365 +725,365 @@
 
 	/**
 	 * DataBinder
-	 * 
-	 * This will create a data binder object that can 
-	 * create one way and two way data bindings. 
+	 *
+	 * This will create a data binder object that can
+	 * create one way and two way data bindings.
 	 * @class
 	 */
 	var DataBinder = base.Class.extend(
-	{ 
+	{
 		/**
 		 * @constructor
 		 */
-		constructor: function() 
-		{ 
+		constructor: function()
+		{
 			this.version = "1.0.1";
-			this.attr = 'dataBindId'; 
+			this.attr = 'dataBindId';
 
-			this.connections = new ConnectionTracker(); 
+			this.connections = new ConnectionTracker();
 
-			this.idCount = 0; 
-			this.setup(); 
-		}, 
+			this.idCount = 0;
+			this.setup();
+		},
 
 		/**
-		 * This will setup the events. 
+		 * This will setup the events.
 		 * @protected
 		 */
-		setup: function() 
-		{ 
+		setup: function()
+		{
 			this.setupEvents();
-		}, 
+		},
 
 		/**
-		 * This will bind an element to a data property. 
-		 * 
-		 * @param {object} element 
-		 * @param {object} data 
-		 * @param {string} prop 
-		 * @param {(string|function)} [filter] 
-		 * @return {object} an instance of the databinder. 
+		 * This will bind an element to a data property.
+		 *
+		 * @param {object} element
+		 * @param {object} data
+		 * @param {string} prop
+		 * @param {(string|function)} [filter]
+		 * @return {object} an instance of the databinder.
 		 */
-		bind: function(element, data, prop, filter) 
-		{ 
-			var bindSettings = this.getPropSettings(prop); 
-			prop = bindSettings.prop; 
-			
-			/* this will setup the model bind attr to the 
-			element and assign a bind id attr to support 
-			two way binding */ 
-			var connection = this.setupConnection(element, data, prop, bindSettings.attr, filter);   
+		bind: function(element, data, prop, filter)
+		{
+			var bindSettings = this.getPropSettings(prop);
+			prop = bindSettings.prop;
 
-			/* we want to get the starting value of the 
-			data and set it on our element */ 
-			var connectionElement = connection.element, 
-			value = data.get(prop); 
-			if(typeof value !== 'undefined') 
-			{ 
-				connectionElement.set(value); 
+			/* this will setup the model bind attr to the
+			element and assign a bind id attr to support
+			two way binding */
+			var connection = this.setupConnection(element, data, prop, bindSettings.attr, filter);
+
+			/* we want to get the starting value of the
+			data and set it on our element */
+			var connectionElement = connection.element,
+			value = data.get(prop);
+			if(typeof value !== 'undefined')
+			{
+				connectionElement.set(value);
 			}
-			else 
-			{ 
-				/* this will set the element value 
-				as the prop value */ 
-				value = connectionElement.get(); 
+			else
+			{
+				/* this will set the element value
+				as the prop value */
+				value = connectionElement.get();
 				if(value !== '')
-				{ 
+				{
 					connection.data.set(value);
-				} 
+				}
 			}
-			return this; 
-		}, 
-		
+			return this;
+		},
+
 		/**
-		 * This will bind an element to a data property. 
-		 * 
+		 * This will bind an element to a data property.
+		 *
 		 * @protected
-		 * @param {object} element 
-		 * @param {object} data 
-		 * @param {string} prop 
+		 * @param {object} element
+		 * @param {object} data
+		 * @param {string} prop
 		 * @param {string} customAttr
-		 * @param {(string|function)} [filter] 
-		 * @return {object} The new connection. 
+		 * @param {(string|function)} [filter]
+		 * @return {object} The new connection.
 		 */
 		setupConnection: function(element, data, prop, customAttr, filter)
 		{
 			var id = this.getBindId(element);
 			var connection = new TwoWayConnection();
 
-			// this will create the data source 
-			var dataSource = connection.addData(data, prop); 
+			// this will create the data source
+			var dataSource = connection.addData(data, prop);
 			// this will subscribe the data to the element
-			dataSource.subscribe(id); 
-			
-			/* this will add the data binding 
-			attr to our element so it will subscribe to 
+			dataSource.subscribe(id);
+
+			/* this will add the data binding
+			attr to our element so it will subscribe to
 			the two data changes */
-			var dataId = data.getDataId(), 
-			msg = dataId + ':' + prop; 
-			
-			// this will create the element source 
-			var elementSource = connection.addElement(element, customAttr, filter); 
+			var dataId = data.getDataId(),
+			msg = dataId + ':' + prop;
+
+			// this will create the element source
+			var elementSource = connection.addElement(element, customAttr, filter);
 			// this will subscribe the element to the data
-			elementSource.subscribe(msg); 
-			
+			elementSource.subscribe(msg);
+
 			this.addConnection(id, 'bind', connection);
-			
-			return connection;  
-		}, 
-		
+
+			return connection;
+		},
+
 		/**
-		 * This will add a new connection to the 
-		 * connection tracker. 
-		 * 
-		 * @protected 
-		 * @param {string} id 
-		 * @param {string} attr 
-		 * @param {object} connection 
+		 * This will add a new connection to the
+		 * connection tracker.
+		 *
+		 * @protected
+		 * @param {string} id
+		 * @param {string} attr
+		 * @param {object} connection
 		 */
 		addConnection: function(id, attr, connection)
 		{
 			this.connections.add(id, attr, connection);
-		}, 
-		
+		},
+
 		/**
-		 * This will set the bind id. 
-		 * 
-		 * @param {object} element 
+		 * This will set the bind id.
+		 *
+		 * @param {object} element
 		 */
 		setBindId: function(element)
 		{
-			var id = 'db-' + this.idCount++; 
+			var id = 'db-' + this.idCount++;
 			element[this.attr] = id;
-			return id; 
-		}, 
-		
+			return id;
+		},
+
 		/**
-		 * This will get the bind id. 
-		 * 
-		 * @param {object} element 
+		 * This will get the bind id.
+		 *
+		 * @param {object} element
 		 * @return {string}
 		 */
 		getBindId: function(element)
 		{
-			return element[this.attr] || this.setBindId(element); 
-		}, 
-		
+			return element[this.attr] || this.setBindId(element);
+		},
+
 		/**
-		 * This will parse the prop to get the settings. 
-		 * 
-		 * @param {string} prop 
+		 * This will parse the prop to get the settings.
+		 *
+		 * @param {string} prop
 		 * @return {object}
 		 */
 		getPropSettings: function(prop)
 		{
-			var bindProp = prop, 
-			bindAttr = null; 
-			
-			/* this will setup the custom attr if the prop 
-			has specified one. */ 
+			var bindProp = prop,
+			bindAttr = null;
+
+			/* this will setup the custom attr if the prop
+			has specified one. */
 			if(prop.indexOf(':') !== -1)
 			{
 				var parts = prop.split(':');
-				bindProp = parts[1]; 
-				bindAttr = parts[0]; 
+				bindProp = parts[1];
+				bindAttr = parts[0];
 			}
-			
+
 			return {
-				prop: bindProp, 
+				prop: bindProp,
 				attr: bindAttr
-			}; 
-		}, 
-		
+			};
+		},
+
 		/**
-		 * This will unbind the element. 
-		 * 
-		 * @param {object} element 
-		 * @return {object} an instance of the data binder. 
+		 * This will unbind the element.
+		 *
+		 * @param {object} element
+		 * @return {object} an instance of the data binder.
 		 */
-		unbind: function(element) 
-		{ 
-			var id = element[this.attr]; 
+		unbind: function(element)
+		{
+			var id = element[this.attr];
 			if(id)
 			{
 				this.connections.remove(id);
-			} 
+			}
 			return this;
-		}, 
-		
+		},
+
 		/**
-		 * This will setup a watcher for an element. 
-		 * 
-		 * @param {object} element 
-		 * @param {object} data 
-		 * @param {string} prop 
-		 * @param {function} callBack 
+		 * This will setup a watcher for an element.
+		 *
+		 * @param {object} element
+		 * @param {object} data
+		 * @param {string} prop
+		 * @param {function} callBack
 		 */
 		watch: function(element, data, prop, callBack)
 		{
 			if(!element || typeof element !== 'object')
 			{
-				return false; 
+				return false;
 			}
-			
+
 			var connection = new OneWayConnection();
-			
-			// this will create the one way source 
-			var source = connection.addSource(data); 
+
+			// this will create the one way source
+			var source = connection.addSource(data);
 			source.subscribe(prop, callBack);
-			
+
 			// this will add the new connection to the connection tracker
 			var id = this.getBindId(element);
-			var attr = data.getDataId() + ':' + prop; 
-			this.addConnection(id, attr, connection);  
-			
-			var value = data.get(prop); 
+			var attr = data.getDataId() + ':' + prop;
+			this.addConnection(id, attr, connection);
+
+			var value = data.get(prop);
 			if(typeof value !== 'undefined')
 			{
-				callBack(value); 
+				callBack(value);
 			}
-		}, 
-		
+		},
+
 		/**
-		 * This will remove a watcher from an element. 
-		 * 
-		 * @param {object} element 
-		 * @param {object} data 
-		 * @param {string} prop 
+		 * This will remove a watcher from an element.
+		 *
+		 * @param {object} element
+		 * @param {object} data
+		 * @param {string} prop
 		 */
 		unwatch: function(element, data, prop)
 		{
 			if(!element || typeof element !== 'object')
 			{
-				return false; 
-			} 
-			
-			var id = element[this.attr]; 
+				return false;
+			}
+
+			var id = element[this.attr];
 			if(id)
 			{
 				var attr = data.getDataId() + ':' + prop;
 				this.connections.remove(id, attr);
-			} 
-		}, 
+			}
+		},
 
 		/**
-		 * This will publish to the pub sub. 
-		 * 
-		 * @param {string} msg 
-		 * @param {*} value 
-		 * @param {object} committer 
-		 * @return {object} an instance of the data binder. 
+		 * This will publish to the pub sub.
+		 *
+		 * @param {string} msg
+		 * @param {*} value
+		 * @param {object} committer
+		 * @return {object} an instance of the data binder.
 		 */
 		publish: function(msg, value, committer)
-		{ 
+		{
 			pubSub.publish(msg, value, committer);
 			return this;
-		}, 
-		
+		},
+
 		/**
-		 * This will check if an element is bound. 
-		 * 
+		 * This will check if an element is bound.
+		 *
 		 * @protected
-		 * @param {object} element 
+		 * @param {object} element
 		 * @return {boolean}
 		 */
-		isDataBound: function(element) 
-		{ 
+		isDataBound: function(element)
+		{
 			if(element)
-			{ 
-				var id = element[this.attr]; 
+			{
+				var id = element[this.attr];
 				if(id)
 				{
-					return id; 
+					return id;
 				}
 			}
-			return false; 
-		}, 
-		
+			return false;
+		},
+
 		/**
 		 * @member {array} blockedKeys
 		 * @protected
 		 */
-		blockedKeys: [ 
-			9, //tab 
-			18, //alt 
-			20, //caps lock 
-			37, //arrows 
-			38, 
-			39, 
-			40 
-		], 
+		blockedKeys: [
+			9, //tab
+			18, //alt
+			20, //caps lock
+			37, //arrows
+			38,
+			39,
+			40
+		],
 
 		isBlocked: function(evt)
 		{
 			if(evt.type !== 'keyup')
-			{ 
-				return false; 
+			{
+				return false;
 			}
 
 			return (evt.altKey !== false || base.inArray(this.blockedKeys, evt.keyCode) !== -1);
 		},
-		
+
 		/**
-		 * This is the callBack for the chnage event. 
-		 * 
-		 * @param {object} evt 
+		 * This is the callBack for the chnage event.
+		 *
+		 * @param {object} evt
 		 */
-		bindHandler: function(evt) 
+		bindHandler: function(evt)
 		{
 			if(this.isBlocked(evt))
 			{
-				return true; 
+				return true;
 			}
 
-			var target = evt.target || evt.srcElement; 
-			var id = this.isDataBound(target); 
+			var target = evt.target || evt.srcElement;
+			var id = this.isDataBound(target);
 			if(id)
-			{ 
-				var connection = this.connections.get(id, 'bind'); 
+			{
+				var connection = this.connections.get(id, 'bind');
 				if(connection)
 				{
-					var value = connection.element.get(); 
+					var value = connection.element.get();
 					/* this will publish to the ui and to the
-					model that subscribes to the element */ 
+					model that subscribes to the element */
 					pubSub.publish(id, value, target);
-				} 
+				}
 			}
 			evt.stopPropagation();
-		}, 
+		},
 
-		/* this will setup the on change handler and 
-		add the events. this needs to be setup before adding 
-		the events. */ 
-		changeHandler: null, 
+		/* this will setup the on change handler and
+		add the events. this needs to be setup before adding
+		the events. */
+		changeHandler: null,
 
 		/**
-		 * This wil setup the events. 
+		 * This wil setup the events.
 		 * @protected
 		 */
-		setupEvents: function() 
-		{  
-			this.changeHandler = base.bind(this, this.bindHandler); 
+		setupEvents: function()
+		{
+			this.changeHandler = base.bind(this, this.bindHandler);
 
-			this.addEvents();  
-		}, 
-
-		/**
-		 * This will add the events. 
-		 */ 
-		addEvents: function() 
-		{ 
-			base.on(["change", "keyup"], document, this.changeHandler, false); 
-		}, 
+			this.addEvents();
+		},
 
 		/**
-		 * This will remove the events. 
+		 * This will add the events.
 		 */
-		removeEvents: function() 
-		{ 
+		addEvents: function()
+		{
+			base.on(["change", "keyup"], document, this.changeHandler, false);
+		},
+
+		/**
+		 * This will remove the events.
+		 */
+		removeEvents: function()
+		{
 			base.off(["change", "keyup"], document, this.changeHandler, false);
 		}
-	}); 
-	
-	base.extend.DataBinder = new DataBinder(); 
+	});
+
+	base.extend.DataBinder = new DataBinder();
 })();

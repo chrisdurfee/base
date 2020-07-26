@@ -1,4 +1,4 @@
-export const DataUtils = 
+export const DataUtils =
 {
     /**
      * @param {RexExp} deepDataPattern
@@ -6,24 +6,24 @@ export const DataUtils =
 	deepDataPattern: /(\w+)|(?:\[(\d)\))/g,
 
 	/**
-	 * This will check if a string has deep data. 
-	 * 
-	 * @param {string} str 
+	 * This will check if a string has deep data.
+	 *
+	 * @param {string} str
 	 * @return {bool}
 	 */
 	hasDeepData(str)
 	{
-		return (str.indexOf('.') !== -1 || str.indexOf('[') !== -1); 
-	}, 
+		return (str.indexOf('.') !== -1 || str.indexOf('[') !== -1);
+	},
 
 	/**
 	 * This will get the deep data segments
-	 * @param {string} str 
+	 * @param {string} str
 	 * @return {array}
 	 */
 	getSegments(str)
 	{
-		var pattern = this.deepDataPattern; 
+		var pattern = this.deepDataPattern;
 		return str.match(pattern);
 	}
 };

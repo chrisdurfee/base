@@ -1,70 +1,70 @@
-/* base framework module */ 
-/* 
-	date and time 
-*/ 
-(function() 
+/* base framework module */
+/*
+	date and time
+*/
+(function()
 {
-	"use strict"; 
-	
+	"use strict";
+
 	/**
-	 * This will add date functions to the base framework. 
-	 *  
-	 */ 
-	base.extend.date = {  
-		
+	 * This will add date functions to the base framework.
+	 *
+	 */
+	base.extend.date = {
+
 		/**
 		 * @member {array} monthName
-		 */ 
-		monthNames: ["January","February","March","April","May","June","July","August","September","October","November","December"], 
-		
+		 */
+		monthNames: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+
 		/**
 		 * @member {array} dayNames
-		 */ 
-		dayNames: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], 
-		
+		 */
+		dayNames: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+
 		/**
-		 * This will get the day name. 
-		 * 
-		 * @param {int} [day] 
-		 * @param {boolean} [shortenName=false] 
+		 * This will get the day name.
+		 *
+		 * @param {int} [day]
+		 * @param {boolean} [shortenName=false]
 		 * @return {string}
 		 */
-		getDayName: function(day, shortenName) 
-		{ 
-			day = (typeof day !== 'undefined')? day : new Date().getDate(); 
-			
-			var dayName = false;  
+		getDayName: function(day, shortenName)
+		{
+			day = (typeof day !== 'undefined')? day : new Date().getDate();
+
+			var dayName = false;
 			var days = this.dayNames;
-			if(day < days.length) 
-			{ 
-				/* we want to check to shorten name */ 
-				dayName = (shortenName)? days[day].substring(0, 3) : days[day]; 
+			if(day < days.length)
+			{
+				/* we want to check to shorten name */
+				dayName = (shortenName)? days[day].substring(0, 3) : days[day];
 			}
-			return dayName; 
+			return dayName;
 		},
-		
+
 		/**
-		 * This will convert month to js. 
-		 * 
-		 * @param {int} month 
+		 * This will convert month to js.
+		 *
+		 * @param {int} month
 		 * @return {int}
 		 */
 		convertJsMonth: function(month)
 		{
-			return this.padNumber(month + 1); 
-		}, 
-		
+			return this.padNumber(month + 1);
+		},
+
 		/**
-		 * This will add leading zero to number less than 10. 
-		 * 
-		 * @param {int} number 
+		 * This will add leading zero to number less than 10.
+		 *
+		 * @param {int} number
 		 * @return {string}
 		 */
 		padNumber: function(number)
 		{
-			return (number <= 9)? '0' + number : String(number); 
+			return (number <= 9)? '0' + number : String(number);
 		},
-		
+
 		createDate: function(dateString)
 		{
 			if(typeof dateString !== 'string')
@@ -101,7 +101,7 @@
 			{
 				return '';
 			}
-			
+
 			var date = this.createDate(dateString);
 
 			if(format === 12)
@@ -118,95 +118,95 @@
 				hours = hours - 12;
 			}
 			return (hours + ':' + this.padNumber(date.getMinutes()) + ' ' + meridian);
-		}, 
-		
-		/**
-		 * This will check for leap year. 
-		 * 
-		 * @param {int} year 
-		 * @return {boolean}
-		 */
-		leapYear: function(year) 
-		{ 
-			var leapYear = false; 
-			
-			if((year % 400 === 0) || (year % 100 !== 0 && year % 4 === 0))
-			{ 
-				leapYear = true;
-			} 
-			return leapYear; 
-		}, 
-		
-		/**
-		 * This will get a month name. 
-		 * 
-		 * @param {int} [month] 
-		 * @param {boolean} [shortenName] 
-		 * @return {string}
-		 */
-		getMonthName: function(month, shortenName) 
-		{ 
-			month = (typeof month !== 'undefined')? month : new Date().getMonth(); 
-			
-			var monthName = false; 
-			var months = this.monthNames;
-			if(month < months.length) 
-			{ 
-				/* we want to check to shorten name */ 
-				monthName = (shortenName)? months[month].substring(0, 3) : months[month]; 
-			} 
-			return monthName; 
-		}, 
-		
-		/**
-		 * This will return the month length. 
-		 * 
-		 * @param {int} [month] 
-		 * @param {int} [year] 
-		 * @return {int}
-		 */
-		getMonthLength: function(month, year) 
-		{ 
-			/* we want to check to use params or use 
-			default */ 
-			var date = new Date(); 
-			month = (typeof month !== 'undefined')? month : date.getMonth();
-			year = (typeof year !== 'undefined')? year : date.getFullYear(); 
-			
-			/* we need to get the month lengths for 
-			the year */ 
-			var yearMonthLengths = this.getMonthsLength(year); 
-			
-			/* we can select the month length from 
-			the yearMonthLengths array */ 
-			var monthLength = yearMonthLengths[month]; 
-			return monthLength; 
-		}, 
-		
-		/**
-		 * This will get the length of all the months. 
-		 * 
-		 * @param {int} year 
-		 * @return {array}
-		 */
-		getMonthsLength: function(year) 
-		{ 
-			year = (typeof year !== 'undefined')? year : new Date().getFullYear();
-			
-			/* we needto check if the year is a leap year */ 
-			var isLeapYear = this.leapYear(year); 
-			var days = (isLeapYear === true)? 
-				[31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] 
-			:
-				[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];  
-			
-			return days; 
-		}, 
+		},
 
 		/**
-		 * This will get the milliseconds from a date until now. 
-		 * 
-		 * @param {string} date 
+		 * This will check for leap year.
+		 *
+		 * @param {int} year
+		 * @return {boolean}
+		 */
+		leapYear: function(year)
+		{
+			var leapYear = false;
+
+			if((year % 400 === 0) || (year % 100 !== 0 && year % 4 === 0))
+			{
+				leapYear = true;
+			}
+			return leapYear;
+		},
+
+		/**
+		 * This will get a month name.
+		 *
+		 * @param {int} [month]
+		 * @param {boolean} [shortenName]
+		 * @return {string}
+		 */
+		getMonthName: function(month, shortenName)
+		{
+			month = (typeof month !== 'undefined')? month : new Date().getMonth();
+
+			var monthName = false;
+			var months = this.monthNames;
+			if(month < months.length)
+			{
+				/* we want to check to shorten name */
+				monthName = (shortenName)? months[month].substring(0, 3) : months[month];
+			}
+			return monthName;
+		},
+
+		/**
+		 * This will return the month length.
+		 *
+		 * @param {int} [month]
+		 * @param {int} [year]
+		 * @return {int}
+		 */
+		getMonthLength: function(month, year)
+		{
+			/* we want to check to use params or use
+			default */
+			var date = new Date();
+			month = (typeof month !== 'undefined')? month : date.getMonth();
+			year = (typeof year !== 'undefined')? year : date.getFullYear();
+
+			/* we need to get the month lengths for
+			the year */
+			var yearMonthLengths = this.getMonthsLength(year);
+
+			/* we can select the month length from
+			the yearMonthLengths array */
+			var monthLength = yearMonthLengths[month];
+			return monthLength;
+		},
+
+		/**
+		 * This will get the length of all the months.
+		 *
+		 * @param {int} year
+		 * @return {array}
+		 */
+		getMonthsLength: function(year)
+		{
+			year = (typeof year !== 'undefined')? year : new Date().getFullYear();
+
+			/* we needto check if the year is a leap year */
+			var isLeapYear = this.leapYear(year);
+			var days = (isLeapYear === true)?
+				[31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+			:
+				[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+			return days;
+		},
+
+		/**
+		 * This will get the milliseconds from a date until now.
+		 *
+		 * @param {string} date
 		 * @return {int}
 		 */
 		getDiffFromNow: function(date)
@@ -220,9 +220,9 @@
 		},
 
 		/**
-		 * This will get the age from a date until now. 
-		 * 
-		 * @param {string} date 
+		 * This will get the age from a date until now.
+		 *
+		 * @param {string} date
 		 * @return {(string|int)}
 		 */
 		getAge: function(date)
@@ -235,22 +235,22 @@
 				case milliseconds < 86400000:
 					age = '1 day';
 					break;
-				case milliseconds < 604800000: 
+				case milliseconds < 604800000:
 					var days = this.toDays(milliseconds);
 					age = (days) + ' days';
 					break;
-				case milliseconds < 1209600000: 
+				case milliseconds < 1209600000:
 					age = '1 week';
 					break;
-				case milliseconds < 2592000000: 
+				case milliseconds < 2592000000:
 					var days = this.toDays(milliseconds),
 					weeks = Math.floor(days / 7);
 					age = weeks + ' weeks';
 					break;
-				case milliseconds < 5184000000: 
+				case milliseconds < 5184000000:
 					age = '1 month';
 					break;
-				case milliseconds < 31104000000: 
+				case milliseconds < 31104000000:
 					var months = this.toMonths(milliseconds);
 					age = months + ' months';
 					break;
@@ -263,9 +263,9 @@
 		},
 
 		/**
-		 * This will get the timeframe for a date. 
-		 * 
-		 * @param {string} date 
+		 * This will get the timeframe for a date.
+		 *
+		 * @param {string} date
 		 * @return {string}
 		 */
 		getTimeFrame: function(date)
@@ -276,8 +276,8 @@
 
 		/**
 		 * This will get the timeframe from milliseconds.
-		 * 
-		 * @param {int} milliseconds 
+		 *
+		 * @param {int} milliseconds
 		 * @return {string}
 		 */
 		convertToEstimate: function(milliseconds)
@@ -400,125 +400,125 @@
 
 			return timeFrame;
 		},
-		
-		/**
-		 * This will convert to years. 
-		 * 
-		 * @param {int} milliseconds 
-		 * @return {int}
-		 */
-		toYears: function(milliseconds) 
-		{ 
-			if(typeof milliseconds !== 'number') 
-			{ 
-				return false;
-			} 
-			
-			return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 365.26));
-		}, 
 
 		/**
-		 * This will convert to months. 
-		 * 
-		 * @param {int} milliseconds 
+		 * This will convert to years.
+		 *
+		 * @param {int} milliseconds
 		 * @return {int}
 		 */
-		toMonths: function(milliseconds) 
-		{ 
-			if(typeof milliseconds === 'number') 
-			{ 
-				return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 30)); 
-			} 
-			return false; 
+		toYears: function(milliseconds)
+		{
+			if(typeof milliseconds !== 'number')
+			{
+				return false;
+			}
+
+			return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 365.26));
 		},
-		
+
 		/**
-		 * This will convert to days. 
-		 * 
-		 * @param {int} milliseconds 
+		 * This will convert to months.
+		 *
+		 * @param {int} milliseconds
 		 * @return {int}
 		 */
-		toDays: function(milliseconds) 
-		{ 
-			if(typeof milliseconds !== 'number') 
-			{ 
-				return false;
+		toMonths: function(milliseconds)
+		{
+			if(typeof milliseconds === 'number')
+			{
+				return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 30));
 			}
-			
-			return Math.floor(milliseconds / (60 * 60 * 1000 * 24) * 1);  
-		}, 
-		
-		/**
-		 * This will convert to hours. 
-		 * 
-		 * @param {int} milliseconds 
-		 * @return {int}
-		 */
-		toHours: function(milliseconds) 
-		{ 
-			if(typeof milliseconds !== 'number') 
-			{ 
-				return false;
-			} 
-				
-			return Math.floor((milliseconds % (60 * 60 * 1000 * 24)) / (60 * 60 * 1000) * 1);  
-		}, 
-		
-		/**
-		 * This will convert to minutes. 
-		 * 
-		 * @param {int} milliseconds 
-		 * @return {int}
-		 */
-		toMinutes: function(milliseconds) 
-		{ 
-			if(typeof milliseconds !== 'number') 
-			{ 
-				return false;
-			}
-			
-			return Math.floor(((milliseconds % (60 * 60 * 1000 * 24)) % (60 * 60 * 1000)) / (60 * 1000) * 1);  
-		}, 
-		
-		/**
-		 * This will convert to seconds. 
-		 * 
-		 * @param {int} milliseconds 
-		 * @return {int}
-		 */
-		toSeconds: function(milliseconds) 
-		{ 
-			if(typeof milliseconds !== 'number') 
-			{ 
-				return false;
-			}
-			
-			return Math.floor((((milliseconds % (60 * 60 * 1000 * 24)) % (60 * 60 * 1000)) % (60 * 1000)) / 1000 * 1);  
+			return false;
 		},
-		
+
 		/**
-		 * This will get the difference between two dates. 
-		 * 
-		 * @param {string} startDate 
-		 * @param {string} endDate 
+		 * This will convert to days.
+		 *
+		 * @param {int} milliseconds
+		 * @return {int}
+		 */
+		toDays: function(milliseconds)
+		{
+			if(typeof milliseconds !== 'number')
+			{
+				return false;
+			}
+
+			return Math.floor(milliseconds / (60 * 60 * 1000 * 24) * 1);
+		},
+
+		/**
+		 * This will convert to hours.
+		 *
+		 * @param {int} milliseconds
+		 * @return {int}
+		 */
+		toHours: function(milliseconds)
+		{
+			if(typeof milliseconds !== 'number')
+			{
+				return false;
+			}
+
+			return Math.floor((milliseconds % (60 * 60 * 1000 * 24)) / (60 * 60 * 1000) * 1);
+		},
+
+		/**
+		 * This will convert to minutes.
+		 *
+		 * @param {int} milliseconds
+		 * @return {int}
+		 */
+		toMinutes: function(milliseconds)
+		{
+			if(typeof milliseconds !== 'number')
+			{
+				return false;
+			}
+
+			return Math.floor(((milliseconds % (60 * 60 * 1000 * 24)) % (60 * 60 * 1000)) / (60 * 1000) * 1);
+		},
+
+		/**
+		 * This will convert to seconds.
+		 *
+		 * @param {int} milliseconds
+		 * @return {int}
+		 */
+		toSeconds: function(milliseconds)
+		{
+			if(typeof milliseconds !== 'number')
+			{
+				return false;
+			}
+
+			return Math.floor((((milliseconds % (60 * 60 * 1000 * 24)) % (60 * 60 * 1000)) % (60 * 1000)) / 1000 * 1);
+		},
+
+		/**
+		 * This will get the difference between two dates.
+		 *
+		 * @param {string} startDate
+		 * @param {string} endDate
 		 * @return {object}
 		 */
-		getDifference: function(startDate, endDate) 
-		{ 
-			/* we want to convert the dates to objects */ 
-			var start = new Date(startDate), 
-			end = new Date(endDate); 
-			
-			/* we want to subtract the start time from the end */ 
-			var difference = (end.getTime() - start.getTime()); 
-			
-			return { 
-				years:  this.toYears(difference),  
-				days:  this.toDays(difference), 
-				hours:  this.toHours(difference), 
-				minutes:  this.toMinutes(difference), 
-				seconds:  this.toSeconds(difference) 
-			};  
+		getDifference: function(startDate, endDate)
+		{
+			/* we want to convert the dates to objects */
+			var start = new Date(startDate),
+			end = new Date(endDate);
+
+			/* we want to subtract the start time from the end */
+			var difference = (end.getTime() - start.getTime());
+
+			return {
+				years:  this.toYears(difference),
+				days:  this.toDays(difference),
+				hours:  this.toHours(difference),
+				minutes:  this.toMinutes(difference),
+				seconds:  this.toSeconds(difference)
+			};
 		}
-	}; 
+	};
 })();

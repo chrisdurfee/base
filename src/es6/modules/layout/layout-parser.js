@@ -1,49 +1,52 @@
 /**
  * LayoutParser
- * 
- * This will parse JSON layouts. 
+ *
+ * This will parse JSON layouts.
  * @class
  */
 export class LayoutParser
 {
+	constructor()
+	{
+		/**
+		 * @member {array} _reserved
+		 * @protected
+		 */
+		this._reserved = [
+			'tag',
+			'bind',
+			'onCreated',
+			'route',
+			'switch',
+			'onSet',
+			'onState',
+			'watch',
+			'cache'
+		];
+	}
+
 	/**
-	 * @member {array} _reserved
-	 * @protected
-	 */
-	_reserved = [
-		'tag', 
-		'bind',
-		'onCreated', 
-		'route', 
-		'switch', 
-		'onSet', 
-		'onState', 
-		'watch', 
-		'cache'
-	]; 
-	
-	/**
-	 * This will get the tag name of an element. 
-	 * 
-	 * @param {object} obj 
+	 * This will get the tag name of an element.
+	 *
+	 * @param {object} obj
 	 * @return {string}
 	 */
 	getElementTag(obj)
 	{
 		let type = 'div',
-		node = obj.tag || obj.t; 
+		node = obj.tag || obj.t;
 		if (typeof node !== 'undefined')
 		{
 			type = obj.tag = node;
 		}
 
 		return type;
-	} 
+	}
 
 	/**
-	 * This will parse a layout element. 
-	 * 
-	 * @param {object} obj 
+	 * This will parse a layout element.
+	 *
+	 * @param {object} obj
 	 * @return {object}
 	 */
 	parseElement(obj)
@@ -51,18 +54,18 @@ export class LayoutParser
 		let attr = {},
 		children = [];
 
-		let tag = this.getElementTag(obj); 
-		if(tag === 'button') 
-		{ 
-			attr.type = attr.type || 'button'; 
+		let tag = this.getElementTag(obj);
+		if(tag === 'button')
+		{
+			attr.type = attr.type || 'button';
 		}
-		
+
 		if(typeof obj.children === 'undefined')
 		{
-			obj.children = null; 
+			obj.children = null;
 		}
-		
-		const reserved = this._reserved; 
+
+		const reserved = this._reserved;
 
 		for (var key in obj)
 		{
@@ -92,12 +95,12 @@ export class LayoutParser
 					}
 				}
 			}
-		} 
+		}
 
 		return {
 			tag,
 			attr,
 			children
-		}; 
+		};
 	}
 }
