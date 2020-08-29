@@ -1205,7 +1205,7 @@
 			var self = this,
 			settings = {
 				url: this.url,
-				type: method,
+				method: method,
 				params: params,
 				completed: function(response, xhr)
 				{

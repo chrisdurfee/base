@@ -312,8 +312,8 @@ export class ModelService
 	{
 		let settings = {
 			url: this.url,
-			type: method,
-			params: params,
+			method,
+			params,
 			completed: (response, xhr) =>
 			{
 				if(typeof requestCallBack === 'function')

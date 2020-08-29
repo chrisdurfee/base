@@ -6,7 +6,7 @@
  * functions to work in many browsers and versions.
  */
 
- import {Objects} from './objects.js';
+ import {Objects} from './shared/objects.js';
  import {DataTracker} from './data-tracker.js';
 
 const global = window;
