@@ -61,10 +61,12 @@ export class ComponentHelper
 			if(type === 'object')
 			{
 				let comp = this.component = this.template;
+				let persist = (comp.persist !== false);
+
 				comp.route = this.route;
-				comp.persist = true;
+				comp.persist = persist;
 				comp.parent = this.parent;
-				this.persist = true;
+				this.persist = persist;
 			}
 
 			this.hasTemplate = true;
@@ -85,7 +87,7 @@ export class ComponentHelper
 		this.setup = true;
 
 		let comp = this.component;
-		if(!(this.persist && comp))
+		if(!this.persist || !comp)
 		{
 			comp = this.component = new this.template({
 				route: this.route,

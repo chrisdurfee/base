@@ -277,13 +277,54 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	setupRoute(ele, route, parent)
 	{
+		// this will check to resume route
+		if(this.checkResume(route))
+		{
+			this.resumeRoute(ele, route.component.route);
+			return;
+		}
+
 		route.container = ele;
 		route.parent = parent;
 		let newRoute = base.router.add(route);
 
-		base.dataTracker.add(ele, 'routes',
+		this.trackRoute(ele, newRoute);
+	}
+
+	/**
+	 * This will check to resume route.
+	 *
+	 * @param {object} route
+	 */
+	checkResume(route)
+	{
+		return (route && route.component && route.component.route);
+	}
+
+	/**
+	 * This will resume a route.
+	 *
+	 * @param {object} ele
+	 * @param {object} route
+	 */
+	resumeRoute(ele, route)
+	{
+		base.router.resume(route, ele);
+
+		this.trackRoute(ele, route);
+	}
+
+	/**
+	 * This will track a route.
+	 *
+	 * @param {object} ele
+	 * @param {object} route
+	 */
+	trackRoute(ele, route)
+	{
+		base.DataTracker.add(ele, 'routes',
 		{
-			route: newRoute
+			route
 		});
 	}
 
@@ -297,17 +338,42 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	addSwitch(ele, group, parent)
 	{
+		let route = group[0];
+		// this will check to resume switch
+		if(this.checkResume(route))
+		{
+			this.resumeSwitch(ele, group);
+			return;
+		}
+
 		for(var i = 0, length = group.length; i < length; i++)
 		{
-			var route = group[i];
+			route = group[i];
 			route.container = ele;
 			route.parent = parent;
 		}
 
 		let id = base.router.addSwitch(group);
-		base.dataTracker.add(ele, 'switch',
+		this.trackSwitch(ele, id);
+	}
+
+	resumeSwitch(ele, group)
+	{
+		let id = base.router.resumeSwitch(group, ele);
+		this.trackSwitch(ele, id);
+	}
+
+	/**
+	 * This will track a switch.
+	 *
+	 * @param {object} ele
+	 * @param {int} id
+	 */
+	trackSwitch(ele, id)
+	{
+		base.DataTracker.add(ele, 'switch',
 		{
-			id: id
+			id
 		});
 	}
 
@@ -516,7 +582,7 @@ export class LayoutBuilder extends htmlBuilder
 		let component = obj.component || obj;
 		component.parent = parent;
 
-		if(parent && parent.persist === true)
+		if(parent && parent.persist === true && component.persist !== false)
 		{
 			component.persist = true;
 		}

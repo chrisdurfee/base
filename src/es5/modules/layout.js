@@ -587,13 +587,54 @@
 		 */
 		setupRoute: function(ele, route, parent)
 		{
+			// this will check to resume route
+			if(this.checkResume(route))
+			{
+				this.resumeRoute(ele, route.component.route);
+				return;
+			}
+
 			route.container = ele;
 			route.parent = parent;
 			var newRoute = base.router.add(route);
 
+			this.trackRoute(ele, newRoute);
+		},
+
+		/**
+		 * This will check to resume route.
+		 *
+		 * @param {object} route
+		 */
+		checkResume: function(route)
+		{
+			return (route && route.component && route.component.route);
+		},
+
+		/**
+		 * This will resume a route.
+		 *
+		 * @param {object} ele
+		 * @param {object} route
+		 */
+		resumeRoute: function(ele, route)
+		{
+			base.router.resume(route, ele);
+
+			this.trackRoute(ele, route);
+		},
+
+		/**
+		 * This will track a route.
+		 *
+		 * @param {object} ele
+		 * @param {object} route
+		 */
+		trackRoute: function(ele, route)
+		{
 			base.DataTracker.add(ele, 'routes',
 			{
-				route: newRoute
+				route: route
 			});
 		},
 
@@ -607,14 +648,39 @@
 		 */
 		addSwitch: function(ele, group, parent)
 		{
+			var route = group[0];
+			// this will check to resume switch
+			if(this.checkResume(route))
+			{
+				this.resumeSwitch(ele, group);
+				return;
+			}
+
 			for(var i = 0, length = group.length; i < length; i++)
 			{
-				var route = group[i];
+				route = group[i];
 				route.container = ele;
 				route.parent = parent;
 			}
 
 			var id = base.router.addSwitch(group);
+			this.trackSwitch(ele, id);
+		},
+
+		resumeSwitch: function(ele, group)
+		{
+			var id = base.router.resumeSwitch(group, ele);
+			this.trackSwitch(ele, id);
+		},
+
+		/**
+		 * This will track a switch.
+		 *
+		 * @param {object} ele
+		 * @param {int} id
+		 */
+		trackSwitch: function(ele, id)
+		{
 			base.DataTracker.add(ele, 'switch',
 			{
 				id: id
@@ -829,7 +895,7 @@
 			var component = obj.component || obj;
 			component.parent = parent;
 
-			if(parent && parent.persist === true)
+			if(parent && parent.persist === true && component.persist !== false)
 			{
 				component.persist = true;
 			}

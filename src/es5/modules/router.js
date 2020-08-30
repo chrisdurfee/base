@@ -154,9 +154,26 @@
 			}
 
 			var route = this.createRoute(settings);
+			this.addRoute(route);
+			return route;
+		},
+
+		addRoute: function(route)
+		{
 			this.routes.push(route);
 			this.checkRoute(route, this.location.pathname);
-			return route;
+		},
+
+		/**
+		 * This will resume a route.
+		 *
+		 * @param {object} route
+		 * @param {object} container
+		 */
+		resume: function(route, container)
+		{
+			route.resume(container);
+			this.addRoute(route);
 		},
 
 		/**
@@ -263,9 +280,8 @@
 		 */
 		addSwitch: function(group)
 		{
-			var switches = this.switches;
 			var id = this.switchCount++;
-			var switchArray = switches[id] = [];
+			var switchArray = this.getSwitchGroup(id);
 
 			for(var i = 0, length = group.length; i < length; i++)
 			{
@@ -275,6 +291,34 @@
 
 			this.checkGroup(switchArray, this.location.pathname);
 			return id;
+		},
+
+		/**
+		 * This will resume a switch.
+		 *
+		 * @param {object} group
+		 * @param {object} container
+		 * @return {int} the switch id.
+		 */
+		resumeSwitch: function(group, container)
+		{
+			var id = this.switchCount++;
+			var switchArray = this.getSwitchGroup(id);
+
+			for(var i = 0, length = group.length; i < length; i++)
+			{
+				var route = group[i].component.route;
+				route.resume(container);
+				switchArray.push(route);
+			}
+
+			this.checkGroup(switchArray, this.location.pathname);
+			return id;
+		},
+
+		getSwitchGroup: function(id)
+		{
+			return (this.switches[id] = []);
 		},
 
 		/**
@@ -1097,6 +1141,20 @@
 		},
 
 		/**
+		 * This will resume the route.
+		 *
+		 * @param {object} container
+		 */
+		resume: function(container)
+		{
+			var controller = this.controller;
+			if(controller)
+			{
+				controller.container = container;
+			}
+		},
+
+		/**
 		 * This will set the route path.
 		 *
 		 * @param {string} path
@@ -1270,10 +1328,12 @@
 				if(type === 'object')
 				{
 					var comp = this.component = this.template;
+					var persist = (comp.persist !== false);
+
 					comp.route = this.route;
-					comp.persist = true;
+					comp.persist = persist;
 					comp.parent = this.parent;
-					this.persist = true;
+					this.persist = persist;
 				}
 
 				this.hasTemplate = true;
@@ -1294,7 +1354,7 @@
 			this.setup = true;
 
 			var comp = this.component;
-			if(!(this.persist && comp))
+			if(!this.persist || !comp)
 			{
 				comp = this.component = new this.template({
 					route: this.route,

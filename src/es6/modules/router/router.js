@@ -124,9 +124,26 @@ export class Router
 		}
 
 		const route = this.createRoute(settings);
+		this.addRoute(route);
+		return route;
+	}
+
+	addRoute(route)
+	{
 		this.routes.push(route);
 		this.checkRoute(route, this.location.pathname);
-		return route;
+	}
+
+	/**
+	 * This will resume a route.
+	 *
+	 * @param {object} route
+	 * @param {object} container
+	 */
+	resume(route, container)
+	{
+		route.resume(container);
+		this.addRoute(route);
 	}
 
 	/**
@@ -233,9 +250,8 @@ export class Router
 	 */
 	addSwitch(group)
 	{
-		let switches = this.switches,
-		id = this.switchCount++,
-		switchArray = switches[id] = [];
+		let id = this.switchCount++;
+		let switchArray = this.getSwitchGroup(id);
 
 		for(var i = 0, length = group.length; i < length; i++)
 		{
@@ -245,6 +261,34 @@ export class Router
 
 		this.checkGroup(switchArray, this.location.pathname);
 		return id;
+	}
+
+	/**
+	 * This will resume a switch.
+	 *
+	 * @param {object} group
+	 * @param {object} container
+	 * @return {int} the switch id.
+	 */
+	resumeSwitch(group, container)
+	{
+		let id = this.switchCount++;
+		let switchArray = this.getSwitchGroup(id);
+
+		for(var i = 0, length = group.length; i < length; i++)
+		{
+			var route = group[i].component.route;
+			route.resume(container);
+			switchArray.push(route);
+		}
+
+		this.checkGroup(switchArray, this.location.pathname);
+		return id;
+	}
+
+	getSwitchGroup(id)
+	{
+		return (this.switches[id] = []);
 	}
 
 	/**

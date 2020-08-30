@@ -190,6 +190,20 @@ export class Route extends SimpleData
 	}
 
 	/**
+	 * This will resume the route.
+	 *
+	 * @param {object} container
+	 */
+	resume(container)
+	{
+		let controller = this.controller;
+		if(controller)
+		{
+			controller.container = container;
+		}
+	}
+
+	/**
 	 * This will set the route path.
 	 *
 	 * @param {string} path
