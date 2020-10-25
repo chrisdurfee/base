@@ -437,8 +437,9 @@
 		 *
 		 * @param {object} parent
 		 * @param {object} child
+		 * @param {object} [optionalNode]
 		 */
-		prepend: function(parent, child)
+		prepend: function(parent, child, optionalNode)
 		{
 			switch(typeof parent)
 			{
@@ -452,7 +453,8 @@
 					break;
 			}
 
-			parent.insertBefore(child, parent.firstChild);
+			var node = optionalNode || parent.firstChild;
+			parent.insertBefore(child, node);
 		},
 
 		/**

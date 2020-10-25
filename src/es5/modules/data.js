@@ -994,7 +994,7 @@
 			params = params || {};
 			if(typeof params === 'string')
 			{
-				params = base.parseQueryString(params);
+				params = base.parseQueryString(params, false);
 			}
 
 			if(!addingParams)
@@ -1004,7 +1004,7 @@
 
 			if(typeof addingParams === 'string')
 			{
-				addingParams = base.parseQueryString(addingParams);
+				addingParams = base.parseQueryString(addingParams, false);
 			}
 
 			if(this._isFormData(params))

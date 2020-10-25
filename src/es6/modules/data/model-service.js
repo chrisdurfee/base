@@ -108,7 +108,7 @@ export class ModelService
 		params = params || {};
 		if(typeof params === 'string')
 		{
-			params = base.parseQueryString(params);
+			params = base.parseQueryString(params, false);
 		}
 
 		if(!addingParams)
@@ -118,7 +118,7 @@ export class ModelService
 
 		if(typeof addingParams === 'string')
 		{
-			addingParams = base.parseQueryString(addingParams);
+			addingParams = base.parseQueryString(addingParams, false);
 		}
 
 		if(this._isFormData(params))

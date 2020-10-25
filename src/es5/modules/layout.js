@@ -383,6 +383,11 @@
 		 */
 		buildElement: function(obj, container, parent)
 		{
+			if(!obj)
+			{
+				return;
+			}
+
 			if(obj.component || obj.isComponent === true)
 			{
 				this.createComponent(obj, container, parent);
@@ -588,11 +593,11 @@
 		setupRoute: function(ele, route, parent)
 		{
 			// this will check to resume route
-			if(this.checkResume(route))
-			{
-				this.resumeRoute(ele, route.component.route);
-				return;
-			}
+			// if(this.checkResume(route))
+			// {
+			// 	this.resumeRoute(ele, route.component.route);
+			// 	return;
+			// }
 
 			route.container = ele;
 			route.parent = parent;
@@ -650,11 +655,11 @@
 		{
 			var route = group[0];
 			// this will check to resume switch
-			if(this.checkResume(route))
-			{
-				this.resumeSwitch(ele, group);
-				return;
-			}
+			// if(this.checkResume(route))
+			// {
+			// 	this.resumeSwitch(ele, group);
+			// 	return;
+			// }
 
 			for(var i = 0, length = group.length; i < length; i++)
 			{
@@ -820,7 +825,7 @@
 			switch(typeof result)
 			{
 				case 'object':
-					if(parent && parent.persist === true && parent.state)
+					if(parent && result.isComponent === true && parent.persist === true && parent.state)
 					{
 						var key = prop + ':' + value,
 						state = parent.state,

@@ -210,7 +210,7 @@ export class XhrRequest
 			{
 				if(addingType === 'string')
 				{
-					addingParams = base.parseQueryString(addingParams);
+					addingParams = base.parseQueryString(addingParams, false);
 				}
 
 				if(params instanceof FormData)

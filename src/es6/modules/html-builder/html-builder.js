@@ -413,8 +413,9 @@ export class htmlBuilder
 	 *
 	 * @param {object} parent
 	 * @param {object} child
+	 * @param {object} [optionalNode]
 	 */
-	prepend(parent, child)
+	prepend(parent, child, optionalNode)
 	{
 		switch(typeof parent)
 		{
@@ -425,7 +426,8 @@ export class htmlBuilder
 				break;
 		}
 
-		parent.insertBefore(child, parent.firstChild);
+		var node = optionalNode || parent.firstChild;
+		parent.insertBefore(child, node);
 	}
 
 	/**

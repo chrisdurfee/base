@@ -640,9 +640,10 @@
 		 *
 		 * @param {string} [str] The string to parse or the global
 		 * location will be parsed.
+		 * @param {bool} [decode]
 		 * @return {object}
 		 */
-		parseQueryString: function(str)
+		parseQueryString: function(str, decode)
 		{
 			if(typeof str !== 'string')
 			{
@@ -655,7 +656,7 @@
 			{
 				/* we want to save the key and the
 				value to the objURL */
-				objURL[b] = decodeURIComponent(d);
+				objURL[b] = (decode !== false)? decodeURIComponent(d) : d;
 			});
 
 			return objURL;
@@ -1909,14 +1910,15 @@
 
 			var sanitize = function(text)
 			{
+				if(typeof text !== 'string')
+				{
+					return text;
+				}
+
 				/* we need to escape chars and encode the uri
 				components */
 				text = escapeChars(text);
-
-				if(typeof text === 'string')
-				{
-					text = encodeURIComponent(text);
-				}
+				text = encodeURIComponent(text);
 
 				/* we want to re-encode the double quotes so they
 				will be escaped by the json encoder */

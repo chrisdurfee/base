@@ -75,6 +75,11 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	buildElement(obj, container, parent)
 	{
+		if(!obj)
+		{
+			return;
+		}
+
 		if(obj.component || obj.isComponent === true)
 		{
 			this.createComponent(obj, container, parent);
@@ -278,11 +283,11 @@ export class LayoutBuilder extends htmlBuilder
 	setupRoute(ele, route, parent)
 	{
 		// this will check to resume route
-		if(this.checkResume(route))
-		{
-			this.resumeRoute(ele, route.component.route);
-			return;
-		}
+		// if(this.checkResume(route))
+		// {
+		// 	this.resumeRoute(ele, route.component.route);
+		// 	return;
+		// }
 
 		route.container = ele;
 		route.parent = parent;
@@ -340,11 +345,11 @@ export class LayoutBuilder extends htmlBuilder
 	{
 		let route = group[0];
 		// this will check to resume switch
-		if(this.checkResume(route))
-		{
-			this.resumeSwitch(ele, group);
-			return;
-		}
+		// if(this.checkResume(route))
+		// {
+		// 	this.resumeSwitch(ele, group);
+		// 	return;
+		// }
 
 		for(var i = 0, length = group.length; i < length; i++)
 		{
@@ -507,7 +512,7 @@ export class LayoutBuilder extends htmlBuilder
 		switch(typeof result)
 		{
 			case 'object':
-				if(parent && parent.persist === true && parent.state)
+				if(parent && result.isComponent === true && parent.persist === true && parent.state)
 				{
 					let key = prop + ':' + value,
 					state = parent.state,

@@ -206,6 +206,19 @@ export class Component
 	}
 
 	/**
+	 * This will prepend layout to a container.
+	 *
+	 * @param {object} layout
+	 * @param {object} container
+	 * @param {object} [optionalNode]
+	 */
+	prepend(layout, container, optionalNode)
+	{
+		var frag = this.build(layout, null);
+		builder.prepend(container, frag, optionalNode);
+	}
+
+	/**
 	 * This will rebuild a layout.
 	 *
 	 * @param {object} layout
