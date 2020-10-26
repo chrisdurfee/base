@@ -1,0 +1,16 @@
+Component
+* Reseach a better way to persist component
+* Maybe add a new method on a component to fire when rendered to screen
+* add directive to allow components to be cache to parent components. not using the cache method
+
+Atom
+* allow array as prop shorthand for children array
+Div([
+    {
+        className: 'page'
+    }
+])
+
+Router
+* fix resumeable routes
+* add redirects to Router
