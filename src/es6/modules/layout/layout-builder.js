@@ -1,10 +1,11 @@
 import {base} from '../../core.js';
-import {LayoutParser} from './layout-parser.js';
+import {ElementParser} from './element-parser.js';
 import {dataBinder} from '../data-binder/data-binder.js';
-import {htmlBuilder} from '../html-builder/html-builder.js';
+import {Directives} from './directives.js';
+import {Html} from './html.js';
 import {WatcherHelper} from './watcher-helper.js';
 
-const parser = new LayoutParser();
+const parser = new ElementParser();
 
 /**
  * LayoutBuilder
@@ -12,25 +13,28 @@ const parser = new LayoutParser();
  * This will build JSON layouts.
  *
  * @class
- * @augments htmlBuilder
+ * @augments Html
  */
-export class LayoutBuilder extends htmlBuilder
+export class LayoutBuilder extends Html
 {
-	/**
-	 * This will create a new element.
-	 *
-	 * @override
-	 * @param {string} nodeName The node name.
-	 * @param {object} attrObject The node attributes.
-	 * @param {object} container The node container.
-	 * @return {object} The new element.
-	 */
-	create(nodeName, attrObject, container)
+	constructor()
 	{
-		let obj = document.createElement(nodeName);
-		this._addElementAttrs(obj, attrObject);
-		this.append(container, obj);
-		return obj;
+		super();
+		this.registerDirectives();
+	}
+
+	registerDirectives()
+	{
+		const directives = Directives;
+
+		directives.add('cache', this.cache.bind(this));
+		directives.add('bind', this.bindElement.bind(this));
+		directives.add('onCreated', this.onCreated.bind(this));
+		directives.add('route', this.addRoute.bind(this));
+		directives.add('switch', this.addSwitch.bind(this));
+		directives.add('onState', this.onState.bind(this));
+		directives.add('onSet', this.onSet.bind(this));
+		directives.add('watch', this.watch.bind(this));
 	}
 
 	/**
@@ -91,18 +95,6 @@ export class LayoutBuilder extends htmlBuilder
 	}
 
 	/**
-	 * This will append a child element to a parent.
-	 *
-	 * @override
-	 * @param {object} parent
-	 * @param {object} child
-	 */
-	append(parent, child)
-	{
-		parent.appendChild(child);
-	}
-
-	/**
 	 * This will create an element.
 	 *
 	 * @protected
@@ -112,56 +104,13 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	createElement(obj, container, parent)
 	{
-		let settings = parser.parseElement(obj),
+		let settings = parser.parse(obj),
 		ele = this.createNode(settings, container);
 
-		const propName = obj.cache;
-		if(parent && propName)
+		const directives = settings.directives;
+		if(directives && directives.length)
 		{
-			parent[propName] = ele;
-		}
-
-		if(typeof obj.onCreated === 'function')
-		{
-			obj.onCreated(ele);
-		}
-
-		/* this will check to bind the element to
-		the prop of a data */
-		let bind = obj.bind;
-		if(bind)
-		{
-			this.bindElement(ele, bind, parent);
-		}
-
-		if(obj.route)
-		{
-			this.addRoute(ele, obj.route, parent);
-		}
-
-		if(obj.switch)
-		{
-			this.addSwitch(ele, obj.switch, parent);
-		}
-
-		if(parent)
-		{
-			let onState = obj.onState;
-			if(onState && onState.length)
-			{
-				this.onState(ele, onState, parent);
-			}
-
-			let onSet = obj.onSet;
-			if(onSet && onSet.length)
-			{
-				this.onSet(ele, onSet, parent);
-			}
-		}
-
-		if(obj.watch)
-		{
-			this.watch(ele, obj.watch, parent);
+			this.setDirectives(ele, directives, parent);
 		}
 
 		/* we want to recursively add the children to
@@ -180,6 +129,60 @@ export class LayoutBuilder extends htmlBuilder
 
 				this.buildElement(child, ele, parent);
 			}
+		}
+	}
+
+	/**
+	 * This will add the element directives.
+	 *
+	 * @param {object} ele
+	 * @param {array} directives
+	 * @param {object} parent
+	 */
+	setDirectives(ele, directives, parent)
+	{
+		for(var i = 0, length = directives.length; i < length; i++)
+		{
+			this.handleDirective(ele, directives[i], parent);
+		}
+	}
+
+	/**
+	 * This will handle an attr directive.
+	 *
+	 * @param {object} ele
+	 * @param {object} attrDirective
+	 * @param {object} parent
+	 */
+	handleDirective(ele, attrDirective, parent)
+	{
+		attrDirective.directive.callBack(ele, attrDirective.attr.value, parent);
+	}
+
+	/**
+	 * This will be called when an element onCreated directive is called.
+	 *
+	 * @param {object} ele
+	 * @param {function} callBack
+	 * @param {object} parent
+	 */
+	onCreated(ele, callBack, parent)
+	{
+		callBack(ele);
+	}
+
+	/**
+	 * This will cache an element ot the parent.
+	 *
+	 * @param {object} ele
+	 * @param {object} propName
+	 * @param {object} parent
+	 */
+	cache(ele, propName, parent)
+	{
+		if(parent && propName)
+		{
+			parent[propName] = ele;
 		}
 	}
 
@@ -327,7 +330,7 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	trackRoute(ele, route)
 	{
-		base.DataTracker.add(ele, 'routes',
+		base.dataTracker.add(ele, 'routes',
 		{
 			route
 		});
@@ -376,7 +379,7 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	trackSwitch(ele, id)
 	{
-		base.DataTracker.add(ele, 'switch',
+		base.dataTracker.add(ele, 'switch',
 		{
 			id
 		});
@@ -612,7 +615,7 @@ export class LayoutBuilder extends htmlBuilder
 		let tag = settings.tag;
 		if(tag !== 'text')
 		{
-			return this.create(tag, settings.attr, container);
+			return this.create(tag, settings.attr, settings.content, container);
 		}
 
 		let attr = settings.attr,
