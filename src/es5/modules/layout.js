@@ -112,6 +112,8 @@
 		}
 	});
 
+	var WATCHER_PATTERN = /(\[\[(.*?)\]\])/g;
+
 	/**
 	 * WatcherHelper
 	 *
@@ -171,7 +173,7 @@
 		 *
 		 * @protected
 		 * @param {object} ele
-		 * @param {(string|array)} data
+		 * @param {(object|array)} data
 		 * @param {string} string
 		 * @param {string} attr
 		 * @param {boolean} isArray
@@ -183,8 +185,7 @@
 			return function()
 			{
 				var count = 0,
-				pattern = /(\[\[(.*?)\]\])/g,
-				value = string.replace(pattern, function()
+				value = string.replace(WATCHER_PATTERN, function()
 				{
 					var watcherData = (isArray)? data[count] : data;
 					count++;
@@ -222,6 +223,29 @@
 		},
 
 		/**
+		 * This will get the prop values.
+		 *
+		 * @param {object} data
+		 * @param {string} string
+		 * @param {bool} isArray
+		 * @return {array}
+		 */
+		getPropValues: function(data, props, isArray)
+		{
+			var values = [];
+
+			for(var i = 0, length = props.length; i < length; i++)
+			{
+				var watcherData = (isArray)? data[i] : data;
+				var value = watcherData.get(props[i]);
+				value = (typeof value !== 'undefined'? value : '');
+				values.push(value);
+			}
+
+			return values;
+		},
+
+		/**
 		 * This will get the watcher callBack.
 		 *
 		 * @param {object} settings
@@ -237,8 +261,12 @@
 			overrideCallBack = settings.callBack;
 			if(typeof overrideCallBack === 'function')
 			{
+				var self = this;
+				var props = string.match(WATCHER_PATTERN);
+				var isMultiProp = (props && props.length > 1);
 				callBack = function(value, committer)
 				{
+					value = (isMultiProp !== true)? value : self.getPropValues(data, props, isDataArray);
 					overrideCallBack(ele, value, committer);
 				};
 			}

@@ -1,6 +1,8 @@
 import {base} from '../../core.js';
 import {dataBinder} from '../data-binder/data-binder.js';
 
+const WATCHER_PATTERN = /(\[\[(.*?)\]\])/g;
+
 /**
  * WatcherHelper
  *
@@ -71,8 +73,7 @@ export const WatcherHelper =
 		return () =>
 		{
 			let count = 0,
-			pattern = /(\[\[(.*?)\]\])/g,
-			value = string.replace(pattern, function()
+			value = string.replace(WATCHER_PATTERN, function()
 			{
 				let watcherData = (isArray)? data[count] : data;
 				count++;
@@ -111,6 +112,29 @@ export const WatcherHelper =
 	},
 
 	/**
+	 * This will get the prop values.
+	 *
+	 * @param {object} data
+	 * @param {string} string
+	 * @param {bool} isArray
+	 * @return {array}
+	 */
+	getPropValues(data, props, isArray)
+	{
+		let values = [];
+
+		for(var i = 0, length = props.length; i < length; i++)
+		{
+			var watcherData = (isArray)? data[i] : data;
+			var value = watcherData.get(props[i]);
+			value = (typeof value !== 'undefined'? value : '');
+			values.push(value);
+		}
+
+		return values;
+	},
+
+	/**
 	 * This will get the watcher callBack.
 	 *
 	 * @param {object} settings
@@ -126,8 +150,11 @@ export const WatcherHelper =
 		overrideCallBack = settings.callBack;
 		if(typeof overrideCallBack === 'function')
 		{
-			callBack = function(value, committer)
+			let props = string.match(WATCHER_PATTERN);
+			let isMultiProp = (props && props.length > 1);
+			callBack = (value, committer) =>
 			{
+				value = (isMultiProp !== true)? value : this.getPropValues(data, props, isDataArray);
 				overrideCallBack(ele, value, committer);
 			};
 		}
