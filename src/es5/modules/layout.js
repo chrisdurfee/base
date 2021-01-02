@@ -94,7 +94,7 @@
 					{
 						if (key === 'children')
 						{
-							children = Array.prototype.push.apply(children, value);
+							Array.prototype.push.apply(children, value);
 							//children = children.concat(value);
 						}
 						else
