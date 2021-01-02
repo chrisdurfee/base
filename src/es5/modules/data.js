@@ -469,7 +469,7 @@
 				obj = this.stage;
 				for (var i = 0; i < length; i++)
 				{
-					var prop = props[i];
+					prop = props[i];
 
 					/* we need to setup the object to go to the next level
 					of the data object before calling the next property. */

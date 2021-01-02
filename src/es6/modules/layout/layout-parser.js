@@ -87,7 +87,8 @@ export class LayoutParser
 				{
 					if (key === 'children')
 					{
-						children = children.concat(value);
+						children = Array.prototype.push.apply(children, value);
+						//children = children.concat(value);
 					}
 					else
 					{

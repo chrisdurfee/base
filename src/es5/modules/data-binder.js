@@ -314,6 +314,51 @@
 	});
 
 	/**
+	 * This will set an element attr by the setAttribute method.
+	 *
+	 * @param {object} element
+	 * @param {string} attr
+	 * @param {mixed} value
+	 */
+	var SetAttr = function(element, attr, value)
+	{
+		base.setAttr(element, attr, value);
+	};
+
+	var UpdateRadioAttr = function(element, attr, value)
+	{
+		element.checked = (element.value === value);
+	};
+
+	var UpdateCheckboxAttr = function(element, attr, value)
+	{
+		value = (value == 1);
+		UpdateAttr(element, attr, value);
+	};
+
+	/**
+	 * This will update an element attr by the bracket notation.
+	 *
+	 * @param {object} element
+	 * @param {string} attr
+	 * @param {nixed} value
+	 */
+	var UpdateAttr = function(element, attr, value)
+	{
+		element[attr] = value;
+	};
+
+	var GetAttr = function(element, attr)
+	{
+		return base.getAttr(element, attr);
+	};
+
+	var GetAttribute = function(element, attr)
+	{
+		return element[attr];
+	};
+
+	/**
 	 * ElementSource
 	 *
 	 * This will create an element source to use with
@@ -334,12 +379,42 @@
 			TwoWaySource.call(this);
 			this.element = element;
 			this.attr = this.getAttrBind(attr);
+			this.addSetMethod(element, this.attr);
 
 			if(typeof filter === 'string')
 			{
 				filter = this.setupFilter(filter);
 			}
 			this.filter = filter;
+		},
+
+		addSetMethod: function(element, attr)
+		{
+			if(attr.substr(4, 1) === '-')
+			{
+				this.setValue = SetAttr;
+				this.getValue = GetAttr;
+			}
+			else
+			{
+				this.getValue = GetAttribute;
+
+				var type = element.type;
+				if(type)
+				{
+					switch(type)
+					{
+						case 'checkbox':
+							this.setValue = UpdateCheckboxAttr;
+							return;
+						case 'radio':
+							this.setValue = UpdateRadioAttr;
+							return;
+					}
+				}
+
+				this.setValue = UpdateAttr;
+			}
 		},
 
 		/**
@@ -427,29 +502,7 @@
 				value = this.filter(value);
 			}
 
-			var attr = this.attr,
-			type = element.type;
-			if(type)
-			{
-				switch(type)
-				{
-					case 'checkbox':
-						value = (value == 1);
-						break;
-					case 'radio':
-						element.checked = (element.value === value);
-						return true;
-				}
-			}
-
-			if(attr.substr(4, 1) === '-')
-			{
-				base.setAttr(element, attr, value);
-			}
-			else
-			{
-				element[attr] = value;
-			}
+			this.setValue(element, this.attr, value);
 		},
 
 		/**
@@ -463,8 +516,7 @@
 				return '';
 			}
 
-			var attr = this.attr;
-			return (attr.substr(4, 1) === '-')? base.getAttr(element, attr) : element[attr];
+			return this.getValue(element, this.attr);
 		},
 
 		/**
@@ -738,7 +790,7 @@
 		constructor: function()
 		{
 			this.version = "1.0.1";
-			this.attr = 'data-bind-id';
+			this.attr = 'dataBindId';
 
 			this.connections = new ConnectionTracker();
 
@@ -766,13 +818,25 @@
 		 */
 		bind: function(element, data, prop, filter)
 		{
-			var bindSettings = this.getPropSettings(prop);
-			prop = bindSettings.prop;
+			var bindProp = prop,
+			bindAttr = null;
+
+			if(prop.indexOf(':') !== -1)
+			{
+				/* this will setup the custom attr if the prop
+				has specified one. */
+				var parts = prop.split(':');
+				if(parts.length > 1)
+				{
+					bindProp = parts[1];
+					bindAttr = parts[0];
+				}
+			}
 
 			/* this will setup the model bind attr to the
 			element and assign a bind id attr to support
 			two way binding */
-			var connection = this.setupConnection(element, data, prop, bindSettings.attr, filter);
+			var connection = this.setupConnection(element, data, bindProp, bindAttr, filter);
 
 			/* we want to get the starting value of the
 			data and set it on our element */
@@ -853,8 +917,9 @@
 		 */
 		setBindId: function(element)
 		{
-			var id = 'bs-db-' + this.idCount++;
-			base.attr(element, this.attr, id);
+			var id = 'db-' + this.idCount++;
+			base.setData(element, this.attr, id);
+			element[this.attr] = id;
 			return id;
 		},
 
@@ -866,38 +931,7 @@
 		 */
 		getBindId: function(element)
 		{
-			var id = base.attr(element, this.attr);
-			if(!id)
-			{
-				id = this.setBindId(element);
-			}
-			return id;
-		},
-
-		/**
-		 * This will parse the prop to get the settings.
-		 *
-		 * @param {string} prop
-		 * @return {object}
-		 */
-		getPropSettings: function(prop)
-		{
-			var bindProp = prop,
-			bindAttr = null;
-
-			/* this will setup the custom attr if the prop
-			has specified one. */
-			var parts = prop.split(':');
-			if(parts.length > 1)
-			{
-				bindProp = parts[1];
-				bindAttr = parts[0];
-			}
-
-			return {
-				prop: bindProp,
-				attr: bindAttr
-			};
+			return element[this.attr] || this.setBindId(element);
 		},
 
 		/**
@@ -908,7 +942,7 @@
 		 */
 		unbind: function(element)
 		{
-			var id = base.data(element, this.attr);
+			var id = element[this.attr];
 			if(id)
 			{
 				this.connections.remove(id);
@@ -963,7 +997,7 @@
 				return false;
 			}
 
-			var id = base.attr(element, this.attr);
+			var id = element[this.attr];
 			if(id)
 			{
 				var attr = data.getDataId() + ':' + prop;
@@ -996,7 +1030,7 @@
 		{
 			if(element)
 			{
-				var id = base.data(element, this.attr);
+				var id = element[this.attr];
 				if(id)
 				{
 					return id;

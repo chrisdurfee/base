@@ -322,20 +322,12 @@
 
 			DataTracker.remove(ele);
 
-			/* this will loop though the element attrs to
-			check for any event listeners to cancel and
-			remove any data binding */
-			var attributes = ele.attributes;
-			if(attributes)
+			var bound = ele.dataBindId;
+			if(bound)
 			{
-				/* this will only remove the data bind */
-				var bound = attributes['data-bind-id'];
-				if(bound)
-				{
-					/* this will check to remove any data bindings
-					to the element */
-					DataBinder.unbind(ele);
-				}
+				/* this will check to remove any data bindings
+				to the element */
+				DataBinder.unbind(ele);
 			}
 		},
 

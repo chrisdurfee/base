@@ -20,7 +20,7 @@ export class DataBinder
 	constructor()
 	{
 		this.version = "1.0.1";
-		this.attr = 'data-bind-id';
+		this.attr = 'dataBindId';
 
 		/**
 		 * @member {array} blockedKeys
@@ -60,13 +60,25 @@ export class DataBinder
 	 */
 	bind(element, data, prop, filter)
 	{
-		let bindSettings = this.getPropSettings(prop);
-		prop = bindSettings.prop;
+		let bindProp = prop,
+		bindAttr = null;
+
+		if(prop.indexOf(':') !== -1)
+		{
+			/* this will setup the custom attr if the prop
+			has specified one. */
+			let parts = prop.split(':');
+			if(parts.length > 1)
+			{
+				bindProp = parts[1];
+				bindAttr = parts[0];
+			}
+		}
 
 		/* this will setup the model bind attr to the
 		element and assign a bind id attr to support
 		two way binding */
-		let connection = this.setupConnection(element, data, prop, bindSettings.attr, filter);
+		let connection = this.setupConnection(element, data, bindProp, bindAttr, filter);
 
 		/* we want to get the starting value of the
 		data and set it on our element */
@@ -147,8 +159,9 @@ export class DataBinder
 	 */
 	setBindId(element)
 	{
-		let id = 'bs-db-' + this.idCount++;
-		base.attr(element, this.attr, id);
+		let id = 'db-' + this.idCount++;
+		base.setData(element, this.attr, id);
+		element[this.attr] = id;
 		return id;
 	}
 
@@ -160,36 +173,7 @@ export class DataBinder
 	 */
 	getBindId(element)
 	{
-		let id = base.attr(element, this.attr);
-		if(!id)
-		{
-			id = this.setBindId(element);
-		}
-		return id;
-	}
-
-	/**
-	 * This will parse the prop to get the settings.
-	 *
-	 * @param {string} prop
-	 * @return {object}
-	 */
-	getPropSettings(prop)
-	{
-		let attr = null;
-
-		/* this will setup the custom attr if the prop
-		has specified one. */
-		let parts = prop.split(':');
-		if(parts.length > 1)
-		{
-			[attr, prop] = parts;
-		}
-
-		return {
-			prop,
-			attr
-		};
+		return element[this.attr] || this.setBindId(element);
 	}
 
 	/**
@@ -200,7 +184,7 @@ export class DataBinder
 	 */
 	unbind(element)
 	{
-		let id = base.data(element, this.attr);
+		let id = element[this.attr];
 		if(id)
 		{
 			this.connections.remove(id);
@@ -255,7 +239,7 @@ export class DataBinder
 			return false;
 		}
 
-		let id = base.attr(element, this.attr);
+		let id = element[this.attr];
 		if(id)
 		{
 			let attr = data.getDataId() + ':' + prop;
@@ -288,7 +272,7 @@ export class DataBinder
 	{
 		if(element)
 		{
-			let id = base.data(element, this.attr);
+			let id = element[this.attr];
 			if(id)
 			{
 				return id;

@@ -650,7 +650,7 @@
 				return false;
 			}
 
-			if(layout instanceof base.Component)
+			if(layout.isComponent === true)
 			{
 				layout =
 				{

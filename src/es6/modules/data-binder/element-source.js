@@ -2,6 +2,51 @@ import {base} from '../../core.js';
 import {TwoWaySource} from './two-way-source.js';
 
 /**
+ * This will set an element attr by the setAttribute method.
+ *
+ * @param {object} element
+ * @param {string} attr
+ * @param {mixed} value
+ */
+const SetAttr = (element, attr, value) =>
+{
+	base.setAttr(element, attr, value);
+};
+
+const UpdateRadioAttr = (element, attr, value) =>
+{
+	element.checked = (element.value === value);
+};
+
+const UpdateCheckboxAttr = (element, attr, value) =>
+{
+	value = (value == 1);
+	UpdateAttr(element, attr, value);
+};
+
+/**
+ * This will update an element attr by the bracket notation.
+ *
+ * @param {object} element
+ * @param {string} attr
+ * @param {nixed} value
+ */
+const UpdateAttr = (element, attr, value) =>
+{
+	element[attr] = value;
+};
+
+const GetAttr = (element, attr) =>
+{
+	return base.getAttr(element, attr);
+};
+
+const GetAttribute = (element, attr) =>
+{
+	return element[attr];
+};
+
+/**
  * ElementSource
  *
  * This will create an element source to use with
@@ -22,8 +67,38 @@ export class ElementSource extends TwoWaySource
 		super();
 		this.element = element;
 		this.attr = this.getAttrBind(attr);
+		this.addSetMethod(element, this.attr);
 
 		this.filter = (typeof filter === 'string')? this.setupFilter(filter) : filter;
+	}
+
+	addSetMethod(element, attr)
+	{
+		if(attr.substr(4, 1) === '-')
+		{
+			this.setValue = SetAttr;
+			this.getValue = GetAttr;
+		}
+		else
+		{
+			this.getValue = GetAttribute;
+
+			var type = element.type;
+			if(type)
+			{
+				switch(type)
+				{
+					case 'checkbox':
+						this.setValue = UpdateCheckboxAttr;
+						return;
+					case 'radio':
+						this.setValue = UpdateRadioAttr;
+						return;
+				}
+			}
+
+			this.setValue = UpdateAttr;
+		}
 	}
 
 	/**
@@ -111,29 +186,7 @@ export class ElementSource extends TwoWaySource
 			value = this.filter(value);
 		}
 
-		let attr = this.attr,
-		type = element.type;
-		if(type)
-		{
-			switch(type)
-			{
-				case 'checkbox':
-					value = (value == 1);
-					break;
-				case 'radio':
-					element.checked = (element.value === value);
-					return true;
-			}
-		}
-
-		if(attr.substr(4, 1) === '-')
-		{
-			base.setAttr(element, attr, value);
-		}
-		else
-		{
-			element[attr] = value;
-		}
+		this.setValue(element, this.attr, value);
 	}
 
 	/**
@@ -147,8 +200,7 @@ export class ElementSource extends TwoWaySource
 			return '';
 		}
 
-		let attr = this.attr;
-		return (attr.substr(4, 1) === '-')? base.getAttr(element, attr) : element[attr];
+		return this.getValue(element, this.attr);
 	}
 
 	/**

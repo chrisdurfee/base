@@ -94,7 +94,8 @@
 					{
 						if (key === 'children')
 						{
-							children = children.concat(value);
+							children = Array.prototype.push.apply(children, value);
+							//children = children.concat(value);
 						}
 						else
 						{
@@ -523,7 +524,7 @@
 		 * This will get the data source from the parent component.
 		 *
 		 * @protected
-		 * @param {object} [parent]
+		 * @param {object} parent
 		 * @return {(object|boolean)}
 		 */
 		_getDataSource: function(parent)
@@ -533,8 +534,7 @@
 				return false;
 			}
 
-			var data = (parent.data || parent.state);
-			return data || false;
+			return (parent.data || parent.state || false);
 		},
 
 		/**
@@ -559,9 +559,9 @@
 
 				prop = bind;
 			}
-			else if(base.isArray(bind))
+			else
 			{
-				if((typeof bind[0] !== 'object'))
+				if(typeof bind[0] !== 'object')
 				{
 					var dataSource = this._getDataSource(parent);
 					if(!dataSource)

@@ -307,20 +307,12 @@ export class htmlBuilder
 
 		dataTracker.remove(ele);
 
-		/* this will loop though the element attrs to
-		check for any event listeners to cancel and
-		remove any data binding */
-		let attributes = ele.attributes;
-		if(attributes)
+		let bound = ele.dataBindId;
+		if(bound)
 		{
-			/* this will only remove the data bind */
-			let bound = attributes['data-bind-id'];
-			if(bound)
-			{
-				/* this will check to remove any data bindings
-				to the element */
-				dataBinder.unbind(ele);
-			}
+			/* this will check to remove any data bindings
+			to the element */
+			DataBinder.unbind(ele);
 		}
 	}
 
