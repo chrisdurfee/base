@@ -312,7 +312,7 @@ export class htmlBuilder
 		{
 			/* this will check to remove any data bindings
 			to the element */
-			DataBinder.unbind(ele);
+			dataBinder.unbind(ele);
 		}
 	}
 
