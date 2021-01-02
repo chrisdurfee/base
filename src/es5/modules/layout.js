@@ -165,7 +165,14 @@
 			}
 			else
 			{
-				base.setAttr(ele, attr, value);
+				if(attr.substr(4, 1) === '-')
+				{
+					base.setAttr(ele, attr, value);
+				}
+				else
+				{
+					ele[attr] = value;
+				}
 			}
 		},
 
