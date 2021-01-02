@@ -327,7 +327,7 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	trackRoute(ele, route)
 	{
-		base.DataTracker.add(ele, 'routes',
+		base.dataTracker.add(ele, 'routes',
 		{
 			route
 		});
@@ -376,7 +376,7 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	trackSwitch(ele, id)
 	{
-		base.DataTracker.add(ele, 'switch',
+		base.dataTracker.add(ele, 'switch',
 		{
 			id
 		});
