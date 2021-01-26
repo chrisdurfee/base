@@ -94,8 +94,8 @@
 					{
 						if (key === 'children')
 						{
-							Array.prototype.push.apply(children, value);
-							//children = children.concat(value);
+							//Array.prototype.push.apply(children, value);
+							children = children.concat(value);
 						}
 						else
 						{
@@ -860,7 +860,7 @@
 			switch(typeof result)
 			{
 				case 'object':
-					if(parent && result.isComponent === true && parent.persist === true && parent.state)
+					if(parent && result && result.isComponent === true && parent.persist === true && parent.state)
 					{
 						var key = prop + ':' + value,
 						state = parent.state,

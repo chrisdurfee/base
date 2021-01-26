@@ -322,7 +322,7 @@
 
 			DataTracker.remove(ele);
 
-			var bound = ele.dataBindId;
+			var bound = ele.bindId;
 			if(bound)
 			{
 				/* this will check to remove any data bindings

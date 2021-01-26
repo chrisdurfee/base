@@ -512,7 +512,7 @@ export class LayoutBuilder extends htmlBuilder
 		switch(typeof result)
 		{
 			case 'object':
-				if(parent && result.isComponent === true && parent.persist === true && parent.state)
+				if(parent && result && result.isComponent === true && parent.persist === true && parent.state)
 				{
 					let key = prop + ':' + value,
 					state = parent.state,

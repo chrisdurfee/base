@@ -790,7 +790,7 @@
 		constructor: function()
 		{
 			this.version = "1.0.1";
-			this.attr = 'dataBindId';
+			this.attr = 'bindId';
 
 			this.connections = new ConnectionTracker();
 
@@ -918,7 +918,7 @@
 		setBindId: function(element)
 		{
 			var id = 'db-' + this.idCount++;
-			base.setData(element, this.attr, id);
+			element.dataset[this.attr] = id;
 			element[this.attr] = id;
 			return id;
 		},

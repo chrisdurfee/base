@@ -95,7 +95,7 @@ export class NavLink extends Component
             value: ['[[path]]', data],
             callBack: (ele, value) =>
             {
-                let selected = exact? (value === ele.pathname) : (new RegExp(ele.pathname + '($|\/|\\.).*').test(value));
+                let selected = exact? (value === ele.pathname) : (new RegExp('^' + ele.pathname + '($|\/|\\.).*').test(value));
                 this.update(ele, selected);
             }
         });
