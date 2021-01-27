@@ -83,7 +83,7 @@ export class DataBinder
 		/* we want to get the starting value of the
 		data and set it on our element */
 		let connectionElement = connection.element,
-		value = data.get(prop);
+		value = data.get(bindProp);
 		if(typeof value !== 'undefined')
 		{
 			connectionElement.set(value);
