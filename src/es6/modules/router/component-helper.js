@@ -89,11 +89,18 @@ export class ComponentHelper
 		let comp = this.component;
 		if(!this.persist || !comp)
 		{
-			comp = this.component = new this.template({
-				route: this.route,
-				persist: this.persist,
-				parent: this.parent
-			});
+			if(typeof this.template === 'function')
+			{
+				comp = this.component = new this.template({
+					route: this.route,
+					persist: this.persist,
+					parent: this.parent
+				});
+			}
+			else
+			{
+				comp = this.component = this.template;
+			}
 		}
 
 		comp.setup(this.container);
