@@ -321,36 +321,9 @@
 		 */
 		bindRemoteState: function(target, actionEvent, remoteTargetId)
 		{
-			var token,
-			remoteTarget = base.state.getTarget(remoteTargetId);
+			var remoteTarget = base.state.getTarget(remoteTargetId);
 
-			var value = remoteTarget.get(actionEvent);
-			if(typeof value !== 'undefined')
-			{
-				target.set(actionEvent, value);
-			}
-
-			token = remoteTarget.on(actionEvent, function(state, prevState, committer)
-			{
-				if(committer === target)
-				{
-					return false;
-				}
-
-				target.set(actionEvent, state, remoteTarget);
-			});
-
-			target.on(actionEvent, function(state, prevState, committer)
-			{
-				if(committer === remoteTarget)
-				{
-					return false;
-				}
-
-				remoteTarget.set(actionEvent, state, target);
-			});
-
-			return token;
+			return target.link(remoteTarget, actionEvent);
 		},
 
 		/**
@@ -896,6 +869,11 @@
 			this.beforeDestroy();
 			this.removeEvents();
 			this.removeStates();
+
+			if(this.data && this.persist === false)
+			{
+				this.data.unlink();
+			}
 		},
 
 		/**

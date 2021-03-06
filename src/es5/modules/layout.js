@@ -465,6 +465,24 @@
 				parent[propName] = ele;
 			}
 
+			/* we want to recursively add the children to
+			the new element */
+			var children = settings.children;
+			if (children.length > 0)
+			{
+				var child;
+				for (var i = 0, length = children.length; i < length; i++)
+				{
+					child = children[i];
+					if(child === null)
+					{
+						continue;
+					}
+
+					this.buildElement(child, ele, parent);
+				}
+			}
+
 			if(typeof obj.onCreated === 'function')
 			{
 				obj.onCreated(ele);
@@ -506,24 +524,6 @@
 			if(obj.watch)
 			{
 				this.watch(ele, obj.watch, parent);
-			}
-
-			/* we want to recursively add the children to
-			the new element */
-			var children = settings.children;
-			if (children.length > 0)
-			{
-				var child;
-				for (var i = 0, length = children.length; i < length; i++)
-				{
-					child = children[i];
-					if(child === null)
-					{
-						continue;
-					}
-
-					this.buildElement(child, ele, parent);
-				}
 			}
 		},
 

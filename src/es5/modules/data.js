@@ -70,6 +70,7 @@
 		constructor: function(settings)
 		{
 			this.dirty = false;
+			this.links = {};
 
 			this._init();
 			this.setup();
@@ -134,7 +135,8 @@
 		on: function(attrName, callBack)
 		{
 			var message = attrName + ':change';
-			return this.eventSub.on(message, callBack);
+			var token = this.eventSub.on(message, callBack);
+			return this._id + token;
 		},
 
 		/**
@@ -325,7 +327,142 @@
 			{
 				return this.getModelData();
 			}
-		}
+		},
+
+		/**
+		 * This will link a data source property to another data source.
+		 *
+		 * @param {object} data
+		 * @param {string|object} attr
+		 * @param {string} alias
+		 * @return {string|array}
+		 */
+		 link: function(data, attr, alias)
+		 {
+			 // this will get the data source attrs if sending a whole data object
+			 if(arguments.length === 1 && data.isData === true)
+			 {
+				 attr = data.get();
+			 }
+ 
+			 if(typeof attr !== 'object')
+			 {
+				 return this.remoteLink(data, attr, alias);
+			 }
+ 
+			 var tokens = [];
+			 for(var prop in attr)
+			 {
+				 if(attr.hasOwnProperty(prop) === false)
+				 {
+					 continue;
+				 }
+ 
+				 tokens.push(this.remoteLink(data, prop));
+			 }
+			 return tokens;
+		 },
+ 
+		 /**
+		  * This will link a remote data source by property.
+		  *
+		  * @param {object} data
+		  * @param {string} attr
+		  * @param {string} alias
+		  * @return {string}
+		  */
+		 remoteLink: function(data, attr, alias)
+		 {
+			 var childAttr = alias || attr;
+			 var value = data.get(attr);
+			 if(typeof value !== 'undefined')
+			 {
+				 this.set(attr, value);
+			 }
+ 
+			 var self = this;
+			 var token = data.on(attr, function(propValue, committer)
+			 {
+				 if(committer === self)
+				 {
+					 return false;
+				 }
+ 
+				 self.set(childAttr, propValue, data);
+			 });
+ 
+			 this.addLink(token, data);
+ 
+			 var remoteToken = this.on(childAttr, function(propValue, committer)
+			 {
+				 if(committer === data)
+				 {
+					 return false;
+				 }
+ 
+				 data.set(attr, propValue, self);
+			 });
+ 
+			 data.addLink(remoteToken, this);
+			 return token;
+		 },
+ 
+		 /**
+		  * This will add a link token to the links array.
+		  *
+		  * @param {string} token
+		  * @param {object} data
+		  */
+		 addLink: function(token, data)
+		 {
+			 this.links[token] = data;
+		 },
+ 
+		 /**
+		  * This will remove a link or all links.
+		  *
+		  * @param {string} [token]
+		  */
+		 unlink: function(token)
+		 {
+			 if(token)
+			 {
+				 this.removeLink(token);
+				 return;
+			 }
+ 
+			 var links = this.links;
+			 if(links.length)
+			 {
+				 for(var i = 0, length = links.length; i < length; i++)
+				 {
+					 this.removeLink(links[i], false);
+				 }
+				 this.links = [];
+			 }
+		 },
+ 
+		 /**
+		  * This will remove the linked subscription.
+		  *
+		  * @param {string} token
+		  * @param {bool} removeFromLinks
+		  */
+		 removeLink: function(token, removeFromLinks)
+		 {
+			 var data = this.links[token];
+			 if(data)
+			 {
+				 data.off(token);
+			 }
+ 
+			 if(removeFromLinks === false)
+			 {
+				 return;
+			 }
+ 
+			 delete this.links[token];
+		 }
 	});
 
 	var DataBinder = base.DataBinder;
@@ -341,6 +478,8 @@
 	 */
 	var Data = BasicData.extend(
 	{
+		isData: true,
+
 		/**
 		 * This will setup the stage and attributes object.
 		 */
@@ -715,6 +854,24 @@
 		}
 	});
 
+	var DeepData = Data.extend(
+	{
+		/**
+		 * This will publish an update to the data binder.
+		 *
+		 * @protected
+		 * @param {string} attr
+		 * @param {*} val
+		 * @param {*} committer
+		 */
+		_publish: function(attr, val, committer)
+		{
+			this.publishDeep(attr, val, committer);
+		}
+	});
+
+	base.DeepData = DeepData;
+
 	/**
 	 * SimpleData
 	 *
@@ -738,7 +895,7 @@
 		_publish: function(attr, val, committer, prevValue)
 		{
 			var message = attr + ':change';
-			this.eventSub.publish(message, val, prevValue, committer);
+			this.eventSub.publish(message, val, committer);
 
 			committer = committer || this;
 

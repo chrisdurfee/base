@@ -95,7 +95,7 @@ var NavLink = base.Component.extend(
             value: ['[[path]]', data],
             callBack: function(ele, value)
             {
-                var selected = exact? (value === ele.pathname) : (new RegExp(ele.pathname + '($|\/|\\.).*').test(value));
+                var selected = exact? (value === ele.pathname) : (new RegExp('^' + ele.pathname + '($|\/|\\.).*').test(value));
                 self.update(ele, selected);
             }
         });

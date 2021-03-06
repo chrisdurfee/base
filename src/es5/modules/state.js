@@ -29,6 +29,7 @@
 			one way binding */
 			this.eventSub = new base.DataPubSub();
 
+			this.links = {};
 			this.stage = {};
 			this.id = id;
 		},
