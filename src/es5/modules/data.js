@@ -63,6 +63,8 @@
 
 	var BasicData = base.Class.extend(
 	{
+		isData: true,
+
 		/**
 		 * @constructor
 		 * @param {object} [settings]
@@ -344,12 +346,12 @@
 			 {
 				 attr = data.get();
 			 }
- 
+
 			 if(typeof attr !== 'object')
 			 {
 				 return this.remoteLink(data, attr, alias);
 			 }
- 
+
 			 var tokens = [];
 			 for(var prop in attr)
 			 {
@@ -357,12 +359,12 @@
 				 {
 					 continue;
 				 }
- 
+
 				 tokens.push(this.remoteLink(data, prop));
 			 }
 			 return tokens;
 		 },
- 
+
 		 /**
 		  * This will link a remote data source by property.
 		  *
@@ -379,7 +381,7 @@
 			 {
 				 this.set(attr, value);
 			 }
- 
+
 			 var self = this;
 			 var token = data.on(attr, function(propValue, committer)
 			 {
@@ -387,26 +389,26 @@
 				 {
 					 return false;
 				 }
- 
+
 				 self.set(childAttr, propValue, data);
 			 });
- 
+
 			 this.addLink(token, data);
- 
+
 			 var remoteToken = this.on(childAttr, function(propValue, committer)
 			 {
 				 if(committer === data)
 				 {
 					 return false;
 				 }
- 
+
 				 data.set(attr, propValue, self);
 			 });
- 
+
 			 data.addLink(remoteToken, this);
 			 return token;
 		 },
- 
+
 		 /**
 		  * This will add a link token to the links array.
 		  *
@@ -417,7 +419,7 @@
 		 {
 			 this.links[token] = data;
 		 },
- 
+
 		 /**
 		  * This will remove a link or all links.
 		  *
@@ -430,7 +432,7 @@
 				 this.removeLink(token);
 				 return;
 			 }
- 
+
 			 var links = this.links;
 			 if(links.length)
 			 {
@@ -441,7 +443,7 @@
 				 this.links = [];
 			 }
 		 },
- 
+
 		 /**
 		  * This will remove the linked subscription.
 		  *
@@ -455,12 +457,12 @@
 			 {
 				 data.off(token);
 			 }
- 
+
 			 if(removeFromLinks === false)
 			 {
 				 return;
 			 }
- 
+
 			 delete this.links[token];
 		 }
 	});
@@ -478,8 +480,6 @@
 	 */
 	var Data = BasicData.extend(
 	{
-		isData: true,
-
 		/**
 		 * This will setup the stage and attributes object.
 		 */

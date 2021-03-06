@@ -24,7 +24,7 @@ export class SimpleData extends BasicData
 	_publish(attr, val, committer, prevValue)
 	{
 		let message = attr + ':change';
-		this.eventSub.publish(message, val, prevValue, committer);
+		this.eventSub.publish(message, val, committer);
 
 		committer = committer || this;
 

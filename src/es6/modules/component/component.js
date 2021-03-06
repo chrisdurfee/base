@@ -498,6 +498,11 @@ export class Component
 		this.beforeDestroy();
 		this.removeEvents();
 		this.removeStates();
+
+		if(this.data && this.persist === false)
+		{
+			this.data.unlink();
+		}
 	}
 
 	/**

@@ -307,7 +307,7 @@ export class htmlBuilder
 
 		dataTracker.remove(ele);
 
-		let bound = ele.dataBindId;
+		let bound = ele.bindId;
 		if(bound)
 		{
 			/* this will check to remove any data bindings

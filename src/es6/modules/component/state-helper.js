@@ -182,35 +182,9 @@ export class StateHelper
 	 */
 	bindRemoteState(target, actionEvent, remoteTargetId)
 	{
-		let token,
-		remoteTarget = state.getTarget(remoteTargetId),
-		value = remoteTarget.get(actionEvent);
-		if(typeof value !== 'undefined')
-		{
-			target.set(actionEvent, value);
-		}
+		const remoteTarget = base.state.getTarget(remoteTargetId);
 
-		token = remoteTarget.on(actionEvent, (state, prevState, committer) =>
-		{
-			if(committer === target)
-			{
-				return false;
-			}
-
-			target.set(actionEvent, state, remoteTarget);
-		});
-
-		target.on(actionEvent, (state, prevState, committer) =>
-		{
-			if(committer === remoteTarget)
-			{
-				return false;
-			}
-
-			remoteTarget.set(actionEvent, state, target);
-		});
-
-		return token;
+		return target.link(remoteTarget, actionEvent);
 	}
 
 	/**

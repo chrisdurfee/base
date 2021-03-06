@@ -12,16 +12,16 @@ const routePattern = (uri) =>
 	let uriQuery = "";
 	if(uri)
 	{
+		let filter = /\//g;
+		uriQuery = uri.replace(filter, "\/");
+
 		/* we want to setup the wild card and param
 		checks to be modified to the route uri string */
-		let allowAll = /(\*)/g,
-		param = /(:[^\/?&($]+)/g,
-		optionalParams = /(\?\/+\*?)/g,
-		optionalSlash = /(\/):[^\/(]*?\?/g,
-		filter = /\//g;
-		uriQuery = uri.replace(filter, "\/").replace(allowAll, '.*');
+		let allowAll = /(\*)/g;
+		uriQuery = uriQuery.replace(allowAll, '.*');
 
 		/* this will setup for optional slashes before the optional params */
+		let optionalSlash = /(\/):[^\/(]*?\?/g;
 		uriQuery = uriQuery.replace(optionalSlash, (str) =>
 		{
 			let pattern = /\//g;
@@ -30,7 +30,13 @@ const routePattern = (uri) =>
 
 		/* this will setup for optional params and params
 		and stop at the last slash or query start */
-		uriQuery = uriQuery.replace(optionalParams, '?\/*').replace(param, '([^\/|?]+)');
+		let param = /(:[^\/?&($]+)/g;
+		let optionalParams = /(\?\/+\*?)/g;
+		uriQuery = uriQuery.replace(optionalParams, '?\/*');
+		uriQuery = uriQuery.replace(param, (str) =>
+		{
+			return (str.indexOf('.') < 0)? '([^\/|?]+)' : '([^\/|?]+.*)';
+		});
 	}
 
 	/* we want to set and string end if the wild card is not set */
@@ -75,7 +81,7 @@ const paramPattern = (uri) =>
 	let filter = /[\*?]/g;
 	uri = uri.replace(filter, '');
 
-	let pattern = /:(.[^\/?&($]+)\?*/g,
+	let pattern = /:(.[^.\/?&($]+)\?*/g,
 	matches = uri.match(pattern);
 	if(matches === null)
 	{

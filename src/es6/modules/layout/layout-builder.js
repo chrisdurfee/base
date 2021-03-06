@@ -121,6 +121,24 @@ export class LayoutBuilder extends htmlBuilder
 			parent[propName] = ele;
 		}
 
+		/* we want to recursively add the children to
+		the new element */
+		let children = settings.children;
+		if (children.length > 0)
+		{
+			let child;
+			for (var i = 0, length = children.length; i < length; i++)
+			{
+				child = children[i];
+				if(child === null)
+				{
+					continue;
+				}
+
+				this.buildElement(child, ele, parent);
+			}
+		}
+
 		if(typeof obj.onCreated === 'function')
 		{
 			obj.onCreated(ele);
@@ -162,24 +180,6 @@ export class LayoutBuilder extends htmlBuilder
 		if(obj.watch)
 		{
 			this.watch(ele, obj.watch, parent);
-		}
-
-		/* we want to recursively add the children to
-		the new element */
-		let children = settings.children;
-		if (children.length > 0)
-		{
-			let child;
-			for (var i = 0, length = children.length; i < length; i++)
-			{
-				child = children[i];
-				if(child === null)
-				{
-					continue;
-				}
-
-				this.buildElement(child, ele, parent);
-			}
 		}
 	}
 

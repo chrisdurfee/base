@@ -19,6 +19,7 @@ export class BasicData
 	constructor(settings)
 	{
 		this.dirty = false;
+		this.links = {};
 
 		this._init();
 		this.setup();
@@ -82,7 +83,8 @@ export class BasicData
 	on(attrName, callBack)
 	{
 		let message = attrName + ':change';
-		return this.eventSub.on(message, callBack);
+		let token = this.eventSub.on(message, callBack);
+		return this._id + token;
 	}
 
 	/**
@@ -270,4 +272,140 @@ export class BasicData
 			return this.getModelData();
 		}
 	}
+
+	/**
+	 * This will link a data source property to another data source.
+	 *
+	 * @param {object} data
+	 * @param {string|object} attr
+	 * @param {string} alias
+	 * @return {string|array}
+	 */
+	link(data, attr, alias)
+	{
+		// this will get the data source attrs if sending a whole data object
+		if(arguments.length === 1 && data.isData === true)
+		{
+			attr = data.get();
+		}
+
+		if(typeof attr !== 'object')
+		{
+			return this.remoteLink(data, attr, alias);
+		}
+
+		let tokens = [];
+		for(var prop in attr)
+		{
+			if(attr.hasOwnProperty(prop) === false)
+			{
+				continue;
+			}
+
+			tokens.push(this.remoteLink(data, prop));
+		}
+		return tokens;
+	}
+
+	/**
+	 * This will link a remote data source by property.
+	 *
+	 * @param {object} data
+	 * @param {string} attr
+	 * @param {string} alias
+	 * @return {string}
+	 */
+	remoteLink(data, attr, alias)
+	{
+		let childAttr = alias || attr;
+		let value = data.get(attr);
+		if(typeof value !== 'undefined')
+		{
+			this.set(attr, value);
+		}
+
+		let token = data.on(attr, (propValue, committer) =>
+		{
+			if(committer === this)
+			{
+				return false;
+			}
+
+			this.set(childAttr, propValue, data);
+		});
+
+		this.addLink(token, data);
+
+		let remoteToken = this.on(childAttr, (propValue, committer) =>
+		{
+			if(committer === data)
+			{
+				return false;
+			}
+
+			data.set(attr, propValue, this);
+		});
+
+		data.addLink(remoteToken, this);
+		return token;
+	}
+
+	/**
+	 * This will add a link token to the links array.
+	 *
+	 * @param {string} token
+	 * @param {object} data
+	 */
+	addLink(token, data)
+	{
+		this.links[token] = data;
+	}
+
+	/**
+	 * This will remove a link or all links.
+	 *
+	 * @param {string} [token]
+	 */
+	unlink(token)
+	{
+		if(token)
+		{
+			this.removeLink(token);
+			return;
+		}
+
+		let links = this.links;
+		if(links.length)
+		{
+			for(var i = 0, length = links.length; i < length; i++)
+			{
+				this.removeLink(links[i], false);
+			}
+			this.links = [];
+		}
+	}
+
+	/**
+	 * This will remove the linked subscription.
+	 *
+	 * @param {string} token
+	 * @param {bool} removeFromLinks
+	 */
+	removeLink(token, removeFromLinks)
+	{
+		let data = this.links[token];
+		if(data)
+		{
+			data.off(token);
+		}
+
+		if(removeFromLinks === false)
+		{
+			return;
+		}
+
+		delete this.links[token];
+	}
 }
+
+BasicData.prototype.isData = true;
