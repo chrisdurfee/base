@@ -84,7 +84,7 @@ export class BasicData
 	{
 		let message = attrName + ':change';
 		let token = this.eventSub.on(message, callBack);
-		return this._id + token;
+		return token;
 	}
 
 	/**

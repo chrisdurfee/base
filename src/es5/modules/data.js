@@ -138,7 +138,7 @@
 		{
 			var message = attrName + ':change';
 			var token = this.eventSub.on(message, callBack);
-			return this._id + token;
+			return token;
 		},
 
 		/**
