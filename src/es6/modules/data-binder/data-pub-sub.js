@@ -1,3 +1,5 @@
+let lastToken = -1;
+
 /**
  * DataPubSub
  *
@@ -44,6 +46,7 @@ export class DataPubSub
 	{
 		this.callBacks = {};
 		this.lastToken = -1;
+		lastToken = -1;
 	}
 
 	/**
@@ -55,7 +58,7 @@ export class DataPubSub
 	 */
 	on(msg, callBack)
 	{
-		let token = (++this.lastToken),
+		let token = (++lastToken),
 		list = this.get(msg);
 		list.push({
 			token: token,

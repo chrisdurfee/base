@@ -173,6 +173,19 @@ export class Route extends SimpleData
 	}
 
 	/**
+	 * This will update the route title.
+	 *
+	 * @param {string|function} title
+	 */
+	setTitle(title)
+	{
+		base.router.updateTitle({
+			title: title,
+			stage: this.stage
+		});
+	}
+
+	/**
 	 * This will setup the route component.
 	 *
 	 * @protected

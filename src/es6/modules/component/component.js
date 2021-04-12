@@ -231,6 +231,18 @@ export class Component
 	}
 
 	/**
+	 * This will render the content on condition of a property.
+	 *
+	 * @param {mixed} prop
+	 * @param {mixed} content
+	 * @returns {object}
+	 */
+	if(prop, content)
+	{
+		return (!prop)? null : (content || prop);
+	}
+
+	/**
 	 * This will remove children from an element.
 	 *
 	 * @param {object} layout

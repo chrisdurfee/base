@@ -408,6 +408,11 @@
 		 */
 		checkLink: function(evt)
 		{
+			if(evt.ctrlKey === true)
+			{
+				return true;
+			}
+
 			var target = evt.target || evt.srcElement;
 			if(target.nodeName.toLowerCase() !== 'a')
 			{
@@ -544,6 +549,11 @@
 
 				if(title)
 				{
+					if(typeof title === 'function')
+					{
+						title = title(route.stage);
+					}
+
 					/* we want to replace any params in the title
 					and uppercase the title */
 					title = replaceParams(title);
@@ -1122,6 +1132,19 @@
 			{
 				controller.remove();
 			}
+		},
+
+		/**
+		 * This will update the route title.
+		 *
+		 * @param {string|function} title
+		 */
+		setTitle: function(title)
+		{
+			base.router.updateTitle({
+				title: title,
+				stage: this.stage
+			});
 		},
 
 		/**

@@ -3,6 +3,8 @@
 {
 	"use strict";
 
+	var lastToken = -1;
+
 	/**
 	 * DataPubSub
 	 *
@@ -49,6 +51,7 @@
 		{
 			this.callBacks = {};
 			this.lastToken = -1;
+			lastToken = -1;
 		},
 
 		/**
@@ -60,7 +63,7 @@
 		 */
 		on: function(msg, callBack)
 		{
-			var token = (++this.lastToken);
+			var token = (++lastToken);
 			var list = this.get(msg);
 			list.push({
 				token: token,

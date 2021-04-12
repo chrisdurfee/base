@@ -378,6 +378,11 @@ export class Router
 	 */
 	checkLink(evt)
 	{
+		if(evt.ctrlKey === true)
+		{
+			return true;
+		}
+
 		let target = evt.target || evt.srcElement;
 		if(target.nodeName.toLowerCase() !== 'a')
 		{
@@ -511,6 +516,11 @@ export class Router
 
 			if(title)
 			{
+				if(typeof title === 'function')
+				{
+					title = title(route.stage);
+				}
+
 				/* we want to replace any params in the title
 				and uppercase the title */
 				title = replaceParams(title);
