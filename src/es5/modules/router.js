@@ -1121,6 +1121,19 @@
 		},
 
 		/**
+		 * This will update the route title.
+		 *
+		 * @param {string|function} title
+		 */
+		setTitle: function(title)
+		{
+			base.router.updateTitle({
+				title: title,
+				stage: this.stage
+			});
+		},
+
+		/**
 		 * This will deactivate the route.
 		 */
 		deactivate: function()
@@ -1132,19 +1145,6 @@
 			{
 				controller.remove();
 			}
-		},
-
-		/**
-		 * This will update the route title.
-		 *
-		 * @param {string|function} title
-		 */
-		setTitle: function(title)
-		{
-			base.router.updateTitle({
-				title: title,
-				stage: this.stage
-			});
 		},
 
 		/**

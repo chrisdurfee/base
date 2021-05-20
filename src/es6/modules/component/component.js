@@ -243,6 +243,29 @@ export class Component
 	}
 
 	/**
+	 * This will map an array to children elements.
+	 *
+	 * @param {array} items
+	 * @param {function} callBack
+	 * @returns {array}
+	 */
+	map(items, callBack)
+	{
+		let children = [];
+		if(!items || items.length < 1)
+		{
+			return children;
+		}
+
+		for(var i = 0, length = items.length; i < length; i++)
+		{
+			var item = callBack(items[i], i);
+			children.push(item);
+		}
+		return children;
+	}
+
+	/**
 	 * This will remove children from an element.
 	 *
 	 * @param {object} layout

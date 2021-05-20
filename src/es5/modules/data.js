@@ -187,6 +187,7 @@
 		 * or
 		 *
 		 * @param {object} data
+		 * @return {object} this
 		 */
 		set: function()
 		{
@@ -214,6 +215,7 @@
 			{
 				this._setAttr(args[0], args[1], args[2], args[3]);
 			}
+			return this;
 		},
 
 		/**
@@ -228,6 +230,7 @@
 		 * This will toggle a bool attribute.
 		 *
 		 * @param {string} attr
+		 * @return {object} this
 		 */
 		toggle: function(attr)
 		{
@@ -237,12 +240,14 @@
 			}
 
 			this.set(attr, !this.get(attr));
+			return this;
 		},
 
 		/**
 		 * This will increment an attribute.
 		 *
 		 * @param {string} attr
+		 * @return {object} this
 		 */
 		increment: function(attr)
 		{
@@ -253,12 +258,14 @@
 
 			var val = this.get(attr);
 			this.set(attr, ++val);
+			return this;
 		},
 
 		/**
 		 * This will decrement an attribute.
 		 *
 		 * @param {string} attr
+		 * @return {object} this
 		 */
 		decrement: function(attr)
 		{
@@ -269,6 +276,7 @@
 
 			var val = this.get(attr);
 			this.set(attr, --val);
+			return this;
 		},
 
 		/**
@@ -377,7 +385,7 @@
 		 {
 			 var childAttr = alias || attr;
 			 var value = data.get(attr);
-			 if(typeof value !== 'undefined')
+			 if(typeof value !== 'undefined' && this.get(attr) !== value)
 			 {
 				 this.set(attr, value);
 			 }
@@ -546,6 +554,11 @@
 		 */
 		_setAttr: function(attr, val, committer, stopMerge)
 		{
+			if(val === this.get(attr))
+			{
+				return;
+			}
+
 			/* this will check to update the model based on who
 			updated it. if the data binder updated the data only
 			the stage data is updated */

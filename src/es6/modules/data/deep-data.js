@@ -78,6 +78,11 @@ export class Data extends BasicData
 	 */
 	_setAttr(attr, val, committer, stopMerge)
 	{
+		if(val === this.get(attr))
+		{
+			return;
+		}
+
 		/* this will check to update the model based on who
 		updated it. if the data binder updated the data only
 		the stage data is updated */

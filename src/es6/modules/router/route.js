@@ -159,6 +159,19 @@ export class Route extends SimpleData
 	}
 
 	/**
+	 * This will update the route title.
+	 *
+	 * @param {string|function} title
+	 */
+	setTitle(title)
+	{
+		base.router.updateTitle({
+			title: title,
+			stage: this.stage
+		});
+	}
+
+	/**
 	 * This will deactivate the route.
 	 */
 	deactivate()
@@ -170,19 +183,6 @@ export class Route extends SimpleData
 		{
 			controller.remove();
 		}
-	}
-
-	/**
-	 * This will update the route title.
-	 *
-	 * @param {string|function} title
-	 */
-	setTitle(title)
-	{
-		base.router.updateTitle({
-			title: title,
-			stage: this.stage
-		});
 	}
 
 	/**

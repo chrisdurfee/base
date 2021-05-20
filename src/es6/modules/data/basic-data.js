@@ -133,6 +133,7 @@ export class BasicData
 	 * or
 	 *
 	 * @param {object} data
+	 * @return {object} this
 	 */
 	set(...args)
 	{
@@ -157,6 +158,7 @@ export class BasicData
 		{
 			this._setAttr(...args);
 		}
+		return this;
 	}
 
 	/**
@@ -182,6 +184,7 @@ export class BasicData
 	 * This will toggle a bool attribute.
 	 *
 	 * @param {string} attr
+	 * @return {object} this
 	 */
 	toggle(attr)
 	{
@@ -191,12 +194,14 @@ export class BasicData
 		}
 
 		this.set(attr, !this.get(attr));
+		return this;
 	}
 
 	/**
 	 * This will increment an attribute.
 	 *
 	 * @param {string} attr
+	 * @return {object} this
 	 */
 	increment(attr)
 	{
@@ -207,12 +212,14 @@ export class BasicData
 
 		let val = this.get(attr);
 		this.set(attr, ++val);
+		return this;
 	}
 
 	/**
 	 * This will decrement an attribute.
 	 *
 	 * @param {string} attr
+	 * @return {object} this
 	 */
 	decrement(attr)
 	{
@@ -223,6 +230,7 @@ export class BasicData
 
 		let val = this.get(attr);
 		this.set(attr, --val);
+		return this;
 	}
 
 	/**
@@ -319,7 +327,7 @@ export class BasicData
 	{
 		let childAttr = alias || attr;
 		let value = data.get(attr);
-		if(typeof value !== 'undefined')
+		if(typeof value !== 'undefined' && this.get(attr) !== value)
 		{
 			this.set(attr, value);
 		}
