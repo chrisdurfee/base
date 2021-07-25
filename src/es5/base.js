@@ -1901,11 +1901,8 @@
 					str = String(str);
 				}
 
-				var newLine = /\n/g,
-				returnCarriage = /\r/g,
-				tab = /\t/g;
-
-				return str.replace(newLine, "\\n").replace(returnCarriage, "\\r").replace(tab, "\\t");
+				var tab = /\t/g;
+				return str.replace(tab, "\\t");
 			};
 
 			var sanitize = function(text)

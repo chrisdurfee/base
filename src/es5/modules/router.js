@@ -557,8 +557,7 @@
 					/* we want to replace any params in the title
 					and uppercase the title */
 					title = replaceParams(title);
-					var pattern = /-/g;
-					title = toTitleCase(title.replace(pattern, ' '));
+					title = toTitleCase(title);
 
 					/* we want to check to add the base title to the
 					to the end of the title */

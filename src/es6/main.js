@@ -1057,11 +1057,8 @@ class Base
 				str = String(str);
 			}
 
-			let newLine = /\n/g,
-			returnCarriage = /\r/g,
-			tab = /\t/g;
-
-			return str.replace(newLine, "\\n").replace(returnCarriage, "\\r").replace(tab, "\\t");
+			let tab = /\t/g;
+			return str.replace(tab, "\\t");
 		};
 
 		var sanitize = (text) =>
