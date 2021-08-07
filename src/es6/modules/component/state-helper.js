@@ -182,7 +182,7 @@ export class StateHelper
 	 */
 	bindRemoteState(target, actionEvent, remoteTargetId)
 	{
-		const remoteTarget = base.state.getTarget(remoteTargetId);
+		const remoteTarget = state.getTarget(remoteTargetId);
 
 		return target.link(remoteTarget, actionEvent);
 	}
