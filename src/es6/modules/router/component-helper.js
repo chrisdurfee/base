@@ -53,24 +53,38 @@ export class ComponentHelper
 		if(typeof template === 'string')
 		{
 			template = this.template = window[template];
+			if(!template)
+			{
+				return;
+			}
 		}
 
 		let type = typeof template;
-		if(type === 'function' || type === 'object')
+		if(type === 'function')
 		{
-			if(type === 'object')
+			this.component = new this.template({
+				route: this.route,
+				persist: this.persist,
+				parent: this.parent
+			});
+		}
+		else if(type === 'object')
+		{
+			if(!this.template.isUnit)
 			{
-				let comp = this.component = this.template;
-				let persist = (comp.persist !== false);
-
-				comp.route = this.route;
-				comp.persist = persist;
-				comp.parent = this.parent;
-				this.persist = persist;
+				this.template = Jot(this.template);
 			}
 
-			this.hasTemplate = true;
+			let comp = this.component = this.template;
+			let persist = (comp.persist !== false);
+
+			comp.route = this.route;
+			comp.persist = persist;
+			comp.parent = this.parent;
+			this.persist = persist;
 		}
+
+		this.hasTemplate = true;
 	}
 
 	/**
@@ -89,18 +103,7 @@ export class ComponentHelper
 		let comp = this.component;
 		if(!this.persist || !comp)
 		{
-			if(typeof this.template === 'function')
-			{
-				comp = this.component = new this.template({
-					route: this.route,
-					persist: this.persist,
-					parent: this.parent
-				});
-			}
-			else
-			{
-				comp = this.component = this.template;
-			}
+			comp = this.component = this.template;
 		}
 
 		comp.setup(this.container);

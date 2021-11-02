@@ -4,6 +4,23 @@ import {dataBinder} from '../data-binder/data-binder.js';
 import {htmlBuilder} from '../html-builder/html-builder.js';
 import {WatcherHelper} from './watcher-helper.js';
 
+/**
+ * This will create a watch element.
+ *
+ * @param {object} data
+ * @param {string} prop
+ * @returns {function}
+ */
+export const Watch = function(data, prop)
+{
+	return function(callBack)
+	{
+		return {
+			onSet: [data, prop, callBack]
+		};
+	};
+};
+
 const parser = new LayoutParser();
 
 /**
@@ -31,6 +48,36 @@ export class LayoutBuilder extends htmlBuilder
 		this._addElementAttrs(obj, attrObject);
 		this.append(container, obj);
 		return obj;
+	}
+
+	/**
+	 * This will render a function/Unit/Component.
+	 *
+	 * @param {object|function} layout
+	 * @param {object} container
+	 * @returns {object} The layout Unit or Component
+	 */
+	render(layout, container)
+	{
+		if(!layout)
+		{
+			return;
+		}
+
+		switch(typeof layout)
+		{
+			case 'object':
+				if(layout.isUnit === true)
+				{
+					layout.setup(container);
+					return layout;
+				}
+			default:
+				let component = Jot(layout);
+				let jot = new component();
+				jot.setup(container);
+				return jot;
+		}
 	}
 
 	/**
@@ -80,7 +127,7 @@ export class LayoutBuilder extends htmlBuilder
 			return;
 		}
 
-		if(obj.component || obj.isComponent === true)
+		if(obj.component || obj.isUnit === true)
 		{
 			this.createComponent(obj, container, parent);
 		}
@@ -174,6 +221,24 @@ export class LayoutBuilder extends htmlBuilder
 			if(onSet && onSet.length)
 			{
 				this.onSet(ele, onSet, parent);
+			}
+
+			let useParent = obj.useParent;
+			if(useParent)
+			{
+				this.useParent(ele, useParent, parent);
+			}
+
+			let useData = obj.useData;
+			if(useData)
+			{
+				this.useData(ele, useData, parent);
+			}
+
+			let useState = obj.useState;
+			if(useState)
+			{
+				this.useData(ele, useState, parent);
 			}
 		}
 
@@ -411,6 +476,57 @@ export class LayoutBuilder extends htmlBuilder
 	}
 
 	/**
+	 * This will pass the parent state to the callBack.
+	 *
+	 * @param {object} ele
+	 * @param {function} callBack
+	 * @param {object} parent
+	 */
+	useParent(ele, callBack, parent)
+	{
+		if(!callBack || !parent)
+		{
+			return false;
+		}
+
+		callBack(parent, ele);
+	}
+
+	/**
+	 * This will pass the parent state to the callBack.
+	 *
+	 * @param {object} ele
+	 * @param {function} callBack
+	 * @param {object} parent
+	 */
+	useData(ele, callBack, parent)
+	{
+		if(!callBack || !parent)
+		{
+			return false;
+		}
+
+		callBack(parent.data, ele);
+	}
+
+	/**
+	 * This will pass the parent state to the callBack.
+	 *
+	 * @param {object} ele
+	 * @param {function} callBack
+	 * @param {object} parent
+	 */
+	useState(ele, callBack, parent)
+	{
+		if(!callBack || !parent)
+		{
+			return false;
+		}
+
+		callBack(parent.state, ele);
+	}
+
+	/**
 	 * This will add an onState watcher.
 	 *
 	 * @param {object} ele
@@ -512,7 +628,7 @@ export class LayoutBuilder extends htmlBuilder
 		switch(typeof result)
 		{
 			case 'object':
-				if(parent && result && result.isComponent === true && parent.persist === true && parent.state)
+				if(parent && result && result.isUnit === true && parent.persist === true && parent.state)
 				{
 					let key = prop + ':' + value,
 					state = parent.state,

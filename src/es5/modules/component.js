@@ -1,5 +1,5 @@
 /* base framework module */
-(function()
+(function(global)
 {
 	"use strict";
 
@@ -391,15 +391,15 @@
 	var builder = base.builder;
 
 	/**
-	 * Component
+	 * Unit
 	 *
 	 * @class
 	 *
-	 * This will allow components to be extended
+	 * This will allow units to be extended
 	 * from a single factory.
 	 *
 	 * @example
-	 * var QuickFlashPanel = base.Component.extend(
+	 * var Alert = base.Unit.extend(
 	 *	{
 	 *		constructor: function(props)
 	 *		{
@@ -415,7 +415,7 @@
 	 *		}
 	 *	});
 	 */
-	var Component = base.Class.extend(
+	var Unit = base.Class.extend(
 	{
 		/**
 		 * @constructor
@@ -432,13 +432,13 @@
 		},
 
 		/**
-		 * @param {bool} isComponent
+		 * @param {bool} isUnit
 		 */
-		isComponent: true,
+		isUnit: true,
 
 		/**
-		 * This will setup the component number and unique
-		 * instance id for the component elements.
+		 * This will setup the unit number and unique
+		 * instance id for the unit elements.
 		 * @protected
 		 */
 		init: function()
@@ -446,12 +446,12 @@
 			var constructor = this.constructor;
 			this.number = (typeof constructor.number === 'undefined')? constructor.number = 0 : (++constructor.number);
 
-			var name = this.overrideTypeId || this.componentTypeId;
+			var name = this.overrideTypeId || this._typeId;
 			this.id = name + this.number;
 		},
 
 		/**
-		 * This will setup the component props.
+		 * This will setup the unit props.
 		 *
 		 * @param {object} [props]
 		 */
@@ -480,7 +480,7 @@
 		},
 
 		/**
-		 * This will render the component.
+		 * This will render the unit.
 		 *
 		 * @return {object}
 		 */
@@ -513,7 +513,7 @@
 		},
 
 		/**
-		 * This will create the component layout.
+		 * This will create the unit layout.
 		 * @protected
 		 * @return {object}
 		 */
@@ -600,12 +600,12 @@
 		 * @param {mixed} content
 		 * @returns {object}
 		 */
-		 if: function(prop, content)
-		 {
-			 return (!prop)? null : (content || prop);
-		 },
+		if: function(prop, content)
+		{
+			return (!prop)? null : (content || prop);
+		},
 
-		 /**
+		/**
 		 * This will map an array to children elements.
 		 *
 		 * @param {array} items
@@ -643,7 +643,7 @@
 		/**
 		 * This will cache an element when its created by
 		 * saving a reference to it as a property on the
-		 * component.
+		 * unit.
 		 *
 		 * @param {string} propName The name to use as
 		 * the reference.
@@ -658,7 +658,7 @@
 				return false;
 			}
 
-			if(layout.isComponent === true)
+			if(layout.isUnit === true)
 			{
 				layout =
 				{
@@ -680,8 +680,8 @@
 		},
 
 		/**
-		 * This will get an id of the component or the full
-		 * id that has the component id prepended to the
+		 * This will get an id of the unit or the full
+		 * id that has the unit id prepended to the
 		 * requested id.
 		 *
 		 * @param {string} [id]
@@ -698,15 +698,13 @@
 		},
 
 		/**
-		 * This will initialize the component.
+		 * This will initialize the unit.
 		 * @protected
 		 */
 		initialize: function()
 		{
 			this.beforeSetup();
-			this.addStates();
 			this.buildLayout();
-			this.addEvents();
 			this.afterSetup();
 		},
 
@@ -727,13 +725,159 @@
 		},
 
 		/**
-		 * This will setup and render the component.
+		 * This will setup and render the unit.
 		 * @param {object} container
 		 */
 		setup: function(container)
 		{
 			this.container = container;
 			this.initialize();
+		},
+
+		/**
+		 * This will remove the unit.
+		 * @protected
+		 */
+		remove: function()
+		{
+			this.prepareDestroy();
+
+			var panel = this.panel || this.id;
+			builder.removeElement(panel);
+		},
+
+		/**
+		 * This will prepare the unit to be destroyed.
+		 */
+		prepareDestroy: function()
+		{
+			this.rendered = false;
+			this.beforeDestroy();
+		},
+
+		/**
+		 * Override this to do something before destroy.
+		 */
+		beforeDestroy: function()
+		{
+
+		},
+
+		/**
+		 * This will destroy the unit.
+		 */
+		destroy: function()
+		{
+			this.remove();
+		},
+
+		/**
+		 * This will bind and element to data.
+		 *
+		 * @param {object} element
+		 * @param {object} data
+		 * @param {string} prop
+		 * @param {function} filter
+		 */
+		bindElement: function(element, data, prop, filter)
+		{
+			if(element)
+			{
+				base.DataBinder.bind(element, data, prop, filter);
+			}
+		}
+	});
+
+	var typeNumber = 0;
+
+	/**
+	 * This will extend the parent unit to a child
+	 * unit.
+	 *
+	 * @static
+	 * @param {object} child
+	 * @return {function}
+	 */
+	Unit.extend = function(child)
+	{
+		if(!child)
+		{
+			return false;
+		}
+
+		var parent = this.prototype;
+
+		/* the child constructor must be set to set
+		the parent static methods on the child */
+		var constructor = child && child.constructor? child.constructor : false;
+		if(child.hasOwnProperty('constructor') === false)
+		{
+			constructor = function()
+			{
+				var args = base.listToArray(arguments);
+				parent.constructor.apply(this, args);
+			};
+		}
+
+		/* this will add the parent class to the
+		child class */
+		constructor.prototype = base.extendClass(parent, child);
+
+		/* this will assign a unique id to the type of
+		unit */
+		constructor.prototype._typeId = 'cp-' + (typeNumber++) + '-';
+
+		/* this will add the static methods from the parent to
+		the child constructor. could use assign but ie doesn't
+		support it */
+		//Object.assign(constructor, this);
+		base.extendObject(this, constructor);
+		return constructor;
+	};
+
+	/**
+	 * Component
+	 *
+	 * @class
+	 *
+	 * This will allow components to be extended
+	 * from a single factory.
+	 *
+	 * @example
+	 * var QuickFlashPanel = base.Component.extend(
+	 *	{
+	 *		constructor: function(props)
+	 *		{
+	 *			// this will setup the component id
+	 *			base.Component.call(this, props);
+	 *		},
+ 	 *
+	 *		render: function()
+	 *		{
+	 *			return {
+ 	 *
+	 *			};
+	 *		}
+	 *	});
+	 */
+	var Component = Unit.extend(
+	{
+		/**
+		 * @param {bool} isComponent
+		 */
+		isComponent: true,
+
+		/**
+		 * This will initialize the component.
+		 * @protected
+		 */
+		initialize: function()
+		{
+			this.beforeSetup();
+			this.addStates();
+			this.buildLayout();
+			this.addEvents();
+			this.afterSetup();
 		},
 
 		/* this will allow the component to override the
@@ -884,18 +1028,6 @@
 		},
 
 		/**
-		 * This will remove the component.
-		 * @protected
-		 */
-		remove: function()
-		{
-			this.prepareDestroy();
-
-			var panel = this.panel || this.id;
-			builder.removeElement(panel);
-		},
-
-		/**
 		 * This will prepare the component to be destroyed.
 		 */
 		prepareDestroy: function()
@@ -909,90 +1041,97 @@
 			{
 				this.data.unlink();
 			}
-		},
-
-		/**
-		 * Override this to do something before destroy.
-		 */
-		beforeDestroy: function()
-		{
-
-		},
-
-		/**
-		 * This will destroy the component.
-		 */
-		destroy: function()
-		{
-			this.remove();
-		},
-
-		/**
-		 * This will bind and element to data.
-		 *
-		 * @param {object} element
-		 * @param {object} data
-		 * @param {string} prop
-		 * @param {function} filter
-		 */
-		bindElement: function(element, data, prop, filter)
-		{
-			if(element)
-			{
-				base.DataBinder.bind(element, data, prop, filter);
-			}
 		}
 	});
 
-	var componentTypeNumber = 0;
-
-	/**
-	 * This will extend the parent component to a child
-	 * component.
-	 *
-	 * @static
-	 * @param {object} child
-	 * @return {function}
-	 */
-	Component.extend = function(child)
+	var setupJotComponent = function(settings)
 	{
-		if(!child)
-		{
-			return false;
-		}
+		var component = {};
 
-		var parent = this.prototype;
-
-		/* the child constructor must be set to set
-		the parent static methods on the child */
-		var constructor = child && child.constructor? child.constructor : false;
-		if(child.hasOwnProperty('constructor') === false)
+		var state = settings.state;
+		if(state)
 		{
-			constructor = function()
+			var stateType = (typeof state);
+			component.setupStates = (stateType === 'function')? state : function()
 			{
-				var args = base.listToArray(arguments);
-				parent.constructor.apply(this, args);
+				return state;
 			};
 		}
 
-		/* this will add the parent class to the
-		child class */
-		constructor.prototype = base.extendClass(parent, child);
+		var events = settings.events;
+		if(events)
+		{
+			var eventType = (typeof events);
+			component.setupEevents = (eventType === 'function')? events : function()
+			{
+				return events;
+			};
+		}
 
-		/* this will assign a unique id to the type of
-		component */
-		constructor.prototype.componentTypeId = 'bs-cp-' + (componentTypeNumber++) + '-';
+		var data = settings.data;
+		if(data)
+		{
+			component.data = data;
+		}
 
-		/* this will add the static methods from the parent to
-		the child constructor. could use assign but ie doesn't
-		support it */
-		//Object.assign(constructor, this);
-		base.extendObject(this, constructor);
-		return constructor;
+		var render = settings.render;
+		if(render)
+		{
+			var renderType = (typeof render);
+			component.render = (renderType === 'function')? render : function()
+			{
+				return render;
+			};
+		}
+
+		return component;
+	};
+
+	/**
+	 * This will create a shorthand component.
+	 *
+	 * @param {object|function} layout
+	 * @returns {function}
+	 */
+	global.Jot = function(layout)
+	{
+		if(!layout)
+		{
+			return null;
+		}
+
+		switch(typeof layout)
+		{
+			case 'object':
+				var settings;
+				if(layout.render)
+				{
+					settings = setupJotComponent(layout);
+					return base.Component.extend(settings);
+				}
+
+				settings = {
+					render: function()
+					{
+						return layout;
+					}
+				};
+
+				// this will create a stateless and dataless unit
+				return base.Unit.extend(settings);
+			case 'function':
+				settings = {
+					render: layout
+				};
+
+				// this will create a stateless and dataless unit
+				return base.Unit.extend(settings);
+		}
 	};
 
 	/* this will add a reference to the component
 	object */
+	base.extend.Unit = Unit;
 	base.extend.Component = Component;
 
-})();
+})(this);

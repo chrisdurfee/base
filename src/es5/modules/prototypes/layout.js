@@ -387,7 +387,7 @@
 		 */
 		buildElement: function(obj, container, parent)
 		{
-			if(obj.component || obj.isComponent === true)
+			if(obj.component || obj.isUnit === true)
 			{
 				this.createComponent(obj, container, parent);
 			}

@@ -637,7 +637,7 @@
 				return false;
 			}
 
-			if(layout.isComponent === true)
+			if(layout.isUnit === true)
 			{
 				layout =
 				{

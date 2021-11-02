@@ -3,7 +3,7 @@
 	this will create a layout builder object
 	and shortcut functions.
 */
-(function()
+(function(global)
 {
 	"use strict";
 
@@ -25,6 +25,10 @@
 			'onCreated',
 			'route',
 			'switch',
+			'useParent',
+			'useState',
+			'useData',
+			'map',
 			'onSet',
 			'onState',
 			'watch',
@@ -347,6 +351,23 @@
 		}
 	};
 
+	/**
+	 * This will create a watch element.
+	 *
+	 * @param {object} data
+	 * @param {string} prop
+	 * @returns {function}
+	 */
+	global.Watch = function(data, prop)
+	{
+		return function(callBack)
+		{
+			return {
+				onSet: [data, prop, callBack]
+			};
+		};
+	};
+
 	var parser = new LayoutParser();
 
 	/**
@@ -375,6 +396,36 @@
 			this._addElementAttrs(obj, attrObject);
 			this.append(container, obj);
 			return obj;
+		},
+
+		/**
+		 * This will render a function/Unit/Component.
+		 *
+		 * @param {object|function} layout
+		 * @param {object} container
+		 * @returns {object} The layout Unit or Component
+		 */
+		render: function(layout, container)
+		{
+			if(!layout)
+			{
+				return;
+			}
+
+			switch(typeof layout)
+			{
+				case 'object':
+					if(layout.isUnit === true)
+					{
+						layout.setup(container);
+						return layout;
+					}
+				default:
+					var component = Jot(layout);
+					var jot = new component();
+					jot.setup(container);
+					return jot;
+			}
 		},
 
 		/**
@@ -424,7 +475,7 @@
 				return;
 			}
 
-			if(obj.component || obj.isComponent === true)
+			if(obj.component || obj.isUnit === true)
 			{
 				this.createComponent(obj, container, parent);
 			}
@@ -518,6 +569,24 @@
 				if(onSet && onSet.length)
 				{
 					this.onSet(ele, onSet, parent);
+				}
+
+				var useParent = obj.useParent;
+				if(useParent)
+				{
+					this.useParent(ele, useParent, parent);
+				}
+
+				var useData = obj.useData;
+				if(useData)
+				{
+					this.useData(ele, useData, parent);
+				}
+
+				var useState = obj.useState;
+				if(useState)
+				{
+					this.useData(ele, useState, parent);
 				}
 			}
 
@@ -756,6 +825,57 @@
 		},
 
 		/**
+		 * This will pass the parent state to the callBack.
+		 *
+		 * @param {object} ele
+		 * @param {function} callBack
+		 * @param {object} parent
+		 */
+		useParent: function(ele, callBack, parent)
+		{
+			if(!callBack || !parent)
+			{
+				return false;
+			}
+
+			callBack(parent, ele);
+		},
+
+		/**
+		 * This will pass the parent state to the callBack.
+		 *
+		 * @param {object} ele
+		 * @param {function} callBack
+		 * @param {object} parent
+		 */
+		useData: function(ele, callBack, parent)
+		{
+			if(!callBack || !parent)
+			{
+				return false;
+			}
+
+			callBack(parent.data, ele);
+		},
+
+		/**
+		 * This will pass the parent state to the callBack.
+		 *
+		 * @param {object} ele
+		 * @param {function} callBack
+		 * @param {object} parent
+		 */
+		useState: function(ele, callBack, parent)
+		{
+			if(!callBack || !parent)
+			{
+				return false;
+			}
+
+			callBack(parent.state, ele);
+		},
+
+		/**
 		 * This will add an onState watcher.
 		 *
 		 * @param {object} ele
@@ -860,7 +980,7 @@
 			switch(typeof result)
 			{
 				case 'object':
-					if(parent && result && result.isComponent === true && parent.persist === true && parent.state)
+					if(parent && result && result.isUnit === true && parent.persist === true && parent.state)
 					{
 						var key = prop + ':' + value,
 						state = parent.state,
@@ -983,4 +1103,4 @@
 	{
 		builder.build(obj, container, parent);
 	};
-})();
+})(this);
