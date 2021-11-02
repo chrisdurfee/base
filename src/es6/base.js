@@ -5,7 +5,7 @@ import {Data, SimpleData, Model} from './modules/data/data.js';
 import {state} from './modules/state/state.js';
 import {router, NavLink} from './modules/router/router.js';
 import {builder} from './modules/layout/layout-builder.js';
-import {Component} from './modules/component/component.js';
+import {Unit, Component, Jot, Watch} from './modules/component/component.js';
 import {Atom} from './modules/atom/atom.js';
 
 base.augment(
@@ -31,7 +31,10 @@ export {
     state,
     builder,
     router,
+    Unit,
     Component,
+    Jot,
+    Watch,
     NavLink,
     Atom
 };
