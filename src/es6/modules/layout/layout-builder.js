@@ -16,7 +16,10 @@ export const Watch = function(data, prop)
 	return function(callBack)
 	{
 		return {
-			onSet: [data, prop, callBack]
+			onSet: [data, prop, (ele, value) =>
+			{
+				return callBack(value);
+			}]
 		};
 	};
 };
@@ -209,6 +212,11 @@ export class LayoutBuilder extends htmlBuilder
 			this.addSwitch(ele, obj.switch, parent);
 		}
 
+		if(obj.html)
+		{
+			this.addHtml(ele, obj.html);
+		}
+
 		if(parent)
 		{
 			let onState = obj.onState;
@@ -238,7 +246,13 @@ export class LayoutBuilder extends htmlBuilder
 			let useState = obj.useState;
 			if(useState)
 			{
-				this.useData(ele, useState, parent);
+				this.useState(ele, useState, parent);
+			}
+
+			let addState = obj.addState;
+			if(addState)
+			{
+				this.addState(ele, addState, parent);
 			}
 		}
 
@@ -524,6 +538,28 @@ export class LayoutBuilder extends htmlBuilder
 		}
 
 		callBack(parent.state, ele);
+	}
+
+	/**
+	 * This will pass the parent state to the callBack.
+	 *
+	 * @param {object} ele
+	 * @param {function} callBack
+	 * @param {object} parent
+	 */
+	addState(ele, callBack, parent)
+	{
+		if(!callBack || !parent)
+		{
+			return false;
+		}
+
+		if(parent.stateHelper)
+		{
+			let state = parent.state;
+			let states = callBack(state);
+			parent.stateHelper.addStates(states);
+		}
 	}
 
 	/**

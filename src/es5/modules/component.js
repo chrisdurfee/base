@@ -159,6 +159,18 @@
 		},
 
 		/**
+		 * This will add states to a state.
+		 *
+		 * @param {object} state
+		 * @param {object} states
+		 */
+		addStates: function(state, states)
+		{
+			var actions = this.convertStates(states);
+			this.addStatesToTarget(state, actions);
+		},
+
+		/**
 		 * This will create a state object.
 		 *
 		 * @param {string} action

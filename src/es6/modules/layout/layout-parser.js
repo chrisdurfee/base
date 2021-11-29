@@ -21,7 +21,9 @@ export class LayoutParser
 			'useParent',
 			'useState',
 			'useData',
+			'addState',
 			'map',
+			'html',
 			'onSet',
 			'onState',
 			'watch',
@@ -48,6 +50,25 @@ export class LayoutParser
 	}
 
 	/**
+	 * This will setup the element children.
+	 *
+	 * @param {object} obj
+	 */
+	setupChildren(obj)
+	{
+		if(obj.nest)
+		{
+			obj.children = obj.nest;
+			obj.nest = null;
+		}
+
+		if(typeof obj.children === 'undefined')
+		{
+			obj.children = null;
+		}
+	}
+
+	/**
 	 * This will parse a layout element.
 	 *
 	 * @param {object} obj
@@ -64,11 +85,7 @@ export class LayoutParser
 			attr.type = attr.type || 'button';
 		}
 
-		if(typeof obj.children === 'undefined')
-		{
-			obj.children = null;
-		}
-
+		this.setupChildren(obj);
 		const reserved = this._reserved;
 
 		for (var key in obj)

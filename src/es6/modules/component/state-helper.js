@@ -21,6 +21,18 @@ export class StateHelper
 	}
 
 	/**
+	 * This will add states to a state.
+	 *
+	 * @param {object} state
+	 * @param {object} states
+	 */
+	addStates(state, states)
+	{
+		let actions = this.convertStates(states);
+		this.addStatesToTarget(state, actions);
+	}
+
+	/**
 	 * This will create a state object.
 	 *
 	 * @param {string} action

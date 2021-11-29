@@ -28,7 +28,9 @@
 			'useParent',
 			'useState',
 			'useData',
+			'addState',
 			'map',
+			'html',
 			'onSet',
 			'onState',
 			'watch',
@@ -55,6 +57,25 @@
 		},
 
 		/**
+		 * This will setup the element children.
+		 *
+		 * @param {object} obj
+		 */
+		setupChildren: function(obj)
+		{
+			if(obj.nest)
+			{
+				obj.children = obj.nest;
+				obj.nest = null;
+			}
+
+			if(typeof obj.children === 'undefined')
+			{
+				obj.children = null;
+			}
+		},
+
+		/**
 		 * This will parse a layout element.
 		 *
 		 * @param {object} obj
@@ -71,11 +92,7 @@
 				attr.type = attr.type || 'button';
 			}
 
-			if(typeof obj.children === 'undefined')
-			{
-				obj.children = null;
-			}
-
+			this.setupChildren(obj);
 			var reserved = this._reserved;
 
 			for (var key in obj)
@@ -363,7 +380,10 @@
 		return function(callBack)
 		{
 			return {
-				onSet: [data, prop, callBack]
+				onSet: [data, prop, function(ele, value)
+				{
+					return callBack(value);
+				}]
 			};
 		};
 	};
@@ -557,6 +577,11 @@
 				this.addSwitch(ele, obj.switch, parent);
 			}
 
+			if(obj.html)
+			{
+				this.addHtml(ele, obj.html);
+			}
+
 			if(parent)
 			{
 				var onState = obj.onState;
@@ -586,7 +611,13 @@
 				var useState = obj.useState;
 				if(useState)
 				{
-					this.useData(ele, useState, parent);
+					this.useState(ele, useState, parent);
+				}
+
+				var addState = obj.addState;
+				if(addState)
+				{
+					this.addState(ele, addState, parent);
 				}
 			}
 
@@ -873,6 +904,28 @@
 			}
 
 			callBack(parent.state, ele);
+		},
+
+		/**
+		 * This will pass the parent state to the callBack.
+		 *
+		 * @param {object} ele
+		 * @param {function} callBack
+		 * @param {object} parent
+		 */
+		addState: function(ele, callBack, parent)
+		{
+			if(!callBack || !parent)
+			{
+				return false;
+			}
+
+			if(parent.stateHelper)
+			{
+				var state = parent.state;
+				var states = callBack(state);
+				parent.stateHelper.addStates(states);
+			}
 		},
 
 		/**
