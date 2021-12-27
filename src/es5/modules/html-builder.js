@@ -3,7 +3,7 @@
 	this will create dynamic html to be
 	added and modified
 */
-(function()
+(function(global)
 {
 	"use strict";
 
@@ -16,7 +16,7 @@
 	 * @param {string} prop
 	 * @return {string}
 	 */
-	var filterProperty = function(prop)
+	global.normalizeAttr = function(prop)
 	{
 		switch(prop)
 		{
@@ -70,7 +70,7 @@
 	 * @param {string} prop
 	 * @return {string}
 	 */
-	var removePrefix = function(prop)
+	global.removeEventPrefix = function(prop)
 	{
 		if(typeof prop === 'string' && prop.substring(0, 2) === 'on')
 		{
@@ -223,12 +223,12 @@
 			{
 				/* this will add the event using the base events
 				so the event is tracked */
-				attr = removePrefix(attr);
+				attr = removeEventPrefix(attr);
 				base.addListener(attr, obj, value);
 			}
 			else
 			{
-				var attrName = filterProperty(attr);
+				var attrName = normalizeAttr(attr);
 				obj[attrName] = value;
 			}
 		},
@@ -484,4 +484,4 @@
 
 	base.extend.htmlBuilder = htmlBuilder;
 
-})();
+})(this);

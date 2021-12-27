@@ -23,6 +23,7 @@ export class LayoutParser
 			'useData',
 			'addState',
 			'map',
+			'for',
 			'html',
 			'onSet',
 			'onState',

@@ -1,7 +1,7 @@
 import {base} from '../../core.js';
 import {LayoutParser} from './layout-parser.js';
 import {dataBinder} from '../data-binder/data-binder.js';
-import {htmlBuilder} from '../html-builder/html-builder.js';
+import {htmlBuilder, normalizeAttr, removeEventPrefix} from '../html-builder/html-builder.js';
 import {WatcherHelper} from './watcher-helper.js';
 
 /**
@@ -43,14 +43,103 @@ export class LayoutBuilder extends htmlBuilder
 	 * @param {string} nodeName The node name.
 	 * @param {object} attrObject The node attributes.
 	 * @param {object} container The node container.
+	 * @param {object} parent
 	 * @return {object} The new element.
 	 */
-	create(nodeName, attrObject, container)
+	create(nodeName, attrObject, container, parent)
 	{
 		let obj = document.createElement(nodeName);
-		this._addElementAttrs(obj, attrObject);
+		this._addElementAttrs(obj, attrObject, parent);
 		this.append(container, obj);
 		return obj;
+	}
+
+	/**
+	 * This will add the element attributes.
+	 *
+	 * @protected
+	 * @param {object} obj
+	 * @param {object} attrObject
+	 * @param {object} parent
+	 */
+	_addElementAttrs(obj, attrObject, parent)
+	{
+		/* we want to check if we have attrributes to add */
+		if(!attrObject || typeof attrObject !== 'object')
+		{
+			return false;
+		}
+
+		/* we need to add the type if set to stop ie
+		from removing the value if set after the value is
+		added */
+		let type = attrObject.type;
+		if(typeof type !== 'undefined')
+		{
+			base.setAttr(obj, 'type', type);
+		}
+
+		/* we want to add each attr to the obj */
+		for(var prop in attrObject)
+		{
+			/* we have already added the type so we need to
+			skip if the prop is type */
+			if(attrObject.hasOwnProperty(prop) === false || prop === 'type')
+			{
+				continue;
+			}
+
+			var attrPropValue = attrObject[prop];
+
+			/* we want to check to add the attr settings
+				by property name */
+			if(prop === 'innerHTML')
+			{
+				obj.innerHTML = attrPropValue;
+			}
+			else if(prop.substr(4, 1) === '-')
+			{
+				// this will handle data and aria attributes
+				base.setAttr(obj, prop, attrPropValue);
+			}
+			else
+			{
+				this.addAttr(obj, prop, attrPropValue, parent);
+			}
+		}
+	}
+
+	/**
+	 * This will add an element attribute.
+	 *
+	 * @param {object} obj
+	 * @param {object} attr
+	 * @param {string} value
+	 */
+	addAttr(obj, attr, value, parent)
+	{
+		if(value === '' || !attr)
+		{
+			return false;
+		}
+
+		/* we want to check to add a value or an event listener */
+		let type = typeof value;
+		if(type === 'function')
+		{
+			/* this will add the event using the base events
+			so the event is tracked */
+			attr = removeEventPrefix(attr);
+			base.addListener(attr, obj, function(e)
+			{
+				value.call(this, e, parent);
+			});
+		}
+		else
+		{
+			let attrName = normalizeAttr(attr);
+			obj[attrName] = value;
+		}
 	}
 
 	/**
@@ -229,6 +318,18 @@ export class LayoutBuilder extends htmlBuilder
 			if(onSet && onSet.length)
 			{
 				this.onSet(ele, onSet, parent);
+			}
+
+			let map = obj.map;
+			if(map && map.length)
+			{
+				this.map(ele, map, parent);
+			}
+
+			let forBind = obj.for;
+			if(forBind && forBind.length)
+			{
+				this.for(ele, forBind, parent);
 			}
 
 			let useParent = obj.useParent;
@@ -563,6 +664,79 @@ export class LayoutBuilder extends htmlBuilder
 	}
 
 	/**
+	 * This will map children to the element.
+	 *
+	 * @param {object} ele
+	 * @param {array} settings
+	 * @param {object} parent
+	 */
+	map(ele, settings, parent)
+	{
+		let items = settings[0];
+		if(!items || items.length < 1)
+		{
+			return;
+		}
+
+		let item = settings[1];
+		let children = [];
+		for(var i = 0, length = items.length; i < length; i++)
+		{
+			var layout = item(items[i], i);
+			if(layout === null)
+			{
+				continue;
+			}
+
+			children.push(layout);
+		}
+
+		return this.build(children, ele, parent);
+	}
+
+	/**
+	 * This will watch a data attr and update the
+	 * children to the element when the attr value is updated.
+	 *
+	 * @param {object} ele
+	 * @param {array} settings
+	 * @param {object} parent
+	 */
+	for(ele, settings, parent)
+	{
+		let data, prop, item;
+
+		if(settings.length < 3)
+		{
+			if(!parent.data)
+			{
+				return;
+			}
+
+			data = parent.data;
+			prop = settings[0];
+			item = settings[1];
+		}
+		else
+		{
+			data = settings[0];
+			prop = settings[1];
+			item = settings[2];
+		}
+
+		base.DataBinder.watch(ele, data, prop, (items) =>
+		{
+			this.removeAll(ele);
+			if(!items || items.length < 1)
+			{
+				return;
+			}
+
+			this.map(ele, items, item, parent);
+		});
+	}
+
+	/**
 	 * This will add an onState watcher.
 	 *
 	 * @param {object} ele
@@ -757,18 +931,19 @@ export class LayoutBuilder extends htmlBuilder
 	 *
 	 * @param {object} settings
 	 * @param {object} container
+	 * @param {object} parent
 	 * @return {object}
 	 */
-	createNode(settings, container)
+	createNode(settings, container, parent)
 	{
 		let tag = settings.tag;
 		if(tag !== 'text')
 		{
-			return this.create(tag, settings.attr, container);
+			return this.create(tag, settings.attr, container, parent);
 		}
 
-		let attr = settings.attr,
-		text = attr.textContent || attr.text;
+		let attr = settings.attr;
+		let text = attr.textContent || attr.text;
 		return this.createTextNode(text, container);
 	}
 }

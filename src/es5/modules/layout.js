@@ -30,6 +30,7 @@
 			'useData',
 			'addState',
 			'map',
+			'for',
 			'html',
 			'onSet',
 			'onState',
@@ -407,15 +408,103 @@
 		 * @param {string} nodeName The node name.
 		 * @param {object} attrObject The node attributes.
 		 * @param {object} container The node container.
-		 * @param {boolean} [prepend=false] Add to the begining of the container.
+		 * @param {object} parent
 		 * @return {object} The new element.
 		 */
-		create: function(nodeName, attrObject, container, prepend)
+		create: function(nodeName, attrObject, container, parent)
 		{
 			var obj = document.createElement(nodeName);
-			this._addElementAttrs(obj, attrObject);
+			this._addElementAttrs(obj, attrObject, parent);
 			this.append(container, obj);
 			return obj;
+		},
+
+		/**
+		 * This will add the element attributes.
+		 *
+		 * @protected
+		 * @param {object} obj
+		 * @param {object} attrObject
+		 * @param {object} parent
+		 */
+		_addElementAttrs: function(obj, attrObject, parent)
+		{
+			/* we want to check if we have attrributes to add */
+			if(!attrObject || typeof attrObject !== 'object')
+			{
+				return false;
+			}
+
+			/* we need to add the type if set to stop ie
+			from removing the value if set after the value is
+			added */
+			var type = attrObject.type;
+			if(typeof type !== 'undefined')
+			{
+				base.setAttr(obj, 'type', type);
+			}
+
+			/* we want to add each attr to the obj */
+			for(var prop in attrObject)
+			{
+				/* we have already added the type so we need to
+				skip if the prop is type */
+				if(attrObject.hasOwnProperty(prop) === false || prop === 'type')
+				{
+					continue;
+				}
+
+				var attrPropValue = attrObject[prop];
+
+				/* we want to check to add the attr settings
+				 by property name */
+				if(prop === 'innerHTML')
+				{
+					obj.innerHTML = attrPropValue;
+				}
+				else if(prop.substr(4, 1) === '-')
+				{
+					// this will handle data and aria attributes
+					base.setAttr(obj, prop, attrPropValue);
+				}
+				else
+				{
+					this.addAttr(obj, prop, attrPropValue, parent);
+				}
+			}
+		},
+
+		/**
+		 * This will add an element attribute.
+		 *
+		 * @param {object} obj
+		 * @param {object} attr
+		 * @param {string} value
+		 */
+		addAttr: function(obj, attr, value, parent)
+		{
+			if(value === '' || !attr)
+			{
+				return false;
+			}
+
+			/* we want to check to add a value or an event listener */
+			var type = typeof value;
+			if(type === 'function')
+			{
+				/* this will add the event using the base events
+				so the event is tracked */
+				attr = removeEventPrefix(attr);
+				base.addListener(attr, obj, function(e)
+				{
+					value.call(this, e, parent);
+				});
+			}
+			else
+			{
+				var attrName = normalizeAttr(attr);
+				obj[attrName] = value;
+			}
 		},
 
 		/**
@@ -594,6 +683,18 @@
 				if(onSet && onSet.length)
 				{
 					this.onSet(ele, onSet, parent);
+				}
+
+				var map = obj.map;
+				if(map && map.length)
+				{
+					this.map(ele, map, parent);
+				}
+
+				var forBind = obj.for;
+				if(forBind && forBind.length)
+				{
+					this.for(ele, forBind, parent);
 				}
 
 				var useParent = obj.useParent;
@@ -929,6 +1030,80 @@
 		},
 
 		/**
+		 * This will map children to the element.
+		 *
+		 * @param {object} ele
+		 * @param {array} settings
+		 * @param {object} parent
+		 */
+		map: function(ele, settings, parent)
+		{
+			var items = settings[0];
+			if(!items || items.length < 1)
+			{
+				return;
+			}
+
+			var item = settings[1];
+			var children = [];
+			for(var i = 0, length = items.length; i < length; i++)
+			{
+				var layout = item(items[i], i);
+				if(layout === null)
+				{
+					continue;
+				}
+
+				children.push(layout);
+			}
+
+			return this.build(children, ele, parent);
+		},
+
+		/**
+		 * This will watch a data attr and update the
+		 * children to the element when the attr value is updated.
+		 *
+		 * @param {object} ele
+		 * @param {array} settings
+		 * @param {object} parent
+		 */
+		for: function(ele, settings, parent)
+		{
+			var data, prop, item;
+
+			if(settings.length < 3)
+			{
+				if(!parent.data)
+				{
+					return;
+				}
+
+				data = parent.data;
+				prop = settings[0];
+				item = settings[1];
+			}
+			else
+			{
+				data = settings[0];
+				prop = settings[1];
+				item = settings[2];
+			}
+
+			var self = this;
+			base.DataBinder.watch(ele, data, prop, function(items)
+			{
+				self.removeAll(ele);
+				if(!items || items.length < 1)
+				{
+					return;
+				}
+
+				self.map(ele, items, item, parent);
+			});
+		},
+
+		/**
 		 * This will add an onState watcher.
 		 *
 		 * @param {object} ele
@@ -1126,14 +1301,15 @@
 		 *
 		 * @param {object} settings
 		 * @param {object} container
+		 * @param {object} parent
 		 * @return {object}
 		 */
-		createNode: function(settings, container)
+		createNode: function(settings, container, parent)
 		{
 			var tag = settings.tag;
 			if(tag !== 'text')
 			{
-				return this.create(tag, settings.attr, container);
+				return this.create(tag, settings.attr, container, parent);
 			}
 
 			var attr = settings.attr;

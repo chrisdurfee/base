@@ -280,6 +280,71 @@
 		},
 
 		/**
+		 * This will set the data local storage key.
+		 *
+		 * @param {string} key
+		 */
+		setKey: function(key)
+		{
+			this.key = key;
+		},
+
+		/**
+		 * This will restore the data from local storage.
+		 *
+		 * @param {mixed} defaultValue
+		 * @returns {bool|void}
+		 */
+		resume: function(defaultValue)
+		{
+			var key = this.key;
+			if(!key)
+			{
+				return false;
+			}
+
+			var data;
+			var value = localStorage.getItem(key);
+			if(typeof value === 'undefined')
+			{
+				if(defaultValue)
+				{
+					data = defaultValue;
+				}
+			}
+			else
+			{
+				data = JSON.parse(value);
+			}
+
+			this.set(data);
+		},
+
+		/**
+		 * This will store the data to the local stoage under
+		 * the storage key.
+		 *
+		 * @returns {bool|void}
+		 */
+		store: function()
+		{
+			var key = this.key;
+			if(!key)
+			{
+				return false;
+			}
+
+			var data = this.get();
+			if(!data)
+			{
+				return false;
+			}
+
+			var value = JSON.stringify(data);
+			localStorage.setItem(key, value);
+		},
+
+		/**
 		 * This will delete an attribute.
 		 *
 		 * @param {object} obj
@@ -582,6 +647,102 @@
 			to update any ui elements that are subscribed */
 			committer = committer || this;
 			this._publish(attr, val, committer);
+		},
+
+		/**
+		 * This will link a data attr object to another data object.
+		 *
+		 * @param {object} data
+		 * @param {string} attr
+		 */
+		linkAttr: function(data, attr)
+		{
+			var value = this.get(attr);
+			if(value)
+			{
+				for(var prop in value)
+				{
+					if(value.hasOwnProperty(prop))
+					{
+						this.link(data, prop, attr + '.' + prop);
+					}
+				}
+			}
+		},
+
+		/**
+		 * This will create a new data source by scoping the parent
+		 * data attr and linking the two sources.
+		 *
+		 * @param {string} attr
+		 * @param {object} [constructor]
+		 * @returns {object}
+		 */
+		scope: function(attr, constructor)
+		{
+			var value = this.get(attr);
+			if(!value)
+			{
+				return false;
+			}
+
+			constructor = constructor || this.constructor;
+			var data = new constructor(value);
+
+			/* this will link the new data to the parent attr */
+			data.linkAttr(this, attr);
+			return data;
+		},
+
+		/**
+		 * This will splice a value from an array and set
+		 * the result.
+		 *
+		 * @param {string} attr
+		 * @param {int} index
+		 * @return {object} this
+		 */
+		splice: function(attr, index)
+		{
+			this.delete(attr + '[' + index + ']');
+			this.refresh(attr);
+
+			return this;
+		},
+
+		/**
+		 * This will add a value to an array and set the result.
+		 *
+		 * @param {string} attr
+		 * @param {mixed} value
+		 * @param {bool|void}
+		 * @return {object} this
+		 */
+		push: function(attr, value)
+		{
+			var currentValue = this.get(attr);
+			if(Array.isArray(currentValue) === false)
+			{
+				return false;
+			}
+
+			var nextIndex = currentValue.length;
+			this.set(attr + '[' + nextIndex + ']', value);
+			this.refresh(attr);
+			return this;
+		},
+
+		/**
+		 * This will refresh the value.
+		 *
+		 * @param {string} attr
+		 * @return {object} this
+		 */
+		refresh: function(attr)
+		{
+			this.set(attr, this.get(attr));
+
+			return this;
 		},
 
 		/**

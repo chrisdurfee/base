@@ -234,6 +234,71 @@ export class BasicData
 	}
 
 	/**
+	 * This will set the data local storage key.
+	 *
+	 * @param {string} key
+	 */
+	setKey(key)
+	{
+		this.key = key;
+	}
+
+	/**
+	 * This will restore the data from local storage.
+	 *
+	 * @param {mixed} defaultValue
+	 * @returns {bool|void}
+	 */
+	resume(defaultValue)
+	{
+		let key = this.key;
+		if(!key)
+		{
+			return false;
+		}
+
+		let data;
+		let value = localStorage.getItem(key);
+		if(typeof value === 'undefined')
+		{
+			if(defaultValue)
+			{
+				data = defaultValue;
+			}
+		}
+		else
+		{
+			data = JSON.parse(value);
+		}
+
+		this.set(data);
+	}
+
+	/**
+	 * This will store the data to the local stoage under
+	 * the storage key.
+	 *
+	 * @returns {bool|void}
+	 */
+	store()
+	{
+		let key = this.key;
+		if(!key)
+		{
+			return false;
+		}
+
+		let data = this.get();
+		if(!data)
+		{
+			return false;
+		}
+
+		let value = JSON.stringify(data);
+		localStorage.setItem(key, value);
+	}
+
+	/**
 	 * This will delete a property value or the model data.
 	 *
 	 * @param {string} [attrName]

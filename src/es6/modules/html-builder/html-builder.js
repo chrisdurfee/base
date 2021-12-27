@@ -9,7 +9,7 @@ const dataTracker = base.dataTracker;
  * @param {string} prop
  * @return {string}
  */
-const filterProperty = (prop) =>
+export const normalizeAttr = (prop) =>
 {
 	switch(prop)
 	{
@@ -63,7 +63,7 @@ const filterProperty = (prop) =>
  * @param {string} prop
  * @return {string}
  */
-const removePrefix = (prop) =>
+export const removeEventPrefix = (prop) =>
 {
 	if(typeof prop === 'string' && prop.substring(0, 2) === 'on')
 	{
@@ -208,12 +208,12 @@ export class htmlBuilder
 		{
 			/* this will add the event using the base events
 			so the event is tracked */
-			attr = removePrefix(attr);
+			attr = removeEventPrefix(attr);
 			base.addListener(attr, obj, value);
 		}
 		else
 		{
-			let attrName = filterProperty(attr);
+			let attrName = normalizeAttr(attr);
 			obj[attrName] = value;
 		}
 	}

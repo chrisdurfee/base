@@ -109,6 +109,102 @@ export class Data extends BasicData
 	}
 
 	/**
+	 * This will link a data attr object to another data object.
+	 *
+	 * @param {object} data
+	 * @param {string} attr
+	 */
+	linkAttr(data, attr)
+	{
+		let value = this.get(attr);
+		if(value)
+		{
+			for(var prop in value)
+			{
+				if(value.hasOwnProperty(prop))
+				{
+					this.link(data, prop, attr + '.' + prop);
+				}
+			}
+		}
+	}
+
+	/**
+	 * This will create a new data source by scoping the parent
+	 * data attr and linking the two sources.
+	 *
+	 * @param {string} attr
+	 * @param {object} [constructor]
+	 * @returns {object}
+	 */
+	scope(attr, constructor)
+	{
+		let value = this.get(attr);
+		if(!value)
+		{
+			return false;
+		}
+
+		constructor = constructor || this.constructor;
+		let data = new constructor(value);
+
+		/* this will link the new data to the parent attr */
+		data.linkAttr(this, attr);
+		return data;
+	}
+
+	/**
+	 * This will splice a value from an array and set
+	 * the result.
+	 *
+	 * @param {string} attr
+	 * @param {int} index
+	 * @return {object} this
+	 */
+	splice(attr, index)
+	{
+		this.delete(attr + '[' + index + ']');
+		this.refresh(attr);
+
+		return this;
+	}
+
+	/**
+	 * This will add a value to an array and set the result.
+	 *
+	 * @param {string} attr
+	 * @param {mixed} value
+	 * @param {bool|void}
+	 * @return {object} this
+	 */
+	push(attr, value)
+	{
+		let currentValue = this.get(attr);
+		if(Array.isArray(currentValue) === false)
+		{
+			return false;
+		}
+
+		let nextIndex = currentValue.length;
+		this.set(attr + '[' + nextIndex + ']', value);
+		this.refresh(attr);
+		return this;
+	}
+
+	/**
+	 * This will refresh the value.
+	 *
+	 * @param {string} attr
+	 * @return {object} this
+	 */
+	refresh(attr)
+	{
+		this.set(attr, this.get(attr));
+
+		return this;
+	}
+
+	/**
 	 * This will publish an update to the data binder.
 	 *
 	 * @protected
