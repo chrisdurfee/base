@@ -91,10 +91,10 @@ export const Jot = function(layout)
         return null;
     }
 
+    let settings;
     switch(typeof layout)
     {
         case 'object':
-            let settings;
             if(layout.render)
             {
                 settings = setupJotComponent(layout);
