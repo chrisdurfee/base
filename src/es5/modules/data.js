@@ -723,7 +723,7 @@
 			var currentValue = this.get(attr);
 			if(Array.isArray(currentValue) === false)
 			{
-				return false;
+				return this;
 			}
 
 			var nextIndex = currentValue.length;

@@ -182,7 +182,7 @@ export class Data extends BasicData
 		let currentValue = this.get(attr);
 		if(Array.isArray(currentValue) === false)
 		{
-			return false;
+			return this;
 		}
 
 		let nextIndex = currentValue.length;
