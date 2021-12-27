@@ -259,7 +259,7 @@ export class BasicData
 
 		let data;
 		let value = localStorage.getItem(key);
-		if(typeof value === 'undefined')
+		if(value === null)
 		{
 			if(defaultValue)
 			{

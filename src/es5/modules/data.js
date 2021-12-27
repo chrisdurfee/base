@@ -305,7 +305,7 @@
 
 			var data;
 			var value = localStorage.getItem(key);
-			if(typeof value === 'undefined')
+			if(value === null)
 			{
 				if(defaultValue)
 				{
