@@ -3,6 +3,7 @@ import {LayoutParser} from './layout-parser.js';
 import {dataBinder} from '../data-binder/data-binder.js';
 import {htmlBuilder, normalizeAttr, removeEventPrefix} from '../html-builder/html-builder.js';
 import {WatcherHelper} from './watcher-helper.js';
+import {Jot} from "../component/jot.js";
 
 /**
  * This will create a watch element.
