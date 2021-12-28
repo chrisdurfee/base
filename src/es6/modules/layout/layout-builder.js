@@ -725,7 +725,7 @@ export class LayoutBuilder extends htmlBuilder
 			item = settings[2];
 		}
 
-		base.DataBinder.watch(ele, data, prop, (items) =>
+		dataBinder.watch(ele, data, prop, (items) =>
 		{
 			this.removeAll(ele);
 			if(!items || items.length < 1)
