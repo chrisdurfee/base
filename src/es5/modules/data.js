@@ -657,7 +657,7 @@
 		 */
 		linkAttr: function(data, attr)
 		{
-			var value = this.get(attr);
+			var value = data.get(attr);
 			if(value)
 			{
 				for(var prop in value)

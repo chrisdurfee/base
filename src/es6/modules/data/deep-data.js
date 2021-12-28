@@ -116,7 +116,7 @@ export class Data extends BasicData
 	 */
 	linkAttr(data, attr)
 	{
-		let value = this.get(attr);
+		let value = data.get(attr);
 		if(value)
 		{
 			for(var prop in value)
