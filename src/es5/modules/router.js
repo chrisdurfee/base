@@ -363,6 +363,7 @@
 		setup: function(baseURI, title)
 		{
 			this.baseURI = baseURI || '/';
+			this.updateBaseTag(this.baseURI);
 			this.title = (typeof title !== 'undefined')? title : '';
 
 			this.setupHistory();
@@ -377,6 +378,17 @@
 			var endPoint = this.getEndPoint();
 			this.navigate(endPoint, null, true);
 			return this;
+		},
+
+		updateBaseTag: function(url)
+		{
+			/* this will modify the base tag to ref from
+			the base url for all xhr */
+			var ele = document.getElementsByTagName('base');
+			if(ele.length)
+			{
+				ele[0].href = url;
+			}
 		},
 
 		/**
