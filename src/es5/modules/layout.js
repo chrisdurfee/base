@@ -617,7 +617,7 @@
 		createElement: function(obj, container, parent)
 		{
 			var settings = parser.parseElement(obj);
-			var ele = this.createNode(settings, container);
+			var ele = this.createNode(settings, container, parent);
 
 			var propName = obj.cache;
 			if(parent && propName)

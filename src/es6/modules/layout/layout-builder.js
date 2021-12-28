@@ -253,7 +253,7 @@ export class LayoutBuilder extends htmlBuilder
 	createElement(obj, container, parent)
 	{
 		let settings = parser.parseElement(obj),
-		ele = this.createNode(settings, container);
+		ele = this.createNode(settings, container, parent);
 
 		const propName = obj.cache;
 		if(parent && propName)
