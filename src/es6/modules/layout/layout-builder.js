@@ -733,7 +733,7 @@ export class LayoutBuilder extends htmlBuilder
 				return;
 			}
 
-			this.map(ele, items, item, parent);
+			this.map(ele, [items, item], parent);
 		});
 	}
 

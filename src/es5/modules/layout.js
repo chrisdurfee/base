@@ -1099,7 +1099,7 @@
 					return;
 				}
 
-				self.map(ele, items, item, parent);
+				self.map(ele, [items, item], parent);
 			});
 		},
 
