@@ -1080,6 +1080,24 @@
 			};
 		}
 
+		var before = settings.before;
+		if(before)
+		{
+			component.beforeSetup = before;
+		}
+
+		var after = settings.after;
+		if(after)
+		{
+			component.afterSetup = after;
+		}
+
+		var destroy = settings.destroy;
+		if(destroy)
+		{
+			component.beforeDestroy = destroy;
+		}
+
 		var data = settings.data;
 		if(data)
 		{

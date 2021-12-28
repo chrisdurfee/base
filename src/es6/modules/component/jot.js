@@ -25,6 +25,24 @@ const setupJotComponent = function(settings)
         };
     }
 
+    let before = settings.before;
+    if(before)
+    {
+        component.beforeSetup = before;
+    }
+
+    let after = settings.after;
+    if(after)
+    {
+        component.afterSetup = after;
+    }
+
+    let destroy = settings.destroy;
+    if(destroy)
+    {
+        component.beforeDestroy = destroy;
+    }
+
     let data = settings.data;
     if(data)
     {
