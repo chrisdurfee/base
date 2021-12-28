@@ -280,6 +280,22 @@
 		},
 
 		/**
+		 * This will set the key value if it is null.
+		 *
+		 * @param {string} key
+		 * @param {mixed} value
+		 * @return {object} this
+		 */
+		ifNull: function(key, value)
+		{
+			if(this.get(key) === null)
+			{
+				this.set(key, value);
+			}
+			return this;
+		},
+
+		/**
 		 * This will set the data local storage key.
 		 *
 		 * @param {string} key
