@@ -664,7 +664,7 @@
 				{
 					if(value.hasOwnProperty(prop))
 					{
-						this.link(data, prop, attr + '.' + prop);
+						this.link(data, attr + '.' + prop, prop);
 					}
 				}
 			}
