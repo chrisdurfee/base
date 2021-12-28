@@ -619,7 +619,7 @@
 		 */
 		_setAttr: function(attr, val, committer, stopMerge)
 		{
-			if(val === this.get(attr))
+			if(typeof val !== 'object' && val === this.get(attr))
 			{
 				return;
 			}
