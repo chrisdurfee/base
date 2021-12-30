@@ -174,7 +174,6 @@ export class Data extends BasicData
 	 *
 	 * @param {string} attr
 	 * @param {mixed} value
-	 * @param {bool|void}
 	 * @return {object} this
 	 */
 	push(attr, value)
@@ -182,13 +181,70 @@ export class Data extends BasicData
 		let currentValue = this.get(attr);
 		if(Array.isArray(currentValue) === false)
 		{
-			return this;
+			currentValue = [];
 		}
 
-		let nextIndex = currentValue.length;
-		this.set(attr + '[' + nextIndex + ']', value);
-		this.refresh(attr);
+		currentValue.push(value);
+		this.set(attr, currentValue);
 		return this;
+	}
+
+	/**
+	 * This will add a value to an array and set the result.
+	 *
+	 * @param {string} attr
+	 * @param {mixed} value
+	 * @return {object} this
+	 */
+	unshift(attr, value)
+	{
+		let currentValue = this.get(attr);
+		if(Array.isArray(currentValue) === false)
+		{
+			currentValue = [];
+		}
+
+		currentValue.unshift(value);
+		this.set(attr, currentValue);
+		return this;
+	}
+
+	/**
+	 * This will add a value to an array and set the result.
+	 *
+	 * @param {string} attr
+	 * @return {mixed} this
+	 */
+	shift(attr)
+	{
+		let currentValue = this.get(attr);
+		if(Array.isArray(currentValue) === false)
+		{
+			return null;
+		}
+
+		let value = currentValue.shift();
+		this.set(attr, currentValue);
+		return value;
+	}
+
+	/**
+	 * This will pop the last value from an array and set the result.
+	 *
+	 * @param {string} attr
+	 * @return {mixed}
+	 */
+	pop(attr)
+	{
+		let currentValue = this.get(attr);
+		if(Array.isArray(currentValue) === false)
+		{
+			return null;
+		}
+
+		let value = currentValue.pop();
+		this.set(attr, currentValue);
+		return value;
 	}
 
 	/**

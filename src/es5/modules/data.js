@@ -731,7 +731,6 @@
 		 *
 		 * @param {string} attr
 		 * @param {mixed} value
-		 * @param {bool|void}
 		 * @return {object} this
 		 */
 		push: function(attr, value)
@@ -739,13 +738,70 @@
 			var currentValue = this.get(attr);
 			if(Array.isArray(currentValue) === false)
 			{
-				return this;
+				currentValue = [];
 			}
 
-			var nextIndex = currentValue.length;
-			this.set(attr + '[' + nextIndex + ']', value);
-			this.refresh(attr);
+			currentValue.push(value);
+			this.set(attr, currentValue);
 			return this;
+		},
+
+		/**
+		 * This will add a value to an array and set the result.
+		 *
+		 * @param {string} attr
+		 * @param {mixed} value
+		 * @return {object} this
+		 */
+		unshift: function(attr, value)
+		{
+			var currentValue = this.get(attr);
+			if(Array.isArray(currentValue) === false)
+			{
+				currentValue = [];
+			}
+
+			currentValue.unshift(value);
+			this.set(attr, currentValue);
+			return this;
+		},
+
+		/**
+		 * This will add a value to an array and set the result.
+		 *
+		 * @param {string} attr
+		 * @return {mixed} this
+		 */
+		shift: function(attr)
+		{
+			var currentValue = this.get(attr);
+			if(Array.isArray(currentValue) === false)
+			{
+				return null;
+			}
+
+			var value = currentValue.shift();
+			this.set(attr, currentValue);
+			return value;
+		},
+
+		/**
+		 * This will pop the last value from an array and set the result.
+		 *
+		 * @param {string} attr
+		 * @return {mixed}
+		 */
+		pop: function(attr)
+		{
+			var currentValue = this.get(attr);
+			if(Array.isArray(currentValue) === false)
+			{
+				return null;
+			}
+
+			var value = currentValue.pop();
+			this.set(attr, currentValue);
+			return value;
 		},
 
 		/**
