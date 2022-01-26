@@ -98,7 +98,7 @@ export class LayoutBuilder extends htmlBuilder
 			{
 				obj.innerHTML = attrPropValue;
 			}
-			else if(prop.substr(4, 1) === '-')
+			else if(prop.substring(4, 1) === '-')
 			{
 				// this will handle data and aria attributes
 				base.setAttr(obj, prop, attrPropValue);
@@ -305,6 +305,16 @@ export class LayoutBuilder extends htmlBuilder
 		if(obj.html)
 		{
 			this.addHtml(ele, obj.html);
+		}
+
+		if(obj.role)
+		{
+			this.addRole(ele, obj.role, parent);
+		}
+
+		if(obj.aria)
+		{
+			this.addAria(ele, obj.aria, parent);
 		}
 
 		if(parent)
@@ -561,6 +571,88 @@ export class LayoutBuilder extends htmlBuilder
 		{
 			id
 		});
+	}
+
+	/**
+	 * This will add aria attributes.
+	 *
+	 * @protected
+	 * @param {object} ele
+	 * @param {array} role
+	 * @param {object} parent
+	 */
+	addRole(ele, role, parent)
+	{
+		if(!role)
+		{
+			return;
+		}
+
+		if(role)
+		{
+			base.setAttr(ele, 'role', role);
+		}
+	}
+
+	/**
+	 * This will add aria attributes.
+	 *
+	 * @protected
+	 * @param {object} ele
+	 * @param {array} attributes
+	 * @param {object} parent
+	 */
+	addAria(ele, attributes, parent)
+	{
+		if(!attributes)
+		{
+			return;
+		}
+
+		let role = attributes.role;
+		if(role)
+		{
+			base.setAttr(ele, 'role', role);
+			attributes.role = null;
+		}
+
+		/**
+		 * This will setup the onSet callBack.
+		 *
+		 * @param {string} attr
+		 * @return {function}
+		 */
+		const onSetCallBack = (attr) =>
+		{
+			return (ele, val) =>
+			{
+				var text = (val)? "true" : "false";
+				base.setAttr(ele, attr, text);
+			};
+		};
+
+		for(var prop in attributes)
+		{
+			if(attributes.hasOwnProperty(prop) === false || attributes[prop] === null)
+			{
+				continue;
+			}
+
+			var value = attributes[prop];
+			var attr = 'aria-' + prop;
+
+			/* this will setup an onSet to change the attr value
+			when the data chnages. */
+			if(Array.isArray(value))
+			{
+				value.push(onSetCallBack(attr));
+				this.onSet(ele, value, parent);
+			}
+			else
+			{
+				base.setAttr(ele, attr, value);
+			}
+		}
 	}
 
 	/**

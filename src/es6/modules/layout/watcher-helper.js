@@ -53,7 +53,7 @@ export const WatcherHelper =
 		}
 		else
 		{
-			if(attr.substr(4, 1) === '-')
+			if(attr.substring(4, 1) === '-')
 			{
 				base.setAttr(ele, attr, value);
 			}

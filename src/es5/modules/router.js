@@ -48,14 +48,14 @@
 		{
 			if(typeof uri === 'string')
 			{
-				if(uri.substr(0, 1) === '/')
+				if(uri.substring(0, 1) === '/')
 				{
-					uri = uri.substr(1);
+					uri = uri.substring(1);
 				}
 
-				if(uri.substr(-1) === '/')
+				if(uri.substring(-1) === '/')
 				{
-					uri = uri.substr(0, uri.length - 1);
+					uri = uri.substring(0, uri.length - 1);
 				}
 			}
 
@@ -102,7 +102,7 @@
 			 */
 			this.data = new base.Data(
 			{
-				path: this.location.pathname
+				path: ''
 			});
 		},
 
@@ -111,7 +111,7 @@
 		 */
 		setupHistory: function()
 		{
-			this.history = new History(this);
+			this.history = RouterEvents.create(this);
 			this.history.setup();
 		},
 
@@ -161,7 +161,7 @@
 		addRoute: function(route)
 		{
 			this.routes.push(route);
-			this.checkRoute(route, this.location.pathname);
+			this.checkRoute(route, this.getPath());
 		},
 
 		/**
@@ -289,7 +289,7 @@
 				switchArray.push(route);
 			}
 
-			this.checkGroup(switchArray, this.location.pathname);
+			this.checkGroup(switchArray, this.getPath());
 			return id;
 		},
 
@@ -312,7 +312,7 @@
 				switchArray.push(route);
 			}
 
-			this.checkGroup(switchArray, this.location.pathname);
+			this.checkGroup(switchArray, this.getPath());
 			return id;
 		},
 
@@ -367,6 +367,8 @@
 			this.title = (typeof title !== 'undefined')? title : '';
 
 			this.setupHistory();
+
+			this.data.set('path', this.getPath());
 
 			this.callBackLink = base.bind(this, this.checkLink);
 			base.on('click', document, this.callBackLink);
@@ -503,7 +505,7 @@
 		 */
 		updatePath: function()
 		{
-			var path = this.location.pathname;
+			var path = this.getPath();
 			this.data.set('path', path);
 		},
 
@@ -533,7 +535,7 @@
 					var pattern = /\w\S*/;
 					return str.replace(pattern, function(txt)
 					{
-						return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+						return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
 					});
 				};
 
@@ -808,19 +810,18 @@
 			var location = this.location,
 			path = this.path = location.pathname;
 
+			if(this.history.type === 'hash')
+			{
+				return location.hash.replace('#', '');
+			}
+
 			return path + location.search + location.hash;
 		}
 	});
 
 	var routerNumber = 0;
 
-	/**
-	 * History
-	 *
-	 * This will setup the history controller.
-	 * @class
-	 */
-	var History = base.Class.extend(
+	var RouterEvents = base.Class.extend(
 	{
 		/**
 		 * @constructor
@@ -832,7 +833,6 @@
 
 			/* this will check if the history api is supported
 			and enabled */
-			this.enabled = false;
 			this.locationId = 'base-app-router-' + routerNumber++;
 			this.callBack = null;
 		},
@@ -845,36 +845,40 @@
 		 */
 		setup: function()
 		{
-			/* we want to check if history is enabled */
-			this.enabled = this.isSupported();
-
-			/* we want to check to add the history event listener
-			that will check the popsate events and select the
-			nav option by the history state object */
-			if(this.enabled !== true)
-			{
-				return this;
-			}
-
 			this.callBack = base.bind(this, this.check);
 			this.addEvent();
 			return this;
-		},
+		}
+	});
 
-		/**
-		 * This will check if the browser supports the history api.
-		 *
-		 * @return {boolean}
-		 */
-		isSupported: function()
+	/**
+	 * This will check if the history API is supported.
+	 *
+	 * @returns {boolean}
+	 */
+	var isHistorySupported = function()
+	{
+		if('history' in window && 'pushState' in window.history)
 		{
-			if('history' in window && 'pushState' in window.history)
-			{
-				return true;
-			}
+			return true;
+		}
 
-			return false;
-		},
+		return false;
+	};
+
+	RouterEvents.create = function(router)
+	{
+		if(isHistorySupported() === true)
+		{
+			return new HistoryRouter(router);
+		}
+
+		return new HashRouter(router);
+	};
+
+	var HistoryRouter = RouterEvents.extend(
+	{
+		type: 'history',
 
 		/**
 		 * This will add the events.
@@ -951,11 +955,6 @@
 		 */
 		addState: function(uri, data, replace)
 		{
-			if(this.enabled !== true)
-			{
-				return this;
-			}
-
 			var history = window.history,
 			lastState = history.state;
 
@@ -976,6 +975,58 @@
 		}
 	});
 
+	var HashRouter = RouterEvents.extend(
+	{
+		type: 'hash',
+
+		/**
+		 * This will add the events.
+		 *
+		 * @return {object} a reference to the object.
+		 */
+		addEvent: function()
+		{
+			base.on('hashchange', window, this.callBack);
+			return this;
+		},
+
+		/**
+		 * This will remove the events.
+		 *
+		 * @return {object} a reference to the object.
+		 */
+		removeEvent: function()
+		{
+			base.off('hashchange', window, this.callBack);
+			return this;
+		},
+
+		/**
+		 * This will check to activate the router.
+		 *
+		 * @param {object} evt
+		 */
+		check: function(evt)
+		{
+			this.router.checkActiveRoutes();
+		},
+
+		/**
+		 * This will add a state to the history.
+		 *
+		 * @param {string} uri
+		 * @param {object} data
+		 * @param {boolean} replace
+		 * @return {object} a reference to the object.
+		 */
+		addState: function(uri, data, replace)
+		{
+			window.location.hash = uri;
+
+			return this;
+		}
+	});
+
 	/**
 	 * This will setup a route uri pattern.
 	 *
@@ -989,11 +1040,6 @@
 		{
 			var filter = /\//g;
 			uriQuery = uri.replace(filter, "\/");
-
-			/* we want to setup the wild card and param
-			checks to be modified to the route uri string */
-			var allowAll = /(\*)/g;
-			uriQuery = uriQuery.replace(allowAll, '.*');
 
 			/* this will setup for optional slashes before the optional params */
 			var optionalSlash = /(\/):[^\/(]*?\?/g;
@@ -1012,6 +1058,11 @@
 			{
 				return (str.indexOf('.') < 0)? '([^\/|?]+)' : '([^\/|?]+.*)';
 			});
+
+			/* we want to setup the wild card and param
+			checks to be modified to the route uri string */
+			var allowAll = /(\*)/g;
+			uriQuery = uriQuery.replace(allowAll, '.*');
 		}
 
 		/* we want to set and string end if the wild card is not set */
@@ -1225,6 +1276,36 @@
 			{
 				controller.focus(params);
 			}
+
+			var path = this.path;
+			if(!path)
+			{
+				return;
+			}
+
+			var hash = path.split('#')[1];
+			if(!hash)
+			{
+				return;
+			}
+
+			this.scrollToId(hash);
+		},
+
+		scrollToId: function(hash)
+		{
+			if(!hash)
+			{
+				return;
+			}
+
+			var ele = document.getElementById(hash);
+			if(!ele)
+			{
+				return;
+			}
+
+			ele.scrollIntoView(true);
 		},
 
 		/**
@@ -1564,7 +1645,8 @@
 				value: ['[[path]]', data],
 				callBack: function(ele, value)
 				{
-					var selected = exact? (value === ele.pathname) : (new RegExp('^' + ele.pathname + '($|\/|\\.).*').test(value));
+					var path = ele.pathname + ele.hash;
+					var selected = exact? (value === path) : (new RegExp('^' + ele.pathname + '($|#|\/|\\.).*').test(value));
 					self.update(ele, selected);
 				}
 			});

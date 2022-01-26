@@ -8,7 +8,7 @@ let routerNumber = 0;
  * This will setup the history controller.
  * @class
  */
-export class History
+export class RouterEvents
 {
 	/**
 	 * @constructor
@@ -20,7 +20,6 @@ export class History
 
 		/* this will check if the history api is supported
 		and enabled */
-		this.enabled = false;
 		this.locationId = 'base-app-router-' + routerNumber++;
 		this.callBack = null;
 	}
@@ -33,32 +32,14 @@ export class History
 	 */
 	setup()
 	{
-		/* we want to check if history is enabled */
-		this.enabled = this.isSupported();
-
-		/* we want to check to add the history event listener
-		that will check the popsate events and select the
-		nav option by the history state object */
-		if(this.enabled !== true)
-		{
-			return this;
-		}
-
 		this.callBack = this.check.bind(this);
 		this.addEvent();
 		return this;
 	}
+}
 
-	/**
-	 * This will check if the browser supports the history api.
-	 *
-	 * @return {boolean}
-	 */
-	isSupported()
-	{
-		return ('history' in window && 'pushState' in window.history);
-	}
-
+class HistoryRouter extends RouterEvents
+{
 	/**
 	 * This will add the events.
 	 *
@@ -134,11 +115,6 @@ export class History
 	 */
 	addState(uri, data, replace)
 	{
-		if(this.enabled !== true)
-		{
-			return this;
-		}
-
 		let history = window.history,
 		lastState = history.state;
 
@@ -158,3 +134,84 @@ export class History
 		return this;
 	}
 }
+
+class HashRouter extends RouterEvents
+{
+	/**
+	 * This will add the events.
+	 *
+	 * @return {object} a reference to the object.
+	 */
+	addEvent()
+	{
+		base.on('hashchange', window, this.callBack);
+		return this;
+	}
+
+	/**
+	 * This will remove the events.
+	 *
+	 * @return {object} a reference to the object.
+	 */
+	removeEvent()
+	{
+		base.off('hashchange', window, this.callBack);
+		return this;
+	}
+
+	/**
+	 * This will check to activate the router.
+	 *
+	 * @param {object} evt
+	 */
+	check(evt)
+	{
+		this.router.checkActiveRoutes();
+	}
+
+	/**
+	 * This will add a state to the history.
+	 *
+	 * @param {string} uri
+	 * @param {object} data
+	 * @param {boolean} replace
+	 * @return {object} a reference to the object.
+	 */
+	addState(uri, data, replace)
+	{
+		window.location.hash = uri;
+
+		return this;
+	}
+}
+
+/**
+ * This will check if the history API is supported.
+ *
+ * @returns {boolean}
+ */
+const isHistorySupported = () =>
+{
+	if('history' in window && 'pushState' in window.history)
+	{
+		return true;
+	}
+
+	return false;
+};
+
+/**
+ * This will create a router by API support.
+ *
+ * @param {object} router
+ * @returns {object}
+ */
+RouterEvents.create = (router) =>
+{
+	if(isHistorySupported() === true)
+	{
+		return new HistoryRouter(router);
+	}
+
+	return new HashRouter(router);
+};

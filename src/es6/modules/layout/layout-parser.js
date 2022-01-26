@@ -28,6 +28,8 @@ export class LayoutParser
 			'onSet',
 			'onState',
 			'watch',
+			'role',
+			'aria',
 			'cache'
 		];
 	}

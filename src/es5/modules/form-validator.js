@@ -42,14 +42,14 @@
 			}
 
 			/* we want to check to remove the leading 1 */
-			if(phone.substr(0, 1) === '1')
+			if(phone.substring(0, 1) === '1')
 			{
 				phone = phone.substring(1);
 			}
 
 			/* we want check the length and block any 555
 			area code numbers */
-			return (phone.length === 10 && phone.substr(0, 3) !== '555');
+			return (phone.length === 10 && phone.substring(0, 3) !== '555');
 		},
 
 		/* this will return true or false if a
@@ -134,7 +134,7 @@
 				var upperCaseWords = function(str)
 				{
 					var pattern = /\w\S*/g;
-					return str.replace(pattern, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+					return str.replace(pattern, function(txt){return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();});
 				};
 
 				/* we want to get something to identify the field */

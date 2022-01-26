@@ -3,7 +3,7 @@ import {Data} from '../data/data.js';
 export {NavLink} from './nav-link.js';
 import {Utils} from './utils.js';
 import {Route} from './route.js';
-import {History} from './history.js';
+import {RouterEvents} from './router-events.js';
 
 /* this will register the route system to the
 data tracker to remove routes that have been
@@ -72,7 +72,7 @@ export class Router
 		 */
 		this.data = new Data(
 		{
-			path: this.location.pathname
+			path: ''
 		});
 	}
 
@@ -81,7 +81,7 @@ export class Router
 	 */
 	setupHistory()
 	{
-		this.history = new History(this);
+		this.history = RouterEvents.create(this);
 		this.history.setup();
 	}
 
@@ -131,7 +131,7 @@ export class Router
 	addRoute(route)
 	{
 		this.routes.push(route);
-		this.checkRoute(route, this.location.pathname);
+		this.checkRoute(route, this.getPath());
 	}
 
 	/**
@@ -259,7 +259,7 @@ export class Router
 			switchArray.push(route);
 		}
 
-		this.checkGroup(switchArray, this.location.pathname);
+		this.checkGroup(switchArray, this.getPath());
 		return id;
 	}
 
@@ -282,7 +282,7 @@ export class Router
 			switchArray.push(route);
 		}
 
-		this.checkGroup(switchArray, this.location.pathname);
+		this.checkGroup(switchArray, this.getPath());
 		return id;
 	}
 
@@ -337,6 +337,8 @@ export class Router
 		this.title = (typeof title !== 'undefined')? title : '';
 
 		this.setupHistory();
+
+		this.data.set('path', this.getPath());
 
 		this.callBackLink = this.checkLink.bind(this);
 		base.on('click', document, this.callBackLink);
@@ -473,7 +475,7 @@ export class Router
 	 */
 	updatePath()
 	{
-		let path = this.location.pathname;
+		let path = this.getPath();
 		this.data.set('path', path);
 	}
 
@@ -500,7 +502,7 @@ export class Router
 				let pattern = /\w\S*/;
 				return str.replace(pattern, (txt) =>
 				{
-					return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+					return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
 				});
 			};
 
@@ -775,6 +777,11 @@ export class Router
 		/* we want to get the window location path */
 		let location = this.location,
 		path = this.path = location.pathname;
+
+		if(this.history.type === 'hash')
+		{
+			return location.hash.replace('#', '');
+		}
 
 		return path + location.search + location.hash;
 	}

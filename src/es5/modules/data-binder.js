@@ -393,7 +393,7 @@
 
 		addSetMethod: function(element, attr)
 		{
-			if(attr.substr(4, 1) === '-')
+			if(attr.substring(4, 1) === '-')
 			{
 				this.setValue = SetAttr;
 				this.getValue = GetAttr;

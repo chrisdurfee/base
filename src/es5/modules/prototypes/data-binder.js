@@ -442,7 +442,7 @@
 				}
 			}
 
-			if(attr.substr(4, 1) === '-')
+			if(attr.substring(4, 1) === '-')
 			{
 				base.setAttr(element, attr, value);
 			}
@@ -464,7 +464,7 @@
 			}
 
 			var attr = this.attr;
-			return (attr.substr(4, 1) === '-')? base.getAttr(element, attr) : element[attr];
+			return (attr.substring(4, 1) === '-')? base.getAttr(element, attr) : element[attr];
 		},
 
 		/**

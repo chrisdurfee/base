@@ -165,7 +165,7 @@
 				{
 					obj.innerHTML = attrPropValue;
 				}
-				else if(prop.substr(4, 1) === '-')
+				else if(prop.substring(4, 1) === '-')
 				{
 					// this will handle data and aria attributes
 					base.setAttr(obj, prop, attrPropValue);

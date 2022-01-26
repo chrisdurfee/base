@@ -15,11 +15,6 @@ const routePattern = (uri) =>
 		let filter = /\//g;
 		uriQuery = uri.replace(filter, "\/");
 
-		/* we want to setup the wild card and param
-		checks to be modified to the route uri string */
-		let allowAll = /(\*)/g;
-		uriQuery = uriQuery.replace(allowAll, '.*');
-
 		/* this will setup for optional slashes before the optional params */
 		let optionalSlash = /(\/):[^\/(]*?\?/g;
 		uriQuery = uriQuery.replace(optionalSlash, (str) =>
@@ -37,6 +32,11 @@ const routePattern = (uri) =>
 		{
 			return (str.indexOf('.') < 0)? '([^\/|?]+)' : '([^\/|?]+.*)';
 		});
+
+		/* we want to setup the wild card and param
+		checks to be modified to the route uri string */
+		let allowAll = /(\*)/g;
+		uriQuery = uriQuery.replace(allowAll, '.*');
 	}
 
 	/* we want to set and string end if the wild card is not set */
@@ -253,6 +253,42 @@ export class Route extends SimpleData
 		{
 			controller.focus(params);
 		}
+
+		let path = this.path;
+		if(!path)
+		{
+			return;
+		}
+
+		let hash = path.split('#')[1];
+		if(!hash)
+		{
+			return;
+		}
+
+		this.scrollToId(hash);
+	}
+
+	/**
+	 * This will scroll to the element by id.
+	 *
+	 * @param {string} hash
+	 * @returns void
+	 */
+	scrollToId(hash)
+	{
+		if(!hash)
+		{
+			return;
+		}
+
+		let ele = document.getElementById(hash);
+		if(!ele)
+		{
+			return;
+		}
+
+		ele.scrollIntoView(true);
 	}
 
 	/**
