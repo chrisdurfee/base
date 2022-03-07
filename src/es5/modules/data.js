@@ -1385,6 +1385,26 @@
 		},
 
 		/**
+		 * This will convert an object to a string.
+		 *
+		 * @protected
+		 * @param {object} object
+		 * @return {string}
+		 */
+		objectToString: function(object)
+		{
+			var params = [];
+			for (var prop in object)
+			{
+				if(object.hasOwnProperty(prop))
+				{
+					params.push(prop + '=' + object[prop]);
+				}
+			}
+			return params.join('&');
+		},
+
+		/**
 		 * This will add the params.
 		 *
 		 * @protected
@@ -1402,7 +1422,7 @@
 
 			if(!addingParams)
 			{
-				return params;
+				return this.objectToString(params);
 			}
 
 			if(typeof addingParams === 'string')
@@ -1423,6 +1443,7 @@
 			else
 			{
 				params = base.extendObject(params, addingParams);
+				params = this.objectToString(params);
 			}
 
 			return params;
@@ -1448,7 +1469,7 @@
 
 			var model = this.model,
 			self = this;
-			return this.request(params, instanceParams, callBack, function(response)
+			return this._get('', params, instanceParams, callBack, function(response)
 			{
 				if(response)
 				{
@@ -1511,7 +1532,7 @@
 			method params */
 			params = this.addParams(params, instanceParams, instanceParams);
 
-			return this.request(params, callBack);
+			return this._put('', params, callBack);
 		},
 
 		/**
@@ -1531,7 +1552,7 @@
 			var params = 'op=add' +
 						 '&' + this.setupObjectData();
 
-			return this.request(params, instanceParams, callBack);
+			return this._post('', params, instanceParams, callBack);
 		},
 
 		/**
@@ -1551,7 +1572,7 @@
 			var params = 'op=update' +
 						 '&' + this.setupObjectData();
 
-			return this.request(params, instanceParams, callBack);
+			return this._patch('', params, instanceParams, callBack);
 		},
 
 		/**
@@ -1567,7 +1588,7 @@
 			params = 'op=delete' +
 						 '&id=' + id;
 
-			return this.request(params, instanceParams, callBack);
+			return this._delete('', params, instanceParams, callBack);
 		},
 
 		/**
@@ -1591,23 +1612,40 @@
 						 '&start=' + start +
 						 '&stop=' + count;
 
-			return this.request(params, instanceParams, callBack);
+			return this._get('', params, instanceParams, callBack);
+		},
+
+		getUrl: function(url)
+		{
+			var baseUrl = this.url;
+			if(!url)
+			{
+				return baseUrl;
+			}
+
+			if(url[0] === '?')
+			{
+				return baseUrl + url;
+			}
+
+            return baseUrl += '/' + url;
 		},
 
 		/**
 		 * This will make an ajax request.
 		 *
+		 * @param {string} url
 		 * @param {string} method
 		 * @param {(string|object)} params
 		 * @param {function} callBack
 		 * @param {function} [requestCallBack]
 		 * @param {object}
 		 */
-		setupRequest: function(method, params, callBack, requestCallBack)
+		setupRequest: function(url, method, params, callBack, requestCallBack)
 		{
 			var self = this,
 			settings = {
-				url: this.url,
+				url: this.getUrl(url),
 				method: method,
 				params: params,
 				completed: function(response, xhr)
@@ -1646,68 +1684,98 @@
 		 */
 		request: function(params, instanceParams, callBack, requestCallBack)
 		{
-			return this._request('POST', params, instanceParams, callBack, requestCallBack);
+			return this._request('', 'POST', params, instanceParams, callBack, requestCallBack);
 		},
 
 		/**
 		 * This will make a GET request.
 		 *
+		 * @param {string} url
 		 * @param {(string|object)} params
 		 * @param {string} instanceParams
 		 * @param {function} callBack
 		 * @param {function} [requestCallBack]
 		 * @param {object}
 		 */
-		_get: function(params, instanceParams, callBack, requestCallBack)
+		_get: function(url, params, instanceParams, callBack, requestCallBack)
 		{
-			return this._request('GET', params, instanceParams, callBack, requestCallBack);
+			params = this.setupParams(params);
+            params = this.addParams(params, instanceParams);
+
+			url = url || '';
+
+			if(params)
+			{
+				url += '?' + params;
+			}
+
+            return this.setupRequest(url, "GET", '', callBack, requestCallBack);
 		},
 
 		/**
 		 * This will make a POST request.
 		 *
+		 * @param {string} url
 		 * @param {(string|object)} params
 		 * @param {string} instanceParams
 		 * @param {function} callBack
 		 * @param {function} [requestCallBack]
 		 * @param {object}
 		 */
-		_post: function(params, instanceParams, callBack, requestCallBack)
+		_post: function(url, params, instanceParams, callBack, requestCallBack)
 		{
-			return this._request('POST', params, instanceParams, callBack, requestCallBack);
+			return this._request(url, 'POST', params, instanceParams, callBack, requestCallBack);
 		},
 
 		/**
 		 * This will make a PUT request.
 		 *
+		 * @param {string} url
 		 * @param {(string|object)} params
 		 * @param {string} instanceParams
 		 * @param {function} callBack
 		 * @param {function} [requestCallBack]
 		 * @param {object}
 		 */
-		_put: function(params, instanceParams, callBack, requestCallBack)
+		_put: function(url, params, instanceParams, callBack, requestCallBack)
 		{
-			return this._request('PUT', params, instanceParams, callBack, requestCallBack);
+			return this._request(url, 'PUT', params, instanceParams, callBack, requestCallBack);
+		},
+
+		/**
+		 * This will make a PATCH request.
+		 *
+         * @param {string} url
+		 * @param {(string|object)} params
+		 * @param {string} instanceParams
+		 * @param {function} callBack
+		 * @param {function} [requestCallBack]
+		 * @param {object}
+		 */
+		_patch: function(url, params, instanceParams, callBack, requestCallBack)
+		{
+			return this._request(url, 'PATCH', params, instanceParams, callBack, requestCallBack);
 		},
 
 		/**
 		 * This will make a DELETE request.
 		 *
+		 * @param {string} url
 		 * @param {(string|object)} params
 		 * @param {string} instanceParams
 		 * @param {function} callBack
 		 * @param {function} [requestCallBack]
 		 * @param {object}
 		 */
-		_delete: function(params, instanceParams, callBack, requestCallBack)
+		_delete: function(url, params, instanceParams, callBack, requestCallBack)
 		{
-			return this._request('DELETE', params, instanceParams, callBack, requestCallBack);
+			return this._request(url, 'DELETE', params, instanceParams, callBack, requestCallBack);
 		},
 
 		/**
 		 * This will make an ajax request.
 		 *
+		 * @param {string} url
 		 * @param {string} method
 		 * @param {(string|object)} params
 		 * @param {string} instanceParams
@@ -1715,12 +1783,12 @@
 		 * @param {function} [requestCallBack]
 		 * @param {object}
 		 */
-		_request: function(method, params, instanceParams, callBack, requestCallBack)
+		_request: function(url, method, params, instanceParams, callBack, requestCallBack)
 		{
 			params = this.setupParams(params);
 			params = this.addParams(params, instanceParams);
 
-			return this.setupRequest(method, params, callBack, requestCallBack);
+			return this.setupRequest(url, method, params, callBack, requestCallBack);
 		},
 
 		getResponse: function(response, callBack, xhr)

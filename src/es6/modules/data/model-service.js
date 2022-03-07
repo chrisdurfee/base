@@ -96,6 +96,26 @@ export class ModelService
 	}
 
 	/**
+	 * This will convert an object to a string.
+	 *
+	 * @protected
+	 * @param {object} object
+	 * @return {string}
+	 */
+	objectToString(object)
+	{
+		const params = [];
+		for (var prop in object)
+		{
+			if(object.hasOwnProperty(prop))
+			{
+				params.push(prop + '=' + object[prop]);
+			}
+		}
+		return params.join('&');
+	}
+
+	/**
 	 * This will add the params.
 	 *
 	 * @protected
@@ -113,7 +133,7 @@ export class ModelService
 
 		if(!addingParams)
 		{
-			return params;
+			return this.objectToString(params);
 		}
 
 		if(typeof addingParams === 'string')
@@ -134,6 +154,7 @@ export class ModelService
 		else
 		{
 			params = Object.assign(params, addingParams);
+			params = this.objectToString(params);
 		}
 
 		return params;
@@ -153,7 +174,7 @@ export class ModelService
 						'&id=' + id;
 
 		let model = this.model;
-		return this.request(params, instanceParams, callBack, (response) =>
+		return this._get('', params, instanceParams, callBack, (response) =>
 		{
 			if(response)
 			{
@@ -216,7 +237,7 @@ export class ModelService
 		method params */
 		params = this.addParams(params, instanceParams, instanceParams);
 
-		return this.request(params, callBack);
+		return this._put('', params, callBack);
 	}
 
 	/**
@@ -236,7 +257,7 @@ export class ModelService
 		let params = 'op=add' +
 						'&' + this.setupObjectData();
 
-		return this.request(params, instanceParams, callBack);
+		return this._post('', params, instanceParams, callBack);
 	}
 
 	/**
@@ -256,7 +277,7 @@ export class ModelService
 		let params = 'op=update' +
 						'&' + this.setupObjectData();
 
-		return this.request(params, instanceParams, callBack);
+		return this._patch('', params, instanceParams, callBack);
 	}
 
 	/**
@@ -272,7 +293,7 @@ export class ModelService
 		params = 'op=delete' +
 						'&id=' + id;
 
-		return this.request(params, instanceParams, callBack);
+		return this._delete('', params, instanceParams, callBack);
 	}
 
 	/**
@@ -296,22 +317,39 @@ export class ModelService
 						'&start=' + start +
 						'&stop=' + count;
 
-		return this.request(params, instanceParams, callBack);
+		return this._get('', params, instanceParams, callBack);
+	}
+
+	getUrl(url)
+	{
+		let baseUrl = this.url;
+		if(!url)
+		{
+			return baseUrl;
+		}
+
+		if(url[0] === '?')
+		{
+			return baseUrl + url;
+		}
+
+		return baseUrl += '/' + url;
 	}
 
 	/**
 	 * This will make an ajax request.
 	 *
+	 * @param {string} url
 	 * @param {string} method
 	 * @param {(string|object)} params
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
 	 */
-	setupRequest(method, params, callBack, requestCallBack)
+	setupRequest(url, method, params, callBack, requestCallBack)
 	{
 		let settings = {
-			url: this.url,
+			url: this.getUrl(url),
 			method,
 			params,
 			completed: (response, xhr) =>
@@ -350,68 +388,98 @@ export class ModelService
 	 */
 	request(params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('POST', params, instanceParams, callBack, requestCallBack);
+		return this._request('', 'POST', params, instanceParams, callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make a GET request.
 	 *
+	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
 	 */
-	_get(params, instanceParams, callBack, requestCallBack)
+	_get(url, params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('GET', params, instanceParams, callBack, requestCallBack);
+		params = this.setupParams(params);
+		params = this.addParams(params, instanceParams);
+
+		url = url || '';
+
+		if(params)
+		{
+			url += '?' + params;
+		}
+
+		return this.setupRequest(url, "GET", '', callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make a POST request.
 	 *
+	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
 	 */
-	_post(params, instanceParams, callBack, requestCallBack)
+	_post(url, params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('POST', params, instanceParams, callBack, requestCallBack);
+		return this._request(url, 'POST', params, instanceParams, callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make a PUT request.
 	 *
+	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
 	 */
-	_put(params, instanceParams, callBack, requestCallBack)
+	_put(url, params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('PUT', params, instanceParams, callBack, requestCallBack);
+		return this._request(url, 'PUT', params, instanceParams, callBack, requestCallBack);
+	}
+
+	/**
+	 * This will make a PATCH request.
+	 *
+	 * @param {string} url
+	 * @param {(string|object)} params
+	 * @param {string} instanceParams
+	 * @param {function} callBack
+	 * @param {function} [requestCallBack]
+	 * @param {object}
+	 */
+	_patch(url, params, instanceParams, callBack, requestCallBack)
+	{
+		return this._request(url, 'PATCH', params, instanceParams, callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make a DELETE request.
 	 *
+	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
 	 */
-	_delete(params, instanceParams, callBack, requestCallBack)
+	_delete(url, params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('DELETE', params, instanceParams, callBack, requestCallBack);
+		return this._request(url, 'DELETE', params, instanceParams, callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make an ajax request.
 	 *
+	 * @param {string} url
 	 * @param {string} method
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
@@ -419,12 +487,12 @@ export class ModelService
 	 * @param {function} [requestCallBack]
 	 * @param {object}
 	 */
-	_request(method, params, instanceParams, callBack, requestCallBack)
+	_request(url, method, params, instanceParams, callBack, requestCallBack)
 	{
 		params = this.setupParams(params);
 		params = this.addParams(params, instanceParams);
 
-		return this.setupRequest(method, params, callBack, requestCallBack);
+		return this.setupRequest(url, method, params, callBack, requestCallBack);
 	}
 
 	getResponse(response, callBack, xhr)

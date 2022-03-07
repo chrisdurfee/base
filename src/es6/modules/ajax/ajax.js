@@ -24,6 +24,8 @@ let XhrDefaultSettings =
 		'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
 	},
 
+	beforeSend: [],
+
 	/* this will set the ajax request to async (bool) */
 	async: true,
 
@@ -56,6 +58,17 @@ base.augment(
 	addFixedParams(params)
 	{
 		this.xhrSettings.fixedParams = params;
+	},
+
+	/**
+	 * This will add a callback that will be called before
+	 * each request.
+	 *
+	 * @param {function} callBack
+	 */
+	beforeSend(callBack)
+	{
+		this.xhrSettings.beforeSend.push(callBack);
 	},
 
 	/**
@@ -154,10 +167,36 @@ export class XhrRequest
 
 		this.setupHeaders();
 		this.addXhrEvents();
+		this.beforeSend();
 
 		/* this will setup the params and send the
 		xhr request */
 		xhr.send(this.getParams());
+	}
+
+	/**
+	 * This will call all before send callbacks.
+	 *
+	 * @returns {void}
+	 */
+	beforeSend()
+	{
+		let items = base.xhrSettings.beforeSend;
+		if(items.length < 1)
+		{
+			return;
+		}
+
+		let xhr = this.xhr;
+		let settings = this.settings;
+		for(var i = 0, length = items.length; i < length; i++)
+		{
+			var callBack = items[i];
+			if(callBack)
+			{
+				callBack(xhr, settings);
+			}
+		}
 	}
 
 	/**

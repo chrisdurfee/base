@@ -1253,6 +1253,7 @@
 		 * This will uncamel-case a string.
 		 *
 		 * @param {string} str
+		 * @param {string} delimiter
 		 * @return {(string|boolean)} The string or false.
 		 */
 		uncamelCase: function(str, delimiter)

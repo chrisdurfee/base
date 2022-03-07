@@ -1,5 +1,39 @@
 import {base} from '../../core.js';
 
+/**
+ * History
+ *
+ * This will setup the history controller.
+ * @class
+ */
+export class HistoryController
+{
+    /**
+     * This will check if browser based navigation is supported
+     *
+     * @returns boolean
+     */
+    static browserIsSupported()
+    {
+        return ('history' in window && 'pushState' in window.history);
+    }
+
+    /**
+     * This will create a History Object based on navigation support
+     *
+     * @param {Router} router
+     * @returns History
+     */
+    static setup(router)
+    {
+        if(HistoryController.browserIsSupported())
+        {
+            return new BrowserHistory(router).setup();
+        }
+        return new HashHistory(router).setup();
+    }
+}
+
 let routerNumber = 0;
 
 /**
@@ -8,7 +42,7 @@ let routerNumber = 0;
  * This will setup the history controller.
  * @class
  */
-export class RouterEvents
+class History
 {
 	/**
 	 * @constructor
@@ -17,11 +51,8 @@ export class RouterEvents
 	constructor(router)
 	{
 		this.router = router;
-
-		/* this will check if the history api is supported
-		and enabled */
 		this.locationId = 'base-app-router-' + routerNumber++;
-		this.callBack = null;
+		this.callBack = this.check.bind(this);
 	}
 
 	/**
@@ -32,13 +63,12 @@ export class RouterEvents
 	 */
 	setup()
 	{
-		this.callBack = this.check.bind(this);
 		this.addEvent();
 		return this;
 	}
 }
 
-class HistoryRouter extends RouterEvents
+class BrowserHistory extends History
 {
 	/**
 	 * This will add the events.
@@ -135,7 +165,7 @@ class HistoryRouter extends RouterEvents
 	}
 }
 
-class HashRouter extends RouterEvents
+class HashHistory extends History
 {
 	/**
 	 * This will add the events.
@@ -166,7 +196,7 @@ class HashRouter extends RouterEvents
 	 */
 	check(evt)
 	{
-		this.router.checkActiveRoutes();
+		this.router.checkActiveRoutes(evt.newURL);
 	}
 
 	/**
@@ -184,34 +214,3 @@ class HashRouter extends RouterEvents
 		return this;
 	}
 }
-
-/**
- * This will check if the history API is supported.
- *
- * @returns {boolean}
- */
-const isHistorySupported = () =>
-{
-	if('history' in window && 'pushState' in window.history)
-	{
-		return true;
-	}
-
-	return false;
-};
-
-/**
- * This will create a router by API support.
- *
- * @param {object} router
- * @returns {object}
- */
-RouterEvents.create = (router) =>
-{
-	if(isHistorySupported() === true)
-	{
-		return new HistoryRouter(router);
-	}
-
-	return new HashRouter(router);
-};
