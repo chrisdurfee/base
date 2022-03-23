@@ -953,12 +953,13 @@ export class LayoutBuilder extends htmlBuilder
 
 		if(settings.length < 3)
 		{
-			if(!parent.data)
+			const parentData = this.getParentSetData(parent);
+			if(!parentData)
 			{
 				return;
 			}
 
-			data = parent.data;
+			data = parentData;
 			prop = settings[0];
 			item = settings[1];
 		}
