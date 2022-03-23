@@ -463,8 +463,8 @@ export class Unit
 	 */
 	initialize()
 	{
-		this.beforeSetup();
 		this.setupContext();
+		this.beforeSetup();
 		this.buildLayout();
 		this.afterSetup();
 	}

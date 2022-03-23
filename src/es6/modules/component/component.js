@@ -63,8 +63,8 @@ export class Component extends Unit
 	 */
 	initialize()
 	{
-		this.beforeSetup();
 		this.setupContext();
+		this.beforeSetup();
 		this.addStates();
 		this.buildLayout();
 		this.addEvents();

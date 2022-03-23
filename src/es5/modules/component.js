@@ -849,8 +849,8 @@
 		 */
 		initialize: function()
 		{
-			this.beforeSetup();
 			this.setupContext();
+			this.beforeSetup();
 			this.buildLayout();
 			this.afterSetup();
 		},
@@ -1021,8 +1021,8 @@
 		 */
 		initialize: function()
 		{
-			this.beforeSetup();
 			this.setupContext();
+			this.beforeSetup();
 			this.addStates();
 			this.buildLayout();
 			this.addEvents();
