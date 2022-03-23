@@ -25,6 +25,20 @@ export const Watch = function(data, prop)
 	};
 };
 
+/**
+ * This will track the context from an atom to remove
+ * it when the element is removed.
+ */
+base.dataTracker.addType('context', function(data)
+{
+	if(!data)
+	{
+		return false;
+	}
+
+	data.parent.removeContextBranch(data.branch);
+});
+
 const parser = new LayoutParser();
 
 /**
@@ -279,6 +293,18 @@ export class LayoutBuilder extends htmlBuilder
 			}
 		}
 
+		this.addElementDirectives(ele, obj, parent);
+	}
+
+	/**
+	 * This will add the element directives.
+	 *
+	 * @param {object} ele
+	 * @param {object} obj
+	 * @param {object} [parent]
+	 */
+	addElementDirectives(ele, obj, parent)
+	{
 		if(typeof obj.onCreated === 'function')
 		{
 			obj.onCreated(ele);
@@ -305,6 +331,21 @@ export class LayoutBuilder extends htmlBuilder
 		if(obj.html)
 		{
 			this.addHtml(ele, obj.html);
+		}
+
+		if(obj.useContext)
+		{
+			this.useContext(ele, obj.useContext, parent);
+		}
+
+		if(obj.addContext)
+		{
+			this.addContext(ele, obj.addContext, parent);
+		}
+
+		if(obj.context)
+		{
+			this.context(ele, obj.context, parent);
 		}
 
 		if(obj.role)
@@ -388,8 +429,22 @@ export class LayoutBuilder extends htmlBuilder
 			return false;
 		}
 
-		let data = (parent.data || parent.state);
-		return data || false;
+		if(parent.data)
+		{
+			return parent.data;
+		}
+
+		if(parent.context && parent.context.data)
+		{
+			return parent.context.data;
+		}
+
+		if(parent.state)
+		{
+			return parent.state;
+		}
+
+		return false;
 	}
 
 	/**
@@ -656,6 +711,103 @@ export class LayoutBuilder extends htmlBuilder
 	}
 
 	/**
+	 * This will get the parent context.
+	 *
+	 * @param {object|null} parent
+	 * @returns {object|null}
+	 */
+	getParentContext(parent)
+	{
+		return (!parent)? null : parent.getContext();
+	}
+
+	/**
+	 * This will set the context attributes.
+	 *
+	 * @protected
+	 * @param {object} ele
+	 * @param {function} context
+	 * @param {object} [parent]
+	 */
+	context(ele, context, parent)
+	{
+		if(typeof context !== 'function')
+		{
+			return;
+		}
+
+		let parentContext = this.getParentContext(parent);
+		let attributes = context(parentContext);
+		if(!attributes)
+		{
+			return;
+		}
+
+		this._addElementAttrs(ele, attributes, parent);
+		this.addElementDirectives(ele, attributes, parent);
+	}
+
+	/**
+	 * This will use the parent context.
+	 *
+	 * @param {object} ele
+	 * @param {function} callBack
+	 * @param {object} [parent]
+	 * @returns {void}
+	 */
+	useContext(ele, callBack, parent)
+	{
+		if(typeof callBack !== 'function')
+		{
+			return;
+		}
+
+		let parentContext = this.getParentContext(parent);
+		callBack(parentContext);
+	}
+
+	/**
+	 * This will add context the parent context.
+	 *
+	 * @param {object} ele
+	 * @param {array} callBack
+	 * @param {object} [parent]
+	 * @returns {void}
+	 */
+	addContext(ele, callBack, parent)
+	{
+		if(typeof callBack !== 'function' || !parent)
+		{
+			return;
+		}
+
+		let parentContext = this.getParentContext(parent);
+		let childContext = callBack(parentContext);
+		if(!childContext)
+		{
+			return;
+		}
+
+		parent.addContextBranch(childContext[0], childContext[1]);
+	}
+
+	/**
+	 * This will track the child context on the element.
+	 *
+	 * @param {object} ele
+	 * @param {string} branchName
+	 * @param {object} parent
+	 */
+	trackContext(ele, branchName, parent)
+	{
+		base.dataTracker.add(ele, 'context',
+		{
+			branch: branchName,
+			parent: parent
+		});
+	}
+
+	/**
 	 * This will add a watcher.
 	 *
 	 * @protected
@@ -670,7 +822,7 @@ export class LayoutBuilder extends htmlBuilder
 			return false;
 		}
 
-		if(base.isArray(watcher))
+		if(Array.isArray(watcher) && typeof watcher[0] !== 'string')
 		{
 			for(var i = 0, length = watcher.length; i < length; i++)
 			{
@@ -842,6 +994,27 @@ export class LayoutBuilder extends htmlBuilder
 	}
 
 	/**
+	 * This will get the parent set data.
+	 *
+	 * @param {object} parent
+	 * @returns {object|null}
+	 */
+	getParentSetData(parent)
+	{
+		if(parent.data)
+		{
+			return parent.data;
+		}
+
+		if(parent.context && parent.context.data)
+		{
+			return parent.context.data;
+		}
+
+		return null;
+	}
+
+	/**
 	 * This will add an onSet watcher.
 	 *
 	 * @param {object} ele
@@ -850,7 +1023,8 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	onSet(ele, onSet, parent)
 	{
-		this.onUpdate(ele, parent.data, onSet, parent);
+		const data = this.getParentSetData(parent);
+		this.onUpdate(ele, data, onSet, parent);
 	}
 
 	/**

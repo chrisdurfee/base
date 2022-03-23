@@ -28,6 +28,9 @@ export class LayoutParser
 			'onSet',
 			'onState',
 			'watch',
+			'context',
+			'useContext',
+			'addContext',
 			'role',
 			'aria',
 			'cache'

@@ -99,6 +99,140 @@ export class Unit
 	}
 
 	/**
+	 * This will get the parent context.
+	 *
+	 * @returns {object|null}
+	 */
+	getParentContext()
+	{
+		if(!this.parent)
+		{
+			return null;
+		}
+
+		return this.parent.getContext();
+	}
+
+	/**
+	 * This will set up the context.
+	 *
+	 * @returns {void}
+	 */
+	setupContext()
+	{
+		let parentContext = this.getParentContext();
+		let context = this.setContext(parentContext);
+		if(context)
+		{
+			this.context = context;
+			return;
+		}
+
+		this.context = parentContext;
+		this.setupAddingContext();
+	}
+
+	/**
+	 * This will set up the adding context.
+	 *
+	 * @returns {void}
+	 */
+	setupAddingContext()
+	{
+		let parentContext = this.context;
+		let context = this.addContext(parentContext);
+		if(!context)
+		{
+			return;
+		}
+
+		let branchName = context[0];
+		if(!branchName)
+		{
+			return;
+		}
+
+		this.addingContext = true;
+		this.contextBranchName = branchName;
+		this.addContextBranch(branchName, context[1]);
+	}
+
+	/**
+	 * This will add a branch to the context.
+	 *
+	 * @param {string} branchName
+	 * @param {mixed} value
+	 */
+	addContextBranch(branchName, value)
+	{
+		this.context = this.context || {};
+		this.context[branchName] = value;
+	}
+
+	/**
+	 * This will set the component context.
+	 *
+	 * @param {object|null} context
+	 * @returns {object|null}
+	 */
+	setContext(context)
+	{
+		return null;
+	}
+
+	/**
+	 * This will add context to the parent context.
+	 *
+	 * @param {object|null} context
+	 * @return {array|null}
+	 */
+	addContext(context)
+	{
+		return null;
+	}
+
+	/**
+	 * This will remove the added context from the parent.
+	 *
+	 * @returns {void}
+	 */
+	removeContext()
+	{
+		if(!this.addingContext)
+		{
+			return;
+		}
+
+		this.removeContextBranch(this.contextBranchName);
+	}
+
+	/**
+	 * This will remove a context branch.
+	 *
+	 * @param {string} branch
+	 * @returns {void}
+	 */
+	removeContextBranch(branch)
+	{
+		if(!branch)
+		{
+			return;
+		}
+
+		delete this.context[branch];
+	}
+
+	/**
+	 * This will get the context.
+	 *
+	 * @returns {object|null}
+	 */
+	getContext()
+	{
+		return this.context;
+	}
+
+	/**
 	 * override this to do something when created.
 	 */
 	onCreated()
@@ -330,6 +464,7 @@ export class Unit
 	initialize()
 	{
 		this.beforeSetup();
+		this.setupContext();
 		this.buildLayout();
 		this.afterSetup();
 	}
@@ -367,6 +502,7 @@ export class Unit
 	remove()
 	{
 		this.prepareDestroy();
+		this.removeContext();
 
 		let panel = this.panel || this.id;
 		builder.removeElement(panel);

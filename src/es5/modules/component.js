@@ -484,6 +484,140 @@
 		},
 
 		/**
+		 * This will get the parent context.
+		 *
+		 * @returns {object|null}
+		 */
+		getParentContext: function()
+		{
+			if(!this.parent)
+			{
+				return null;
+			}
+
+			return this.parent.getContext();
+		},
+
+		/**
+		 * This will set up the context.
+		 *
+		 * @returns {void}
+		 */
+		setupContext: function()
+		{
+			var parentContext = this.getParentContext();
+			var context = this.setContext(parentContext);
+			if(context)
+			{
+				this.context = context;
+				return;
+			}
+
+			this.context = parentContext;
+			this.setupAddingContext();
+		},
+
+		/**
+		 * This will set up the adding context.
+		 *
+		 * @returns {void}
+		 */
+		setupAddingContext: function()
+		{
+			var parentContext = this.context;
+			var context = this.addContext(parentContext);
+			if(!context)
+			{
+				return;
+			}
+
+			var branchName = context[0];
+			if(!branchName)
+			{
+				return;
+			}
+
+			this.addingContext = true;
+			this.contextBranchName = branchName;
+			this.addContextBranch(branchName, context[1]);
+		},
+
+		/**
+		 * This will add a branch to the context.
+		 *
+		 * @param {string} branchName
+		 * @param {mixed} value
+		 */
+		addContextBranch: function(branchName, value)
+		{
+			this.context = this.context || {};
+			this.context[branchName] = value;
+		},
+
+		/**
+		 * This will set the component context.
+		 *
+		 * @param {object|null} context
+		 * @returns {object|null}
+		 */
+		setContext: function(context)
+		{
+			return null;
+		},
+
+		/**
+		 * This will add context to the parent context.
+		 *
+		 * @param {object|null} context
+		 * @return {array|null}
+		 */
+		addContext: function(context)
+		{
+			return null;
+		},
+
+		/**
+		 * This will remove the added context from the parent.
+		 *
+		 * @returns {void}
+		 */
+		removeContext: function()
+		{
+			if(!this.addingContext)
+			{
+				return;
+			}
+
+			this.removeContextBranch(this.contextBranchName);
+		},
+
+		/**
+		 * This will remove a context branch.
+		 *
+		 * @param {string} branch
+		 * @returns {void}
+		 */
+		removeContextBranch: function(branch)
+		{
+			if(!branch)
+			{
+				return;
+			}
+
+			delete this.context[branch];
+		},
+
+		/**
+		 * This will get the context.
+		 *
+		 * @returns {object|null}
+		 */
+		getContext: function()
+		{
+			return this.context;
+		},
+
+		/**
 		 * override this to do something when created.
 		 */
 		onCreated: function()
@@ -716,6 +850,7 @@
 		initialize: function()
 		{
 			this.beforeSetup();
+			this.setupContext();
 			this.buildLayout();
 			this.afterSetup();
 		},
@@ -753,6 +888,7 @@
 		remove: function()
 		{
 			this.prepareDestroy();
+			this.removeContext();
 
 			var panel = this.panel || this.id;
 			builder.removeElement(panel);
@@ -886,6 +1022,7 @@
 		initialize: function()
 		{
 			this.beforeSetup();
+			this.setupContext();
 			this.addStates();
 			this.buildLayout();
 			this.addEvents();
@@ -1048,6 +1185,7 @@
 			this.beforeDestroy();
 			this.removeEvents();
 			this.removeStates();
+			this.removeContext();
 
 			if(this.data && this.persist === false)
 			{

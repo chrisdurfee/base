@@ -35,6 +35,9 @@
 			'onSet',
 			'onState',
 			'watch',
+			'context',
+			'useContext',
+			'addContext',
 			'role',
 			'aria',
 			'cache'
@@ -229,6 +232,32 @@
 		},
 
 		/**
+		 * This will get the parent data.
+		 *
+		 * @param {object} parent
+		 * @returns {object|null}
+		 */
+		getParentData: function(parent)
+		{
+			if(parent.data)
+			{
+				return parent.data;
+			}
+
+			if(parent.context && parent.context.data)
+			{
+				return parent.context.data;
+			}
+
+			if(parent.state)
+			{
+				return parent.state;
+			}
+
+			return null;
+		},
+
+		/**
 		 * This will get a watcher value.
 		 *
 		 * @private
@@ -249,7 +278,20 @@
 			var value = settings.value;
 			if(base.isArray(value) === false)
 			{
-				value = [value, (parent.data || parent.state)];
+				/**
+				 * This will setup an array watcher based on a string.
+				 */
+				value = [value, this.getParentData(parent)];
+			}
+			else
+			{
+				/**
+				 * This will check to add the default data.
+				 */
+				if(value.length < 2)
+				{
+					value.push(this.getParentData(parent));
+				}
 			}
 			return value;
 		},
@@ -353,6 +395,14 @@
 				return false;
 			}
 
+			if(Array.isArray(settings))
+			{
+				settings = {
+					attr: settings[2],
+					value: [settings[0], settings[1]]
+				};
+			}
+
 			this.addDataWatcher(ele, settings, parent);
 		},
 
@@ -390,6 +440,16 @@
 			};
 		};
 	};
+
+	base.DataTracker.addType('context', function(data)
+	{
+		if(!data)
+		{
+			return false;
+		}
+
+		data.parent.removeContextBranch(data.branch);
+	});
 
 	var parser = new LayoutParser();
 
@@ -645,6 +705,18 @@
 				}
 			}
 
+			this.addElementDirectives(ele, obj, parent);
+		},
+
+		/**
+		 * This will add the element directives.
+		 *
+		 * @param {object} ele
+		 * @param {object} obj
+		 * @param {object} [parent]
+		 */
+		addElementDirectives: function(ele, obj, parent)
+		{
 			if(typeof obj.onCreated === 'function')
 			{
 				obj.onCreated(ele);
@@ -671,6 +743,21 @@
 			if(obj.html)
 			{
 				this.addHtml(ele, obj.html);
+			}
+
+			if(obj.useContext)
+			{
+				this.useContext(ele, obj.useContext, parent);
+			}
+
+			if(obj.addContext)
+			{
+				this.addContext(ele, obj.addContext, parent);
+			}
+
+			if(obj.context)
+			{
+				this.context(ele, obj.context, parent);
 			}
 
 			if(obj.role)
@@ -754,7 +841,22 @@
 				return false;
 			}
 
-			return (parent.data || parent.state || false);
+			if(parent.data)
+			{
+				return parent.data;
+			}
+
+			if(parent.context && parent.context.data)
+			{
+				return parent.context.data;
+			}
+
+			if(parent.state)
+			{
+				return parent.state;
+			}
+
+			return false;
 		},
 
 		/**
@@ -1023,6 +1125,103 @@
 		},
 
 		/**
+		 * This will get the parent context.
+		 *
+		 * @param {object|null} parent
+		 * @returns {object|null}
+		 */
+		getParentContext: function(parent)
+		{
+			return (!parent)? null : parent.getContext();
+		},
+
+		/**
+		 * This will set the context attributes.
+		 *
+		 * @protected
+		 * @param {object} ele
+		 * @param {function} context
+		 * @param {object} [parent]
+		 */
+		context: function(ele, context, parent)
+		{
+			if(typeof context !== 'function')
+			{
+				return;
+			}
+
+			var parentContext = this.getParentContext(parent);
+			var attributes = context(parentContext);
+			if(!attributes)
+			{
+				return;
+			}
+
+			this._addElementAttrs(ele, attributes, parent);
+			this.addElementDirectives(ele, attributes, parent);
+		},
+
+		/**
+		 * This will use the parent context.
+		 *
+		 * @param {object} ele
+		 * @param {function} callBack
+		 * @param {object} [parent]
+		 * @returns {void}
+		 */
+		useContext: function(ele, callBack, parent)
+		{
+			if(typeof callBack !== 'function')
+			{
+				return;
+			}
+
+			var parentContext = this.getParentContext(parent);
+			callBack(parentContext);
+		},
+
+		/**
+		 * This will add context the parent context.
+		 *
+		 * @param {object} ele
+		 * @param {array} callBack
+		 * @param {object} [parent]
+		 * @returns {void}
+		 */
+		addContext: function(ele, callBack, parent)
+		{
+			if(typeof callBack !== 'function' || !parent)
+			{
+				return;
+			}
+
+			var parentContext = this.getParentContext(parent);
+			var childContext = callBack(parentContext);
+			if(!childContext)
+			{
+				return;
+			}
+
+			parent.addContextBranch(childContext[0], childContext[1]);
+		},
+
+		/**
+		 * This will track the child context on the element.
+		 *
+		 * @param {object} ele
+		 * @param {string} branchName
+		 * @param {object} parent
+		 */
+		trackContext: function(ele, branchName, parent)
+		{
+			base.DataTracker.add(ele, 'context',
+			{
+				branch: branchName,
+				parent: parent
+			});
+		},
+
+		/**
 		 * This will add a watcher.
 		 *
 		 * @protected
@@ -1037,7 +1236,7 @@
 				return false;
 			}
 
-			if(base.isArray(watcher))
+			if(base.isArray(watcher) && typeof watcher[0] !== 'string')
 			{
 				for(var i = 0, length = watcher.length; i < length; i++)
 				{
@@ -1210,6 +1409,27 @@
 		},
 
 		/**
+		 * This will get the parent set data.
+		 *
+		 * @param {object} parent
+		 * @returns {object|null}
+		 */
+		getParentSetData: function(parent)
+		{
+			if(parent.data)
+			{
+				return parent.data;
+			}
+
+			if(parent.context && parent.context.data)
+			{
+				return parent.context.data;
+			}
+
+			return null;
+		},
+
+		/**
 		 * This will add an onSet watcher.
 		 *
 		 * @param {object} ele
@@ -1218,7 +1438,8 @@
 		 */
 		onSet: function(ele, onSet, parent)
 		{
-			this.onUpdate(ele, parent.data, onSet, parent);
+			var data = this.getParentSetData(parent);
+			this.onUpdate(ele, data, onSet, parent);
 		},
 
 		/**

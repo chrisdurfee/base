@@ -93,6 +93,32 @@ export const WatcherHelper =
 	},
 
 	/**
+	 * This will get the parent data.
+	 *
+	 * @param {object} parent
+	 * @returns {object|null}
+	 */
+	getParentData(parent)
+	{
+		if(parent.data)
+		{
+			return parent.data;
+		}
+
+		if(parent.context && parent.context.data)
+		{
+			return parent.context.data;
+		}
+
+		if(parent.state)
+		{
+			return parent.state;
+		}
+
+		return null;
+	},
+
+	/**
 	 * This will get a watcher value.
 	 *
 	 * @private
@@ -113,7 +139,20 @@ export const WatcherHelper =
 		let value = settings.value;
 		if(Array.isArray(value) === false)
 		{
-			value = [value, (parent.data || parent.state)];
+			/**
+			 * This will setup an array watcher based on a string.
+			 */
+			value = [value, this.getParentData(parent)];
+		}
+		else
+		{
+			/**
+			 * This will check to add the default data.
+			 */
+			if(value.length < 2)
+			{
+				value.push(this.getParentData(parent));
+			}
 		}
 		return value;
 	},
@@ -214,6 +253,14 @@ export const WatcherHelper =
 		if(!settings)
 		{
 			return;
+		}
+
+		if(Array.isArray(settings))
+		{
+			settings = {
+				attr: settings[2],
+				value: [settings[0], settings[1]]
+			};
 		}
 
 		this.addDataWatcher(ele, settings, parent);

@@ -64,6 +64,7 @@ export class Component extends Unit
 	initialize()
 	{
 		this.beforeSetup();
+		this.setupContext();
 		this.addStates();
 		this.buildLayout();
 		this.addEvents();
@@ -219,6 +220,7 @@ export class Component extends Unit
 		this.beforeDestroy();
 		this.removeEvents();
 		this.removeStates();
+		this.removeContext();
 
 		if(this.data && this.persist === false)
 		{
