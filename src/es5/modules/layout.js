@@ -1604,6 +1604,11 @@
 				component.persist = true;
 			}
 
+			if(component.cacheable)
+			{
+				parent[component.cacheable] = component;
+			}
+
 			component.setup(container);
 
 			if(obj.component && typeof obj.onCreated === 'function')

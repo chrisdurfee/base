@@ -1178,12 +1178,17 @@ export class LayoutBuilder extends htmlBuilder
 	createComponent(obj, container, parent)
 	{
 		// this will allow both cached components or native components
-		let component = obj.component || obj;
+		const component = obj.component || obj;
 		component.parent = parent;
 
 		if(parent && parent.persist === true && component.persist !== false)
 		{
 			component.persist = true;
+		}
+
+		if(component.cacheable)
+		{
+			parent[component.cacheable] = component;
 		}
 
 		component.setup(container);

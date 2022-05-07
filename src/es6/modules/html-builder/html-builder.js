@@ -3,6 +3,23 @@ import {dataBinder} from '../data-binder/data-binder.js';
 
 const dataTracker = base.dataTracker;
 
+const NORMALIZED_NAMES =
+{
+	class: 'className',
+	text: 'textContent',
+	for: 'htmlFor',
+	readonly: 'readOnly',
+	maxlength: 'maxLength',
+	cellspacing: 'cellSpacing',
+	rowspan: 'rowSpan',
+	colspan: 'colSpan',
+	tabindex: 'tabIndex',
+	celpadding: 'cellPadding',
+	useMap: 'useMap',
+	frameborder: 'frameBorder',
+	contenteditable: 'contentEditable'
+};
+
 /**
  * This will get the javascript property name.
  *
@@ -11,50 +28,7 @@ const dataTracker = base.dataTracker;
  */
 export const normalizeAttr = (prop) =>
 {
-	switch(prop)
-	{
-		case 'class':
-			prop = 'className';
-			break;
-		case 'text':
-			prop = 'textContent';
-			break;
-		case 'for':
-			prop = 'htmlFor';
-			break;
-		case 'readonly':
-			prop = 'readOnly';
-			break;
-		case 'maxlength':
-			prop = 'maxLength';
-			break;
-		case 'cellspacing':
-			prop = 'cellSpacing';
-			break;
-		case 'rowspan':
-			prop = 'rowSpan';
-			break;
-		case 'colspan':
-			prop = 'colSpan';
-			break;
-		case 'tabindex':
-			prop = 'tabIndex';
-			break;
-		case 'cellpadding':
-			prop = 'cellPadding';
-			break;
-		case 'usemap':
-			prop = 'useMap';
-			break;
-		case 'frameborder':
-			prop = 'frameBorder';
-			break;
-		case 'contenteditable':
-			prop = 'contentEditable';
-			break;
-	}
-
-	return prop;
+	return NORMALIZED_NAMES[prop] || prop;
 };
 
 /**

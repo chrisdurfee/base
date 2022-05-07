@@ -1,62 +1,67 @@
 import {Unit} from './unit.js';
 import {Component} from './component.js';
 
-const setupJotComponent = function(settings)
+/**
+ * This will store the jot shorthand method alaises.
+ */
+const JOT_SHORTHAND_METHODS =
+{
+    created: 'onCreated',
+    state: 'setupStates',
+    events: 'setupEevents',
+    before: 'beforeSetup',
+    render: 'render',
+    after: 'afterSetup',
+    destroy: 'beforeDestroy'
+};
+
+/**
+ * This will get the jot method by value. If the method is an
+ * object, it will be nested in a function.
+ *
+ * @param {object|function} value
+ * @returns {function}
+ */
+const getJotShorthandMethod = (value) =>
+{
+    const valueType = (typeof value);
+    return (valueType === 'function')? value : function()
+    {
+        return value;
+    };
+};
+
+/**
+ * This will create a jot component object that will be used
+ * to create the jot component.
+ *
+ * @param {object} settings
+ * @returns {object}
+ */
+const JotComponent = (settings) =>
 {
     const component = {};
-
-    let state = settings.state;
-    if(state)
+    if(!settings)
     {
-        let stateType = (typeof state);
-        component.setupStates = (stateType === 'function')? state : function()
+        return component;
+    }
+
+    for(var prop in settings)
+    {
+        if(settings.hasOwnProperty(prop) === false)
         {
-            return state;
-        };
-    }
+            continue;
+        }
 
-    let events = settings.events;
-    if(events)
-    {
-        let eventType = (typeof events);
-        component.setupEevents = (eventType === 'function')? events : function()
+        let value = settings[prop];
+        let alias = JOT_SHORTHAND_METHODS[prop];
+        if(alias)
         {
-            return events;
-        };
-    }
+            component[alias] = getJotShorthandMethod(value);
+            continue;
+        }
 
-    let before = settings.before;
-    if(before)
-    {
-        component.beforeSetup = before;
-    }
-
-    let after = settings.after;
-    if(after)
-    {
-        component.afterSetup = after;
-    }
-
-    let destroy = settings.destroy;
-    if(destroy)
-    {
-        component.beforeDestroy = destroy;
-    }
-
-    let data = settings.data;
-    if(data)
-    {
-        component.data = data;
-    }
-
-    let render = settings.render;
-    if(render)
-    {
-        let renderType = (typeof render);
-        component.render = (renderType === 'function')? render : function()
-        {
-            return render;
-        };
+        component[prop] = value;
     }
 
     return component;
@@ -115,7 +120,7 @@ export const Jot = function(layout)
         case 'object':
             if(layout.render)
             {
-                settings = setupJotComponent(layout);
+                settings = JotComponent(layout);
                 return createComponentClass(settings);
             }
 

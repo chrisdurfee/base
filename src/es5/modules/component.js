@@ -1194,62 +1194,67 @@
 		}
 	});
 
-	var setupJotComponent = function(settings)
+	/**
+	 * This will store the jot shorthand method alaises.
+	 */
+	var JOT_SHORTHAND_METHODS =
+	{
+		created: 'onCreated',
+		state: 'setupStates',
+		events: 'setupEevents',
+		before: 'beforeSetup',
+		render: 'render',
+		after: 'afterSetup',
+		destroy: 'beforeDestroy'
+	};
+
+	/**
+	 * This will get the jot method by value. If the method is an
+	 * object, it will be nested in a function.
+	 *
+	 * @param {object|function} value
+	 * @returns {function}
+	 */
+	var getJotShorthandMethod = function(value)
+	{
+		var valueType = (typeof value);
+		return (valueType === 'function')? value : function()
+		{
+			return value;
+		};
+	};
+
+	/**
+	 * This will create a jot component object that will be used
+	 * to create the jot component.
+	 *
+	 * @param {object} settings
+	 * @returns {object}
+	 */
+	var JotComponent = function(settings)
 	{
 		var component = {};
-
-		var state = settings.state;
-		if(state)
+		if(!settings)
 		{
-			var stateType = (typeof state);
-			component.setupStates = (stateType === 'function')? state : function()
+			return component;
+		}
+
+		for(var prop in settings)
+		{
+			if(settings.hasOwnProperty(prop) === false)
 			{
-				return state;
-			};
-		}
+				continue;
+			}
 
-		var events = settings.events;
-		if(events)
-		{
-			var eventType = (typeof events);
-			component.setupEevents = (eventType === 'function')? events : function()
+			var value = settings[prop];
+			var alias = JOT_SHORTHAND_METHODS[prop];
+			if(alias)
 			{
-				return events;
-			};
-		}
+				component[alias] = getJotShorthandMethod(value);
+				continue;
+			}
 
-		var before = settings.before;
-		if(before)
-		{
-			component.beforeSetup = before;
-		}
-
-		var after = settings.after;
-		if(after)
-		{
-			component.afterSetup = after;
-		}
-
-		var destroy = settings.destroy;
-		if(destroy)
-		{
-			component.beforeDestroy = destroy;
-		}
-
-		var data = settings.data;
-		if(data)
-		{
-			component.data = data;
-		}
-
-		var render = settings.render;
-		if(render)
-		{
-			var renderType = (typeof render);
-			component.render = (renderType === 'function')? render : function()
-			{
-				return render;
-			};
+			component[prop] = value;
 		}
 
 		return component;
@@ -1274,7 +1279,7 @@
 				var settings;
 				if(layout.render)
 				{
-					settings = setupJotComponent(layout);
+					settings = JotComponent(layout);
 					return base.Component.extend(settings);
 				}
 
