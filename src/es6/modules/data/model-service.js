@@ -23,7 +23,7 @@ export class ModelService
 		/**
 		 * @member {string} objectType The return type.
 		 */
-		this.objectType = 'item';
+		this.objectType = this.objectType || 'item';
 
 		this.url = '';
 		this.validateCallBack = null;
