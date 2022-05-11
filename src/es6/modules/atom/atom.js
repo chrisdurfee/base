@@ -42,11 +42,6 @@ Atom.extend = function extend(childLayout)
 		parentLayout = parent(props);
 		if(typeof parentLayout === 'object')
 		{
-			if(layout.isUnit)
-			{
-				return layout;
-			}
-
 			layout = Object.assign({}, parentLayout, layout);
 		}
 		return layout;

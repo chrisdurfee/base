@@ -475,11 +475,11 @@ base.augment(
         let getMouseWheelType = () =>
         {
             let type = 'wheel';
-            if('onmousewheel' in global)
+            if('onmousewheel' in self)
             {
                 type = 'mousewheel';
             }
-            else if('DOMMouseScroll' in global)
+            else if('DOMMouseScroll' in self)
             {
                 type = 'DOMMouseScroll';
             }
