@@ -21,7 +21,7 @@ export const date = {
 	 * @param {boolean} [shortenName=false]
 	 * @return {string}
 	 */
-	getDayName(day = new Date().getDate(), shortenName = false)
+	getDayName(day = new Date().getDay(), shortenName = false)
 	{
 		let days = this.dayNames;
 		if(day > days.length)
@@ -46,6 +46,23 @@ export const date = {
 	},
 
 	/**
+	 * This will convert a date.
+	 *
+	 * @param {string} dateString
+	 * @param {bool} addYear
+	 * @returns {string}
+	 */
+	convertDate(dateString, addYear)
+	{
+		var baseDate = base.date;
+		dateString = (dateString)? dateString.replace(/\s/, 'T'): ''; //For safari
+
+		var date = new Date(dateString),
+		year = (addYear === true)? ' ' + date.getFullYear() : '';
+		return baseDate.getDayName(date.getDay()) + ', ' + baseDate.getMonthName(date.getMonth(), true) + ' ' + baseDate.padNumber(date.getDate()) + year;
+	},
+
+	/**
 	 * This will add leading zero to number less than 10.
 	 *
 	 * @param {int} number
@@ -57,6 +74,26 @@ export const date = {
 	},
 
 	/**
+	 * This will create a new date object.
+	 *
+	 * @param {string} dateString
+	 * @returns {Date}
+	 */
+	createDate(dateString)
+	{
+		if(!dateString)
+		{
+			return new Date();
+		}
+
+		if(typeof dateString === 'string' && dateString.indexOf('-') > -1)
+		{
+			dateString = dateString.replace(/\s/, 'T'); //For safari
+		}
+		return new Date(dateString);
+	},
+
+	/**
 	 * This will format a date.
 	 *
 	 * @param {string} type
@@ -65,7 +102,7 @@ export const date = {
 	 */
 	format(type, dateString)
 	{
-		let date = new Date(dateString);
+		let date = this.createDate(dateString);
 		switch(type)
 		{
 			case 'sql':
@@ -77,6 +114,36 @@ export const date = {
 
 		}
 		return dateString;
+	},
+
+	/**
+	 * This will format time.
+	 *
+	 * @param {string} dateString
+	 * @param {int} format
+	 * @returns {stirng}
+	 */
+	formatTime(dateString, format)
+	{
+		let date = this.createDate(dateString);
+		if(format === 24)
+		{
+			return this.padNumber(date.getHours()) + ':' + this.padNumber(date.getMinutes()) + ':' + this.padNumber(date.getSeconds());
+		}
+
+		let hours = date.getHours(),
+		meridian = 'AM';
+
+		if(hours >= 12)
+		{
+			meridian = 'PM';
+		}
+
+		if(hours > 12)
+		{
+			hours = hours - 12;
+		}
+		return (hours + ':' + this.padNumber(date.getMinutes()) + ' ' + meridian);
 	},
 
 	/**
@@ -152,6 +219,209 @@ export const date = {
 	},
 
 	/**
+	 * This will get the difference from now.
+	 *
+	 * @param {string} date
+	 * @param {bool} setHours
+	 * @returns {int}
+	 */
+	getDiffFromNow(date, setHours)
+	{
+		date = date.replace(/\s/, 'T'); //For safari
+		date = new Date(date);
+
+		let now = new Date();
+		if(setHours === true)
+		{
+			now.setHours(0,0,0,0);
+		}
+
+		let timeDiff = now.getTime() - date.getTime();
+		return timeDiff;
+	},
+
+	/**
+	 * This will get the age.
+	 *
+	 * @param {string} date
+	 * @returns {string}
+	 */
+	getAge(date)
+	{
+		const milliseconds = this.getDiffFromNow(date);
+
+		let age = '';
+		switch(true)
+		{
+			case milliseconds < 86400000:
+				age = '1 day';
+				break;
+			case milliseconds < 604800000:
+				var days = this.toDays(milliseconds);
+				age = (days) + ' days';
+				break;
+			case milliseconds < 1209600000:
+				age = '1 week';
+				break;
+			case milliseconds < 2592000000:
+				var days = this.toDays(milliseconds),
+				weeks = Math.floor(days / 7);
+				age = weeks + ' weeks';
+				break;
+			case milliseconds < 5184000000:
+				age = '1 month';
+				break;
+			case milliseconds < 31104000000:
+				var months = this.toMonths(milliseconds);
+				age = months + ' months';
+				break;
+			default:
+				var years = this.toYears(milliseconds);
+				age = years;
+		}
+
+		return age;
+	},
+
+	/**
+	 * This will get the time frame.
+	 *
+	 * @param {string} date
+	 * @returns {string}
+	 */
+	getTimeFrame(date)
+	{
+		let timeDiff = this.getDiffFromNow(date);
+		return this.convertToEstimate(timeDiff);
+	},
+
+	/**
+	 *
+	 * @param {int} milliseconds
+	 * @returns {string}
+	 */
+	convertToEstimate(milliseconds)
+	{
+		let timeFrame = '';
+
+		if(milliseconds <= 0)
+		{
+			switch(true)
+			{
+				case milliseconds < -63072000000:
+					var years = this.toYears(Math.abs(milliseconds));
+					timeFrame = 'in ' + years + ' years';
+					break;
+				case milliseconds < -31536000000:
+					timeFrame = 'in a year';
+					break;
+				case milliseconds < -5184000000:
+					var months = this.toMonths(Math.abs(milliseconds));
+					timeFrame = 'in ' + months + ' months';
+					break;
+				case milliseconds < -2592000000:
+					timeFrame = 'in a month';
+					break;
+				case milliseconds < -1209600000:
+					var days = this.toDays(Math.abs(milliseconds)),
+					weeks = Math.floor(days / 7);
+					timeFrame = 'in ' + weeks + ' weeks';
+					break;
+				case milliseconds < -604800000:
+					timeFrame = 'in a week';
+					break;
+				case milliseconds < -172800000:
+					var days = this.toDays(Math.abs(milliseconds));
+					timeFrame = 'in ' + (days) + ' days';
+					break;
+				case milliseconds < -86400000:
+					timeFrame = 'tomorrow';
+					break;
+				case milliseconds < -7200000:
+					var hours = this.toHours(Math.abs(milliseconds));
+					timeFrame = 'in ' + hours + ' hours';
+					break;
+				case milliseconds <= -3600000:
+					timeFrame = 'in an hour';
+					break;
+				case milliseconds < -120000:
+					var minutes = this.toMinutes(Math.abs(milliseconds));
+					timeFrame = 'in ' + minutes + ' minutes';
+					break;
+				case milliseconds < -60000:
+					timeFrame = 'in a minute';
+					break;
+				case milliseconds < -2000:
+					var seconds = this.toSeconds(Math.abs(milliseconds));
+					timeFrame = 'in ' + seconds + ' seconds';
+					break;
+				case milliseconds < -1:
+					timeFrame = 'in 1 second';
+					break;
+				default:
+					timeFrame = 'now';
+			}
+		}
+		else
+		{
+			switch(true)
+			{
+				case milliseconds < 1000:
+					timeFrame = '1 second ago';
+					break;
+				case milliseconds < 60000:
+					var seconds = this.toSeconds(milliseconds);
+					timeFrame = seconds + ' seconds ago';
+					break;
+				case milliseconds < 120000:
+					timeFrame = '1 minute ago';
+					break;
+				case milliseconds < 3600000:
+					var minutes = this.toMinutes(milliseconds);
+					timeFrame = minutes + ' minutes ago';
+					break;
+				case milliseconds < 7200000:
+					timeFrame = '1 hour ago';
+					break;
+				case milliseconds < 86400000:
+					var hours = this.toHours(milliseconds);
+					timeFrame = hours + ' hours ago';
+					break;
+				case milliseconds < 172800000:
+					timeFrame = 'yesterday';
+					break;
+				case milliseconds < 604800000:
+					var days = this.toDays(milliseconds);
+					timeFrame = (days) + ' days ago';
+					break;
+				case milliseconds < 1209600000:
+					timeFrame = 'a week ago';
+					break;
+				case milliseconds < 2592000000:
+					var days = this.toDays(milliseconds),
+					weeks = Math.floor(days / 7);
+					timeFrame = weeks + ' weeks ago';
+					break;
+				case milliseconds < 5184000000:
+					timeFrame = 'a month ago';
+					break;
+				case milliseconds < 31536000000:
+					var months = this.toMonths(milliseconds);
+					timeFrame = months + ' months ago';
+					break;
+				case milliseconds < 63072000000:
+					timeFrame = 'a year ago';
+					break;
+				default:
+					var years = this.toYears(milliseconds);
+					timeFrame = years + ' years ago';
+			}
+		}
+
+		return timeFrame;
+	},
+
+	/**
 	 * This will convert to years.
 	 *
 	 * @param {int} milliseconds
@@ -165,6 +435,21 @@ export const date = {
 		}
 
 		return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 365.26));
+	},
+
+	/**
+	 * This will convert to months.
+	 *
+	 * @param {int} milliseconds
+	 * @returns {int}
+	 */
+	toMonths(milliseconds)
+	{
+		if(typeof milliseconds === 'number')
+		{
+			return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 30));
+		}
+		return false;
 	},
 
 	/**

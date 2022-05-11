@@ -484,45 +484,12 @@ export class XhrRequest
 	getResponseData()
 	{
 		let xhr = this.xhr,
-		response = xhr.responseText;
+		response = xhr.response;
 
-		if(xhr.responseType || typeof response !== 'string')
+		const responseType = xhr.responseType;
+		if(!responseType || responseType === 'text')
 		{
-			return response;
-		}
-
-		let encoded = false;
-		/* we want to check to decode the response by the type */
-		switch(this.settings.responseType.toLowerCase())
-		{
-			case 'json':
-
-				encoded = base.jsonDecode(response);
-				if(encoded !== false)
-				{
-					response = encoded;
-				}
-				else
-				{
-					response = response;
-					this.error = 'yes';
-				}
-				break;
-			case 'xml':
-				encoded = base.xmlParse(response);
-				if(encoded !== false)
-				{
-					response = encoded;
-				}
-				else
-				{
-					response = response;
-					this.error = 'yes';
-				}
-				break;
-			case 'text':
-				break;
-
+			return xhr.responseText;
 		}
 
 		return response;

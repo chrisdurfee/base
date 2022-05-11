@@ -32,6 +32,11 @@ export const Objects =
 	 */
 	cloneObject(obj)
 	{
+		if(!obj)
+		{
+			return {};
+		}
+
 		return JSON.parse(JSON.stringify(obj));
 	},
 

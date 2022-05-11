@@ -1159,6 +1159,18 @@ class Base
 }
 
 /**
+ * This will return the base prototype to allow the module
+ * to be added to base as a module.
+ *
+ * @static
+ * @return {object} the base prototype.
+ */
+Base.prototype.extend = (function()
+{
+	return Base.prototype;
+})();
+
+/**
  * This is the instance of base that all modules will use.
  * @global
  */

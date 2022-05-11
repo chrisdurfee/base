@@ -35,12 +35,18 @@ Atom.extend = function extend(childLayout)
 
 	const child = (props = {}) =>
 	{
+		props = props || {};
 		let layout = childLayout(props),
 
 		// we want to check to merge the layout with the parent layout
 		parentLayout = parent(props);
 		if(typeof parentLayout === 'object')
 		{
+			if(layout.isUnit)
+			{
+				return layout;
+			}
+
 			layout = Object.assign({}, parentLayout, layout);
 		}
 		return layout;
