@@ -89,6 +89,7 @@ export const date = {
 		if(typeof dateString === 'string' && dateString.indexOf('-') > -1)
 		{
 			dateString = dateString.replace(/\s/, 'T'); //For safari
+			dateString = (dateString.indexOf(':') > -1)? dateString : dateString + "T00:00:00";
 		}
 		return new Date(dateString);
 	},
