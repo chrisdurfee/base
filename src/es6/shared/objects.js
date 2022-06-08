@@ -21,7 +21,20 @@ export const Objects =
 	 */
 	extendObject(sourceObj, targetObj)
 	{
-		return Object.assign(targetObj, sourceObj);
+		if(typeof sourceObj === 'undefined' || typeof targetObj === 'undefined')
+		{
+			return false;
+		}
+
+		for(var property in sourceObj)
+		{
+			if(sourceObj.hasOwnProperty(property) && typeof targetObj[property] === 'undefined')
+			{
+				targetObj[property] = sourceObj[property];
+			}
+		}
+
+		return targetObj;
 	},
 
 	/**

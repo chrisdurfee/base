@@ -1,3 +1,5 @@
+import {Objects} from "../../shared/objects.js";
+
 /**
  * Atom
  *
@@ -29,7 +31,7 @@ Atom.extend = function extend(childLayout)
 		let layoutObject = childLayout;
 		childLayout = (props) =>
 		{
-			return Object.assign({}, layoutObject);
+			return Objects.cloneObject(layoutObject);
 		};
 	}
 
@@ -42,7 +44,7 @@ Atom.extend = function extend(childLayout)
 		parentLayout = parent(props);
 		if(typeof parentLayout === 'object')
 		{
-			layout = Object.assign({}, parentLayout, layout);
+			layout = Objects.extendObject(parentLayout, layout);
 		}
 		return layout;
 	};

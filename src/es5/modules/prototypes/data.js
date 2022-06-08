@@ -952,7 +952,7 @@
 
 			if(!addingParams)
 			{
-				return params;
+				return (!this._isFormData(params))? this.objectToString(params) : params;
 			}
 
 			if(typeof addingParams === 'string')

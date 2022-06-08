@@ -162,9 +162,10 @@ export class LayoutBuilder extends htmlBuilder
 	 *
 	 * @param {object|function} layout
 	 * @param {object} container
+	 * @param {object} [parent]
 	 * @returns {object} The layout Unit or Component
 	 */
-	render(layout, container)
+	render(layout, container, parent)
 	{
 		if(!layout)
 		{
@@ -176,13 +177,13 @@ export class LayoutBuilder extends htmlBuilder
 			case 'object':
 				if(layout.isUnit === true)
 				{
-					layout.setup(container);
+					this.createComponent(layout, container, parent);
 					return layout;
 				}
 			default:
 				let component = Jot(layout);
 				let jot = new component();
-				jot.setup(container);
+				this.createComponent(jot, container, parent);
 				return jot;
 		}
 	}
@@ -1186,7 +1187,7 @@ export class LayoutBuilder extends htmlBuilder
 			component.persist = true;
 		}
 
-		if(component.cacheable)
+		if(component.cacheable && parent)
 		{
 			parent[component.cacheable] = component;
 		}

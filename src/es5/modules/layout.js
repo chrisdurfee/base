@@ -574,9 +574,10 @@
 		 *
 		 * @param {object|function} layout
 		 * @param {object} container
+		 * @param {object} [parent]
 		 * @returns {object} The layout Unit or Component
 		 */
-		render: function(layout, container)
+		render: function(layout, container, parent)
 		{
 			if(!layout)
 			{
@@ -588,13 +589,13 @@
 				case 'object':
 					if(layout.isUnit === true)
 					{
-						layout.setup(container);
+						this.createComponent(layout, container, parent);
 						return layout;
 					}
 				default:
 					var component = Jot(layout);
 					var jot = new component();
-					jot.setup(container);
+					this.createComponent(jot, container, parent);
 					return jot;
 			}
 		},
@@ -1604,7 +1605,7 @@
 				component.persist = true;
 			}
 
-			if(component.cacheable)
+			if(component.cacheable && parent)
 			{
 				parent[component.cacheable] = component;
 			}

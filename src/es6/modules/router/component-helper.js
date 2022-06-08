@@ -1,3 +1,5 @@
+import { builder } from "../layout/layout-builder.js";
+
 /**
  * ComponentHelper
  *
@@ -106,7 +108,7 @@ export class ComponentHelper
 			comp = this.component = this.template;
 		}
 
-		comp.setup(this.container);
+		builder.render(comp, this.container, this.parent);
 	}
 
 	/**

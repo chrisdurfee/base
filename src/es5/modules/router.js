@@ -1494,7 +1494,7 @@
 				comp = this.component = this.template;
 			}
 
-			comp.setup(this.container);
+			base.builder.render(comp, this.container, this.parent);
 		},
 
 		/**
