@@ -74,11 +74,6 @@
 				obj.children = obj.nest;
 				obj.nest = null;
 			}
-
-			if(typeof obj.children === 'undefined')
-			{
-				obj.children = null;
-			}
 		},
 
 		/**
@@ -106,7 +101,12 @@
 				if (obj.hasOwnProperty(key))
 				{
 					var value = obj[key];
-					if (value === null || base.inArray(reserved, key) !== -1)
+					if(value === undefined || value === null)
+					{
+						continue;
+					}
+
+					if (base.inArray(reserved, key) !== -1)
 					{
 						continue;
 					}

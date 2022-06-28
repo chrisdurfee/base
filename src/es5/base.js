@@ -1891,15 +1891,23 @@
 		 * by encoding them to not break the param string.
 		 *
 		 * @param {object} obj
+		 * @param {bool} [removeNewLines]
 		 * @return {string}
 		 */
-		prepareJsonUrl: function(obj)
+		prepareJsonUrl: function(obj, removeNewLines)
 		{
+			removeNewLines = removeNewLines || false;
 			var escapeChars = function(str)
 			{
 				if(typeof str !== 'string')
 				{
 					str = String(str);
+				}
+
+				if(removeNewLines)
+				{
+					var newLine = /\n/g;
+					str = str.replace(newLine, "\\n");
 				}
 
 				var tab = /\t/g;

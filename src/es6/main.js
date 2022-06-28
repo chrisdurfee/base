@@ -1047,15 +1047,22 @@ class Base
 	 * by encoding them to not break the param string.
 	 *
 	 * @param {object} obj
+	 * @param {bool} [removeNewLines]
 	 * @return {string}
 	 */
-	prepareJsonUrl(obj)
+	prepareJsonUrl(obj, removeNewLines = false)
 	{
 		var escapeChars = (str) =>
 		{
 			if(typeof str !== 'string')
 			{
 				str = String(str);
+			}
+
+			if(removeNewLines)
+			{
+				let newLine = /\n/g;
+				str = str.replace(newLine, "\\n");
 			}
 
 			let tab = /\t/g;

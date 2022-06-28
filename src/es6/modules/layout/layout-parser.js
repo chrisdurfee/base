@@ -67,11 +67,6 @@ export class LayoutParser
 			obj.children = obj.nest;
 			obj.nest = null;
 		}
-
-		if(typeof obj.children === 'undefined')
-		{
-			obj.children = null;
-		}
 	}
 
 	/**
@@ -99,7 +94,12 @@ export class LayoutParser
 			if (obj.hasOwnProperty(key))
 			{
 				var value = obj[key];
-				if (value === null || reserved.indexOf(key) !== -1)
+				if (value === undefined || value === null)
+				{
+					continue;
+				}
+
+				if (reserved.indexOf(key) !== -1)
 				{
 					continue;
 				}
