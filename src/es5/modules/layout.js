@@ -1364,7 +1364,7 @@
 		 */
 		for: function(ele, settings, parent)
 		{
-			var data, prop, item;
+			var data, prop, item, scope;
 
 			if(settings.length < 3)
 			{
@@ -1377,14 +1377,17 @@
 				data = parentData;
 				prop = settings[0];
 				item = settings[1];
+				scope = settings[2];
 			}
 			else
 			{
 				data = settings[0];
 				prop = settings[1];
 				item = settings[2];
+				scope = settings[3];
 			}
 
+			var scopeData = (scope !== false);
 			var self = this;
 			base.DataBinder.watch(ele, data, prop, function(items)
 			{
@@ -1394,7 +1397,20 @@
 					return;
 				}
 
-				self.map(ele, [items, item], parent);
+				var children = [];
+				for(var i = 0, length = items.length; i < length; i++)
+				{
+					var scoped = (scopeData)? data.scope(prop + '[' + i + ']') : null;
+					var layout = item(items[i], i, scoped);
+					if(layout === null)
+					{
+						continue;
+					}
+
+					children.push(layout);
+				}
+
+				return self.build(children, ele, parent);
 			});
 		},
 

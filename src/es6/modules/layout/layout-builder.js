@@ -950,7 +950,7 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	for(ele, settings, parent)
 	{
-		let data, prop, item;
+		let data, prop, item, scope;
 
 		if(settings.length < 3)
 		{
@@ -963,14 +963,17 @@ export class LayoutBuilder extends htmlBuilder
 			data = parentData;
 			prop = settings[0];
 			item = settings[1];
+			scope = settings[2];
 		}
 		else
 		{
 			data = settings[0];
 			prop = settings[1];
 			item = settings[2];
+			scope = settings[3];
 		}
 
+		let scopeData = (scope !== false);
 		dataBinder.watch(ele, data, prop, (items) =>
 		{
 			this.removeAll(ele);
@@ -979,7 +982,20 @@ export class LayoutBuilder extends htmlBuilder
 				return;
 			}
 
-			this.map(ele, [items, item], parent);
+			let children = [];
+			for(var i = 0, length = items.length; i < length; i++)
+			{
+				var scoped = (scopeData)? data.scope(prop + '[' + i + ']') : null;
+				var layout = item(items[i], i, scoped);
+				if(layout === null)
+				{
+					continue;
+				}
+
+				children.push(layout);
+			}
+
+			return this.build(children, ele, parent);
 		});
 	}
 
