@@ -928,7 +928,13 @@ export class LayoutBuilder extends htmlBuilder
 		let children = [];
 		for(var i = 0, length = items.length; i < length; i++)
 		{
-			var layout = item(items[i], i);
+			var row = items[i];
+			if(!row)
+			{
+				continue;
+			}
+
+			var layout = item(row, i);
 			if(layout === null)
 			{
 				continue;
