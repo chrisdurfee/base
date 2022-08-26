@@ -308,7 +308,7 @@ export class LayoutBuilder extends htmlBuilder
 	{
 		if(typeof obj.onCreated === 'function')
 		{
-			obj.onCreated(ele);
+			obj.onCreated(ele, parent);
 		}
 
 		/* this will check to bind the element to
@@ -1125,7 +1125,7 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	updateElement(ele, callBack, prop, value, parent)
 	{
-		let result = callBack(ele, value);
+		let result = callBack(ele, value, parent);
 		switch(typeof result)
 		{
 			case 'object':
@@ -1233,14 +1233,19 @@ export class LayoutBuilder extends htmlBuilder
 	createNode(settings, container, parent)
 	{
 		let tag = settings.tag;
-		if(tag !== 'text')
+		if(tag === 'text')
 		{
-			return this.create(tag, settings.attr, container, parent);
+			let attr = settings.attr;
+			let text = attr.textContent || attr.text;
+			return this.createTextNode(text, container);
+		}
+		else if(tag === 'comment')
+		{
+			let text = attr.text;
+			return this.createCommentNode(text, container);
 		}
 
-		let attr = settings.attr;
-		let text = attr.textContent || attr.text;
-		return this.createTextNode(text, container);
+		return this.create(tag, settings.attr, container, parent);
 	}
 }
 

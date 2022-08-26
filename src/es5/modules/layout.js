@@ -720,7 +720,7 @@
 		{
 			if(typeof obj.onCreated === 'function')
 			{
-				obj.onCreated(ele);
+				obj.onCreated(ele, parent);
 			}
 
 			/* this will check to bind the element to
@@ -1543,7 +1543,7 @@
 		 */
 		updateElement: function(ele, callBack, prop, value, parent)
 		{
-			var result = callBack(ele, value);
+			var result = callBack(ele, value, parent);
 			switch(typeof result)
 			{
 				case 'object':

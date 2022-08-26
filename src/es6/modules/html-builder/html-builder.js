@@ -221,6 +221,24 @@ export class htmlBuilder
 	}
 
 	/**
+	 * This will create a text node.
+	 *
+	 * @param {string} text
+	 * @param {object} container
+	 * @return {object}
+	 */
+	createCommentNode(text, container)
+	{
+		let obj = document.createComment(text);
+
+		if(container)
+		{
+			this.append(container, obj);
+		}
+		return obj;
+	}
+
+	/**
 	 * This will create the options on a select.
 	 *
 	 * @param {object} selectElem
