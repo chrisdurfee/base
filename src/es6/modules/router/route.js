@@ -199,20 +199,20 @@ export class Route extends SimpleData
 			return settings.component;
 		}
 
-		const imported = settings.import;
+		let imported = settings.import;
 		if(!imported)
 		{
 			return null;
 		}
 
-		if(typeof imported !== 'string')
+		if(typeof imported === 'string')
 		{
-			return imported;
+			imported = {
+				src: imported
+			};
 		}
 
-		return {
-			src: imported
-		};
+		return Import(imported);
 	}
 
 	/**
