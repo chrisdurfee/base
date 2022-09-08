@@ -1,5 +1,6 @@
 import {ComponentHelper} from './component-helper.js';
 import {SimpleData} from '../data/data.js';
+import {Import} from '../import/import.js';
 
 /**
  * This will setup a route uri pattern.
@@ -186,20 +187,50 @@ export class Route extends SimpleData
 	}
 
 	/**
-	 * This will setup the route component.
+	 * This will get the route layout.
+	 *
+	 * @param {object} settings
+	 * @returns {object|null}
+	 */
+	getLayout(settings)
+	{
+		if(settings.component)
+		{
+			return settings.component;
+		}
+
+		const imported = settings.import;
+		if(!imported)
+		{
+			return null;
+		}
+
+		if(typeof imported !== 'string')
+		{
+			return imported;
+		}
+
+		return {
+			src: imported
+		};
+	}
+
+	/**
+	 * This will setup the route layout.
 	 *
 	 * @protected
 	 * @param {object} settings
 	 */
 	setupComponentHelper(settings)
 	{
-		if(settings.component)
+		const layout = this.getLayout(settings);
+		if(layout)
 		{
-			let {component, container, persist = false, parent} = settings;
+			let {container, persist = false, parent} = settings;
 
 			const helperSettings =
 			{
-				component,
+				layout,
 				container,
 				persist,
 				parent
