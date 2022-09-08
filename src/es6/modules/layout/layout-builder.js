@@ -1241,6 +1241,7 @@ export class LayoutBuilder extends htmlBuilder
 		}
 		else if(tag === 'comment')
 		{
+			let attr = settings.attr;
 			let text = attr.text;
 			return this.createCommentNode(text, container);
 		}
