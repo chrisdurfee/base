@@ -223,14 +223,14 @@ export class Route extends SimpleData
 	 */
 	setupComponentHelper(settings)
 	{
-		const layout = this.getLayout(settings);
-		if(layout)
+		const component = this.getLayout(settings);
+		if(component)
 		{
 			let {container, persist = false, parent} = settings;
 
 			const helperSettings =
 			{
-				layout,
+				component,
 				container,
 				persist,
 				parent
