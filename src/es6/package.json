@@ -1,0 +1,12 @@
+{
+  "name": "Base Framework",
+  "version": "1.0.0",
+  "description": "This is a javascript framework.",
+  "main": "base.js",
+  "scripts": {
+
+  },
+  "keywords": ["JavaScript", "Framework", "Base", "ES6"],
+  "author": "Chris Durfee",
+  "license": "ISC"
+}
