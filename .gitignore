@@ -1,0 +1,12 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+.vs
+error_log
+.editorconfig
+.jshintrc
+_notes/
+.idea/
+.vscode/
+node_modules/
+*.code-workspace
+Dockerfile
+docker-compose.yml
