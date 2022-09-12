@@ -1,6 +1,6 @@
 {
   "name": "@base-framework/base",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "This is a javascript framework.",
   "main": "base.min.js",
   "scripts": {
