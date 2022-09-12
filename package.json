@@ -2,9 +2,9 @@
   "name": "@base-framework/base",
   "version": "2.6.1",
   "description": "This is a javascript framework.",
-  "main": "base.min.js",
+  "main": "/dist/base.min.js",
   "scripts": {
-    "prepublishOnly" : "uglifyjs base.js --compress --mangle --output base.min.js"
+    "prepublishOnly": "uglifyjs base.js --compress --mangle --output /dist/base.min.js"
   },
   "keywords": [
     "JavaScript",
@@ -25,7 +25,10 @@
     "uglify-js": "^3.17.0"
   },
   "files": [
-      "dist"
+    "dist"
   ],
-  "homepage": "https://github.com/chrisdurfee/base#readme"
+  "homepage": "https://github.com/chrisdurfee/base#readme",
+  "dependencies": {
+    "webpack": "^5.74.0"
+  }
 }
