@@ -1,0 +1,9 @@
+.vs
+error_log
+.editorconfig
+.jshintrc
+_notes/
+.idea/
+.vscode/
+!dist/*
+src/*

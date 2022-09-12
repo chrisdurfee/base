@@ -24,5 +24,8 @@
   "devDependencies": {
     "uglify-js": "^3.17.0"
   },
+  "files": [
+      "dist"
+  ],
   "homepage": "https://github.com/chrisdurfee/base#readme"
 }
