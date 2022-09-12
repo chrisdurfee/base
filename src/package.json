@@ -4,7 +4,7 @@
   "description": "This is a javascript framework.",
   "main": "base.min.js",
   "scripts": {
-    "prepublishOnly" : "uglifyjs -o myfile.min.js myfile.js"
+    "prepublishOnly" : "uglifyjs -o base.min.js base.js"
   },
   "keywords": [
     "JavaScript",
