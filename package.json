@@ -1,34 +1,33 @@
 {
-  "name": "@base-framework/base",
-  "version": "2.6.1",
-  "description": "This is a javascript framework.",
-  "main": "/dist/base.min.js",
-  "scripts": {
-    "prepublishOnly": "uglifyjs base.js --compress --mangle --output /dist/base.min.js"
-  },
-  "keywords": [
-    "JavaScript",
-    "Framework",
-    "Base",
-    "ES6"
-  ],
-  "author": "Chris Durfee",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chrisdurfee/base.git"
-  },
-  "bugs": {
-    "url": "https://github.com/chrisdurfee/base/issues"
-  },
-  "devDependencies": {
-    "uglify-js": "^3.17.0"
-  },
-  "files": [
-    "dist"
-  ],
-  "homepage": "https://github.com/chrisdurfee/base#readme",
-  "dependencies": {
-    "webpack": "^5.74.0"
-  }
+	"name": "@base-framework/base",
+	"version": "2.6.2",
+	"description": "This is a javascript framework.",
+	"main": "/dist/base.js",
+	"scripts": {
+		"prepublishOnly": "webpack --mode=production"
+	},
+	"keywords": [
+		"JavaScript",
+		"Framework",
+		"Base",
+		"ES6"
+	],
+	"author": "Chris Durfee",
+	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/chrisdurfee/base.git"
+	},
+	"bugs": {
+		"url": "https://github.com/chrisdurfee/base/issues"
+	},
+	"devDependencies": {
+		"uglify-js": "^3.17.0",
+		"webpack": "^5.74.0",
+		"webpack-cli": "^4.10.0"
+	},
+	"files": [
+		"dist"
+	],
+	"homepage": "https://github.com/chrisdurfee/base#readme"
 }
