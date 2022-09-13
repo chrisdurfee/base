@@ -1,10 +1,10 @@
 {
 	"name": "@base-framework/base",
-	"version": "2.6.2",
+	"version": "2.6.3",
 	"description": "This is a javascript framework.",
 	"main": "/dist/base.js",
 	"scripts": {
-		"prepublishOnly": "webpack --mode=production"
+		"prepublishOnly": "esbuild base.js --bundle --minify --platform=browser --outfile=dist/base.js"
 	},
 	"keywords": [
 		"JavaScript",
@@ -22,9 +22,7 @@
 		"url": "https://github.com/chrisdurfee/base/issues"
 	},
 	"devDependencies": {
-		"uglify-js": "^3.17.0",
-		"webpack": "^5.74.0",
-		"webpack-cli": "^4.10.0"
+		"esbuild": "^0.15.7"
 	},
 	"files": [
 		"dist"
