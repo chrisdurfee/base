@@ -26,6 +26,8 @@
 		"esbuild": "^0.15.7"
 	},
 	"files": [
+		"pacakge.json",
+		"readme.md",
 		"dist"
 	],
 	"homepage": "https://github.com/chrisdurfee/base#readme"
