@@ -4,7 +4,8 @@
 	"description": "This is a javascript framework.",
 	"main": "/dist/base.js",
 	"scripts": {
-		"prepublishOnly": "esbuild base.js --bundle --minify --platform=browser --outfile=dist/base.js"
+		"build": "esbuild --bundle --minify src/base.js --platform=browser --outfile=dist/base.js",
+		"prepublishOnly": "esbuild --bundle --minify src/base.js --platform=browser --outfile=dist/base.js"
 	},
 	"keywords": [
 		"JavaScript",
