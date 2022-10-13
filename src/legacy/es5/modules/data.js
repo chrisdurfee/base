@@ -1528,11 +1528,7 @@
 			var params = 'op=setup' +
 						 '&' + this.setupObjectData();
 
-			/* this will add the instance params with the
-			method params */
-			params = this.addParams(params, instanceParams, instanceParams);
-
-			return this._put('', params, callBack);
+			return this._put('', params, instanceParams, callBack);
 		},
 
 		/**
