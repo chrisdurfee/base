@@ -1061,7 +1061,7 @@ class Base
 
 			if(removeNewLines)
 			{
-				let newLine = /\n/g;
+				let newLine = /(\n|\r\n)/g;
 				str = str.replace(newLine, "\\n");
 			}
 

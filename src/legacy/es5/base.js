@@ -1906,7 +1906,7 @@
 
 				if(removeNewLines)
 				{
-					var newLine = /\n/g;
+					var newLine = /(\n|\r\n)/g;
 					str = str.replace(newLine, "\\n");
 				}
 
