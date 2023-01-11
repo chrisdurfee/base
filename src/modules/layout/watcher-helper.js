@@ -1,7 +1,7 @@
 import {base} from '../../core.js';
 import {dataBinder} from '../data-binder/data-binder.js';
 
-const WATCHER_PATTERN = /(\[\[(.*?)\]\])/g;
+const WATCHER_PATTERN = /(\[\[(.*?(?<!\d))\]\])/g;
 
 /**
  * WatcherHelper
@@ -20,7 +20,7 @@ export const WatcherHelper =
 	 */
 	_getWatcherProps(string)
 	{
-		let pattern = /\[\[(.*?)\]\]/g,
+		let pattern = /\[\[(.*?)(?<!\d)\]\]/g,
 		matches = string.match(pattern);
 		if(matches)
 		{
