@@ -12,7 +12,7 @@
 	var setupAttrSettings = function(settings)
 	{
 		var attributes = {};
-		if(!settings && typeof settings !== 'object')
+		if(!settings || typeof settings !== 'object')
 		{
 			return attributes;
 		}

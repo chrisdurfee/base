@@ -17,7 +17,7 @@ export const cloneObject = (obj) =>
 export const setupAttrSettings = (settings) =>
 {
 	let attributes = {};
-	if(!settings && typeof settings !== 'object')
+	if(!settings || typeof settings !== 'object')
 	{
 		return attributes;
 	}

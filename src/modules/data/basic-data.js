@@ -253,24 +253,26 @@ export class BasicData
 	 * This will set the data local storage key.
 	 *
 	 * @param {string} key
+	 * @return {object} this
 	 */
 	setKey(key)
 	{
 		this.key = key;
+		return this;
 	}
 
 	/**
 	 * This will restore the data from local storage.
 	 *
 	 * @param {mixed} defaultValue
-	 * @returns {bool|void}
+	 * @returns {object} this
 	 */
 	resume(defaultValue)
 	{
 		let key = this.key;
 		if(!key)
 		{
-			return false;
+			return this;
 		}
 
 		let data;
@@ -287,14 +289,20 @@ export class BasicData
 			data = JSON.parse(value);
 		}
 
+		if(!data)
+		{
+			return this;
+		}
+
 		this.set(data);
+		return this;
 	}
 
 	/**
 	 * This will store the data to the local stoage under
 	 * the storage key.
 	 *
-	 * @returns {bool|void}
+	 * @returns {bool}
 	 */
 	store()
 	{
@@ -312,6 +320,7 @@ export class BasicData
 
 		let value = JSON.stringify(data);
 		localStorage.setItem(key, value);
+		return true;
 	}
 
 	/**

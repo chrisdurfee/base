@@ -64,8 +64,8 @@ export class Component extends Unit
 	initialize()
 	{
 		this.setupContext();
-		this.beforeSetup();
 		this.addStates();
+		this.beforeSetup();
 		this.buildLayout();
 		this.addEvents();
 		this.afterSetup();
