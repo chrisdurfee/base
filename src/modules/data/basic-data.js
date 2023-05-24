@@ -1,6 +1,8 @@
 import {DataPubSub} from '../data-binder/data-pub-sub.js';
 import {setupAttrSettings} from './attrs.js';
 
+let dataNumber = 0;
+
 /**
  * BasicData
  *
@@ -49,10 +51,10 @@ export class BasicData
 	 */
 	_init()
 	{
-		const constructor = this.constructor;
-		this._dataNumber = (typeof constructor._dataNumber === 'undefined')? constructor._dataNumber = 0 : (++constructor._dataNumber);
+		const id = (++dataNumber);
+		this._dataNumber = id;
 
-		this._id = 'dt-' + this._dataNumber;
+		this._id = 'dt-' + id;
 		this._dataId = this._id + ':';
 	}
 

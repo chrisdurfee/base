@@ -1022,8 +1022,8 @@
 		initialize: function()
 		{
 			this.setupContext();
-			this.addStates();
 			this.beforeSetup();
+			this.addStates();
 			this.buildLayout();
 			this.addEvents();
 			this.afterSetup();
