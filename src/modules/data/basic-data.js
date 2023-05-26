@@ -221,6 +221,7 @@ export class BasicData
 	 * This will decrement an attribute.
 	 *
 	 * @param {string} attr
+	 * @param {string} value
 	 * @return {object} this
 	 */
 	decrement(attr)
@@ -232,6 +233,24 @@ export class BasicData
 
 		let val = this.get(attr);
 		this.set(attr, --val);
+		return this;
+	}
+
+	/**
+	 * This will concat an attribute.
+	 *
+	 * @param {string} attr
+	 * @return {object} this
+	 */
+	concat(attr, value)
+	{
+		if(typeof attr === 'undefined')
+		{
+			return;
+		}
+
+		let currentValue = this.get(attr);
+		this.set(attr, currentValue + value);
 		return this;
 	}
 
