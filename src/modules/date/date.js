@@ -168,12 +168,16 @@ export const date = {
 	getMonthName(month = new Date().getMonth(), shortenName = false)
 	{
 		let months = this.monthNames;
-		if(month > months.length)
+		if (month > months.length)
 		{
 			return false;
 		}
 
 		let monthName = months[month];
+		if (!monthName)
+		{
+			return false;
+		}
 		return (shortenName)? monthName.substring(0, 3) : monthName;
 	},
 

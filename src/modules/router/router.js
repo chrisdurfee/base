@@ -561,7 +561,7 @@ export class Router
 	 */
 	checkActiveRoutes(path)
 	{
-		this.lastPath = path;
+		this.lastPath = this.path;
 
 		path = path || this.getPath();
 		this.path = path;
