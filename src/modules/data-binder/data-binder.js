@@ -337,7 +337,7 @@ export class DataBinder
 	 */
 	addEvents()
 	{
-		base.on(["change", "keyup"], document, this.changeHandler, false);
+		base.on(["change", "keyup", "paste"], document, this.changeHandler, false);
 	}
 
 	/**
@@ -345,7 +345,7 @@ export class DataBinder
 	 */
 	removeEvents()
 	{
-		base.off(["change", "keyup"], document, this.changeHandler, false);
+		base.off(["change", "keyup", "paste"], document, this.changeHandler, false);
 	}
 }
 
