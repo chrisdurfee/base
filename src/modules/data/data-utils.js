@@ -1,3 +1,6 @@
+/**
+ * This is a utility class for data.
+ */
 export const DataUtils =
 {
     /**
@@ -23,7 +26,7 @@ export const DataUtils =
 	 */
 	getSegments(str)
 	{
-		var pattern = this.deepDataPattern;
+		const pattern = this.deepDataPattern;
 		return str.match(pattern);
 	}
 };

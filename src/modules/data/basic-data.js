@@ -1,5 +1,5 @@
-import {DataPubSub} from '../data-binder/data-pub-sub.js';
-import {setupAttrSettings} from './attrs.js';
+import { DataPubSub } from '../data-binder/data-pub-sub.js';
+import { setupAttrSettings } from './attrs.js';
 
 let dataNumber = 0;
 
@@ -84,8 +84,8 @@ export class BasicData
 	 */
 	on(attrName, callBack)
 	{
-		let message = attrName + ':change';
-		let token = this.eventSub.on(message, callBack);
+		const message = attrName + ':change';
+		const token = this.eventSub.on(message, callBack);
 		return token;
 	}
 
@@ -97,7 +97,7 @@ export class BasicData
 	 */
 	off(attrName, token)
 	{
-		let message = attrName + ':change';
+		const message = attrName + ':change';
 		this.eventSub.off(message, token);
 	}
 
@@ -109,17 +109,15 @@ export class BasicData
 	 * @param {*} val
 	 * @param {object} committer
 	 */
-	_setAttr(attr, val, committer)
+	_setAttr(attr, val, committer = this)
 	{
-		let prevValue = this.stage[attr];
-		if(val === prevValue)
+		const prevValue = this.stage[attr];
+		if (val === prevValue)
 		{
 			return false;
 		}
 
 		this.stage[attr] = val;
-
-		committer = committer || this;
 
 		/* this will publish the data to the data binder
 		to update any ui elements that are subscribed */
@@ -139,26 +137,27 @@ export class BasicData
 	 */
 	set(...args)
 	{
-		if(typeof args[0] === 'object')
-		{
-			let [items, committer, stopMerge] = args;
-
-			for(var attr in items)
-			{
-				if(items.hasOwnProperty(attr))
-				{
-					var item = items[attr];
-					if(typeof item === 'function')
-					{
-						continue;
-					}
-					this._setAttr(attr, item, committer, stopMerge);
-				}
-			}
-		}
-		else
+		if (typeof args[0] !== 'object')
 		{
 			this._setAttr(...args);
+			return this;
+		}
+
+		const [items, committer, stopMerge] = args;
+
+		for(var attr in items)
+		{
+			if (!items.hasOwnProperty(attr))
+			{
+				continue;
+			}
+
+			var item = items[attr];
+			if(typeof item === 'function')
+			{
+				continue;
+			}
+			this._setAttr(attr, item, committer, stopMerge);
 		}
 		return this;
 	}
@@ -190,7 +189,7 @@ export class BasicData
 	 */
 	toggle(attr)
 	{
-		if(typeof attr === 'undefined')
+		if (typeof attr === 'undefined')
 		{
 			return;
 		}
@@ -207,7 +206,7 @@ export class BasicData
 	 */
 	increment(attr)
 	{
-		if(typeof attr === 'undefined')
+		if (typeof attr === 'undefined')
 		{
 			return;
 		}
@@ -226,7 +225,7 @@ export class BasicData
 	 */
 	decrement(attr)
 	{
-		if(typeof attr === 'undefined')
+		if (typeof attr === 'undefined')
 		{
 			return;
 		}
@@ -244,7 +243,7 @@ export class BasicData
 	 */
 	concat(attr, value)
 	{
-		if(typeof attr === 'undefined')
+		if (typeof attr === 'undefined')
 		{
 			return;
 		}
@@ -263,7 +262,7 @@ export class BasicData
 	 */
 	ifNull(key, value)
 	{
-		if(this.get(key) === null)
+		if (this.get(key) === null)
 		{
 			this.set(key, value);
 		}
@@ -290,17 +289,17 @@ export class BasicData
 	 */
 	resume(defaultValue)
 	{
-		let key = this.key;
-		if(!key)
+		const key = this.key;
+		if (!key)
 		{
 			return this;
 		}
 
 		let data;
-		let value = localStorage.getItem(key);
-		if(value === null)
+		const value = localStorage.getItem(key);
+		if (value === null)
 		{
-			if(defaultValue)
+			if (defaultValue)
 			{
 				data = defaultValue;
 			}
@@ -310,7 +309,7 @@ export class BasicData
 			data = JSON.parse(value);
 		}
 
-		if(!data)
+		if (!data)
 		{
 			return this;
 		}
@@ -327,19 +326,19 @@ export class BasicData
 	 */
 	store()
 	{
-		let key = this.key;
-		if(!key)
+		const key = this.key;
+		if (!key)
 		{
 			return false;
 		}
 
-		let data = this.get();
-		if(!data)
+		const data = this.get();
+		if (!data)
 		{
 			return false;
 		}
 
-		let value = JSON.stringify(data);
+		const value = JSON.stringify(data);
 		localStorage.setItem(key, value);
 		return true;
 	}
@@ -352,7 +351,7 @@ export class BasicData
 	 */
 	delete(attrName)
 	{
-		if(typeof attrName !== 'undefined')
+		if (typeof attrName !== 'undefined')
 		{
 			this._deleteAttr(this.stage, attrName);
 			return;
@@ -382,14 +381,12 @@ export class BasicData
 	 */
 	get(attrName)
 	{
-		if(typeof attrName !== 'undefined')
+		if (typeof attrName !== 'undefined')
 		{
 			return this._getAttr(this.stage, attrName);
 		}
-		else
-		{
-			return this.getModelData();
-		}
+
+		return this.getModelData();
 	}
 
 	/**
@@ -403,20 +400,20 @@ export class BasicData
 	link(data, attr, alias)
 	{
 		// this will get the data source attrs if sending a whole data object
-		if(arguments.length === 1 && data.isData === true)
+		if (arguments.length === 1 && data.isData === true)
 		{
 			attr = data.get();
 		}
 
-		if(typeof attr !== 'object')
+		if (typeof attr !== 'object')
 		{
 			return this.remoteLink(data, attr, alias);
 		}
 
-		let tokens = [];
-		for(var prop in attr)
+		const tokens = [];
+		for (var prop in attr)
 		{
-			if(attr.hasOwnProperty(prop) === false)
+			if (attr.hasOwnProperty(prop) === false)
 			{
 				continue;
 			}
@@ -436,14 +433,14 @@ export class BasicData
 	 */
 	remoteLink(data, attr, alias)
 	{
-		let childAttr = alias || attr;
-		let value = data.get(attr);
-		if(typeof value !== 'undefined' && this.get(attr) !== value)
+		const childAttr = alias || attr;
+		const value = data.get(attr);
+		if (typeof value !== 'undefined' && this.get(attr) !== value)
 		{
 			this.set(attr, value);
 		}
 
-		let token = data.on(attr, (propValue, committer) =>
+		const token = data.on(attr, (propValue, committer) =>
 		{
 			if(committer === this)
 			{
@@ -455,9 +452,9 @@ export class BasicData
 
 		this.addLink(token, data);
 
-		let remoteToken = this.on(childAttr, (propValue, committer) =>
+		const remoteToken = this.on(childAttr, (propValue, committer) =>
 		{
-			if(committer === data)
+			if (committer === data)
 			{
 				return false;
 			}
@@ -487,16 +484,16 @@ export class BasicData
 	 */
 	unlink(token)
 	{
-		if(token)
+		if (token)
 		{
 			this.removeLink(token);
 			return;
 		}
 
-		let links = this.links;
-		if(links.length)
+		const links = this.links;
+		if (links.length)
 		{
-			for(var i = 0, length = links.length; i < length; i++)
+			for (var i = 0, length = links.length; i < length; i++)
 			{
 				this.removeLink(links[i], false);
 			}
@@ -512,13 +509,13 @@ export class BasicData
 	 */
 	removeLink(token, removeFromLinks)
 	{
-		let data = this.links[token];
-		if(data)
+		const data = this.links[token];
+		if (data)
 		{
 			data.off(token);
 		}
 
-		if(removeFromLinks === false)
+		if (removeFromLinks === false)
 		{
 			return;
 		}

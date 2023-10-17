@@ -1,6 +1,6 @@
-import {Data} from './deep-data.js';
-import {ModelService} from './model-service.js';
-import {setupAttrSettings} from './attrs.js';
+import { Data } from './deep-data.js';
+import { ModelService } from './model-service.js';
+import { setupAttrSettings } from './attrs.js';
 
 /**
  * This will get the defaults from the settings.
@@ -10,27 +10,29 @@ import {setupAttrSettings} from './attrs.js';
  */
 const setupDefaultAttr = (settings) =>
 {
-	let attributes = {};
-	if(!settings || typeof settings !== 'object')
+	const attributes = {};
+	if (!settings || typeof settings !== 'object')
 	{
 		return attributes;
 	}
 
-	let defaults = settings.defaults;
-	if(!defaults)
+	const defaults = settings.defaults;
+	if (!defaults)
 	{
 		return attributes;
 	}
 
-	for(var prop in defaults)
+	for (var prop in defaults)
 	{
-		if(defaults.hasOwnProperty(prop))
+		if (!defaults.hasOwnProperty(prop))
 		{
-			var attr = defaults[prop];
-			if(typeof attr !== 'function')
-			{
-				attributes[prop] = attr;
-			}
+			continue;
+		}
+
+		var attr = defaults[prop];
+		if (typeof attr !== 'function')
+		{
+			attributes[prop] = attr;
 		}
 	}
 	delete settings.defaults;
@@ -45,12 +47,12 @@ const setupDefaultAttr = (settings) =>
  */
 const getXhr = (settings) =>
 {
-	if(!settings || typeof settings.xhr !== 'object')
+	if (!settings || typeof settings.xhr !== 'object')
 	{
 		return {};
 	}
 
-	let settingsXhr = settings.xhr,
+	const settingsXhr = settings.xhr,
 	xhr = Object.assign({}, settingsXhr);
 	delete settings.xhr;
 	return xhr;

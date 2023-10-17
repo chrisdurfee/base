@@ -1,7 +1,7 @@
-import {BasicData} from './basic-data.js';
-import {cloneObject} from './attrs.js';
-import {DataUtils as utils} from './data-utils.js';
-import {dataBinder} from '../data-binder/data-binder.js';
+import { BasicData } from './basic-data.js';
+import { Objects } from '../../shared/objects.js';
+import { DataUtils as utils } from './data-utils.js';
+import { dataBinder } from '../data-binder/data-binder.js';
 
 /**
  * Data
@@ -34,36 +34,35 @@ export class Data extends BasicData
 	{
 		/* this will check if we need to update
 		deep nested data */
-		if(utils.hasDeepData(attr))
-		{
-			let prop,
-			props = utils.getSegments(attr),
-			length = props.length,
-			end = length - 1;
-
-			for (var i = 0; i < length; i++)
-			{
-				prop = props[i];
-
-				/* this will add the value to the last prop */
-				if(i === end)
-				{
-					obj[prop] = val;
-					break;
-				}
-
-				if (obj[prop] === undefined)
-				{
-					/* this will check to setup a new object
-					or an array if the prop is a number */
-					obj[prop] = isNaN(prop)? {} : [];
-				}
-				obj = obj[prop];
-			}
-		}
-		else
+		if (!utils.hasDeepData(attr))
 		{
 			obj[attr] = val;
+			return;
+		}
+
+		let prop,
+		props = utils.getSegments(attr),
+		length = props.length,
+		end = length - 1;
+
+		for (var i = 0; i < length; i++)
+		{
+			prop = props[i];
+
+			/* this will add the value to the last prop */
+			if (i === end)
+			{
+				obj[prop] = val;
+				break;
+			}
+
+			if (obj[prop] === undefined)
+			{
+				/* this will check to setup a new object
+				or an array if the prop is a number */
+				obj[prop] = isNaN(prop)? {} : [];
+			}
+			obj = obj[prop];
 		}
 	}
 
@@ -78,7 +77,7 @@ export class Data extends BasicData
 	 */
 	_setAttr(attr, val, committer, stopMerge)
 	{
-		if(typeof val !== 'object' && val === this.get(attr))
+		if (typeof val !== 'object' && val === this.get(attr))
 		{
 			return;
 		}
@@ -86,7 +85,7 @@ export class Data extends BasicData
 		/* this will check to update the model based on who
 		updated it. if the data binder updated the data only
 		the stage data is updated */
-		if(!committer && stopMerge !== true)
+		if (!committer && stopMerge !== true)
 		{
 			/* this will update the attribute data because
 			it was updated outside the data binder */
@@ -94,7 +93,7 @@ export class Data extends BasicData
 		}
 		else
 		{
-			if(this.dirty === false)
+			if (this.dirty === false)
 			{
 				this.dirty = true;
 			}
@@ -116,15 +115,17 @@ export class Data extends BasicData
 	 */
 	linkAttr(data, attr)
 	{
-		let value = data.get(attr);
-		if(value)
+		const value = data.get(attr);
+		if (!value)
 		{
-			for(var prop in value)
+			return;
+		}
+
+		for (var prop in value)
+		{
+			if (value.hasOwnProperty(prop))
 			{
-				if(value.hasOwnProperty(prop))
-				{
-					this.link(data, attr + '.' + prop, prop);
-				}
+				this.link(data, attr + '.' + prop, prop);
 			}
 		}
 	}
@@ -139,14 +140,14 @@ export class Data extends BasicData
 	 */
 	scope(attr, constructor)
 	{
-		let value = this.get(attr);
-		if(!value)
+		const value = this.get(attr);
+		if (!value)
 		{
 			return false;
 		}
 
 		constructor = constructor || this.constructor;
-		let data = new constructor(value);
+		const data = new constructor(value);
 
 		/* this will link the new data to the parent attr */
 		data.linkAttr(this, attr);
@@ -179,7 +180,7 @@ export class Data extends BasicData
 	push(attr, value)
 	{
 		let currentValue = this.get(attr);
-		if(Array.isArray(currentValue) === false)
+		if (Array.isArray(currentValue) === false)
 		{
 			currentValue = [];
 		}
@@ -199,7 +200,7 @@ export class Data extends BasicData
 	unshift(attr, value)
 	{
 		let currentValue = this.get(attr);
-		if(Array.isArray(currentValue) === false)
+		if (Array.isArray(currentValue) === false)
 		{
 			currentValue = [];
 		}
@@ -213,17 +214,17 @@ export class Data extends BasicData
 	 * This will add a value to an array and set the result.
 	 *
 	 * @param {string} attr
-	 * @return {mixed} this
+	 * @return {mixed}
 	 */
 	shift(attr)
 	{
 		let currentValue = this.get(attr);
-		if(Array.isArray(currentValue) === false)
+		if (Array.isArray(currentValue) === false)
 		{
 			return null;
 		}
 
-		let value = currentValue.shift();
+		const value = currentValue.shift();
 		this.set(attr, currentValue);
 		return value;
 	}
@@ -237,12 +238,12 @@ export class Data extends BasicData
 	pop(attr)
 	{
 		let currentValue = this.get(attr);
-		if(Array.isArray(currentValue) === false)
+		if (Array.isArray(currentValue) === false)
 		{
 			return null;
 		}
 
-		let value = currentValue.pop();
+		const value = currentValue.pop();
 		this.set(attr, currentValue);
 		return value;
 	}
@@ -283,69 +284,68 @@ export class Data extends BasicData
 	 */
 	publishDeep(attr, val, committer)
 	{
-		if(utils.hasDeepData(attr))
-		{
-			let prop,
-			props = utils.getSegments(attr),
-			length = props.length,
-			end = length - 1;
-
-			/* the path is a string equivalent of the javascript dot notation path
-			of the object being published. */
-			let path = '',
-			obj = this.stage;
-			for (var i = 0; i < length; i++)
-			{
-				prop = props[i];
-
-				/* we need to setup the object to go to the next level
-				of the data object before calling the next property. */
-				obj = obj[prop];
-
-				if (i > 0)
-				{
-					/* this will add the property to the path based on if its an
-					object property or an array. */
-					if(isNaN(prop))
-					{
-						path += '.' + prop;
-					}
-				}
-				else
-				{
-					path = prop;
-				}
-
-				var publish;
-				if(i === end)
-				{
-					/* if the loop is on the last pass it only needs to publish
-					the val. */
-					publish = val;
-				}
-				else
-				{
-					/* we only want to publish the modified branches. we need to
-					get the next property in the props array and create a publish
-					object or array with the next property value. */
-					var nextProp = props[i + 1];
-					if(isNaN(nextProp) === false)
-					{
-						path += '[' + nextProp + ']';
-						continue;
-					}
-
-					var nextAttr = {};
-					nextAttr[nextProp] = obj[nextProp];
-					publish = nextAttr;
-				}
-
-				this.publish(path, publish, committer);
-			}
-		}
-		else
+		if (!utils.hasDeepData(attr))
 		{
 			this.publish(attr, val, committer);
+			return;
+		}
+
+		let prop,
+		props = utils.getSegments(attr),
+		length = props.length,
+		end = length - 1;
+
+		/* the path is a string equivalent of the javascript dot notation path
+		of the object being published. */
+		let path = '',
+		obj = this.stage;
+		for (var i = 0; i < length; i++)
+		{
+			prop = props[i];
+
+			/* we need to setup the object to go to the next level
+			of the data object before calling the next property. */
+			obj = obj[prop];
+
+			if (i > 0)
+			{
+				/* this will add the property to the path based on if its an
+				object property or an array. */
+				if(isNaN(prop))
+				{
+					path += '.' + prop;
+				}
+			}
+			else
+			{
+				path = prop;
+			}
+
+			var publish;
+			if (i === end)
+			{
+				/* if the loop is on the last pass it only needs to publish
+				the val. */
+				publish = val;
+			}
+			else
+			{
+				/* we only want to publish the modified branches. we need to
+				get the next property in the props array and create a publish
+				object or array with the next property value. */
+				var nextProp = props[i + 1];
+				if (isNaN(nextProp) === false)
+				{
+					path += '[' + nextProp + ']';
+					continue;
+				}
+
+				var nextAttr = {};
+				nextAttr[nextProp] = obj[nextProp];
+				publish = nextAttr;
+			}
+
+			this.publish(path, publish, committer);
 		}
 	}
 
@@ -362,37 +362,41 @@ export class Data extends BasicData
 		pathString = pathString || "";
 		this._publishAttr(pathString, obj, committer);
 
-		if(obj && typeof obj === 'object')
+		if (!obj || typeof obj !== 'object')
 		{
-			let subPath, value;
-			if(Array.isArray(obj))
+			return;
+		}
+
+		let subPath, value;
+		if (Array.isArray(obj))
+		{
+			const length = obj.length;
+			for (var i = 0; i < length; i++)
 			{
-				let length = obj.length;
-				for(var i = 0; i < length; i++)
-				{
-					value = obj[i];
-					subPath = pathString + '[' + i + ']';
-					this._checkPublish(subPath, value, committer);
-				}
+				value = obj[i];
+				subPath = pathString + '[' + i + ']';
+				this._checkPublish(subPath, value, committer);
 			}
-			else
+		}
+		else
+		{
+			for (var prop in obj)
 			{
-				for(var prop in obj)
+				if (!obj.hasOwnProperty(prop))
 				{
-					if(obj.hasOwnProperty(prop))
-					{
-						value = obj[prop];
-						subPath = pathString + '.' + prop;
-						this._checkPublish(subPath, value, committer);
-					}
+					continue;
 				}
+
+				value = obj[prop];
+				subPath = pathString + '.' + prop;
+				this._checkPublish(subPath, value, committer);
 			}
 		}
 	}
 
 	_checkPublish(subPath, val, committer)
 	{
-		if(!val || typeof val !== 'object')
+		if (!val || typeof val !== 'object')
 		{
 			this._publishAttr(subPath, val, committer);
 		}
@@ -427,7 +431,7 @@ export class Data extends BasicData
 	{
 		/* this will clone the stage object to the
 		attribute object */
-		this.attributes = cloneObject(this.stage);
+		this.attributes = Objects.clone(this.stage);
 		this.dirty = false;
 	}
 
@@ -460,40 +464,36 @@ export class Data extends BasicData
 	 */
 	_deleteAttr(obj, attr)
 	{
-		if(utils.hasDeepData(attr))
-		{
-			let props = utils.getSegments(attr),
-			length = props.length,
-			end = length - 1;
-
-			for (var i = 0; i < length; i++)
-			{
-				var prop = props[i];
-				var propValue = obj[prop];
-				if (propValue !== undefined)
-				{
-					if(i === end)
-					{
-						if(Array.isArray(obj))
-						{
-							obj.splice(prop, 1);
-							break;
-						}
-
-						delete obj[prop];
-						break;
-					}
-					obj = propValue;
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-		else
+		if (!utils.hasDeepData(attr))
 		{
 			delete obj[attr];
+		}
+
+		const props = utils.getSegments(attr),
+		length = props.length,
+		end = length - 1;
+
+		for (var i = 0; i < length; i++)
+		{
+			var prop = props[i];
+			var propValue = obj[prop];
+			if (propValue === undefined)
+			{
+				break;
+			}
+
+			if (i === end)
+			{
+				if (Array.isArray(obj))
+				{
+					obj.splice(prop, 1);
+					break;
+				}
+
+				delete obj[prop];
+				break;
+			}
+			obj = propValue;
 		}
 	}
 
@@ -506,36 +506,32 @@ export class Data extends BasicData
 	 */
 	_getAttr(obj, attr)
 	{
-		if(utils.hasDeepData(attr))
-		{
-			let props = utils.getSegments(attr),
-			length = props.length,
-			end = length - 1;
-
-			for (var i = 0; i < length; i++)
-			{
-				var prop = props[i];
-				var propValue = obj[prop];
-				if (propValue !== undefined)
-				{
-					obj = propValue;
-
-					if(i === end)
-					{
-						return obj;
-					}
-				}
-				else
-				{
-					break;
-				}
-			}
-
-			return undefined;
-		}
-		else
+		if (!utils.hasDeepData(attr))
 		{
 			return obj[attr];
 		}
+
+		const props = utils.getSegments(attr),
+		length = props.length,
+		end = length - 1;
+
+		for (var i = 0; i < length; i++)
+		{
+			var prop = props[i];
+			var propValue = obj[prop];
+			if (propValue === undefined)
+			{
+				break;
+			}
+
+			obj = propValue;
+
+			if (i === end)
+			{
+				return obj;
+			}
+		}
+
+		return undefined;
 	}
 }
