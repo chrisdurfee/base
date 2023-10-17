@@ -1,46 +1,9 @@
-import {base} from '../../main/core.js';
-import {ElementParser} from './element/element-parser.js';
+import {base} from '../../core.js';
 import {dataBinder} from '../data-binder/data-binder.js';
 import {htmlBuilder, normalizeAttr, removeEventPrefix} from '../html-builder/html-builder.js';
 import {Directives} from './directives/directives.js';
 import {WatcherHelper} from './watcher-helper.js';
 import {Jot} from "../component/jot.js";
-
-/**
- * This will create a watch element.
- *
- * @param {object} data
- * @param {string} prop
- * @returns {function}
- */
-export const Watch = function(data, prop)
-{
-	return function(callBack)
-	{
-		return {
-			onSet: [data, prop, (ele, value) =>
-			{
-				return callBack(value);
-			}]
-		};
-	};
-};
-
-/**
- * This will track the context from an atom to remove
- * it when the element is removed.
- */
-base.dataTracker.addType('context', function(data)
-{
-	if(!data)
-	{
-		return false;
-	}
-
-	data.parent.removeContextBranch(data.branch);
-});
-
-const parser = new ElementParser();
 
 /**
  * LayoutBuilder
@@ -52,214 +15,6 @@ const parser = new ElementParser();
  */
 export class LayoutBuilder extends htmlBuilder
 {
-	registerDirectives()
-	{
-		const directives = Directives;
-
-		directives.add('cache', this.cache.bind(this));
-		directives.add('bind', this.bindElement.bind(this));
-		directives.add('onCreated', this.onCreated.bind(this));
-		directives.add('route', this.addRoute.bind(this));
-		directives.add('switch', this.addSwitch.bind(this));
-		directives.add('onState', this.onState.bind(this));
-		directives.add('onSet', this.onSet.bind(this));
-		directives.add('watch', this.watch.bind(this));
-	}
-
-	/**
-	 * This will create a new element.
-	 *
-	 * @override
-	 * @param {string} nodeName The node name.
-	 * @param {object} attrObject The node attributes.
-	 * @param {object} container The node container.
-	 * @param {object} parent
-	 * @return {object} The new element.
-	 */
-	create(nodeName, attrObject, container, parent)
-	{
-		let obj = document.createElement(nodeName);
-		this._addElementAttrs(obj, attrObject, parent);
-		this.append(container, obj);
-		return obj;
-	}
-
-	/**
-	 * This will add the element attributes.
-	 *
-	 * @protected
-	 * @param {object} obj
-	 * @param {object} attrObject
-	 * @param {object} parent
-	 */
-	_addElementAttrs(obj, attrObject, parent)
-	{
-		/* we want to check if we have attrributes to add */
-		if(!attrObject || typeof attrObject !== 'object')
-		{
-			return false;
-		}
-
-		/* we need to add the type if set to stop ie
-		from removing the value if set after the value is
-		added */
-		let type = attrObject.type;
-		if(typeof type !== 'undefined')
-		{
-			base.setAttr(obj, 'type', type);
-		}
-
-		/* we want to add each attr to the obj */
-		for(var prop in attrObject)
-		{
-			/* we have already added the type so we need to
-			skip if the prop is type */
-			if(attrObject.hasOwnProperty(prop) === false || prop === 'type')
-			{
-				continue;
-			}
-
-			var attrPropValue = attrObject[prop];
-
-			/* we want to check to add the attr settings
-				by property name */
-			if(prop === 'innerHTML')
-			{
-				obj.innerHTML = attrPropValue;
-			}
-			else if(prop.indexOf('-') !== -1)
-			{
-				// this will handle data and aria attributes
-				base.setAttr(obj, prop, attrPropValue);
-			}
-			else
-			{
-				this.addAttr(obj, prop, attrPropValue, parent);
-			}
-		}
-	}
-
-	/**
-	 * This will add an element attribute.
-	 *
-	 * @param {object} obj
-	 * @param {object} attr
-	 * @param {string} value
-	 */
-	addAttr(obj, attr, value, parent)
-	{
-		if(value === '' || !attr)
-		{
-			return false;
-		}
-
-		/* we want to check to add a value or an event listener */
-		let type = typeof value;
-		if(type === 'function')
-		{
-			/* this will add the event using the base events
-			so the event is tracked */
-			attr = removeEventPrefix(attr);
-			base.addListener(attr, obj, function(e)
-			{
-				value.call(this, e, parent);
-			});
-		}
-		else
-		{
-			let attrName = normalizeAttr(attr);
-			obj[attrName] = value;
-		}
-	}
-
-	/**
-	 * This will render a function/Unit/Component.
-	 *
-	 * @param {object|function} layout
-	 * @param {object} container
-	 * @param {object} [parent]
-	 * @returns {object} The layout Unit or Component
-	 */
-	render(layout, container, parent)
-	{
-		if(!layout)
-		{
-			return;
-		}
-
-		switch(typeof layout)
-		{
-			case 'object':
-				if(layout.isUnit === true)
-				{
-					this.createComponent(layout, container, parent);
-					return layout;
-				}
-			default:
-				let component = Jot(layout);
-				let jot = new component();
-				this.createComponent(jot, container, parent);
-				return jot;
-		}
-	}
-
-	/**
-	 * This will build a JSON layout.
-	 *
-	 * @param {object} obj The JSON layout.
-	 * @param {object} [container] The parent receiving the layout.
-	 * @param {object} [parent] The component adding the layout.
-	 * @return {object} The doc Frag element.
-	 */
-	build(obj, container, parent)
-	{
-		let fragment = this.createDocFragment();
-
-		if (Array.isArray(obj))
-		{
-			let item;
-			for (var i = 0, length = obj.length; i < length; i++)
-			{
-				item = obj[i];
-				this.buildElement(item, fragment, parent);
-			}
-		}
-		else
-		{
-			this.buildElement(obj, fragment, parent);
-		}
-
-		if(container && typeof container === 'object')
-		{
-			container.appendChild(fragment);
-		}
-		return fragment;
-	}
-
-	/**
-	 * This will build an element or component.
-	 *
-	 * @param {object} obj
-	 * @param {object} container
-	 * @param {object} [parent] The component adding the layout.
-	 */
-	buildElement(obj, container, parent)
-	{
-		if(!obj)
-		{
-			return;
-		}
-
-		if(obj.component || obj.isUnit === true)
-		{
-			this.createComponent(obj, container, parent);
-		}
-		else
-		{
-			this.createElement(obj, container, parent);
-		}
-	}
-
 	/**
 	 * This will append a child element to a parent.
 	 *
@@ -1081,12 +836,12 @@ export class LayoutBuilder extends htmlBuilder
 		callBack,
 		update;
 
-		if(base.isArray(settings[0]))
+		if (Array.isArray(settings[0]))
 		{
-			for(var i = 0, maxLength = settings.length; i < maxLength; i++)
+			for (var i = 0, maxLength = settings.length; i < maxLength; i++)
 			{
 				var itemSettings = settings[i];
-				if(!itemSettings)
+				if (!itemSettings)
 				{
 					continue;
 				}
@@ -1096,7 +851,7 @@ export class LayoutBuilder extends htmlBuilder
 			return;
 		}
 
-		if(settings.length < 3)
+		if (settings.length < 3)
 		{
 			[prop, callBack] = settings;
 		}
@@ -1105,12 +860,12 @@ export class LayoutBuilder extends htmlBuilder
 			[data, prop, callBack] = settings;
 		}
 
-		if(!data || !prop)
+		if (!data || !prop)
 		{
 			return false;
 		}
 
-		switch(typeof callBack)
+		switch (typeof callBack)
 		{
 			case 'object':
 				update = (value) =>
@@ -1190,95 +945,4 @@ export class LayoutBuilder extends htmlBuilder
 			}
 		}
 	}
-
-	/**
-	 * This will reset an element innerHTML and rebuild.
-	 *
-	 * @private
-	 * @param {object} ele
-	 * @param {object} layout
-	 * @param {object} parent
-	 */
-	rebuild(ele, layout, parent)
-	{
-		this.removeAll(ele);
-		this.build(layout, ele, parent);
-	}
-
-	/**
-	 * This will create a component.
-	 *
-	 * @protected
-	 * @param {object} obj
-	 * @param {object} container
-	 * @param {object} parent
-	 */
-	createComponent(obj, container, parent)
-	{
-		// this will allow both cached components or native components
-		const component = obj.component || obj;
-		component.parent = parent;
-
-		if(parent && parent.persist === true && component.persist !== false)
-		{
-			component.persist = true;
-		}
-
-		if(component.cacheable && parent)
-		{
-			parent[component.cacheable] = component;
-		}
-
-		component.setup(container);
-
-		if(obj.component && typeof obj.onCreated === 'function')
-		{
-			obj.onCreated(component);
-		}
-	}
-
-	/**
-	 * This will create a node.
-	 *
-	 * @param {object} settings
-	 * @param {object} container
-	 * @param {object} parent
-	 * @return {object}
-	 */
-	createNode(settings, container, parent)
-	{
-		let tag = settings.tag;
-		if(tag === 'text')
-		{
-			let attr = settings.attr;
-			let text = attr.textContent || attr.text;
-			return this.createTextNode(text, container);
-		}
-		else if(tag === 'comment')
-		{
-			let attr = settings.attr;
-			let text = attr.text;
-			return this.createCommentNode(text, container);
-		}
-
-		return this.create(tag, settings.attr, container, parent);
-	}
 }
-
-export const builder = new LayoutBuilder();
-
-base.augment(
-{
-	/**
-	 * This will build a JSON layout.
-	 *
-	 * @param {object} obj
-	 * @param {object} [container]
-	 * @param {object} [parent]
-	 * @return {object}
-	 */
-	buildLayout(obj, container, parent)
-	{
-		builder.build(obj, container, parent);
-	}
-});

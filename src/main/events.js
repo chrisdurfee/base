@@ -1,10 +1,18 @@
 
-import {base} from './main.js';
-export {base} from './main.js';
+import { base } from './main.js';
+import { Types } from '../shared/types.js';
+import { Arrays } from '../shared/arrays.js';
+export { base } from './main.js';
 
 const dataTracker = base.dataTracker;
 
-export const events =
+/**
+ * Events
+ *
+ * This will add event adding, tracking, and
+ * removing to an object.
+ */
+export const Events =
 {
     /**
      * This will get the events on an element.
@@ -14,10 +22,11 @@ export const events =
      */
     getEvents(obj)
     {
-        if(base.isObject(obj) === false)
+        if (Types.isObject(obj) === false)
         {
             return false;
         }
+
         return dataTracker.get(obj, 'events');
     },
 
@@ -59,14 +68,14 @@ export const events =
      */
     add(event, obj, fn, capture = false, swapped = false, originalFn = null)
     {
-        if(base.isObject(obj) === false)
+        if (Types.isObject(obj) === false)
         {
             return this;
         }
 
         /* we want to create an event object and add it the
         the active events to track */
-        let data = this.create(event, obj, fn, capture, swapped, originalFn);
+        const data = this.create(event, obj, fn, capture, swapped, originalFn);
         dataTracker.add(obj, 'events', data);
 
         obj.addEventListener(event, fn, capture);
@@ -85,13 +94,13 @@ export const events =
      */
     remove(event, obj, fn, capture = false)
     {
-        let result = this.getEvent(event, obj, fn, capture);
-        if(result === false)
+        const result = this.getEvent(event, obj, fn, capture);
+        if (result === false)
         {
             return this;
         }
 
-        if(typeof result === 'object')
+        if (typeof result === 'object')
         {
             /* we want to use the remove event method and just
             pass the listener object */
@@ -107,9 +116,9 @@ export const events =
      */
     removeEvent(listener)
     {
-        if(typeof listener === 'object')
+        if (typeof listener === 'object')
         {
-            let obj = listener.obj;
+            const obj = listener.obj;
             obj.removeEventListener(listener.event, listener.fn, listener.capture);
         }
         return this;
@@ -127,18 +136,18 @@ export const events =
      */
     getEvent(event, obj, fn, capture)
     {
-        if(typeof obj !== 'object')
+        if (typeof obj !== 'object')
         {
             return false;
         }
 
-        let events = this.getEvents(obj);
-        if(!events || events.length < 1)
+        const events = this.getEvents(obj);
+        if (!events || events.length < 1)
         {
             return false;
         }
 
-        let eventObj = this.create(event, obj, fn, capture);
+        const eventObj = this.create(event, obj, fn, capture);
         /* if the search returns anything but false we
         found our active event */
         return this.search(eventObj, events);
@@ -155,15 +164,15 @@ export const events =
     {
         let listener,
         swappable = this.isSwappable(eventObj.event);
-        for(var i = 0, maxLength = events.length; i < maxLength; i++)
+        for (var i = 0, maxLength = events.length; i < maxLength; i++)
         {
             listener = events[i];
-            if(listener.event !== eventObj.event || listener.obj !== eventObj.obj)
+            if (listener.event !== eventObj.event || listener.obj !== eventObj.obj)
             {
                 continue;
             }
 
-            if(listener.fn === eventObj.fn || (swappable === true && listener.originalFn === eventObj.fn))
+            if (listener.fn === eventObj.fn || (swappable === true && listener.originalFn === eventObj.fn))
             {
                 return listener;
             }
@@ -180,7 +189,7 @@ export const events =
      */
     removeEvents(obj)
     {
-        if(base.isObject(obj) === false)
+        if (Types.isObject(obj) === false)
         {
             return this;
         }
@@ -221,7 +230,7 @@ export const events =
     {
         /* we want to check if the event type is in the
         swapped event array */
-        let index = base.inArray(this.swap, event);
+        const index = Arrays.inArray(this.swap, event);
         return (index > -1);
     }
 };
@@ -231,7 +240,7 @@ data tracker to remove events that have been
 added in layouts. */
 dataTracker.addType('events', (data) =>
 {
-    events.removeEvent(data);
+    Events.removeEvent(data);
 });
 
 base.augment(
@@ -239,7 +248,7 @@ base.augment(
     /**
      * @param object events
      */
-    events,
+    events: Events,
 
     /**
      * This will add an event to an object.
@@ -268,11 +277,11 @@ base.augment(
      */
     on(event, obj, fn, capture)
     {
-        let events = this.events;
-        if(this.isArray(event))
+        const events = this.events;
+        if (Array.isArray(event))
         {
             let evt;
-            for(var i = 0, length = event.length; i < length; i++)
+            for (var i = 0, length = event.length; i < length; i++)
             {
                 evt = event[i];
                 events.add(evt, obj, fn, capture);
@@ -296,11 +305,11 @@ base.augment(
      */
     off(event, obj, fn, capture)
     {
-        let events = this.events;
-        if(this.isArray(event))
+        const events = this.events;
+        if (Array.isArray(event))
         {
             var evt;
-            for(var i = 0, length = event.length; i < length; i++)
+            for (var i = 0, length = event.length; i < length; i++)
             {
                 evt = event[i];
                 events.remove(evt, obj, fn, capture);
@@ -343,11 +352,11 @@ base.augment(
     _createEvent(event, eventType, settings, params)
     {
         let e;
-        if(eventType === 'HTMLEvents')
+        if (eventType === 'HTMLEvents')
         {
             e = new Event(event);
         }
-        else if(eventType === 'MouseEvents')
+        else if (eventType === 'MouseEvents')
         {
             e = new MouseEvent(event, settings);
         }
@@ -370,7 +379,7 @@ base.augment(
      */
     createEvent(event, obj, options, params)
     {
-        if(this.isObject(obj) === false)
+        if (Types.isObject(obj) === false)
         {
             return false;
         }
@@ -395,12 +404,12 @@ base.augment(
             relatedTarget: null
         };
 
-        if(base.isObject(options))
+        if (Types.isObject(options))
         {
             settings = Object.assign(settings, options);
         }
 
-        let eventType = this._getEventType(event);
+        const eventType = this._getEventType(event);
         return this._createEvent(event, eventType, settings, params);
     },
 
@@ -413,19 +422,19 @@ base.augment(
      */
     _getEventType(event)
     {
-        let eventTypes = {
+        const eventTypes = {
             'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
             'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
-        },
+        };
 
-        value,
+        let value,
         eventType = 'CustomEvent';
-        for(var prop in eventTypes)
+        for (var prop in eventTypes)
         {
-            if(eventTypes.hasOwnProperty(prop))
+            if (eventTypes.hasOwnProperty(prop))
             {
                 value = eventTypes[prop];
-                if(event.match(value))
+                if (event.match(value))
                 {
                     eventType = prop;
                     break;
@@ -445,12 +454,12 @@ base.augment(
      */
     trigger(event, obj, params)
     {
-        if(this.isObject(obj) === false)
+        if (Types.isObject(obj) === false)
         {
             return this;
         }
 
-        let e = (typeof event === 'string')? this.createEvent(event, obj, null, params) : event;
+        const e = (typeof event === 'string')? this.createEvent(event, obj, null, params) : event;
         obj.dispatchEvent(e);
         return this;
     },
@@ -472,14 +481,14 @@ base.augment(
         /* this will check what mouse wheel type
         the client supports
         @return (string) the event name */
-        let getMouseWheelType = () =>
+        const getMouseWheelType = () =>
         {
             let type = 'wheel';
-            if('onmousewheel' in self)
+            if ('onmousewheel' in self)
             {
                 type = 'mousewheel';
             }
-            else if('DOMMouseScroll' in self)
+            else if ('DOMMouseScroll' in self)
             {
                 type = 'DOMMouseScroll';
             }
@@ -504,34 +513,33 @@ base.augment(
      */
     onMouseWheel(callBackFn, obj, cancelDefault, capture)
     {
-        if(typeof obj === "undefined")
+        if (typeof obj === "undefined")
         {
-                obj = window;
+            obj = window;
         }
 
         /* we want to return the mousewheel data
         to this private callback function before
         returning to the call back function*/
-        let mouseWheelResults = (e) =>
+        const mouseWheelResults = (e) =>
         {
-            e = e || window.event;
-            let delta = Math.max(-1, Math.min(1, (-e.deltaY || e.wheelDelta || -e.detail)));
+            const delta = Math.max(-1, Math.min(1, (-e.deltaY || e.wheelDelta || -e.detail)));
 
             /* we can now send the mouse wheel results to
             the call back function */
-            if(typeof callBackFn === 'function')
+            if (typeof callBackFn === 'function')
             {
                 callBackFn(delta, e);
             }
 
             /* we want to check to cancel default */
-            if(cancelDefault === true)
+            if (cancelDefault === true)
             {
                 e.preventDefault();
             }
         };
 
-        let event = this.getWheelEventType();
+        const event = this.getWheelEventType();
         this.events.add(event, obj, mouseWheelResults, capture, true, callBackFn);
         return this;
     },
@@ -546,12 +554,12 @@ base.augment(
      */
     offMouseWheel(callBackFn, obj, capture)
     {
-        if(typeof obj === "undefined")
+        if (typeof obj === "undefined")
         {
             obj = window;
         }
 
-        let event = this.getWheelEventType();
+        const event = this.getWheelEventType();
         this.off(event, obj, callBackFn, capture);
         return this;
     },
@@ -566,7 +574,7 @@ base.augment(
     {
         e = e || window.event;
 
-        if(typeof e.preventDefault === 'function')
+        if (typeof e.preventDefault === 'function')
         {
             e.preventDefault();
         }
@@ -586,9 +594,7 @@ base.augment(
      */
     stopPropagation(e)
     {
-        e = e || window.event;
-
-        if(typeof e.stopPropagation === 'function')
+        if (typeof e.stopPropagation === 'function')
         {
             e.stopPropagation();
         }

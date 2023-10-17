@@ -1,5 +1,5 @@
 import {ajax} from '../ajax/ajax.js';
-import {base} from '../../core.js';
+import {base} from '../../main/core.js';
 
 /**
  * ModelService

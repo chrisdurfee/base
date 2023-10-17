@@ -1,4 +1,4 @@
-import {base} from '../../core.js';
+import {base} from '../../main/core.js';
 export {DataPubSub} from './data-pub-sub.js';
 import {pubSub} from './data-pub-sub.js';
 import {OneWayConnection} from './one-way-connection.js';

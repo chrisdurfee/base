@@ -1,4 +1,4 @@
-import {base} from '../../core.js';
+import {base} from '../../main/core.js';
 import {builder} from '../layout/layout-builder.js';
 import {dataBinder} from '../data-binder/data-binder.js';
 

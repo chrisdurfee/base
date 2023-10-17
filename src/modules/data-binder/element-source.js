@@ -1,4 +1,4 @@
-import {base} from '../../core.js';
+import {base} from '../../main/core.js';
 import {TwoWaySource} from './two-way-source.js';
 
 /**

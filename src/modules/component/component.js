@@ -1,4 +1,4 @@
-import {base} from '../../core.js';
+import {base} from '../../main/core.js';
 import {Unit} from './unit.js';
 import {state} from '../state/state.js';
 import {EventHelper} from './event-helper.js';

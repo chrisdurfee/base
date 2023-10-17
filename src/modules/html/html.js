@@ -1,8 +1,14 @@
-import {base} from '../../core.js';
-import {dataBinder} from '../data-binder/data-binder.js';
+import { base } from '../../main/core.js';
+import { Dom } from '../../shared/dom.js';
+import { dataBinder } from '../data-binder/data-binder.js';
 
 const dataTracker = base.dataTracker;
 
+/**
+ * This is a look up object to normalize the attribute names.
+ *
+ * @type {object}
+ */
 const NORMALIZED_NAMES =
 {
 	class: 'className',
@@ -39,7 +45,7 @@ export const normalizeAttr = (prop) =>
  */
 export const removeEventPrefix = (prop) =>
 {
-	if(typeof prop === 'string' && prop.substring(0, 2) === 'on')
+	if (typeof prop === 'string' && prop.substring(0, 2) === 'on')
 	{
 		return prop.substring(2);
 	}
@@ -58,20 +64,20 @@ export class htmlBuilder
 	/**
 	 * This will create a new element.
 	 *
-	 * @param {string} nodeName The node name.
-	 * @param {object} attrObject The node attributes.
+	 * @param {string} node The node name.
+	 * @param {object} attrs The node attributes.
 	 * @param {object} container The node container.
 	 * @param {boolean} [prepend=false] Add to the begining of the container.
 	 * @return {object} The new element.
 	 */
-	create(nodeName, attrObject, container, prepend)
+	static create(node, attrs, container, prepend)
 	{
-		let obj = document.createElement(nodeName);
-		this._addElementAttrs(obj, attrObject);
+		const obj = document.createElement(node);
+		this.addAttributes(obj, attrs);
 
 		/* we want to check if the new element should be
 		added to the begining or end */
-		if(prepend === true)
+		if (prepend === true)
 		{
 			this.prepend(container, obj);
 		}
@@ -87,12 +93,12 @@ export class htmlBuilder
 	 *
 	 * @protected
 	 * @param {object} obj
-	 * @param {object} attrObject
+	 * @param {object} attrs
 	 */
-	_addElementAttrs(obj, attrObject)
+	static addAttributes(obj, attrs)
 	{
 		/* we want to check if we have attrributes to add */
-		if(!attrObject || typeof attrObject !== 'object')
+		if (!attrs || typeof attrs !== 'object')
 		{
 			return false;
 		}
@@ -100,34 +106,34 @@ export class htmlBuilder
 		/* we need to add the type if set to stop ie
 		from removing the value if set after the value is
 		added */
-		let type = attrObject.type;
-		if(typeof type !== 'undefined')
+		let type = attrs.type;
+		if (typeof type !== 'undefined')
 		{
-			base.setAttr(obj, 'type', type);
+			Dom.setAttr(obj, 'type', type);
 		}
 
 		/* we want to add each attr to the obj */
-		for(var prop in attrObject)
+		for (var prop in attrObject)
 		{
 			/* we have already added the type so we need to
 			skip if the prop is type */
-			if(attrObject.hasOwnProperty(prop) === false || prop === 'type')
+			if (attrs.hasOwnProperty(prop) === false || prop === 'type')
 			{
 				continue;
 			}
 
-			var attrPropValue = attrObject[prop];
+			var attrPropValue = attrs[prop];
 
 			/* we want to check to add the attr settings
 			 by property name */
-			if(prop === 'innerHTML')
+			if (prop === 'innerHTML')
 			{
 				obj.innerHTML = attrPropValue;
 			}
-			else if(prop.substring(4, 1) === '-')
+			else if (prop.substring(4, 1) === '-')
 			{
 				// this will handle data and aria attributes
-				base.setAttr(obj, prop, attrPropValue);
+				Dom.setAttr(obj, prop, attrPropValue);
 			}
 			else
 			{
@@ -141,25 +147,29 @@ export class htmlBuilder
 	 *
 	 * @param {object} obj
 	 * @param {string} content
+	 * @return {object}
 	 */
-	addHtml(obj, content)
+	static addHtml(obj, content)
 	{
-		if(typeof content !== 'undefined' && content !== '')
+		if (typeof content === 'undefined' || content === '')
 		{
-			/* we need to check if we are adding inner
-			html content or just a string */
-			let pattern = /(?:<[a-z][\s\S]*>)/i;
-			if(pattern.test(content))
-			{
-				/* html */
-				obj.innerHTML = content;
-			}
-			else
-			{
-				/* string */
-				obj.textContent = content;
-			}
+			return this;
 		}
+
+		/* we need to check if we are adding inner
+		html content or just a string */
+		const pattern = /(?:<[a-z][\s\S]*>)/i;
+		if (pattern.test(content))
+		{
+			/* html */
+			obj.innerHTML = content;
+		}
+		else
+		{
+			/* string */
+			obj.textContent = content;
+		}
+		return this;
 	}
 
 	/**
@@ -169,16 +179,16 @@ export class htmlBuilder
 	 * @param {object} attr
 	 * @param {string} value
 	 */
-	addAttr(obj, attr, value)
+	static addAttr(obj, attr, value)
 	{
-		if(value === '' || !attr)
+		if (value === '' || !attr)
 		{
 			return false;
 		}
 
 		/* we want to check to add a value or an event listener */
-		let type = typeof value;
-		if(type === 'function')
+		const type = typeof value;
+		if (type === 'function')
 		{
 			/* this will add the event using the base events
 			so the event is tracked */
@@ -187,7 +197,7 @@ export class htmlBuilder
 		}
 		else
 		{
-			let attrName = normalizeAttr(attr);
+			const attrName = normalizeAttr(attr);
 			obj[attrName] = value;
 		}
 	}
@@ -197,7 +207,7 @@ export class htmlBuilder
 	 *
 	 * @return {object}
 	 */
-	createDocFragment()
+	static createDocFragment()
 	{
 		return document.createDocumentFragment();
 	}
@@ -209,11 +219,11 @@ export class htmlBuilder
 	 * @param {object} container
 	 * @return {object}
 	 */
-	createTextNode(text, container)
+	static createText(text, container)
 	{
-		let obj = document.createTextNode(text);
+		const obj = document.createTextNode(text);
 
-		if(container)
+		if (container)
 		{
 			this.append(container, obj);
 		}
@@ -227,11 +237,11 @@ export class htmlBuilder
 	 * @param {object} container
 	 * @return {object}
 	 */
-	createCommentNode(text, container)
+	static createComment(text, container)
 	{
 		let obj = document.createComment(text);
 
-		if(container)
+		if (container)
 		{
 			this.append(container, obj);
 		}
@@ -245,27 +255,27 @@ export class htmlBuilder
 	 * @param {array} optionArray
 	 * @param {string} [defaultValue]
 	 */
-	setupSelectOptions(selectElem, optionArray, defaultValue)
+	static setupSelectOptions(selectElem, optionArray, defaultValue)
 	{
-		if(!selectElem || typeof selectElem !== 'object')
+		if (!selectElem || typeof selectElem !== 'object')
 		{
 			return false;
 		}
 
-		if(!optionArray || !optionArray.length)
+		if (!optionArray || !optionArray.length)
 		{
 			return false;
 		}
 
 		/* create each option then add it to the select */
-		for(var n = 0, maxLength = optionArray.length; n < maxLength; n++)
+		for (var n = 0, maxLength = optionArray.length; n < maxLength; n++)
 		{
 			var settings = optionArray[n];
 			var option = selectElem.options[n] = new Option(settings.label, settings.value);
 
 			/* we can select an option if a default value
 			has been sumbitted */
-			if(defaultValue !== null && option.value == defaultValue)
+			if (defaultValue !== null && option.value == defaultValue)
 			{
 				option.selected = true;
 			}
@@ -277,30 +287,32 @@ export class htmlBuilder
 	 *
 	 * @param {object} ele
 	 */
-	removeElementData(ele)
+	static removeElementData(ele)
 	{
 		/* we want to do a recursive remove child
 		removal */
-		let children = ele.childNodes;
-		if(children)
+		const children = ele.childNodes;
+		if (children)
 		{
-			let length = children.length - 1;
-			for(var i = length; i >= 0; i--)
+			const length = children.length - 1;
+			for (var i = length; i >= 0; i--)
 			{
 				var child = children[i];
-				if(child)
+				if (!child)
 				{
-					/* this will remove the child element data
-					before the parent is removed */
-					this.removeElementData(child);
+					continue;
 				}
+
+				/* this will remove the child element data
+				before the parent is removed */
+				this.removeElementData(child);
 			}
 		}
 
 		dataTracker.remove(ele);
 
-		let bound = ele.bindId;
-		if(bound)
+		const bound = ele.bindId;
+		if (bound)
 		{
 			/* this will check to remove any data bindings
 			to the element */
@@ -312,12 +324,13 @@ export class htmlBuilder
 	 * This will remove an element and its data.
 	 *
 	 * @param {object} obj
+	 * @return {object} this
 	 */
-	removeElement(obj)
+	static removeElement(obj)
 	{
 		let container;
 
-		if(!obj || !(container = obj.parentNode))
+		if (!obj || !(container = obj.parentNode))
 		{
 			return this;
 		}
@@ -334,31 +347,37 @@ export class htmlBuilder
 	 * This will remove an element.
 	 *
 	 * @param {object} child
+	 * @return {object} this
 	 */
-	removeChild(child)
+	static removeChild(child)
 	{
 		this.removeElement(child);
+		return this;
 	}
 
 	/**
 	 * This will remove all elements from the container.
 	 *
 	 * @param {object} container
+	 * @return {object} this
 	 */
-	removeAll(container)
+	static removeAll(container)
 	{
-		if(typeof container === 'object')
+		if (typeof container !== 'object')
 		{
-			let children = container.childNodes;
-			for(var child in children)
-			{
-				if(children.hasOwnProperty(child))
-				{
-					this.removeElementData(children[child]);
-				}
-			}
-			container.innerHTML = '';
+			return this;
 		}
+
+		const children = container.childNodes;
+		for (var child in children)
+		{
+			if (children.hasOwnProperty(child))
+			{
+				this.removeElementData(children[child]);
+			}
+		}
+		container.innerHTML = '';
+		return this;
 	}
 
 	/**
@@ -366,10 +385,12 @@ export class htmlBuilder
 	 *
 	 * @param {object} child
 	 * @param {object} newParent
+	 * @return {object} this
 	 */
-	changeParent(child, newParent)
+	static changeParent(child, newParent)
 	{
 		newParent.appendChild(child);
+		return this;
 	}
 
 	/**
@@ -377,10 +398,11 @@ export class htmlBuilder
 	 *
 	 * @param {object} parent
 	 * @param {object} child
+	 * @return {object} this
 	 */
-	append(parent, child)
+	static append(parent, child)
 	{
-		switch(typeof parent)
+		switch (typeof parent)
 		{
 			case "object":
 				break;
@@ -390,6 +412,7 @@ export class htmlBuilder
 		}
 
 		parent.appendChild(child);
+		return this;
 	}
 
 	/**
@@ -398,10 +421,11 @@ export class htmlBuilder
 	 * @param {object} parent
 	 * @param {object} child
 	 * @param {object} [optionalNode]
+	 * @return {object}
 	 */
-	prepend(parent, child, optionalNode)
+	static prepend(parent, child, optionalNode)
 	{
-		switch(typeof parent)
+		switch (typeof parent)
 		{
 			case "object":
 				break;
@@ -410,8 +434,9 @@ export class htmlBuilder
 				break;
 		}
 
-		var node = optionalNode || parent.firstChild;
+		const node = optionalNode || parent.firstChild;
 		parent.insertBefore(child, node);
+		return this;
 	}
 
 	/**
@@ -421,14 +446,13 @@ export class htmlBuilder
 	 * @param {boolean} deepCopy
 	 * @return {object}
 	 */
-	clone(node, deepCopy)
+	static clone(node, deepCopy = false)
 	{
-		if(!node || typeof node !== 'object')
+		if (!node || typeof node !== 'object')
 		{
 			return false;
 		}
 
-		deepCopy = deepCopy || false;
 		return node.cloneNode(deepCopy);
 	}
 }
