@@ -1,54 +1,50 @@
-import {Objects} from "../../shared/objects.js";
-
 /**
- * Atom
+ * This will parse the arguments passed to the atom.
  *
- * This will create an interface for atoms to
- * extend from a parent atom.
- * @class
+ * @param {Array} args
+ * @returns {Object}
  */
-export const Atom = function()
+const parseArgs = (args) =>
 {
+	if (!args)
+    {
+    	return;
+    }
 
+    const first = args[0];
+    if (typeof first === 'string' || Array.isArray(first))
+    {
+    	return {
+        	props: {},
+            children: first
+        };
+    }
+
+    return {
+    	props: first,
+        children: args[1] || []
+    };
 };
 
 /**
- * This will extend the atom to a child atom.
- * @static
- * @param {(object|function)}
- * @return {function} The child atom constructor.
+ * This will create an atom.
+ *
+ * @param {function} callBack
+ * @returns {function}
  */
-Atom.extend = function extend(childLayout)
+export const Atom = (callBack) =>
 {
-	let parent = this;
-
-	/*
-	this will setup a layout function to call to standardize
-	the interface for non function atoms.
-	*/
-	if(typeof childLayout === 'object')
-	{
-		let layoutObject = childLayout;
-		childLayout = (props) =>
-		{
-			return Objects.cloneObject(layoutObject);
-		};
-	}
-
-	const child = (props = {}) =>
-	{
-		props = props || {};
-		let layout = childLayout(props),
-
-		// we want to check to merge the layout with the parent layout
-		parentLayout = parent(props);
-		if(typeof parentLayout === 'object')
-		{
-			layout = Objects.extendObject(parentLayout, layout);
-		}
-		return layout;
-	};
-
-	child.extend = extend;
-	return child;
+	/**
+	 * This will create a closure that will
+	 * parse the arguments and then call the
+	 * callback.
+	 */
+	return (...args) =>
+    {
+		/**
+		 * Thi swill allow the atom to access optional args.
+		 */
+    	const {props, children} = parseArgs(args);
+        return callBack(props, children);
+    };
 };
