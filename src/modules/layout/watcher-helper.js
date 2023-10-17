@@ -12,6 +12,22 @@ const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
 export const WatcherHelper =
 {
 	/**
+	 * This will check if a string has params.
+	 *
+	 * @param {string} string
+	 * @returns {bool}
+	 */
+	hasParams(string)
+	{
+		if (!string)
+		{
+			return false;
+		}
+
+		return (string.indexOf('[[') !== -1);
+	},
+
+	/**
 	 * This will get the property names to be watched.
 	 *
 	 * @protected

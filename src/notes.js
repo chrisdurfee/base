@@ -5,12 +5,12 @@
 /**
  * Atoms
  *
- * Update atoms to use composition instead of inheritance.
+ * -- Update atoms to use composition instead of inheritance.
  *
- * Update atoms to use two params instead of one. The first
+ * -- Update atoms to use two params instead of one. The first
  * is the props and the second is the children.
  *
- * Update the atoms to allow optional params.
+ * -- Update the atoms to allow optional params.
  */
 Div({class: 'test'}, 'text')
 
