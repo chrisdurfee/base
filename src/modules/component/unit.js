@@ -1,19 +1,19 @@
-import {base} from '../../main/core.js';
-import {builder} from '../layout/layout-builder.js';
-import {dataBinder} from '../data-binder/data-binder.js';
+import { base } from '../../main/base.js';
+import { builder } from '../layout/layout-builder.js';
+import { dataBinder } from '../data-binder/data-binder.js';
 
 /* this will register the component system to the
 data tracker to remove components that have been
 nested in layouts. */
 base.dataTracker.addType('components', (data) =>
 {
-	if(!data)
+	if (!data)
 	{
 		return;
 	}
 
-	let component = data.component;
-	if(component && component.rendered === true)
+	const component = data.component;
+	if (component && component.rendered === true)
 	{
 		component.prepareDestroy();
 	}
@@ -84,14 +84,14 @@ export class Unit
 	 */
 	setupProps(props)
 	{
-		if(!props || typeof props !== 'object')
+		if (!props || typeof props !== 'object')
 		{
 			return false;
 		}
 
-		for(var prop in props)
+		for (var prop in props)
 		{
-			if(props.hasOwnProperty(prop))
+			if (props.hasOwnProperty(prop))
 			{
 				this[prop] = props[prop];
 			}
@@ -105,7 +105,7 @@ export class Unit
 	 */
 	getParentContext()
 	{
-		if(!this.parent)
+		if (!this.parent)
 		{
 			return null;
 		}
@@ -120,9 +120,9 @@ export class Unit
 	 */
 	setupContext()
 	{
-		let parentContext = this.getParentContext();
-		let context = this.setContext(parentContext);
-		if(context)
+		const parentContext = this.getParentContext();
+		const context = this.setContext(parentContext);
+		if (context)
 		{
 			this.context = context;
 			return;
@@ -139,15 +139,15 @@ export class Unit
 	 */
 	setupAddingContext()
 	{
-		let parentContext = this.context;
-		let context = this.addContext(parentContext);
-		if(!context)
+		const parentContext = this.context;
+		const context = this.addContext(parentContext);
+		if (!context)
 		{
 			return;
 		}
 
-		let branchName = context[0];
-		if(!branchName)
+		const branchName = context[0];
+		if (!branchName)
 		{
 			return;
 		}
@@ -198,7 +198,7 @@ export class Unit
 	 */
 	removeContext()
 	{
-		if(!this.addingContext)
+		if (!this.addingContext)
 		{
 			return;
 		}
@@ -214,7 +214,7 @@ export class Unit
 	 */
 	removeContextBranch(branch)
 	{
-		if(!branch)
+		if (!branch)
 		{
 			return;
 		}
@@ -259,12 +259,12 @@ export class Unit
 	 */
 	_cacheRoot(layout)
 	{
-		if(!layout)
+		if (!layout)
 		{
 			return layout;
 		}
 
-		if(!layout.id)
+		if (!layout.id)
 		{
 			layout.id = this.getId();
 		}
@@ -280,7 +280,7 @@ export class Unit
 	 */
 	_createLayout()
 	{
-		if(this.persist)
+		if (this.persist)
 		{
 			return this._layout || (this._layout = this.render());
 		}
@@ -296,7 +296,7 @@ export class Unit
 	 */
 	prepareLayout()
 	{
-		let layout = this._createLayout();
+		const layout = this._createLayout();
 		return this._cacheRoot(layout);
 	}
 
@@ -306,7 +306,7 @@ export class Unit
 	 */
 	buildLayout()
 	{
-		let layout = this.prepareLayout();
+		const layout = this.prepareLayout();
 		this.build(layout, this.container);
 
 		base.dataTracker.add(this.panel, 'components',
@@ -338,7 +338,7 @@ export class Unit
 	 */
 	prepend(layout, container, optionalNode)
 	{
-		var frag = this.build(layout, null);
+		const frag = this.build(layout, null);
 		builder.prepend(container, frag, optionalNode);
 	}
 
@@ -375,15 +375,15 @@ export class Unit
 	 */
 	map(items, callBack)
 	{
-		let children = [];
-		if(!items || items.length < 1)
+		const children = [];
+		if (!items || items.length < 1)
 		{
 			return children;
 		}
 
-		for(var i = 0, length = items.length; i < length; i++)
+		for (var i = 0, length = items.length; i < length; i++)
 		{
-			var item = callBack(items[i], i);
+			const item = callBack(items[i], i);
 			children.push(item);
 		}
 		return children;
@@ -402,44 +402,6 @@ export class Unit
 	}
 
 	/**
-	 * This will cache an element when its created by
-	 * saving a reference to it as a property on the
-	 * component.
-	 *
-	 * @param {string} propName The name to use as
-	 * the reference.
-	 * @param {object} layout
-	 * @param {function} [callBack]
-	 * @return {object}
-	 */
-	cache(propName, layout, callBack)
-	{
-		if(!layout || typeof layout !== 'object')
-		{
-			return false;
-		}
-
-		if(layout.isUnit === true)
-		{
-			layout =
-			{
-				component: layout
-			};
-		}
-
-		layout.onCreated = (element) =>
-		{
-			this[propName] = element;
-
-			if(typeof callBack === 'function')
-			{
-				callBack(element);
-			}
-		};
-		return layout;
-	}
-
-	/**
 	 * This will get an id of the component or the full
 	 * id that has the component id prepended to the
 	 * requested id.
@@ -450,7 +412,7 @@ export class Unit
 	getId(id)
 	{
 		let mainId = this.id;
-		if(typeof id === 'string')
+		if (typeof id === 'string')
 		{
 			mainId += '-' + id;
 		}
@@ -543,7 +505,7 @@ export class Unit
 	 */
 	bindElement(element, data, prop, filter)
 	{
-		if(element)
+		if (element)
 		{
 			dataBinder.bind(element, data, prop, filter);
 		}

@@ -8,6 +8,8 @@
 
 import { Types } from '../shared/types.js';
 import { DataTracker } from './data-tracker.js';
+import { EventMethods } from './events.js';
+import { equals } from './equals.js';
 
 /**
  * base framework constructor
@@ -15,7 +17,7 @@ import { DataTracker } from './data-tracker.js';
  */
 class Base
 {
-	constructor(dataTracker)
+	constructor()
 	{
 		/**
 		 * @member {string} version
@@ -30,7 +32,7 @@ class Base
 		/**
 		 * @member {object} dataTracker
 		 */
-		this.dataTracker = dataTracker;
+		this.dataTracker = DataTracker;
 	}
 
 	/**
@@ -179,10 +181,13 @@ Base.prototype.extend = (function()
  *
  * @global
  */
-const dataTracker = new DataTracker();
-export const base = new Base(dataTracker);
+export const base = new Base();
 
 /**
- * This will add the Objects method to base.
+ * This will add the augmented methods to base.
  */
-base.augment(Objects);
+base.augment({
+	...Objects,
+	...EventMethods,
+	equals
+});

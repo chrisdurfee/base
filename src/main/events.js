@@ -1,10 +1,7 @@
 
-import { base } from './main.js';
 import { Types } from '../shared/types.js';
 import { Arrays } from '../shared/arrays.js';
-export { base } from './main.js';
-
-const dataTracker = base.dataTracker;
+import { DataTracker } from './data-tracker.js';
 
 /**
  * Events
@@ -27,7 +24,7 @@ export const Events =
             return false;
         }
 
-        return dataTracker.get(obj, 'events');
+        return DataTracker.get(obj, 'events');
     },
 
     /**
@@ -76,7 +73,7 @@ export const Events =
         /* we want to create an event object and add it the
         the active events to track */
         const data = this.create(event, obj, fn, capture, swapped, originalFn);
-        dataTracker.add(obj, 'events', data);
+        DataTracker.add(obj, 'events', data);
 
         obj.addEventListener(event, fn, capture);
 
@@ -194,7 +191,7 @@ export const Events =
             return this;
         }
 
-        dataTracker.remove(obj, 'events');
+        DataTracker.remove(obj, 'events');
 
         return this;
     },
@@ -238,12 +235,16 @@ export const Events =
 /* this will register the event system to the
 data tracker to remove events that have been
 added in layouts. */
-dataTracker.addType('events', (data) =>
+DataTracker.addType('events', (data) =>
 {
     Events.removeEvent(data);
 });
 
-base.augment(
+/**
+ * This will create an object that can be added to base to
+ * add event methods.
+ */
+export const EventMethods =
 {
     /**
      * @param object events
@@ -572,8 +573,6 @@ base.augment(
      */
     preventDefault(e)
     {
-        e = e || window.event;
-
         if (typeof e.preventDefault === 'function')
         {
             e.preventDefault();
@@ -605,4 +604,4 @@ base.augment(
 
         return this;
     }
-});
+};

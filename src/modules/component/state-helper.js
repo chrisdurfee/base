@@ -1,9 +1,11 @@
-import {state} from '../state/state.js';
+import { state } from '../state/state.js';
 
 /**
  * StateHelper
  *
  * This is a helper to manage component states.
+ *
+ * @class
  */
 export class StateHelper
 {
@@ -16,7 +18,7 @@ export class StateHelper
 	{
 		this.remoteStates = [];
 
-		let actions = this.convertStates(states);
+		const actions = this.convertStates(states);
 		this.addStatesToTarget(state, actions);
 	}
 
@@ -28,7 +30,7 @@ export class StateHelper
 	 */
 	addStates(state, states)
 	{
-		let actions = this.convertStates(states);
+		const actions = this.convertStates(states);
 		this.addStatesToTarget(state, actions);
 	}
 
@@ -61,14 +63,15 @@ export class StateHelper
 	 */
 	convertStates(action)
 	{
-		let actions = [];
-		for(var prop in action)
+		const actions = [];
+		for (var prop in action)
 		{
-			if(action.hasOwnProperty(prop) === false)
+			if (action.hasOwnProperty(prop) === false)
 			{
 				continue;
 			}
-			else if(prop === 'remotes')
+
+			if (prop === 'remotes')
 			{
 				this.setupRemoteStates(action[prop], actions);
 				continue;
@@ -77,7 +80,7 @@ export class StateHelper
 			var targetId = null,
 			callBack = null,
 			state = action[prop];
-			if(state && typeof state === 'object')
+			if (state && typeof state === 'object')
 			{
 				callBack = state.callBack;
 				targetId = state.id || state.targetId;
@@ -97,17 +100,17 @@ export class StateHelper
 	setupRemoteStates(remotes, actions)
 	{
 		let remote;
-		for(var i = 0, length = remotes.length; i < length; i++)
+		for (var i = 0, length = remotes.length; i < length; i++)
 		{
 			remote = remotes[i];
-			if(!remote)
+			if (!remote)
 			{
 				continue;
 			}
 
-			for(var prop in remote)
+			for (var prop in remote)
 			{
-				if(remote.hasOwnProperty(prop) === false || prop === 'id')
+				if (remote.hasOwnProperty(prop) === false || prop === 'id')
 				{
 					continue;
 				}
@@ -115,7 +118,7 @@ export class StateHelper
 				var callBack = null,
 				value = remote[prop],
 				state = (value !== null)? value : undefined;
-				if(state && typeof state === 'object')
+				if (state && typeof state === 'object')
 				{
 					callBack = state.callBack;
 					state = state.state;
@@ -136,8 +139,8 @@ export class StateHelper
 	 */
 	removeRemoteStates()
 	{
-		let remoteStates = this.remoteStates;
-		if(remoteStates)
+		const remoteStates = this.remoteStates;
+		if (remoteStates)
 		{
 			this.removeActions(remoteStates);
 		}
@@ -150,12 +153,12 @@ export class StateHelper
 	 */
 	removeActions(actions)
 	{
-		if(actions.length < 1)
+		if (actions.length < 1)
 		{
 			return;
 		}
 
-		for(var i = 0, length = actions.length; i < length; i++)
+		for (var i = 0, length = actions.length; i < length; i++)
 		{
 			var action = actions[i];
 			state.remove(action.targetId, action.action, action.token);
@@ -171,13 +174,13 @@ export class StateHelper
 	{
 		state.restore();
 
-		let remotes = this.remoteStates;
-		if(!remotes)
+		const remotes = this.remoteStates;
+		if (!remotes)
 		{
 			return;
 		}
 
-		for(var i = 0, length = remotes.length; i < length; i++)
+		for (var i = 0, length = remotes.length; i < length; i++)
 		{
 			var action = remotes[i];
 			action.token = this.bindRemoteState(state, action.action, action.targetId);
@@ -208,21 +211,21 @@ export class StateHelper
 	 */
 	addStatesToTarget(state, actions)
 	{
-		let remotes = this.remoteStates;
+		const remotes = this.remoteStates;
 
-		for(var i = 0, length = actions.length; i < length; i++)
+		for (var i = 0, length = actions.length; i < length; i++)
 		{
 			var action = actions[i],
 			token = this.addAction(state, action);
 
-			if(action.targetId)
+			if (action.targetId)
 			{
 				action.token = token;
 				remotes.push(action);
 			}
 		}
 
-		if(remotes.length < 1)
+		if (remotes.length < 1)
 		{
 			this.remoteStates = null;
 		}
@@ -240,19 +243,19 @@ export class StateHelper
 		actionEvent = action.action;
 
 		/* this will check to select the remote target if set */
-		let targetId = action.targetId;
-		if(targetId)
+		const targetId = action.targetId;
+		if (targetId)
 		{
 			token = this.bindRemoteState(target, actionEvent, targetId);
 		}
 
-		if(typeof action.state !== 'undefined')
+		if (typeof action.state !== 'undefined')
 		{
 			target.addAction(actionEvent, action.state);
 		}
 
-		let callBack = action.callBack;
-		if(typeof callBack === 'function')
+		const callBack = action.callBack;
+		if (typeof callBack === 'function')
 		{
 			target.on(actionEvent, callBack);
 		}

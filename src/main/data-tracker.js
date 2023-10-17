@@ -74,7 +74,7 @@ class Tracker
      */
     add(addingType, data)
     {
-        let type = this.types[addingType] || (this.types[addingType] = []);
+        const type = this.types[addingType] || (this.types[addingType] = []);
         type.push(data);
     }
 
@@ -97,7 +97,7 @@ class Tracker
      */
     removeByCallBack(callBack, data)
     {
-        if(typeof callBack === 'function')
+        if (typeof callBack === 'function')
         {
             callBack(data);
         }
@@ -111,28 +111,34 @@ class Tracker
      */
     removeType(removingType)
     {
-        let types = this.types;
-        if(types)
+        const types = this.types;
+        if (!types)
         {
-            let type = types[removingType];
-            if(type.length)
-            {
-                let data,
-                callBack = TrackerTypes.get(removingType);
-                for(var i = 0, length = type.length; i < length; i++)
-                {
-                    data = type[i];
-                    if(data)
-                    {
-                        // this will stop any circular referrences
-                        type[i] = null;
-
-                        this.removeByCallBack(callBack, data);
-                    }
-                }
-                delete types[type];
-            }
+            return;
         }
+
+        const type = types[removingType];
+        if (!type.length)
+        {
+            return;
+        }
+
+        let data,
+        callBack = TrackerTypes.get(removingType);
+        for (var i = 0, length = type.length; i < length; i++)
+        {
+            data = type[i];
+            if (!data)
+            {
+                continue;
+            }
+
+            // this will stop any circular referrences
+            type[i] = null;
+
+            this.removeByCallBack(callBack, data);
+        }
+        delete types[type];
     }
 
     /**
@@ -144,19 +150,19 @@ class Tracker
      */
     remove(type)
     {
-        if(type)
+        if (type)
         {
             this.removeType(type);
         }
         else
         {
-            let types = this.types;
-            for(var prop in types)
+            const types = this.types;
+            for (var prop in types)
             {
-                if(types.hasOwnProperty(prop))
+                if (types.hasOwnProperty(prop))
                 {
                     type = types[prop];
-                    if(!type)
+                    if (!type)
                     {
                         continue;
                     }
@@ -184,23 +190,17 @@ class Tracker
 export class DataTracker
 {
     /**
-     * @constructor
+     * @private
+     * @member trackers This is an object that stores all tracker
+     * objects by tracking id.
      */
-    constructor()
-    {
-        /**
-         * @private
-         * @member trackers This is an object that stores all tracker
-         * objects by tracking id.
-         */
-        this.trackers = {};
+    static trackers = {};
 
-        /**
-         * @private
-         * @member {int} trackingCount
-         */
-        this.trackingCount = 0;
-    }
+    /**
+     * @private
+     * @member {int} trackingCount
+     */
+    static trackingCount = 0;
 
     /**
      * This will add a new type to the data tracker.
@@ -210,7 +210,7 @@ export class DataTracker
      * @param {function} callBack The callBack to help clean
      * up data when removed.
      */
-    addType(type, callBack)
+    static addType(type, callBack)
     {
         TrackerTypes.add(type, callBack);
     }
@@ -219,7 +219,7 @@ export class DataTracker
      * This will remove a type from the data tracker.
      * @param {string} type
      */
-    removeType(type)
+    static removeType(type)
     {
         TrackerTypes.remove(type);
     }
@@ -231,7 +231,7 @@ export class DataTracker
      * @param {object} obj
      * @return {string}
      */
-    getTrackingId(obj)
+    static getTrackingId(obj)
     {
         return obj.trackingId || (obj.trackingId = 'dt' + this.trackingCount++);
     }
@@ -243,7 +243,7 @@ export class DataTracker
      * @param {string} type The type name.
      * @param {*} data The data to track.
      */
-    add(obj, type, data)
+    static add(obj, type, data)
     {
         const id = this.getTrackingId(obj),
         tracker = this.find(id);
@@ -259,11 +259,11 @@ export class DataTracker
      * @param {string} [type]
      * @return {*}
      */
-    get(obj, type)
+    static get(obj, type)
     {
         const id = obj.trackingId;
-        let tracker = this.trackers[id];
-        if(!tracker)
+        const tracker = this.trackers[id];
+        if (!tracker)
         {
             return false;
         }
@@ -278,9 +278,9 @@ export class DataTracker
      * @param {string} id
      * @return {object} The tracker.
      */
-    find(id)
+    static find(id)
     {
-        let trackers = this.trackers;
+        const trackers = this.trackers;
         return (trackers[id] || (trackers[id] = new Tracker()));
     }
 
@@ -290,18 +290,18 @@ export class DataTracker
 	 * @param {object} obj
 	 * @return {boolean}
 	 */
-	isEmpty(obj)
+	static isEmpty(obj)
 	{
-		if(!obj || typeof obj !== 'object')
+		if (!obj || typeof obj !== 'object')
 		{
 			return true;
 		}
 
 		/* we want to loop through each property and
 		check if it belongs to the object directly */
-		for(var key in obj)
+		for (var key in obj)
 		{
-			if(obj.hasOwnProperty(key))
+			if (obj.hasOwnProperty(key))
 			{
 				return false;
 			}
@@ -316,27 +316,27 @@ export class DataTracker
      * @param {object} obj
      * @param {stirng} [type]
      */
-    remove(obj, type)
+    static remove(obj, type)
     {
         const id = obj.trackingId;
-        if(!id)
+        if (!id)
         {
             return true;
         }
 
-        let tracker = this.trackers[id];
-        if(!tracker)
+        const tracker = this.trackers[id];
+        if (!tracker)
         {
             return false;
         }
 
-        if(type)
+        if (type)
         {
             tracker.remove(type);
 
             /* this will remove the msg from the elements
             if no elements are listed under the msg */
-            if(this.isEmpty(tracker.types))
+            if (this.isEmpty(tracker.types))
             {
                 delete this.trackers[id];
             }

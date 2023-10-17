@@ -1,4 +1,4 @@
-import {base} from '../../main/core.js';
+import { base } from '../../main/base.js';
 
 /**
  * EventHelper
@@ -24,14 +24,14 @@ export class EventHelper
 	 */
 	addEvents(events)
 	{
-		let length = events.length;
-		if(length < 1)
+		const length = events.length;
+		if (length < 1)
 		{
 			return false;
 		}
 
 		let event;
-		for(var i = 0; i < length; i++)
+		for (var i = 0; i < length; i++)
 		{
 			event = events[i];
 			this.on(...event);
@@ -72,10 +72,10 @@ export class EventHelper
 
 		let option,
 		events = this.events;
-		for(var i = 0, length = events.length; i < length; i++)
+		for (var i = 0, length = events.length; i < length; i++)
 		{
 			option = events[i];
-			if(option.event === event && option.obj === obj)
+			if (option.event === event && option.obj === obj)
 			{
 				events.splice(i, 1);
 				break;
@@ -90,7 +90,7 @@ export class EventHelper
 	{
 		let event,
 		events = this.events;
-		for(var i = 0, length = events.length; i < length; i++)
+		for (var i = 0, length = events.length; i < length; i++)
 		{
 			event = events[i];
 			base.on(event.event, event.obj, event.callBack, event.capture);
@@ -101,7 +101,7 @@ export class EventHelper
 	{
 		let event,
 		events = this.events;
-		for(var i = 0, length = events.length; i < length; i++)
+		for (var i = 0, length = events.length; i < length; i++)
 		{
 			event = events[i];
 			base.off(event.event, event.obj, event.callBack, event.capture);

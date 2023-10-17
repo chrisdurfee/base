@@ -1,4 +1,4 @@
-import { base } from './main/core.js';
+import { base } from './main/base.js';
 import { ajax } from './modules/ajax/ajax.js';
 import { dataBinder } from './modules/data-binder/data-binder.js';
 import { Data, SimpleData, Model } from './modules/data/data.js';

@@ -1,5 +1,5 @@
-import {Unit} from './unit.js';
-import {Component} from './component.js';
+import { Unit } from './unit.js';
+import { Component } from './component.js';
 
 /**
  * This will store the jot shorthand method alaises.
@@ -41,21 +41,21 @@ const getJotShorthandMethod = (value) =>
 const JotComponent = (settings) =>
 {
     const component = {};
-    if(!settings)
+    if (!settings)
     {
         return component;
     }
 
-    for(var prop in settings)
+    for (var prop in settings)
     {
-        if(settings.hasOwnProperty(prop) === false)
+        if (settings.hasOwnProperty(prop) === false)
         {
             continue;
         }
 
-        let value = settings[prop];
-        let alias = JOT_SHORTHAND_METHODS[prop];
-        if(alias)
+        const value = settings[prop];
+        const alias = JOT_SHORTHAND_METHODS[prop];
+        if (alias)
         {
             component[alias] = getJotShorthandMethod(value);
             continue;
@@ -109,23 +109,23 @@ const createComponentClass = (settings) =>
  */
 export const Jot = function(layout)
 {
-    if(!layout)
+    if (!layout)
     {
         return null;
     }
 
     let settings;
-    switch(typeof layout)
+    switch (typeof layout)
     {
         case 'object':
-            if(layout.render)
+            if (layout.render)
             {
                 settings = JotComponent(layout);
                 return createComponentClass(settings);
             }
 
             settings = {
-                render: function()
+                render()
                 {
                     return layout;
                 }

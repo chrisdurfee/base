@@ -1,12 +1,13 @@
-import {base} from '../../main/core.js';
-import {Unit} from './unit.js';
-import {state} from '../state/state.js';
-import {EventHelper} from './event-helper.js';
-import {StateHelper} from './state-helper.js';
+import { base } from '../../main/core.js';
+import { Unit } from './unit.js';
+import { state } from '../state/state.js';
+import { EventHelper } from './event-helper.js';
+import { StateHelper } from './state-helper.js';
+import { Objects } from '../../shared/objects.js';
 
-export {Unit} from './unit.js';
-export {Jot} from './jot.js';
-export {Watch} from '../layout/layout-builder.js';
+export { Unit } from './unit.js';
+export { Jot } from './jot.js';
+export { Watch } from '../layout/layout-builder.js';
 
 /**
  * Component
@@ -79,7 +80,7 @@ export class Component extends Unit
 	 */
 	setupStateTarget(id)
 	{
-		let targetId = id || this.stateTargetId || this.id;
+		const targetId = id || this.stateTargetId || this.id;
 		this.state = state.getTarget(targetId);
 	}
 
@@ -120,8 +121,8 @@ export class Component extends Unit
 	{
 		/* this will check to restore previous a previous state if the
 		component has been preserved. */
-		let state = this.state;
-		if(state)
+		const state = this.state;
+		if (state)
 		{
 			this.stateHelper.restore(state);
 			return;
@@ -129,8 +130,8 @@ export class Component extends Unit
 
 		/* this will only setupa state manager if
 		we have states */
-		let states = this.setupStates();
-		if(base.isEmpty(states))
+		const states = this.setupStates();
+		if (Objects.isEmpty(states))
 		{
 			return;
 		}
@@ -145,8 +146,8 @@ export class Component extends Unit
 	 */
 	removeStates()
 	{
-		let state = this.state;
-		if(!state)
+		const state = this.state;
+		if (!state)
 		{
 			return false;
 		}
@@ -162,7 +163,7 @@ export class Component extends Unit
 	 */
 	setupEventHelper()
 	{
-		if(!this.events)
+		if (!this.events)
 		{
 			this.events = new EventHelper();
 		}
@@ -188,8 +189,8 @@ export class Component extends Unit
 	 */
 	addEvents()
 	{
-		let events = this.setupEvents();
-		if(events.length < 1)
+		const events = this.setupEvents();
+		if (events.length < 1)
 		{
 			return false;
 		}
@@ -204,8 +205,8 @@ export class Component extends Unit
 	 */
 	removeEvents()
 	{
-		let events = this.events;
-		if(events)
+		const events = this.events;
+		if (events)
 		{
 			events.reset();
 		}
@@ -222,7 +223,7 @@ export class Component extends Unit
 		this.removeStates();
 		this.removeContext();
 
-		if(this.data && this.persist === false)
+		if (this.data && this.persist === false)
 		{
 			this.data.unlink();
 		}

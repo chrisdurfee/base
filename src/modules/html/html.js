@@ -1,8 +1,7 @@
-import { base } from '../../main/core.js';
+import { DataTracker } from '../../main/data-tracker.js';
+import { Events } from '../../main/events.js';
 import { Dom } from '../../shared/dom.js';
 import { dataBinder } from '../data-binder/data-binder.js';
-
-const dataTracker = base.dataTracker;
 
 /**
  * This is a look up object to normalize the attribute names.
@@ -53,13 +52,12 @@ export const removeEventPrefix = (prop) =>
 };
 
 /**
- * htmlBuilder
+ * Html
  *
- * This will create an html builder object that can create
- * and remove dom elements.
+ * This will create html elements.
  * @class
  */
-export class htmlBuilder
+export class Html
 {
 	/**
 	 * This will create a new element.
@@ -190,10 +188,10 @@ export class htmlBuilder
 		const type = typeof value;
 		if (type === 'function')
 		{
-			/* this will add the event using the base events
+			/* this will add the event using the events
 			so the event is tracked */
 			attr = removeEventPrefix(attr);
-			base.addListener(attr, obj, value);
+			Events.add(attr, obj, value);
 		}
 		else
 		{
@@ -309,7 +307,7 @@ export class htmlBuilder
 			}
 		}
 
-		dataTracker.remove(ele);
+		DataTracker.remove(ele);
 
 		const bound = ele.bindId;
 		if (bound)
@@ -402,15 +400,6 @@ export class htmlBuilder
 	 */
 	static append(parent, child)
 	{
-		switch (typeof parent)
-		{
-			case "object":
-				break;
-			case "undefined":
-				parent = document.body;
-				break;
-		}
-
 		parent.appendChild(child);
 		return this;
 	}
@@ -425,15 +414,6 @@ export class htmlBuilder
 	 */
 	static prepend(parent, child, optionalNode)
 	{
-		switch (typeof parent)
-		{
-			case "object":
-				break;
-			case "undefined":
-				parent = document.body;
-				break;
-		}
-
 		const node = optionalNode || parent.firstChild;
 		parent.insertBefore(child, node);
 		return this;

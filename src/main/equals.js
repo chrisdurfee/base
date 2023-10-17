@@ -1,4 +1,4 @@
-import { base } from "./main.js";
+import { base } from "./base.js";
 
 /**
  * This will count the properties of an object.
@@ -54,7 +54,7 @@ const matchProperties = (obj1, obj2) =>
 			break;
 		}
 
-		let value1 = obj1[property],
+		const value1 = obj1[property],
 		value2 = obj2[property];
 
 		if (typeof value1 !== typeof value2)
@@ -112,33 +112,30 @@ const compareObjects = (obj1, obj2) =>
 	return matchProperties(obj1, obj2);
 };
 
-base.augment(
+/**
+ * This will compare if two values match.
+ *
+ * @param {*} option1
+ * @param {*} option2
+ * @return {boolean}
+ */
+export const equals = (option1, option2) =>
 {
-	/**
-	 * This will compare if two values match.
-	 *
-	 * @param {*} option1
-	 * @param {*} option2
-	 * @return {boolean}
-	 */
-	equals(option1, option2)
+	/* we want to check if there types match */
+	const option1Type = typeof option1,
+	option2Type = typeof option2;
+	if (option1Type !== option2Type)
 	{
-		/* we want to check if there types match */
-		const option1Type = typeof option1,
-		option2Type = typeof option2;
-		if (option1Type !== option2Type)
-		{
-			return false;
-		}
-
-		/* we need to check if the options are objects
-		because we will want to match all the
-		properties */
-		if (option1Type === 'object')
-		{
-			return compareObjects(option1, option2);
-		}
-
-		return (option1 === option2);
+		return false;
 	}
-});
+
+	/* we need to check if the options are objects
+	because we will want to match all the
+	properties */
+	if (option1Type === 'object')
+	{
+		return compareObjects(option1, option2);
+	}
+
+	return (option1 === option2);
+};
