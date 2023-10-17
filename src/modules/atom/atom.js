@@ -22,7 +22,7 @@ const parseArgs = (args) =>
 
     return {
     	props: first,
-        children: args[1] || []
+        children: args[1] || null
     };
 };
 
