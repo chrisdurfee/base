@@ -81,8 +81,8 @@ export class DataPubSub
 	 */
 	off(msg, token)
 	{
-		const list = this.callBacks[msg] || false;
-		if (list === false)
+		const list = this.callBacks[msg];
+		if (!list)
 		{
 			return;
 		}
@@ -124,17 +124,15 @@ export class DataPubSub
 	 */
 	publish(msg)
 	{
-		let i, length,
-		list = this.callBacks[msg] || false;
+		const list = this.callBacks[msg] || false;
 		if (list === false)
 		{
 			return;
 		}
 
 		const args = Array.prototype.slice.call(arguments, 1);
-
-		length = list.length;
-		for (i = 0; i < length; i++)
+		const length = list.length;
+		for (var i = 0; i < length; i++)
 		{
 			var item = list[i];
 			if (!item)
