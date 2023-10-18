@@ -5,11 +5,14 @@ import { base } from '../../main/base.js';
  * ModelService
  *
  * This will create a new model service.
+ *
  * @class
  */
 export class ModelService
 {
 	/**
+	 * This will create a model service.
+	 *
 	 * @constructor
 	 * @param {object} model
 	 */
@@ -25,11 +28,24 @@ export class ModelService
 		 */
 		this.objectType = this.objectType || 'item';
 
+		/**
+		 * @member {string} url
+		 */
 		this.url = '';
+
+		/**
+		 * @member {function} validateCallBack
+		 */
 		this.validateCallBack = null;
 		this.init();
 	}
 
+	/**
+	 * This will initialize the model service.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
 	init()
 	{
 		const model = this.model;
@@ -316,6 +332,13 @@ export class ModelService
 		return this._get('', params, instanceParams, callBack);
 	}
 
+	/**
+	 * This will get the url.
+	 *
+	 * @protected
+	 * @param {string} url
+	 * @return {string}
+	 */
 	getUrl(url)
 	{
 		let baseUrl = this.url;
@@ -335,12 +358,14 @@ export class ModelService
 	/**
 	 * This will make an ajax request.
 	 *
+	 * @protected
 	 * @param {string} url
 	 * @param {string} method
 	 * @param {(string|object)} params
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	setupRequest(url, method, params, callBack, requestCallBack)
 	{
@@ -368,6 +393,13 @@ export class ModelService
 		return ajax(settings);
 	}
 
+	/**
+	 * This will check if the data is a form data object.
+	 *
+	 * @protected
+	 * @param {*} data
+	 * @return {boolean}
+	 */
 	_isFormData(data)
 	{
 		return data instanceof FormData;
@@ -376,11 +408,13 @@ export class ModelService
 	/**
 	 * This will make an ajax request.
 	 *
+	 * @protected
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	request(params, instanceParams, callBack, requestCallBack)
 	{
@@ -390,12 +424,14 @@ export class ModelService
 	/**
 	 * This will make a GET request.
 	 *
+	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	_get(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -415,12 +451,14 @@ export class ModelService
 	/**
 	 * This will make a POST request.
 	 *
+	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	_post(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -430,12 +468,14 @@ export class ModelService
 	/**
 	 * This will make a PUT request.
 	 *
+	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	_put(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -445,12 +485,14 @@ export class ModelService
 	/**
 	 * This will make a PATCH request.
 	 *
+	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	_patch(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -460,12 +502,14 @@ export class ModelService
 	/**
 	 * This will make a DELETE request.
 	 *
+	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	_delete(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -475,6 +519,7 @@ export class ModelService
 	/**
 	 * This will make an ajax request.
 	 *
+	 * @protected
 	 * @param {string} url
 	 * @param {string} method
 	 * @param {(string|object)} params
@@ -482,6 +527,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	_request(url, method, params, instanceParams, callBack, requestCallBack)
 	{
@@ -491,6 +537,15 @@ export class ModelService
 		return this.setupRequest(url, method, params, callBack, requestCallBack);
 	}
 
+	/**
+	 * This will get the response.
+	 *
+	 * @protected
+	 * @param {object} response
+	 * @param {function} callBack
+	 * @param {object} xhr
+	 * @return {void}
+	 */
 	getResponse(response, callBack, xhr)
 	{
 		/* this will check to return the response
@@ -501,6 +556,12 @@ export class ModelService
 		}
 	}
 
+	/**
+	 * This will extend the model service.
+	 *
+	 * @param {object} child
+	 * @return {object}
+	 */
 	static extend(child)
 	{
 		if (!child)
@@ -518,7 +579,6 @@ export class ModelService
 		}
 
 		Object.assign(service.prototype, child);
-
 		return service;
 	}
 }

@@ -6,6 +6,7 @@ import { dataBinder } from '../data-binder/data-binder.js';
  *
  * This will extend Data to add a simple data object
  * that doesn't allow deep nested data.
+ *
  * @class
  * @augments BasicData
  */
@@ -20,6 +21,7 @@ export class SimpleData extends BasicData
 	 * @param {*} val
 	 * @param {*} committer
 	 * @param {*} prevValue
+	 * @return {void}
 	 */
 	_publish(attr, val, committer, prevValue)
 	{

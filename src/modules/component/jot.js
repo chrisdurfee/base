@@ -3,6 +3,9 @@ import { Component } from './component.js';
 
 /**
  * This will store the jot shorthand method alaises.
+ *
+ * @constant
+ * @type {object}
  */
 const JOT_SHORTHAND_METHODS =
 {

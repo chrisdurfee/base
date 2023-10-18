@@ -15,6 +15,8 @@ let dataNumber = 0;
 export class BasicData
 {
 	/**
+	 * This will create a basic data object.
+	 *
 	 * @constructor
 	 * @param {object} [settings]
 	 */
@@ -40,6 +42,12 @@ export class BasicData
 		this.set(attributes);
 	}
 
+	/**
+	 * This will setup the data object.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
 	setup()
 	{
 		this.stage = {};
@@ -47,7 +55,9 @@ export class BasicData
 
 	/**
 	 * This will setup the number and unique id of the data object.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	_init()
 	{
@@ -60,6 +70,7 @@ export class BasicData
 
 	/**
 	 * This will get the data id.
+	 *
 	 * @return {string}
 	 */
 	getDataId()
@@ -69,6 +80,8 @@ export class BasicData
 
 	/**
 	 * This is a placeholder.
+	 *
+	 * @return {void}
 	 */
 	remove()
 	{
@@ -94,6 +107,7 @@ export class BasicData
 	 *
 	 * @param {string} attrName
 	 * @param {string} token
+	 * @return {void}
 	 */
 	off(attrName, token)
 	{
@@ -108,6 +122,7 @@ export class BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {object} committer
+	 * @return {void}
 	 */
 	_setAttr(attr, val, committer = this)
 	{
@@ -164,6 +179,9 @@ export class BasicData
 
 	/**
 	 * This will get the model data.
+	 *
+	 * @protected
+	 * @return {object}
 	 */
 	getModelData()
 	{
@@ -173,8 +191,10 @@ export class BasicData
 	/**
 	 * This will delete an attribute.
 	 *
+	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
+	 * @return {void}
 	 */
 	_deleteAttr(obj, attr)
 	{
@@ -471,6 +491,7 @@ export class BasicData
 	 *
 	 * @param {string} token
 	 * @param {object} data
+	 * @return {void}
 	 */
 	addLink(token, data)
 	{
@@ -481,6 +502,7 @@ export class BasicData
 	 * This will remove a link or all links.
 	 *
 	 * @param {string} [token]
+	 * @return {void}
 	 */
 	unlink(token)
 	{
@@ -506,6 +528,7 @@ export class BasicData
 	 *
 	 * @param {string} token
 	 * @param {bool} removeFromLinks
+	 * @return {void}
 	 */
 	removeLink(token, removeFromLinks)
 	{

@@ -10,12 +10,17 @@ import { state } from '../state/state.js';
 export class StateHelper
 {
 	/**
+	 * This will create a state helper.
+	 *
 	 * @constructor
 	 * @param {object} state
 	 * @param {object} states
 	 */
 	constructor(state, states)
 	{
+		/**
+		 * @member {array} remoteStates
+		 */
 		this.remoteStates = [];
 
 		const actions = this.convertStates(states);
@@ -27,6 +32,7 @@ export class StateHelper
 	 *
 	 * @param {object} state
 	 * @param {object} states
+	 * @return {void}
 	 */
 	addStates(state, states)
 	{
@@ -97,6 +103,14 @@ export class StateHelper
 		return actions;
 	}
 
+	/**
+	 * This will setup remote states.
+	 *
+	 * @protected
+	 * @param {array} remotes
+	 * @param {array} actions
+	 * @return {void}
+	 */
 	setupRemoteStates(remotes, actions)
 	{
 		let remote;
@@ -136,6 +150,8 @@ export class StateHelper
 
 	/**
 	 * This will remove remote states.
+	 *
+	 * @return {void}
 	 */
 	removeRemoteStates()
 	{
@@ -150,6 +166,7 @@ export class StateHelper
 	 * This will remove the actions.
 	 *
 	 * @param {array} actions
+	 * @return {void}
 	 */
 	removeActions(actions)
 	{
@@ -169,6 +186,7 @@ export class StateHelper
 	 * This will restore a state.
 	 *
 	 * @param {object} state
+	 * @return {void}
 	 */
 	restore(state)
 	{
@@ -208,6 +226,7 @@ export class StateHelper
 	 * @protected
 	 * @param {object} state
 	 * @param {array} actions
+	 * @return {void}
 	 */
 	addStatesToTarget(state, actions)
 	{
@@ -236,6 +255,7 @@ export class StateHelper
 	 *
 	 * @param {object} target
 	 * @param {object} action
+	 * @return {string}
 	 */
 	addAction(target, action)
 	{

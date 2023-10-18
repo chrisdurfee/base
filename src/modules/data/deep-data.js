@@ -8,6 +8,7 @@ import { dataBinder } from '../data-binder/data-binder.js';
  *
  * This will create a new data object that can be used to
  * bind elements to values.
+ *
  * @class
  * @augments BasicData
  */
@@ -15,6 +16,9 @@ export class Data extends BasicData
 {
 	/**
 	 * This will setup the stage and attributes object.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	setup()
 	{
@@ -29,6 +33,7 @@ export class Data extends BasicData
 	 * @param {object} obj
 	 * @param {string} attr
 	 * @param {*} val
+	 * @return {void}
 	 */
 	_updateAttr(obj, attr, val)
 	{
@@ -74,6 +79,7 @@ export class Data extends BasicData
 	 * @param {*} val
 	 * @param {object} committer
 	 * @param {boolean} stopMerge
+	 * @return {void}
 	 */
 	_setAttr(attr, val, committer, stopMerge)
 	{
@@ -112,6 +118,7 @@ export class Data extends BasicData
 	 *
 	 * @param {object} data
 	 * @param {string} attr
+	 * @return {void}
 	 */
 	linkAttr(data, attr)
 	{
@@ -268,6 +275,7 @@ export class Data extends BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {*} committer
+	 * @return {void}
 	 */
 	_publish(attr, val, committer)
 	{
@@ -281,6 +289,7 @@ export class Data extends BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {object} committer
+	 * @return {void}
 	 */
 	publishDeep(attr, val, committer)
 	{
@@ -356,6 +365,7 @@ export class Data extends BasicData
 	 * @param {string} pathString
 	 * @param {*} obj
 	 * @param {*} committer
+	 * @return {void}
 	 */
 	publish(pathString, obj, committer)
 	{
@@ -394,6 +404,16 @@ export class Data extends BasicData
 		}
 	}
 
+	/**
+	 * This will check if the value is an object and publish
+	 * the value or the object.
+	 *
+	 * @protected
+	 * @param {string} subPath
+	 * @param {*} val
+	 * @param {object} committer
+	 * @return {void}
+	 */
 	_checkPublish(subPath, val, committer)
 	{
 		if (!val || typeof val !== 'object')
@@ -413,19 +433,22 @@ export class Data extends BasicData
 	 * @param {string} subPath
 	 * @param {*} val
 	 * @param {object} committer
+	 * @return {void}
 	 */
 	_publishAttr(subPath, val, committer)
 	{
 		/* save path and value */
 		dataBinder.publish(this._dataId + subPath, val, committer);
 
-		let message = subPath + ':change';
+		const message = subPath + ':change';
 		this.eventSub.publish(message, val, committer);
 	}
 
 	/**
 	 * This will merge the attribute with the stage.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	mergeStage()
 	{
@@ -437,6 +460,8 @@ export class Data extends BasicData
 
 	/**
 	 * This will get the model data.
+	 *
+	 * @return {object}
 	 */
 	getModelData()
 	{
@@ -446,6 +471,8 @@ export class Data extends BasicData
 
 	/**
 	 * This will revert the stage back to the previous attributes.
+	 *
+	 * @return {void}
 	 */
 	revert()
 	{
@@ -458,6 +485,7 @@ export class Data extends BasicData
 	/**
 	 * This will delete an attribute.
 	 *
+	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
 	 * @return {*}
@@ -500,6 +528,7 @@ export class Data extends BasicData
 	/**
 	 * This will get the value of an attribute.
 	 *
+	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
 	 * @return {*}

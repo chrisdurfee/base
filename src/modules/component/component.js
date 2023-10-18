@@ -1,4 +1,3 @@
-import { base } from '../../main/core.js';
 import { Unit } from './unit.js';
 import { state } from '../state/state.js';
 import { EventHelper } from './event-helper.js';
@@ -19,14 +18,8 @@ export { Watch } from '../layout/layout-builder.js';
  * from a single factory.
  *
  * @example
- * class QuickFlashPanel extends base.Component
+ * class QuickFlashPanel extends Component
  *	{
- *		constructor(props)
- *		{
- *			// this will setup the component id
- *			super(props);
- *		},
- *
  *		render()
  *		{
  *			return {
@@ -38,6 +31,8 @@ export { Watch } from '../layout/layout-builder.js';
 export class Component extends Unit
 {
 	/**
+	 * This will create a component.
+	 *
 	 * @constructor
 	 * @param {object} [props]
 	 */
@@ -60,7 +55,9 @@ export class Component extends Unit
 
 	/**
 	 * This will initialize the component.
+	 *
 	 * @protected
+	 * @return {object}
 	 */
 	initialize()
 	{
@@ -86,6 +83,8 @@ export class Component extends Unit
 
 	/**
 	 * Override this to setup the component states.
+	 *
+	 * @protected
 	 * @return {object}
 	 */
 	setupStates()
@@ -115,7 +114,9 @@ export class Component extends Unit
 
 	/**
 	 * This will add the states.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	addStates()
 	{
@@ -142,7 +143,9 @@ export class Component extends Unit
 
 	/**
 	 * This will remove the states.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	removeStates()
 	{
@@ -160,6 +163,7 @@ export class Component extends Unit
 	 * This will setup the event helper.
 	 *
 	 * @protected
+	 * @return {void}
 	 */
 	setupEventHelper()
 	{
@@ -186,6 +190,7 @@ export class Component extends Unit
 	 * This will add the events.
 	 *
 	 * @protected
+	 * @return {void}
 	 */
 	addEvents()
 	{
@@ -201,7 +206,9 @@ export class Component extends Unit
 
 	/**
 	 * This will remove the events.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	removeEvents()
 	{
@@ -214,6 +221,9 @@ export class Component extends Unit
 
 	/**
 	 * This will prepare the component to be destroyed.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	prepareDestroy()
 	{

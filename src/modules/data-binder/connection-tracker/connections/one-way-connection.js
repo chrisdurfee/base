@@ -1,16 +1,19 @@
-import {OneWaySource} from './one-way-source.js';
-import {Connection} from './connection.js';
+import { OneWaySource } from '../../sources/one-way-source.js';
+import { Connection } from './connection.js';
 
 /**
  * OneWayConnection
  *
  * This will create a one way connection.
+ *
  * @class
  * @augments Connection
  */
 export class OneWayConnection extends Connection
 {
 	/**
+	 * This will create a one way connection.
+	 *
 	 * @constructor
 	 */
 	constructor()
@@ -36,7 +39,9 @@ export class OneWayConnection extends Connection
 
 	/**
 	 * This will be used to unsubscribe.
+	 *
 	 * @override
+	 * @return {void}
 	 */
 	unsubscribe()
 	{

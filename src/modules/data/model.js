@@ -66,10 +66,14 @@ let modelTypeNumber = 0;
  *
  * This will extend Data to add a model that can specify
  * a service that connects to a remote source.
+ *
+ * @class
  */
 export class Model extends Data
 {
 	/**
+	 * This will create a new model.
+	 *
 	 * @constructor
 	 * @param {object} [settings]
 	 */
@@ -82,6 +86,9 @@ export class Model extends Data
 	/**
 	 * This adds a method to call if you want the model
 	 * to do something when its initialized.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	initialize()
 	{
@@ -102,7 +109,7 @@ export class Model extends Data
 
 		/* this will setup the default attribute settings for
 		the model */
-		let defaultAttributes = setupDefaultAttr(settings);
+		const defaultAttributes = setupDefaultAttr(settings);
 		class model extends parent
 		{
 			constructor(instanceSettings)

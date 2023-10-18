@@ -7,19 +7,22 @@
 const countProperty = (obj) =>
 {
 	let count = 0;
-	/* we want to count each property of the object */
 	for (var property in obj)
 	{
-		if (obj.hasOwnProperty(property))
+		if (!obj.hasOwnProperty(property))
 		{
-			count++;
+			continue;
+		}
 
-			/* we want to do a recursive count to get
-			any child properties */
-			if (typeof obj[property] === 'object')
-			{
-				count += countProperty(obj[property]);
-			}
+		count++;
+
+		/**
+		 * We want to do a recursive count to get
+		 * any child properties.
+		 */
+		if (typeof obj[property] === 'object')
+		{
+			count += countProperty(obj[property]);
 		}
 	}
 	return count;
@@ -41,12 +44,16 @@ const matchProperties = (obj1, obj2) =>
 		return matched;
 	}
 
-	/* we want to check each object1 property to the
-	object 2 property */
+	/**
+	 * We want to check each object1 property to the
+	 * object 2 property.
+	 */
 	for (var property in obj1)
 	{
-		/* we want to check if the property is owned by the
-		object and that they have matching types */
+		/**
+		 * We want to check if the property is owned by the
+		 * object and that they have matching types.
+		 */
 		if (!obj1.hasOwnProperty(property) || !obj2.hasOwnProperty(property))
 		{
 			break;
@@ -63,8 +70,10 @@ const matchProperties = (obj1, obj2) =>
 		/* we want to check if the type is an object */
 		if (typeof value1 === 'object')
 		{
-			/* this will do a recursive check to the
-			child properties */
+			/**
+			 * This will do a recursive check to the
+			 * child properties.
+			 */
 			matched = matchProperties(value1, value2);
 			if (matched !== true)
 			{

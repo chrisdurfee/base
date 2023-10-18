@@ -1,15 +1,20 @@
-import {base} from '../../main/core.js';
+import { base } from '../../../main/base.js';
+import { Types } from '../../../shared/types.js';
+import { Objects } from '../../../shared/objects.js';
 
 /**
  * ConnectionTracker
  *
  * This will create a new connection tracker to track active
  * connections in the data binder.
+ *
  * @class
  */
 export class ConnectionTracker
 {
 	/**
+	 * This will create a connection tracker.
+	 *
 	 * @constructor
 	 */
 	constructor()
@@ -30,7 +35,7 @@ export class ConnectionTracker
 	 */
 	add(id, attr, connection)
 	{
-		let connections = this.find(id);
+		const connections = this.find(id);
 		return (connections[attr] = connection);
 	}
 
@@ -43,8 +48,8 @@ export class ConnectionTracker
 	 */
 	get(id, attr)
 	{
-		let connections = this.connections[id];
-		if(connections)
+		const connections = this.connections[id];
+		if (connections)
 		{
 			return (connections[attr] || false);
 		}
@@ -59,7 +64,7 @@ export class ConnectionTracker
 	 */
 	find(id)
 	{
-		let connections = this.connections;
+		const connections = this.connections;
 		return (connections[id] || (connections[id] = {}));
 	}
 
@@ -70,17 +75,17 @@ export class ConnectionTracker
 	 */
 	remove(id, attr)
 	{
-		let connections = this.connections[id];
-		if(!connections)
+		const connections = this.connections[id];
+		if (!connections)
 		{
 			return false;
 		}
 
 		let connection;
-		if(attr)
+		if (attr)
 		{
 			connection = connections[attr];
-			if(connection)
+			if (connection)
 			{
 				connection.unsubscribe();
 				delete connections[attr];
@@ -88,22 +93,24 @@ export class ConnectionTracker
 
 			/* this will remove the msg from the elements
 			if no elements are listed under the msg */
-			if(base.isEmpty(connections))
+			if (Objects.isEmpty(connections))
 			{
 				delete this.connections[id];
 			}
 		}
 		else
 		{
-			for(var prop in connections)
+			for (var prop in connections)
 			{
-				if(connections.hasOwnProperty(prop))
+				if (!connections.hasOwnProperty(prop))
 				{
-					connection = connections[prop];
-					if(connection)
-					{
-						connection.unsubscribe();
-					}
+					continue;
+				}
+
+				connection = connections[prop];
+				if (connection)
+				{
+					connection.unsubscribe();
 				}
 			}
 

@@ -1,25 +1,40 @@
-import {DataSource} from './data-source.js';
-import {ElementSource} from './element-source.js';
-import {Connection} from './connection.js';
+import { DataSource } from '../../sources/data-source.js';
+import { ElementSource } from '../../sources/element-source.js';
+import { Connection } from './connection.js';
 
 /**
  * TwoWayConnection
  *
  * This will setup a two way connection.
+ *
  * @class
  * @augments Connection
  */
 export class TwoWayConnection extends Connection
 {
 	/**
+	 * This will create a two way connection.
+	 *
 	 * @constructor
 	 */
-	constructor()
+	constructor(pubSub)
 	{
 		super();
 
+		/**
+		 * @member {object} element
+		 */
 		this.element = null;
+
+		/**
+		 * @member {object} data
+		 */
 		this.data = null;
+
+		/**
+		 * @member {object} pubSub
+		 */
+		this.pubSub = pubSub;
 	}
 
 	/**
@@ -32,7 +47,7 @@ export class TwoWayConnection extends Connection
 	 */
 	addElement(element, attr, filter)
 	{
-		return (this.element = new ElementSource(element, attr, filter));
+		return (this.element = new ElementSource(element, attr, filter, this.pubSub));
 	}
 
 	/**
@@ -44,17 +59,18 @@ export class TwoWayConnection extends Connection
 	 */
 	addData(data, prop)
 	{
-		return (this.data = new DataSource(data, prop));
+		return (this.data = new DataSource(data, prop, this.pubSub));
 	}
 
 	/**
 	 * This will unsubscribe from a source.
 	 *
 	 * @param {object} source
+	 * @return {void}
 	 */
 	unsubscribeSource(source)
 	{
-		if(source)
+		if (source)
 		{
 			source.unsubscribe();
 		}
@@ -62,7 +78,9 @@ export class TwoWayConnection extends Connection
 
 	/**
 	 * This will be used to unsubscribe.
+	 *
 	 * @override
+	 * @return {void}
 	 */
 	unsubscribe()
 	{

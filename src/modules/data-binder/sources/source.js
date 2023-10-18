@@ -3,11 +3,14 @@
  *
  * This will create a new source to use with
  * a connection.
+ *
  * @class
  */
 export class Source
 {
 	/**
+	 * This will create a new source.
+	 *
 	 * @constructor
 	 */
 	constructor()
@@ -28,6 +31,7 @@ export class Source
 	 * This will set the token.
 	 *
 	 * @param {string} token
+	 * @return {void}
 	 */
 	setToken(token)
 	{

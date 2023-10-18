@@ -1,31 +1,44 @@
-import {TwoWaySource} from './two-way-source.js';
+import { TwoWaySource } from './two-way-source.js';
 
 /**
  * DataSource
  *
  * This will create a data source to use with
  * a connection.
+ *
  * @class
  * @augments TwoWaySource
  */
 export class DataSource extends TwoWaySource
 {
 	/**
+	 * This will create a new data source.
+	 *
 	 * @constructor
 	 * @param {object} data
 	 * @param {string} prop
+	 * @param {object} pubSub
 	 */
-	constructor(data, prop)
+	constructor(data, prop, pubSub)
 	{
-		super();
+		super(pubSub);
+
+		/**
+		 * @member {object} data
+		 */
 		this.data = data;
+
+		/**
+		 * @member {string} prop
+		 */
 		this.prop = prop;
 	}
 
 	/**
 	 * This will set the data value.
 	 *
-	 * @param {*} value
+	 * @param {mixed} value
+	 * @return {void}
 	 */
 	set(value)
 	{
@@ -34,6 +47,8 @@ export class DataSource extends TwoWaySource
 
 	/**
 	 * This will get the data value.
+	 *
+	 * @return {mixed}
 	 */
 	get()
 	{
@@ -43,12 +58,13 @@ export class DataSource extends TwoWaySource
 	/**
 	 * The callBack when updated.
 	 *
-	 * @param {*} value
+	 * @param {mixed} value
 	 * @param {object} committer
+	 * @return {void}
 	 */
 	callBack(value, committer)
 	{
-		if(this.data !== committer)
+		if (this.data !== committer)
 		{
 			this.data.set(this.prop, value, committer);
 		}

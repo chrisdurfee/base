@@ -1,10 +1,11 @@
-import {Source} from './source.js';
+import { Source } from './source.js';
 
 /**
  * OneWaySource
  *
  * This will create a one way source to use with
  * a connection.
+ *
  * @class
  * @augments Source
  */
@@ -26,6 +27,7 @@ export class OneWaySource extends Source
 	 *
 	 * @param {string} msg
 	 * @param {function} callBack
+	 * @return {void}
 	 */
 	subscribe(msg, callBack)
 	{
@@ -35,6 +37,8 @@ export class OneWaySource extends Source
 
 	/**
 	 * This will unsubscribe from the message.
+	 *
+	 * @return {void}
 	 */
 	unsubscribe()
 	{

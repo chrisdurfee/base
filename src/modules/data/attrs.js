@@ -1,4 +1,4 @@
-import { Objects } from "../../shared/objects";
+import { Objects } from "../../shared/objects.js";
 
 /**
  * This will get the data attribute settings.

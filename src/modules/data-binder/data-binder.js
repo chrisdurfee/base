@@ -1,25 +1,35 @@
-import {base} from '../../main/core.js';
-export {DataPubSub} from './data-pub-sub.js';
-import {pubSub} from './data-pub-sub.js';
-import {OneWayConnection} from './one-way-connection.js';
-import {TwoWayConnection} from './two-way-connection.js';
-import {ConnectionTracker} from './connection-tracker.js';
+import { base } from '../../main/base.js';
+export { DataPubSub } from './data-pub-sub.js';
+import { OneWayConnection } from './connection-tracker/connections/one-way-connection.js';
+import { TwoWayConnection } from './connection-tracker/connections/two-way-connection.js';
+import { ConnectionTracker } from './connection-tracker/connection-tracker.js';
+import { Types } from '../../shared/types.js';
 
 /**
  * DataBinder
  *
  * This will create a data binder object that can
  * create one way and two way data bindings.
+ *
  * @class
  */
 export class DataBinder
 {
 	/**
+	 * This will create a data binder.
+	 *
 	 * @constructor
 	 */
 	constructor()
 	{
+		/**
+		 * @member {string} version
+		 */
 		this.version = "1.0.1";
+
+		/**
+		 * @member {string} attr
+		 */
 		this.attr = 'bindId';
 
 		/**
@@ -34,15 +44,30 @@ export class DataBinder
 			40
 		];
 
+		/**
+		 * @member {object} connections
+		 * @protected
+		 */
 		this.connections = new ConnectionTracker();
 
+		/**
+		 * @member {object} pubSub
+		 * @protected
+		 */
+		this.pubSub = new DataPubSub();
+
+		/**
+		 * @member {number} idCount
+		 */
 		this.idCount = 0;
 		this.setup();
 	}
 
 	/**
 	 * This will setup the events.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	setup()
 	{
@@ -63,37 +88,43 @@ export class DataBinder
 		let bindProp = prop,
 		bindAttr = null;
 
-		if(prop.indexOf(':') !== -1)
+		if (prop.indexOf(':') !== -1)
 		{
 			/* this will setup the custom attr if the prop
 			has specified one. */
-			let parts = prop.split(':');
-			if(parts.length > 1)
+			const parts = prop.split(':');
+			if (parts.length > 1)
 			{
 				bindProp = parts[1];
 				bindAttr = parts[0];
 			}
 		}
 
-		/* this will setup the model bind attr to the
-		element and assign a bind id attr to support
-		two way binding */
-		let connection = this.setupConnection(element, data, bindProp, bindAttr, filter);
+		/**
+		 * This will setup the model bind attr to the element
+		 * and assign a bind id attr to support two way
+		 * binding.
+		 */
+		const connection = this.setupConnection(element, data, bindProp, bindAttr, filter);
 
-		/* we want to get the starting value of the
-		data and set it on our element */
-		let connectionElement = connection.element,
+		/**
+		 * We want to get the starting value of the data and
+		 * et it on our element.
+		 */
+		const connectionElement = connection.element,
 		value = data.get(bindProp);
-		if(typeof value !== 'undefined')
+		if (typeof value !== 'undefined')
 		{
 			connectionElement.set(value);
 		}
 		else
 		{
-			/* this will set the element value
-			as the prop value */
+			/**
+			 * This will set the element value as the
+			 * prop value.
+			 */
 			value = connectionElement.get();
-			if(value !== '')
+			if (value !== '')
 			{
 				connection.data.set(value);
 			}
@@ -114,23 +145,29 @@ export class DataBinder
 	 */
 	setupConnection(element, data, prop, customAttr, filter)
 	{
-		let id = this.getBindId(element),
+		const id = this.getBindId(element),
 		connection = new TwoWayConnection(),
 
-		// this will create the data source
+		/**
+		 * This will create the data source and
+		 * subscribe the element to the data.
+		 */
 		dataSource = connection.addData(data, prop);
-		// this will subscribe the data to the element
 		dataSource.subscribe(id);
 
-		/* this will add the data binding
-		attr to our element so it will subscribe to
-		the two data changes */
-		let dataId = data.getDataId(),
+		/**
+		 * This will add the data binding attr to our
+		 * element so it will subscribe to the two
+		 * data changes.
+		 */
+		const dataId = data.getDataId(),
 		msg = dataId + ':' + prop;
 
-		// this will create the element source
-		let elementSource = connection.addElement(element, customAttr, filter);
-		// this will subscribe the element to the data
+		/**
+		 * This will create the element source and subscribe
+		 * the data to the element.
+		 */
+		const elementSource = connection.addElement(element, customAttr, filter);
 		elementSource.subscribe(msg);
 
 		this.addConnection(id, 'bind', connection);
@@ -146,6 +183,7 @@ export class DataBinder
 	 * @param {string} id
 	 * @param {string} attr
 	 * @param {object} connection
+	 * @return {void}
 	 */
 	addConnection(id, attr, connection)
 	{
@@ -155,11 +193,13 @@ export class DataBinder
 	/**
 	 * This will set the bind id.
 	 *
+	 * @protected
 	 * @param {object} element
+	 * @return {string}
 	 */
 	setBindId(element)
 	{
-		let id = 'db-' + this.idCount++;
+		const id = 'db-' + this.idCount++;
 		element.dataset[this.attr] = id;
 		element[this.attr] = id;
 		return id;
@@ -168,6 +208,7 @@ export class DataBinder
 	/**
 	 * This will get the bind id.
 	 *
+	 * @protected
 	 * @param {object} element
 	 * @return {string}
 	 */
@@ -184,8 +225,8 @@ export class DataBinder
 	 */
 	unbind(element)
 	{
-		let id = element[this.attr];
-		if(id)
+		const id = element[this.attr];
+		if (id)
 		{
 			this.connections.remove(id);
 		}
@@ -199,17 +240,21 @@ export class DataBinder
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {function} callBack
+	 * @return {void}
 	 */
 	watch(element, data, prop, callBack)
 	{
-		if(!element || typeof element !== 'object')
+		if (!element || typeof element !== 'object')
 		{
-			return false;
+			return;
 		}
 
-		let connection = new OneWayConnection();
+		const connection = new OneWayConnection();
 
-		// this will create the one way source
+		/**
+		 * This will setup the data source and subscribe
+		 * the element to the data.
+		 */
 		const source = connection.addSource(data);
 		source.subscribe(prop, callBack);
 
@@ -218,8 +263,8 @@ export class DataBinder
 		attr = data.getDataId() + ':' + prop;
 		this.addConnection(id, attr, connection);
 
-		let value = data.get(prop);
-		if(typeof value !== 'undefined')
+		const value = data.get(prop);
+		if (typeof value !== 'undefined')
 		{
 			callBack(value);
 		}
@@ -231,18 +276,19 @@ export class DataBinder
 	 * @param {object} element
 	 * @param {object} data
 	 * @param {string} prop
+	 * @return {void}
 	 */
 	unwatch(element, data, prop)
 	{
-		if(!element || typeof element !== 'object')
+		if (Types.isObject(element) === false)
 		{
 			return false;
 		}
 
-		let id = element[this.attr];
-		if(id)
+		const id = element[this.attr];
+		if (id)
 		{
-			let attr = data.getDataId() + ':' + prop;
+			const attr = data.getDataId() + ':' + prop;
 			this.connections.remove(id, attr);
 		}
 	}
@@ -270,20 +316,25 @@ export class DataBinder
 	 */
 	isDataBound(element)
 	{
-		if(element)
+		if (!element)
 		{
-			let id = element[this.attr];
-			if(id)
-			{
-				return id;
-			}
+			return false;
 		}
-		return false;
+
+		const id = element[this.attr];
+		return (id) ? id : false;
 	}
 
+	/**
+	 * This will check if the key is blocked.
+	 *
+	 * @protected
+	 * @param {object} evt
+	 * @return {boolean}
+	 */
 	isBlocked(evt)
 	{
-		if(evt.type !== 'keyup')
+		if (evt.type !== 'keyup')
 		{
 			return false;
 		}
@@ -300,19 +351,19 @@ export class DataBinder
 	 */
 	bindHandler(evt)
 	{
-		if(this.isBlocked(evt))
+		if (this.isBlocked(evt))
 		{
 			return true;
 		}
 
-		let target = evt.target || evt.srcElement,
+		const target = evt.target || evt.srcElement,
 		id = this.isDataBound(target);
-		if(id)
+		if (id)
 		{
-			let connection = this.connections.get(id, 'bind');
-			if(connection)
+			const connection = this.connections.get(id, 'bind');
+			if (connection)
 			{
-				let value = connection.element.get();
+				const value = connection.element.get();
 				/* this will publish to the ui and to the
 				model that subscribes to the element */
 				pubSub.publish(id, value, target);
@@ -323,17 +374,21 @@ export class DataBinder
 
 	/**
 	 * This wil setup the events.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	setupEvents()
 	{
 		this.changeHandler = this.bindHandler.bind(this);
-
 		this.addEvents();
 	}
 
 	/**
 	 * This will add the events.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	addEvents()
 	{
@@ -342,6 +397,9 @@ export class DataBinder
 
 	/**
 	 * This will remove the events.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	removeEvents()
 	{

@@ -1,11 +1,14 @@
 import { base } from '../../main/base.js';
 import { builder } from '../layout/layout-builder.js';
 import { dataBinder } from '../data-binder/data-binder.js';
+import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 
-/* this will register the component system to the
-data tracker to remove components that have been
-nested in layouts. */
-base.dataTracker.addType('components', (data) =>
+/**
+ * This will register the component system to the data
+ * tracker to remove components that have been nested
+ * in layouts.
+ */
+DataTracker.addType('components', (data) =>
 {
 	if (!data)
 	{
@@ -30,25 +33,21 @@ let unitNumber = 0;
  * from a single factory.
  *
  * @example
- * var Alert = base.Unit.extend(
+ * class Alert extends Unit
  *	{
- *		constructor: function(props)
- *		{
- *			// this will setup the component id
- *			base.Component.call(this, props);
- *		},
- *
- *		render: function()
+ *		render()
  *		{
  *			return {
  *
  *			};
  *		}
- *	});
+ *	}
  */
 export class Unit
 {
 	/**
+	 * This will create a unit.
+	 *
 	 * @constructor
 	 * @param {object} [props]
 	 */
@@ -70,7 +69,9 @@ export class Unit
 	/**
 	 * This will setup the component number and unique
 	 * instance id for the component elements.
+	 *
 	 * @protected
+	 * @returns {void}
 	 */
 	init()
 	{
@@ -81,12 +82,13 @@ export class Unit
 	 * This will setup the component props.
 	 *
 	 * @param {object} [props]
+	 * @return {void}
 	 */
 	setupProps(props)
 	{
 		if (!props || typeof props !== 'object')
 		{
-			return false;
+			return;
 		}
 
 		for (var prop in props)
@@ -160,6 +162,7 @@ export class Unit
 	/**
 	 * This will add a branch to the context.
 	 *
+	 * @protected
 	 * @param {string} branchName
 	 * @param {mixed} value
 	 */
@@ -194,6 +197,7 @@ export class Unit
 	/**
 	 * This will remove the added context from the parent.
 	 *
+	 * @protected
 	 * @returns {void}
 	 */
 	removeContext()
@@ -209,6 +213,7 @@ export class Unit
 	/**
 	 * This will remove a context branch.
 	 *
+	 * @protected
 	 * @param {string} branch
 	 * @returns {void}
 	 */
@@ -225,6 +230,7 @@ export class Unit
 	/**
 	 * This will get the context.
 	 *
+	 * @protected
 	 * @returns {object|null}
 	 */
 	getContext()
@@ -234,6 +240,8 @@ export class Unit
 
 	/**
 	 * override this to do something when created.
+	 *
+	 * @returns {void}
 	 */
 	onCreated()
 	{
@@ -275,6 +283,7 @@ export class Unit
 
 	/**
 	 * This will create the component layout.
+	 *
 	 * @protected
 	 * @return {object}
 	 */
@@ -302,7 +311,9 @@ export class Unit
 
 	/**
 	 * This will build the layout.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	buildLayout()
 	{
@@ -320,6 +331,7 @@ export class Unit
 	/**
 	 * This will build a layout.
 	 *
+	 * @protected
 	 * @param {object} layout
 	 * @param {object} container
 	 * @return {object}
@@ -332,9 +344,11 @@ export class Unit
 	/**
 	 * This will prepend layout to a container.
 	 *
+	 * @protected
 	 * @param {object} layout
 	 * @param {object} container
 	 * @param {object} [optionalNode]
+	 * @return {void}
 	 */
 	prepend(layout, container, optionalNode)
 	{
@@ -345,6 +359,7 @@ export class Unit
 	/**
 	 * This will rebuild a layout.
 	 *
+	 * @protected
 	 * @param {object} layout
 	 * @param {object} container
 	 * @return {object}
@@ -357,6 +372,7 @@ export class Unit
 	/**
 	 * This will render the content on condition of a property.
 	 *
+	 * @protected
 	 * @param {mixed} prop
 	 * @param {mixed} content
 	 * @returns {object}
@@ -369,6 +385,7 @@ export class Unit
 	/**
 	 * This will map an array to children elements.
 	 *
+	 * @protected
 	 * @param {array} items
 	 * @param {function} callBack
 	 * @returns {array}
@@ -392,6 +409,7 @@ export class Unit
 	/**
 	 * This will remove children from an element.
 	 *
+	 * @protected
 	 * @param {object} layout
 	 * @param {object} container
 	 * @return {object}
@@ -421,7 +439,9 @@ export class Unit
 
 	/**
 	 * This will initialize the component.
+	 *
 	 * @protected
+	 * @returns {void}
 	 */
 	initialize()
 	{
@@ -433,6 +453,9 @@ export class Unit
 
 	/**
 	 * override this to do something before setup.
+	 *
+	 * @protected
+	 * @returns {void}
 	 */
 	beforeSetup()
 	{
@@ -441,6 +464,9 @@ export class Unit
 
 	/**
 	 * override this to do something after setup.
+	 *
+	 * @protected
+	 * @returns {void}
 	 */
 	afterSetup()
 	{
@@ -449,7 +475,9 @@ export class Unit
 
 	/**
 	 * This will setup and render the component.
+	 *
 	 * @param {object} container
+	 * @returns {void}
 	 */
 	setup(container)
 	{
@@ -459,7 +487,9 @@ export class Unit
 
 	/**
 	 * This will remove the component.
+	 *
 	 * @protected
+	 * @returns {void}
 	 */
 	remove()
 	{
@@ -472,6 +502,9 @@ export class Unit
 
 	/**
 	 * This will prepare the component to be destroyed.
+	 *
+	 * @protected
+	 * @returns {void}
 	 */
 	prepareDestroy()
 	{
@@ -481,6 +514,9 @@ export class Unit
 
 	/**
 	 * Override this to do something before destroy.
+	 *
+	 * @protected
+	 * @returns {void}
 	 */
 	beforeDestroy()
 	{
@@ -489,6 +525,8 @@ export class Unit
 
 	/**
 	 * This will destroy the component.
+	 *
+	 * @returns {void}
 	 */
 	destroy()
 	{
@@ -498,10 +536,12 @@ export class Unit
 	/**
 	 * This will bind and element to data.
 	 *
+	 * @protected
 	 * @param {object} element
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {function} filter
+	 * @returns {void}
 	 */
 	bindElement(element, data, prop, filter)
 	{

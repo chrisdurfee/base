@@ -5,15 +5,21 @@ import { base } from '../../main/base.js';
  *
  * This will create an event object to make
  * adding and removing events easier.
+ *
  * @class
  */
 export class EventHelper
 {
 	/**
+	 * This will create an event helper.
+	 *
 	 * @constructor
 	 */
 	constructor()
 	{
+		/**
+		 * @member {array} events
+		 */
 		this.events = [];
 	}
 
@@ -45,6 +51,7 @@ export class EventHelper
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
+	 * @return {void}
 	 */
 	on(event, obj, callBack, capture)
 	{
@@ -65,6 +72,7 @@ export class EventHelper
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
+	 * @return {void}
 	 */
 	off(event, obj, callBack, capture)
 	{
@@ -85,6 +93,8 @@ export class EventHelper
 
 	/**
 	 * This will set all events.
+	 *
+	 * @return {void}
 	 */
 	set()
 	{
@@ -97,6 +107,11 @@ export class EventHelper
 		}
 	}
 
+	/**
+	 * This will unset all events.
+	 *
+	 * @return {void}
+	 */
 	unset()
 	{
 		let event,
@@ -110,6 +125,8 @@ export class EventHelper
 
 	/**
 	 * This will reset the events.
+	 *
+	 * @return {void}
 	 */
 	reset()
 	{
