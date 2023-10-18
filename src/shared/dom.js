@@ -43,7 +43,7 @@ export class Dom
 		}
 
 		const obj = document.getElementsByName(name);
-		return (obj)? Arrays.listToArray(obj) : false;
+		return (obj)? Arrays.toArray(obj) : false;
 	}
 
 	/**
@@ -77,7 +77,7 @@ export class Dom
 
 		/* if there is only one result just return the
 		first element in the node list */
-		return (elements.length === 1)? elements[0] : Arrays.listToArray(elements);
+		return (elements.length === 1)? elements[0] : Arrays.toArray(elements);
 	}
 
 	/**
@@ -499,8 +499,8 @@ export class Dom
 		{
 			case 'undefined':
 				obj = document.documentElement;
-				left = (window.pageXOffset || obj.scrollLeft);
-				top = (window.pageYOffset || obj.scrollTop);
+				left = obj.scrollLeft;
+				top = obj.scrollTop;
 				break;
 			case 'object':
 				left = obj.scrollLeft;

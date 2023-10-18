@@ -1,5 +1,5 @@
-import {Movement} from './movement.js';
-import {base} from '../../core.js';
+import { Movement } from './movement.js';
+import { base } from '../../main/base.js';
 
 export class CssMovement extends Movement
 {

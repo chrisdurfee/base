@@ -1,4 +1,4 @@
-import {base} from '../../core.js';
+import { base } from '../../main/base.js';
 
 const updateTitle =  (title) =>
 {

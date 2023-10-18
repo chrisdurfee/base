@@ -1,4 +1,4 @@
-import {Animation} from './animation.js';
+import { Animation } from './animation.js';
 
 /*
 	AnimationController

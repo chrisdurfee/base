@@ -1,5 +1,3 @@
-import { base } from "./base.js";
-
 /**
  * This will count the properties of an object.
  *

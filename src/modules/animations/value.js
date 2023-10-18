@@ -1,18 +1,5 @@
-import {base} from '../../core.js';
+import { Arrays } from '../../shared/arrays.js';
 
-/*
-	Value class
-
-	this will create a movement property value that can
-	update the property value when animated.
-
-	this will automatically get the units of the value
-	and check for value combining to inherit the start
-	value and add or remove the end value from the
-	start.
-
-	@param (object) settings
-*/
 export class Value
 {
 	constructor(settings)
@@ -46,12 +33,9 @@ export class Value
 		};
 	}
 
-	/* this will get the units of the property being animated.
-	@param (string) text = the value being modified
-	@return (string) the type of units */
 	getUnits(text)
 	{
-		if(typeof text !== 'undefined')
+		if (typeof text !== 'undefined')
 		{
 			text = this.getString(text);
 
@@ -65,14 +49,14 @@ export class Value
 
 	checkCombind(end)
 	{
-		if(typeof end !== 'undefined')
+		if (typeof end !== 'undefined')
 		{
 			end = this.getString(end);
 			/* we want to check if we have a plus or minus equals to
 			show that we are using the current position as the start */
 			let pattern = /(\+=|-=)/g,
 			matches = end.match(pattern);
-			if(matches)
+			if (matches)
 			{
 				return true;
 			}
@@ -80,21 +64,14 @@ export class Value
 		return false;
 	}
 
-	/* this will convert any type to a string
-	@param (mixed) value = the value to convert
-	@return (string) the value string */
 	getString(value)
 	{
 		return (typeof value !== 'string')? value.toString() : value;
 	}
 
-	/* this will get the number from an value and remove
-	any other marks including chars.
-	@param (mixed) text = the text to get the value from
-	@return (number) the number value */
 	getValue(text)
 	{
-		if(typeof text !== 'undefined')
+		if (typeof text !== 'undefined')
 		{
 			/* we need to remove any non numeric data from the value
 			and convert to number after */
@@ -105,9 +82,6 @@ export class Value
 		return 0;
 	}
 
-	/* this will check if the element is increasing or decreasing the
-	target.
-	@return (bool) true or false */
 	isIncreasing(endValue)
 	{
 		/* we want to check if we are adding to the start or
@@ -115,7 +89,7 @@ export class Value
 		let value = this.value,
 		endTotal = value.end,
 		startValue = value.start;
-		if(value.combining === true)
+		if (value.combining === true)
 		{
 			endTotal = (this.getString(endValue).indexOf("-") === -1)? (startValue + endTotal) : startValue - endTotal;
 		}
@@ -132,16 +106,11 @@ export class Value
 		return (this.value.difference * delta);
 	}
 
-	/* this will setup theproper method to step the
-	value by checking for combining and currying
-	theproper function to step the value.
-	@param (number) delta
-	@return (number) the value step */
 	step(delta)
 	{
 		let step,
 		value = this.value;
-		if(value.combining === true)
+		if (value.combining === true)
 		{
 			step = this.combindValue;
 		}
@@ -149,7 +118,7 @@ export class Value
 		{
 			step = this.calcValue;
 		}
-		return (this.step = step).apply(this, base.listToArray(arguments));
+		return (this.step = step).apply(this, Arrays.toArray(arguments));
 	}
 
 	update(delta)
@@ -174,14 +143,9 @@ export class Value
 		return (start - step) + value.units;
 	}
 
-	/* this will setup the proper method to apply the
-	step by checking for increasing and currying
-	the proper function to applyu the step value.
-	@param (object) value
-	@return (number) the value step */
 	applyStep(value, step)
 	{
-		let applyStep = (value.increasing === true)? this.increaseValue : this.decreaseValue;
-		return (this.applyStep = applyStep).apply(this, base.listToArray(arguments));
+		const applyStep = (value.increasing === true)? this.increaseValue : this.decreaseValue;
+		return (this.applyStep = applyStep).apply(this, Array.toArray(arguments));
 	}
 }

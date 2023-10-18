@@ -43,7 +43,18 @@ export class Types
 	 */
 	static isObject(obj)
 	{
-		return (!obj || typeof obj !== 'object')? false : true;
+		return (obj || typeof obj === 'object');
+	}
+
+	/**
+	 * This will check if the request is an object.
+     *
+	 * @param {object} obj
+	 * @return {boolean}
+	 */
+	static isString(obj)
+	{
+		return (typeof obj === 'string');
 	}
 
     /**

@@ -1,16 +1,6 @@
-import {CssMovement} from './css-movement.js';
-import {AttrMovement} from './attr-movement.js';
+import { CssMovement } from './css-movement.js';
+import { AttrMovement } from './attr-movement.js';
 
-/*
-	Movement class
-
-	this will create a movement object that can
-	update the property when animated. this is an abstract
-	class and should be extended to use.
-
-	@param (object) element
-	@param (object) settings
-*/
 export class Movement
 {
 	constructor(element, settings)

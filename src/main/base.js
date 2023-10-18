@@ -7,8 +7,9 @@
  */
 
 import { Types } from '../shared/types.js';
-import { DataTracker } from './data-tracker.js';
-import { EventMethods } from './events.js';
+import { Arrays } from '../shared/arrays.js';
+import { DataTracker } from './data-tracker/data-tracker.js';
+import { EventMethods } from './events/event-methods.js';
 import { equals } from './equals.js';
 
 /**
@@ -71,7 +72,7 @@ class Base
 	 */
 	override(obj, methodName, overrideMethod, args)
 	{
-		return (obj[methodName] = overrideMethod).apply(obj, this.listToArray(args));
+		return (obj[methodName] = overrideMethod).apply(obj, Arrays.toArray(args));
 	}
 
 	/**
@@ -189,5 +190,6 @@ export const base = new Base();
 base.augment({
 	...Objects,
 	...EventMethods,
+	...Types,
 	equals
 });

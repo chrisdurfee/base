@@ -1,4 +1,4 @@
-import {Movement} from './movement.js';
+import { Movement } from './movement.js';
 
 export class Animation
 {
