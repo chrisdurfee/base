@@ -1,5 +1,5 @@
-import {builder} from '../layout/layout-builder.js';
-import {Jot} from "../component/jot.js";
+import { builder } from '../layout/builder.js';
+import { Jot } from "../component/jot.js";
 
 /**
  * This will track previously loaded scripts and styles.
@@ -29,7 +29,7 @@ const Script = (props) => ({
         loaded.push(props.src);
 
         const callBack = props.load;
-        if(callBack)
+        if (callBack)
         {
             callBack();
         }
@@ -52,7 +52,7 @@ const Style = (props) => ({
         loaded.push(props.src);
 
         const callBack = props.load;
-        if(callBack)
+        if (callBack)
         {
             callBack();
         }
@@ -64,14 +64,36 @@ const Style = (props) => ({
  *
  * This will setup a depends group to load all
  * dependencies before loaded the script.
+ *
+ * @class
  */
 class Group
 {
+    /**
+     * This will create a group.
+     *
+     * @param {function} callBack
+     */
     constructor(callBack)
     {
+        /**
+         * @member {number} percent
+         */
         this.percent = 0;
+
+        /**
+         * @member {number} loaded
+         */
         this.loaded = 0;
+
+        /**
+         * @member {number} total
+         */
         this.total = 0;
+
+        /**
+         * @member {function} callBack
+         */
         this.callBack = callBack || null;
     }
 
@@ -79,6 +101,7 @@ class Group
      * This will add the resource to the document.
      *
      * @param {string} src
+     * @return {void}
      */
     add(src)
     {
@@ -86,7 +109,7 @@ class Group
         let atom;
 
         const load = this.update.bind(this);
-        if(src.indexOf('.css') !== -1)
+        if (src.indexOf('.css') !== -1)
         {
             atom = Style({
                 load,
@@ -108,37 +131,50 @@ class Group
      * This will add the dependencies to the document.
      *
      * @param {array} files
+     * @return {void}
      */
     addFiles(files)
     {
-        if(!files)
+        if (!files)
         {
             return;
         }
 
-        for(var i = 0, length = files.length; i < length; i++)
+        for (var i = 0, length = files.length; i < length; i++)
         {
             var src = files[i];
-            if(!isLoaded(src))
+            if (!isLoaded(src))
             {
                 this.add(src);
             }
         }
     }
 
+    /**
+     * This will update the progress.
+     *
+     * @return {void}
+     */
     update()
     {
         const percent = this.updateProgress();
-        if(percent >= 100)
+        if (percent < 100)
         {
-            var callBack = this.callBack;
-            if(callBack)
-            {
-                callBack();
-            }
+            return;
+        }
+
+        const callBack = this.callBack;
+        if (callBack)
+        {
+            callBack();
         }
     }
 
+    /**
+     * This will update the progress.
+     *
+     * @returns {number}
+     */
     updateProgress()
     {
         ++this.loaded;
@@ -157,7 +193,7 @@ const loadModule = (src, callBack) =>
 {
     import(src).then(module =>
     {
-        if(callBack)
+        if (callBack)
         {
             callBack(module);
         }
@@ -172,7 +208,7 @@ const loadModule = (src, callBack) =>
  */
 const isConstructor = (object) =>
 {
-    if(!object)
+    if (!object)
     {
         return false;
     }
@@ -210,6 +246,8 @@ const Comment = (props) => ({
 });
 
 /**
+ * ImportWrapper
+ *
  * This will create an import wrapper component that
  * will wrap the comment atom to pass route to the
  * imported layout.
@@ -219,14 +257,23 @@ const Comment = (props) => ({
  */
 const ImportWrapper = Jot(
 {
+    /**
+     * This will render the import wrapper.
+     *
+     * @returns {object}
+     */
     render()
     {
+        /**
+         * This will create a comment atom to be replaced
+         * by the module.
+         */
         return Comment(
         {
             onCreated: (ele) =>
             {
                 const src = this.src;
-                if(!src)
+                if (!src)
                 {
                     return;
                 }
@@ -235,7 +282,7 @@ const ImportWrapper = Jot(
                  * This will set up a resource group to load the
                  * depends before the module.
                  */
-                if(this.depends)
+                if (this.depends)
                 {
                     const group = new Group(() =>
                     {
@@ -259,8 +306,8 @@ const ImportWrapper = Jot(
      */
     getLayout(module)
     {
-        let layout = module.default;
-        if(!layout)
+        const layout = module.default;
+        if (!layout)
         {
             return null;
         }
@@ -270,13 +317,13 @@ const ImportWrapper = Jot(
          * callback to set up the module.
          */
         const callBack = this.callBack;
-        if(callBack)
+        if (callBack)
         {
             layout = callBack(layout);
         }
         else
         {
-            if(isConstructor(layout))
+            if (isConstructor(layout))
             {
                 /**
                  * This will set up the layout as a component and pass
@@ -285,7 +332,7 @@ const ImportWrapper = Jot(
                 layout = new layout();
                 layout.route = this.route;
 
-                if(this.persist)
+                if (this.persist)
                 {
                     layout.persist = true;
                 }
@@ -306,6 +353,7 @@ const ImportWrapper = Jot(
      * This will load the module and render the layout.
      *
      * @param {object} ele
+     * @returns {void}
      */
     loadAndRender(ele)
     {
@@ -325,7 +373,7 @@ const ImportWrapper = Jot(
      */
     shouldUpdate(layout)
     {
-        if(this.updateLayout === true)
+        if (this.updateLayout === true)
         {
             return true;
         }
@@ -337,11 +385,12 @@ const ImportWrapper = Jot(
      * This will update the module layout.
      *
      * @param {object} params
+     * @returns {void}
      */
     updateModuleLayout(params)
     {
         const layout = this.layout;
-        if(this.shouldUpdate(layout))
+        if (this.shouldUpdate(layout))
         {
             layout.update(params);
         }
@@ -352,10 +401,11 @@ const ImportWrapper = Jot(
      * the update params to the imported layout.
      *
      * @param {object} params
+     * @returns {void}
      */
     update(params)
     {
-        if(this.loaded === true)
+        if (this.loaded === true)
         {
             this.updateModuleLayout(params);
         }
@@ -369,7 +419,7 @@ const ImportWrapper = Jot(
      */
     beforeDestroy()
     {
-        if(!this.layoutRoot)
+        if (!this.layoutRoot)
         {
             return;
         }

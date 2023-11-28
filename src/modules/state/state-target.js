@@ -1,18 +1,21 @@
 
- import {SimpleData} from '../data/data.js';
- import {state} from './state.js';
+ import { SimpleData } from '../data/data.js';
+ import { StateTracker } from './state-tracker.js';
 
  /**
  * StateTarget
  *
  * This will create a state target to track the state
  * of an object.
+ *
  * @class
  * @augments SimpleData
  */
 export class StateTarget extends SimpleData
 {
 	/**
+	 * This will create a state target.
+	 *
 	 * @constructor
 	 * @param {string} id
 	 */
@@ -24,29 +27,34 @@ export class StateTarget extends SimpleData
 
 	/**
 	 * This will restore a state to the controller.
+	 *
+	 * @return {void}
 	 */
 	restore()
 	{
-		state.restore(this.id, this);
+		StateTracker.restore(this.id, this);
 	}
 
 	/**
 	 * This will remove the target from the controller.
+	 *
+	 * @return {void}
 	 */
 	remove()
 	{
-		state.remove(this.id);
+		StateTracker.remove(this.id);
 	}
 
 	/**
 	 * This will add an action to the target.
 	 *
 	 * @param {string} action
-	 * @param {*} state
+	 * @param {mixed} state
+	 * @return {void}
 	 */
 	addAction(action, state)
 	{
-		if(typeof state !== 'undefined')
+		if (typeof state !== 'undefined')
 		{
 			this.set(action, state);
 		}
@@ -56,7 +64,7 @@ export class StateTarget extends SimpleData
 	 * This will get the state of an action.
 	 *
 	 * @param {string} action
-	 * @return {*}
+	 * @return {mixed}
 	 */
 	getState(action)
 	{
@@ -70,22 +78,22 @@ export class StateTarget extends SimpleData
 	 *
 	 * @param {string} action
 	 * @param {string} [token]
+	 * @return {void}
 	 */
 	removeAction(action, token)
 	{
 		/* if we have a token then the token will be
 		the only item removed */
-		if(token)
+		if (token)
 		{
 			this.off(action, token);
+			return;
 		}
-		else
+
+		const actions = this.stage;
+		if (typeof actions[action] !== 'undefined')
 		{
-			let actions = this.stage;
-			if(typeof actions[action] !== 'undefined')
-			{
-				delete actions[action];
-			}
+			delete actions[action];
 		}
 	}
 }

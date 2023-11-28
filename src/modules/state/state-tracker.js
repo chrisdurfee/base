@@ -1,32 +1,31 @@
 
- import {StateTarget} from './state-target.js';
+ import { StateTarget } from './state-target.js';
 
  /**
- * StateController
+ * StateTracker
  *
- * This will create a state controller that can
+ * This will create a state tracker that can
  * add and remove targets, actions, and action
  * subscriber callBack functions.
  *
  * @class
  */
-class StateController
+export class StateTracker
 {
 	/**
-	 * @constructor
+	 * @member {object} targets
+	 * @private
 	 */
-	constructor()
-	{
-		this.targets = {};
-	}
+	static targets = {};
 
 	/**
 	 * This will restore a state target.
 	 *
 	 * @param {string} id
 	 * @param {object} target
+	 * @return {void}
 	 */
-	restore(id, target)
+	static restore(id, target)
 	{
 		this.targets[id] = target;
 	}
@@ -37,19 +36,21 @@ class StateController
 	 * @param {string} id
 	 * @return {object}
 	 */
-	getTarget(id)
+	static getTarget(id)
 	{
-		let targets = this.targets;
+		const targets = this.targets;
 		return (targets[id] || (targets[id] = new StateTarget(id)));
 	}
 
 	/**
 	 * This will get the state of an action.
 	 *
+	 * @protected
 	 * @param {string} targetId
 	 * @param {string} action
+	 * @return {mixed}
 	 */
-	getActionState(targetId, action)
+	static getActionState(targetId, action)
 	{
 		const target = this.getTarget(targetId);
 		return target.get(action);
@@ -60,13 +61,13 @@ class StateController
 	 *
 	 * @param {string} targetId
 	 * @param {string} [action]
-	 * @param {*} [state] the primary action state
+	 * @param {mixed} [state] the primary action state
 	 * @return {object}
 	 */
 	add(targetId, action, state)
 	{
 		const target = this.getTarget(targetId);
-		if(action)
+		if (action)
 		{
 			target.addAction(action, state);
 		}
@@ -92,6 +93,7 @@ class StateController
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {string} [token]
+	 * @return {void}
 	 */
 	removeAction(targetId, action, token)
 	{
@@ -108,8 +110,8 @@ class StateController
 	 */
 	on(targetId, action, callBack)
 	{
-		let target = this.getTarget(targetId);
-		if(action)
+		const target = this.getTarget(targetId);
+		if (action)
 		{
 			return target.on(action, callBack);
 		}
@@ -122,6 +124,7 @@ class StateController
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {string} token
+	 * @return {void}
 	 */
 	off(targetId, action, token)
 	{
@@ -134,24 +137,24 @@ class StateController
 	 * @param {string} targetId
 	 * @param {string} [action]
 	 * @param {string} [token]
+	 * @return {void}
 	 */
 	remove(targetId, action, token)
 	{
-		let targets = this.targets,
+		const targets = this.targets,
 		target = targets[targetId];
-		if(!target)
+		if (!target)
 		{
-			return false;
+			return;
 		}
 
-		if(action)
+		if (action)
 		{
 			target.off(action, token);
+			return;
 		}
-		else
-		{
-			delete targets[targetId];
-		}
+
+		delete targets[targetId];
 	}
 
 	/**
@@ -159,13 +162,12 @@ class StateController
 	 *
 	 * @param {string} targetId
 	 * @param {string} action
-	 * @param {*} state
+	 * @param {mixed} state
+	 * @return {void}
 	 */
 	set(targetId, action, state)
 	{
-		var target = this.getTarget(targetId);
+		const target = this.getTarget(targetId);
 		target.set(action, state);
 	}
 }
-
-export const state = new StateController();

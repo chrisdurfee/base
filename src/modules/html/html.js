@@ -104,7 +104,7 @@ export class Html
 		/* we need to add the type if set to stop ie
 		from removing the value if set after the value is
 		added */
-		let type = attrs.type;
+		const type = attrs.type;
 		if (typeof type !== 'undefined')
 		{
 			Dom.setAttr(obj, 'type', type);
@@ -128,7 +128,7 @@ export class Html
 			{
 				obj.innerHTML = attrPropValue;
 			}
-			else if (prop.substring(4, 1) === '-')
+			else if (prop.indexOf('-') !== -1)
 			{
 				// this will handle data and aria attributes
 				Dom.setAttr(obj, prop, attrPropValue);
@@ -176,12 +176,13 @@ export class Html
 	 * @param {object} obj
 	 * @param {object} attr
 	 * @param {string} value
+	 * @return {void}
 	 */
 	static addAttr(obj, attr, value)
 	{
 		if (value === '' || !attr)
 		{
-			return false;
+			return;
 		}
 
 		/* we want to check to add a value or an event listener */
