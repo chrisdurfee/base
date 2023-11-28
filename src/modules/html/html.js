@@ -237,7 +237,7 @@ export class Html
 	 */
 	static createComment(text, container)
 	{
-		let obj = document.createComment(text);
+		const obj = document.createComment(text);
 
 		if (container)
 		{

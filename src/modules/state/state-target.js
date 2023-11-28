@@ -1,6 +1,6 @@
 
- import {SimpleData} from '../data/data.js';
- import {state} from './state.js';
+ import { SimpleData } from '../data/data.js';
+ import { State } from './state.js';
 
  /**
  * StateTarget
@@ -27,7 +27,7 @@ export class StateTarget extends SimpleData
 	 */
 	restore()
 	{
-		state.restore(this.id, this);
+		State.restore(this.id, this);
 	}
 
 	/**
@@ -35,7 +35,7 @@ export class StateTarget extends SimpleData
 	 */
 	remove()
 	{
-		state.remove(this.id);
+		State.remove(this.id);
 	}
 
 	/**

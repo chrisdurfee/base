@@ -1,5 +1,5 @@
-import {TrackerTypes} from './tracker-types.js';
-import {Tracker} from './tracker.js';
+import { TrackerTypes } from './tracker-types.js';
+import { Tracker } from './tracker.js';
 
 /**
  * DataTracker
@@ -16,6 +16,7 @@ export class DataTracker
 {
     /**
      * @private
+     * @static
      * @member trackers This is an object that stores all tracker
      * objects by tracking id.
      */
@@ -23,6 +24,7 @@ export class DataTracker
 
     /**
      * @private
+     * @static
      * @member {int} trackingCount
      */
     static trackingCount = 0;

@@ -67,4 +67,4 @@ export class Types
 	{
 		return Array.isArray(data);
 	}
-};
+}

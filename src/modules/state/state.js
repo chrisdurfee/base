@@ -1,8 +1,8 @@
 
- import {StateTarget} from './state-target.js';
+ import { StateTarget } from './state-target.js';
 
  /**
- * StateController
+ * State
  *
  * This will create a state controller that can
  * add and remove targets, actions, and action
@@ -10,15 +10,14 @@
  *
  * @class
  */
-class StateController
+export class State
 {
 	/**
-	 * @constructor
+	 * @private
+	 * @static
+	 * @member {object} targets
 	 */
-	constructor()
-	{
-		this.targets = {};
-	}
+	static targets = {};
 
 	/**
 	 * This will restore a state target.
@@ -26,7 +25,7 @@ class StateController
 	 * @param {string} id
 	 * @param {object} target
 	 */
-	restore(id, target)
+	static restore(id, target)
 	{
 		this.targets[id] = target;
 	}
@@ -37,9 +36,9 @@ class StateController
 	 * @param {string} id
 	 * @return {object}
 	 */
-	getTarget(id)
+	static getTarget(id)
 	{
-		let targets = this.targets;
+		const targets = this.targets;
 		return (targets[id] || (targets[id] = new StateTarget(id)));
 	}
 
@@ -49,7 +48,7 @@ class StateController
 	 * @param {string} targetId
 	 * @param {string} action
 	 */
-	getActionState(targetId, action)
+	static getActionState(targetId, action)
 	{
 		const target = this.getTarget(targetId);
 		return target.get(action);
@@ -63,7 +62,7 @@ class StateController
 	 * @param {*} [state] the primary action state
 	 * @return {object}
 	 */
-	add(targetId, action, state)
+	static add(targetId, action, state)
 	{
 		const target = this.getTarget(targetId);
 		if(action)
@@ -81,7 +80,7 @@ class StateController
 	 * @param {string} [state]
 	 * @return {object}
 	 */
-	addAction(targetId, action, state)
+	static addAction(targetId, action, state)
 	{
 		return this.add(targetId, action, state);
 	}
@@ -93,7 +92,7 @@ class StateController
 	 * @param {string} action
 	 * @param {string} [token]
 	 */
-	removeAction(targetId, action, token)
+	static removeAction(targetId, action, token)
 	{
 		this.off(targetId, action, token);
 	}
@@ -106,7 +105,7 @@ class StateController
 	 * @param {function} callBack
 	 * @return {string}
 	 */
-	on(targetId, action, callBack)
+	static on(targetId, action, callBack)
 	{
 		let target = this.getTarget(targetId);
 		if(action)
@@ -123,7 +122,7 @@ class StateController
 	 * @param {string} action
 	 * @param {string} token
 	 */
-	off(targetId, action, token)
+	static off(targetId, action, token)
 	{
 		this.remove(targetId, action, token);
 	}
@@ -135,7 +134,7 @@ class StateController
 	 * @param {string} [action]
 	 * @param {string} [token]
 	 */
-	remove(targetId, action, token)
+	static remove(targetId, action, token)
 	{
 		let targets = this.targets,
 		target = targets[targetId];
@@ -161,11 +160,9 @@ class StateController
 	 * @param {string} action
 	 * @param {*} state
 	 */
-	set(targetId, action, state)
+	static set(targetId, action, state)
 	{
 		var target = this.getTarget(targetId);
 		target.set(action, state);
 	}
 }
-
-export const state = new StateController();
