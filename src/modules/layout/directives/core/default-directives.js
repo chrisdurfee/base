@@ -2,7 +2,30 @@ import {base} from '../../core.js';
 import {dataBinder} from '../data-binder/data-binder.js';
 import {htmlBuilder, normalizeAttr, removeEventPrefix} from '../html-builder/html-builder.js';
 import {Directives} from './directives/directives.js';
-import {WatcherHelper} from './watcher-helper.js';
+
+this._reserved = [
+	'tag',
+	'bind',
+	'onCreated',
+	'route',
+	'switch',
+	'useParent',
+	'useState',
+	'useData',
+	'addState',
+	'map',
+	'for',
+	'html',
+	'onSet',
+	'onState',
+	'watch',
+	'context',
+	'useContext',
+	'addContext',
+	'role',
+	'aria',
+	'cache'
+];
 
 /**
  * LayoutBuilder

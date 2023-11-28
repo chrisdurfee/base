@@ -1,4 +1,4 @@
-import { base } from '../../main/core.js';
+import { Dom } from '../../shared/dom.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 
 const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
@@ -71,7 +71,7 @@ export const WatcherHelper =
 		{
 			if (attr.substring(4, 1) === '-')
 			{
-				base.setAttr(ele, attr, value);
+				Dom.setAttr(ele, attr, value);
 			}
 			else
 			{
@@ -212,8 +212,8 @@ export const WatcherHelper =
 		overrideCallBack = settings.callBack;
 		if (typeof overrideCallBack === 'function')
 		{
-			let props = string.match(WATCHER_PATTERN);
-			let isMultiProp = (props && props.length > 1);
+			const props = string.match(WATCHER_PATTERN);
+			const isMultiProp = (props && props.length > 1);
 			callBack = (value, committer) =>
 			{
 				value = (isMultiProp !== true)? value : this.getPropValues(data, props, isDataArray);

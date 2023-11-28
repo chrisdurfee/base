@@ -1,4 +1,3 @@
-import { Dom } from "../../../../../shared/dom.js";
 import { DataTracker } from "../../../../../main/data-tracker/data-tracker.js";
 
 /**
@@ -96,4 +95,4 @@ const trackContext = (ele, branchName, parent) =>
         branch: branchName,
         parent: parent
     });
-}
+};
