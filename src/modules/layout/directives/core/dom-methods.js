@@ -1,19 +1,13 @@
-import {base} from '../../core.js';
-import {dataBinder} from '../data-binder/data-binder.js';
-import {htmlBuilder, normalizeAttr, removeEventPrefix} from '../html-builder/html-builder.js';
-import {Directives} from './directives/directives.js';
-import {WatcherHelper} from './watcher-helper.js';
-import {Jot} from "../component/jot.js";
+import { Html } from "../../../html/html.js";
 
 /**
- * LayoutBuilder
+ * DomMethods
  *
- * This will build JSON layouts.
+ * This will add dom methods to a directive.
  *
  * @class
- * @augments htmlBuilder
  */
-export class LayoutBuilder extends htmlBuilder
+export const DomMethods
 {
 	/**
 	 * This will append a child element to a parent.

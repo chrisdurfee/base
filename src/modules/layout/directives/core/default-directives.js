@@ -3,7 +3,6 @@ import {dataBinder} from '../data-binder/data-binder.js';
 import {htmlBuilder, normalizeAttr, removeEventPrefix} from '../html-builder/html-builder.js';
 import {Directives} from './directives/directives.js';
 import {WatcherHelper} from './watcher-helper.js';
-import {Jot} from "../component/jot.js";
 
 /**
  * LayoutBuilder

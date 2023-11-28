@@ -1,4 +1,5 @@
 import { DataTracker } from "../../../../main/data-tracker/data-tracker.js";
+import { router } from "../../../router/router.js";
 
 /**
  * This will add a route.
@@ -39,15 +40,15 @@ export const addRoute = (ele, route, parent) =>
 const setupRoute = (ele, route, parent) =>
 {
     // this will check to resume route
-    // if(this.checkResume(route))
+    // if (checkResume(route))
     // {
-    // 	this.resumeRoute(ele, route.component.route);
+    // 	resumeRoute(ele, route.component.route);
     // 	return;
     // }
 
     route.container = ele;
     route.parent = parent;
-    let newRoute = base.router.add(route);
+    let newRoute = router.add(route);
 
     trackRoute(ele, newRoute);
 };
@@ -70,9 +71,9 @@ const setupRoute = (ele, route, parent) =>
  */
 // const resumeRoute = (ele, route) =>
 // {
-//     base.router.resume(route, ele);
+//     router.resume(route, ele);
 
-//     this.trackRoute(ele, route);
+//     trackRoute(ele, route);
 // };
 
 /**

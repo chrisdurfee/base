@@ -1,9 +1,5 @@
-import {base} from '../../core.js';
-import {dataBinder} from '../data-binder/data-binder.js';
-import {htmlBuilder, normalizeAttr, removeEventPrefix} from '../html-builder/html-builder.js';
-import {Directives} from './directives/directives.js';
-import {WatcherHelper} from './watcher-helper.js';
-import {Jot} from "../component/jot.js";
+import { DataTracker } from "../../../../main/data-tracker/data-tracker.js";
+import { router } from "../../../router/router.js";
 
 /**
  * This will add a switch.
@@ -17,28 +13,45 @@ export const addSwitch = (ele, group, parent) =>
 {
 	let route = group[0];
 	// this will check to resume switch
-	// if(this.checkResume(route))
+	// if (checkResume(route))
 	// {
-	// 	this.resumeSwitch(ele, group);
+	// 	resumeSwitch(ele, group);
 	// 	return;
 	// }
 
-	for(var i = 0, length = group.length; i < length; i++)
+	for (var i = 0, length = group.length; i < length; i++)
 	{
 		route = group[i];
 		route.container = ele;
 		route.parent = parent;
 	}
 
-	let id = base.router.addSwitch(group);
-	this.trackSwitch(ele, id);
+	const id = router.addSwitch(group);
+	trackSwitch(ele, id);
 };
 
-// const resumeSwitch = (ele, group) =>
+/**
+ * This will check to resume route.
+ *
+ * @param {object} route
+ */
+// const checkResume = (route) =>
 // {
-// 	let id = base.router.resumeSwitch(group, ele);
-// 	this.trackSwitch(ele, id);
-// }
+//     return (route && route.component && route.component.route);
+// };
+
+/**
+ * This will resume a route.
+ *
+ * @param {object} ele
+ * @param {object} route
+ */
+// const resumeSwitch = (ele, route) =>
+// {
+//     router.resume(route, ele);
+
+//     trackSwitch(ele, route);
+// };
 
 /**
  * This will track a switch.
@@ -48,7 +61,7 @@ export const addSwitch = (ele, group, parent) =>
  */
 const trackSwitch = (ele, id) =>
 {
-	base.dataTracker.add(ele, 'switch',
+	DataTracker.add(ele, 'switch',
 	{
 		id
 	});
