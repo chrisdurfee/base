@@ -19,12 +19,13 @@ const ElementContent = (settings) =>
 };
 
 /**
- * ElementParser
+ * Parser
  *
  * This will parse JSON layouts.
+ *
  * @class
  */
-export class ElementParser
+export class Parser
 {
 	/**
 	 * This will get the tag name of an element.

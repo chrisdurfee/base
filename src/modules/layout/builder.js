@@ -1,5 +1,5 @@
 import { base } from '../../main/base.js';
-import { ElementParser } from './element/element-parser.js';
+import { Parser } from './element/parser.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 import { Html } from '../html/html.js';
 import { Directives } from './directives/directives.js';
@@ -41,8 +41,6 @@ DataTracker.addType('context', (data) =>
 	data.parent.removeContextBranch(data.branch);
 });
 
-const parser = new ElementParser();
-
 /**
  * LayoutBuilder
  *
@@ -55,7 +53,6 @@ export class Builder
 	registerDirectives()
 	{
 		const directives = Directives;
-
 		directives.add('cache', this.cache.bind(this));
 		directives.add('bind', this.bindElement.bind(this));
 		directives.add('onCreated', this.onCreated.bind(this));
@@ -95,7 +92,7 @@ export class Builder
 	_addElementAttrs(obj, attrObject, parent)
 	{
 		/* we want to check if we have attrributes to add */
-		if(!attrObject || typeof attrObject !== 'object')
+		if (!attrObject || typeof attrObject !== 'object')
 		{
 			return false;
 		}
@@ -104,17 +101,17 @@ export class Builder
 		from removing the value if set after the value is
 		added */
 		let type = attrObject.type;
-		if(typeof type !== 'undefined')
+		if (typeof type !== 'undefined')
 		{
 			base.setAttr(obj, 'type', type);
 		}
 
 		/* we want to add each attr to the obj */
-		for(var prop in attrObject)
+		for (var prop in attrObject)
 		{
 			/* we have already added the type so we need to
 			skip if the prop is type */
-			if(attrObject.hasOwnProperty(prop) === false || prop === 'type')
+			if (attrObject.hasOwnProperty(prop) === false || prop === 'type')
 			{
 				continue;
 			}
@@ -123,11 +120,11 @@ export class Builder
 
 			/* we want to check to add the attr settings
 				by property name */
-			if(prop === 'innerHTML')
+			if (prop === 'innerHTML')
 			{
 				obj.innerHTML = attrPropValue;
 			}
-			else if(prop.indexOf('-') !== -1)
+			else if (prop.indexOf('-') !== -1)
 			{
 				// this will handle data and aria attributes
 				base.setAttr(obj, prop, attrPropValue);
@@ -282,11 +279,11 @@ export class Builder
 	 */
 	createElement(obj, container, parent)
 	{
-		let settings = parser.parseElement(obj),
+		const settings = Parser.parse(obj),
 		ele = this.createNode(settings, container, parent);
 
 		const propName = obj.cache;
-		if(parent && propName)
+		if (parent && propName)
 		{
 			parent[propName] = ele;
 		}
@@ -300,7 +297,7 @@ export class Builder
 			for (var i = 0, length = children.length; i < length; i++)
 			{
 				child = children[i];
-				if(child === null)
+				if (child === null)
 				{
 					continue;
 				}

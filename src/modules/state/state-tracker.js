@@ -64,7 +64,7 @@ export class StateTracker
 	 * @param {mixed} [state] the primary action state
 	 * @return {object}
 	 */
-	add(targetId, action, state)
+	static add(targetId, action, state)
 	{
 		const target = this.getTarget(targetId);
 		if (action)
@@ -82,7 +82,7 @@ export class StateTracker
 	 * @param {string} [state]
 	 * @return {object}
 	 */
-	addAction(targetId, action, state)
+	static addAction(targetId, action, state)
 	{
 		return this.add(targetId, action, state);
 	}
@@ -95,7 +95,7 @@ export class StateTracker
 	 * @param {string} [token]
 	 * @return {void}
 	 */
-	removeAction(targetId, action, token)
+	static removeAction(targetId, action, token)
 	{
 		this.off(targetId, action, token);
 	}
@@ -108,7 +108,7 @@ export class StateTracker
 	 * @param {function} callBack
 	 * @return {string}
 	 */
-	on(targetId, action, callBack)
+	static on(targetId, action, callBack)
 	{
 		const target = this.getTarget(targetId);
 		if (action)
@@ -126,7 +126,7 @@ export class StateTracker
 	 * @param {string} token
 	 * @return {void}
 	 */
-	off(targetId, action, token)
+	static off(targetId, action, token)
 	{
 		this.remove(targetId, action, token);
 	}
@@ -139,7 +139,7 @@ export class StateTracker
 	 * @param {string} [token]
 	 * @return {void}
 	 */
-	remove(targetId, action, token)
+	static remove(targetId, action, token)
 	{
 		const targets = this.targets,
 		target = targets[targetId];
@@ -165,7 +165,7 @@ export class StateTracker
 	 * @param {mixed} state
 	 * @return {void}
 	 */
-	set(targetId, action, state)
+	static set(targetId, action, state)
 	{
 		const target = this.getTarget(targetId);
 		target.set(action, state);

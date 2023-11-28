@@ -1,4 +1,4 @@
-import {base} from '../../core.js';
+import { DataTracker } from "../../../../main/data-tracker/data-tracker.js";
 
 /**
  * This will add a route.
@@ -83,7 +83,7 @@ const setupRoute = (ele, route, parent) =>
  */
 const trackRoute = (ele, route) =>
 {
-    base.dataTracker.add(ele, 'routes',
+    DataTracker.add(ele, 'routes',
     {
         route
     });

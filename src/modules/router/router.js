@@ -3,7 +3,7 @@ import { Data } from '../data/data.js';
 export { NavLink } from './nav-link.js';
 import { Utils } from './utils.js';
 import { Route } from './route.js';
-import { HistoryController } from './history-controller.js';
+import { HistoryController } from './history/history-controller.js';
 
 /* this will register the route system to the
 data tracker to remove routes that have been
@@ -78,6 +78,9 @@ export class Router
 
 	/**
 	 * This will setup our history object.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	setupHistory()
 	{

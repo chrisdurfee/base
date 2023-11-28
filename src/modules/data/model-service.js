@@ -185,18 +185,18 @@ export class ModelService
 	 */
 	get(instanceParams, callBack)
 	{
-		let id = this.model.get('id'),
+		const id = this.model.get('id'),
 		params = 'op=get' +
 			'&id=' + id;
 
-		let model = this.model;
+		const model = this.model;
 		return this._get('', params, instanceParams, callBack, (response) =>
 		{
 			if (response)
 			{
 				/* this will update the model with the get request
 				response */
-				let object = this.getObject(response);
+				const object = this.getObject(response);
 				if (object)
 				{
 					model.set(object);

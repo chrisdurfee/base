@@ -59,6 +59,60 @@ export const Events =
      * @param {string} event The event name.
      * @param {object} obj
      * @param {function} fn
+     * @param {boolean} [capture]
+     * @return {object} An instance of base.
+     */
+    on(event, obj, fn, capture)
+    {
+        if (Array.isArray(event))
+        {
+            let evt;
+            for (var i = 0, length = event.length; i < length; i++)
+            {
+                evt = event[i];
+                this.add(evt, obj, fn, capture);
+            }
+        }
+        else
+        {
+            this.add(event, obj, fn, capture);
+        }
+        return this;
+    },
+
+    /**
+     * This will remove an event from an object.
+     *
+     * @param {string} event The event name.
+     * @param {object} obj
+     * @param {function} fn
+     * @param {boolean} [capture]
+     * @return {object} An instance of base.
+     */
+    off(event, obj, fn, capture)
+    {
+        if (Array.isArray(event))
+        {
+            var evt;
+            for (var i = 0, length = event.length; i < length; i++)
+            {
+                evt = event[i];
+                this.remove(evt, obj, fn, capture);
+            }
+        }
+        else
+        {
+            this.remove(event, obj, fn, capture);
+        }
+        return this;
+    },
+
+    /**
+     * This will add an event to an object.
+     *
+     * @param {string} event The event name.
+     * @param {object} obj
+     * @param {function} fn
      * @param {(object|boolean)} [capture]
      * @param {boolean} [swapped]
      * @param {function} [originalFn]
@@ -225,16 +279,19 @@ export const Events =
      */
     isSwappable(event)
     {
-        /* we want to check if the event type is in the
-        swapped event array */
+        /**
+         * We want to check if the event type is in the
+         * swapped event array.
+         */
         const index = Arrays.inArray(this.swap, event);
         return (index > -1);
     }
 };
 
-/* this will register the event system to the
-data tracker to remove events that have been
-added in layouts. */
+/**
+ * This will register the event system to the data tracker
+ * to remove events that have been added in layouts.
+ */
 DataTracker.addType('events', (data) =>
 {
     Events.removeEvent(data);

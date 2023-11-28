@@ -68,6 +68,7 @@ let modelTypeNumber = 0;
  * a service that connects to a remote source.
  *
  * @class
+ * @extends Data
  */
 export class Model extends Data
 {
