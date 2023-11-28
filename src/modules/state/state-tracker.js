@@ -2,20 +2,19 @@
  import { StateTarget } from './state-target.js';
 
  /**
- * State
+ * StateTracker
  *
- * This will create a state controller that can
+ * This will create a state tracker that can
  * add and remove targets, actions, and action
  * subscriber callBack functions.
  *
  * @class
  */
-export class State
+export class StateTracker
 {
 	/**
-	 * @private
-	 * @static
 	 * @member {object} targets
+	 * @private
 	 */
 	static targets = {};
 
@@ -24,6 +23,7 @@ export class State
 	 *
 	 * @param {string} id
 	 * @param {object} target
+	 * @return {void}
 	 */
 	static restore(id, target)
 	{
@@ -45,8 +45,10 @@ export class State
 	/**
 	 * This will get the state of an action.
 	 *
+	 * @protected
 	 * @param {string} targetId
 	 * @param {string} action
+	 * @return {mixed}
 	 */
 	static getActionState(targetId, action)
 	{
@@ -59,13 +61,13 @@ export class State
 	 *
 	 * @param {string} targetId
 	 * @param {string} [action]
-	 * @param {*} [state] the primary action state
+	 * @param {mixed} [state] the primary action state
 	 * @return {object}
 	 */
-	static add(targetId, action, state)
+	add(targetId, action, state)
 	{
 		const target = this.getTarget(targetId);
-		if(action)
+		if (action)
 		{
 			target.addAction(action, state);
 		}
@@ -80,7 +82,7 @@ export class State
 	 * @param {string} [state]
 	 * @return {object}
 	 */
-	static addAction(targetId, action, state)
+	addAction(targetId, action, state)
 	{
 		return this.add(targetId, action, state);
 	}
@@ -91,8 +93,9 @@ export class State
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {string} [token]
+	 * @return {void}
 	 */
-	static removeAction(targetId, action, token)
+	removeAction(targetId, action, token)
 	{
 		this.off(targetId, action, token);
 	}
@@ -105,10 +108,10 @@ export class State
 	 * @param {function} callBack
 	 * @return {string}
 	 */
-	static on(targetId, action, callBack)
+	on(targetId, action, callBack)
 	{
-		let target = this.getTarget(targetId);
-		if(action)
+		const target = this.getTarget(targetId);
+		if (action)
 		{
 			return target.on(action, callBack);
 		}
@@ -121,8 +124,9 @@ export class State
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {string} token
+	 * @return {void}
 	 */
-	static off(targetId, action, token)
+	off(targetId, action, token)
 	{
 		this.remove(targetId, action, token);
 	}
@@ -133,24 +137,24 @@ export class State
 	 * @param {string} targetId
 	 * @param {string} [action]
 	 * @param {string} [token]
+	 * @return {void}
 	 */
-	static remove(targetId, action, token)
+	remove(targetId, action, token)
 	{
-		let targets = this.targets,
+		const targets = this.targets,
 		target = targets[targetId];
-		if(!target)
+		if (!target)
 		{
-			return false;
+			return;
 		}
 
-		if(action)
+		if (action)
 		{
 			target.off(action, token);
+			return;
 		}
-		else
-		{
-			delete targets[targetId];
-		}
+
+		delete targets[targetId];
 	}
 
 	/**
@@ -158,11 +162,12 @@ export class State
 	 *
 	 * @param {string} targetId
 	 * @param {string} action
-	 * @param {*} state
+	 * @param {mixed} state
+	 * @return {void}
 	 */
-	static set(targetId, action, state)
+	set(targetId, action, state)
 	{
-		var target = this.getTarget(targetId);
+		const target = this.getTarget(targetId);
 		target.set(action, state);
 	}
 }

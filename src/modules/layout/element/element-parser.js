@@ -32,7 +32,7 @@ export class ElementParser
 	 * @param {object} obj
 	 * @return {string}
 	 */
-	getTag(obj)
+	static getTag(obj)
 	{
 		let type = 'div',
 		node = obj.tag;
@@ -49,7 +49,7 @@ export class ElementParser
 	 *
 	 * @param {object} obj
 	 */
-	setupChildren(obj)
+	static setupChildren(obj)
 	{
 		if (obj.nest)
 		{
@@ -62,11 +62,12 @@ export class ElementParser
 	 * This will parse a layout element.
 	 *
 	 * @param {object} obj
+	 * @param {object} parent
 	 * @return {object}
 	 */
-	parse(obj)
+	static parse(obj, parent)
 	{
-		let attr = [],
+		const attr = [],
         children = [],
         directives = [],
         tag = this.getTag(obj),
@@ -110,8 +111,17 @@ export class ElementParser
 
 			/* we need to filter the children from the attr
 			settings. the children need to keep their order. */
-			if (typeof value !== 'object')
+			const type = typeof value;
+			if (type !== 'object')
 			{
+				if (type === 'function')
+				{
+					const callback = value;
+					calue = function(e)
+					{
+						callback.call(this, e, parent);
+					};
+				}
 				attr.push(Attribute(key, value));
 			}
 			else

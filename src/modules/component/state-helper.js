@@ -1,4 +1,4 @@
-import { state } from '../state/state.js';
+import { StateTracker } from '../state/state-tracker.js';
 
 /**
  * StateHelper
@@ -178,7 +178,7 @@ export class StateHelper
 		for (var i = 0, length = actions.length; i < length; i++)
 		{
 			var action = actions[i];
-			state.remove(action.targetId, action.action, action.token);
+			StateTracker.remove(action.targetId, action.action, action.token);
 		}
 	}
 
@@ -190,7 +190,7 @@ export class StateHelper
 	 */
 	restore(state)
 	{
-		state.restore();
+		StateTracker.restore();
 
 		const remotes = this.remoteStates;
 		if (!remotes)
@@ -215,8 +215,7 @@ export class StateHelper
 	 */
 	bindRemoteState(target, actionEvent, remoteTargetId)
 	{
-		const remoteTarget = state.getTarget(remoteTargetId);
-
+		const remoteTarget = StateTracker.getTarget(remoteTargetId);
 		return target.link(remoteTarget, actionEvent);
 	}
 

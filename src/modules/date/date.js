@@ -23,14 +23,14 @@ export const date = {
 	 */
 	getDayName(day = new Date().getDay(), shortenName = false)
 	{
-		let days = this.dayNames;
-		if(day > days.length)
+		const days = this.dayNames;
+		if (day > days.length)
 		{
 			return false;
 		}
 
 		/* we want to check to shorten name */
-		let dayName = days[day];
+		const dayName = days[day];
 		return (shortenName)? dayName.substring(0, 3) : dayName;
 	},
 
@@ -54,10 +54,10 @@ export const date = {
 	 */
 	convertDate(dateString, addYear)
 	{
-		var baseDate = base.date;
+		const baseDate = base.date;
 		dateString = (dateString)? dateString.replace(/\s/, 'T'): ''; //For safari
 
-		var date = new Date(dateString),
+		const date = new Date(dateString),
 		year = (addYear === true)? ' ' + date.getFullYear() : '';
 		return baseDate.getDayName(date.getDay()) + ', ' + baseDate.getMonthName(date.getMonth(), true) + ' ' + baseDate.padNumber(date.getDate()) + year;
 	},
@@ -81,12 +81,12 @@ export const date = {
 	 */
 	createDate(dateString)
 	{
-		if(!dateString)
+		if (!dateString)
 		{
 			return new Date();
 		}
 
-		if(typeof dateString === 'string' && dateString.indexOf('-') > -1)
+		if (typeof dateString === 'string' && dateString.indexOf('-') > -1)
 		{
 			dateString = dateString.replace(/\s/, 'T'); //For safari
 			dateString = (dateString.indexOf(':') > -1)? dateString : dateString + "T00:00:00";
@@ -103,7 +103,7 @@ export const date = {
 	 */
 	format(type, dateString)
 	{
-		let date = this.createDate(dateString);
+		const date = this.createDate(dateString);
 		switch(type)
 		{
 			case 'sql':
@@ -126,8 +126,8 @@ export const date = {
 	 */
 	formatTime(dateString, format)
 	{
-		let date = this.createDate(dateString);
-		if(format === 24)
+		const date = this.createDate(dateString);
+		if (format === 24)
 		{
 			return this.padNumber(date.getHours()) + ':' + this.padNumber(date.getMinutes()) + ':' + this.padNumber(date.getSeconds());
 		}
@@ -135,12 +135,12 @@ export const date = {
 		let hours = date.getHours(),
 		meridian = 'AM';
 
-		if(hours >= 12)
+		if (hours >= 12)
 		{
 			meridian = 'PM';
 		}
 
-		if(hours > 12)
+		if (hours > 12)
 		{
 			hours = hours - 12;
 		}
@@ -167,13 +167,13 @@ export const date = {
 	 */
 	getMonthName(month = new Date().getMonth(), shortenName = false)
 	{
-		let months = this.monthNames;
+		const months = this.monthNames;
 		if (month > months.length)
 		{
 			return false;
 		}
 
-		let monthName = months[month];
+		const monthName = months[month];
 		if (!monthName)
 		{
 			return false;
@@ -192,18 +192,17 @@ export const date = {
 	{
 		/* we want to check to use params or use
 		default */
-		let date = new Date();
+		const date = new Date();
 		month = (typeof month !== 'undefined')? month : date.getMonth();
 		year = (typeof year !== 'undefined')? year : date.getFullYear();
 
 		/* we need to get the month lengths for
 		the year */
-		let yearMonthLengths = this.getMonthsLength(year);
+		const yearMonthLengths = this.getMonthsLength(year);
 
 		/* we can select the month length from
 		the yearMonthLengths array */
-		let monthLength = yearMonthLengths[month];
-		return monthLength;
+		return yearMonthLengths[month];
 	},
 
 	/**
@@ -214,8 +213,8 @@ export const date = {
 	 */
 	getMonthsLength(year = new Date().getFullYear())
 	{
-		let isLeapYear = this.leapYear(year);
-		let days = (isLeapYear === true)?
+		const isLeapYear = this.leapYear(year);
+		const days = (isLeapYear === true)?
 			[31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 		:
 			[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -235,8 +234,8 @@ export const date = {
 		date = date.replace(/\s/, 'T'); //For safari
 		date = new Date(date);
 
-		let now = new Date();
-		if(setHours === true)
+		const now = new Date();
+		if (setHours === true)
 		{
 			now.setHours(0,0,0,0);
 		}
@@ -296,7 +295,7 @@ export const date = {
 	 */
 	getTimeFrame(date)
 	{
-		let timeDiff = this.getDiffFromNow(date);
+		const timeDiff = this.getDiffFromNow(date);
 		return this.convertToEstimate(timeDiff);
 	},
 
@@ -309,9 +308,9 @@ export const date = {
 	{
 		let timeFrame = '';
 
-		if(milliseconds <= 0)
+		if (milliseconds <= 0)
 		{
-			switch(true)
+			switch (true)
 			{
 				case milliseconds < -63072000000:
 					var years = this.toYears(Math.abs(milliseconds));
@@ -369,7 +368,7 @@ export const date = {
 		}
 		else
 		{
-			switch(true)
+			switch (true)
 			{
 				case milliseconds < 1000:
 					timeFrame = '1 second ago';
@@ -434,7 +433,7 @@ export const date = {
 	 */
 	toYears(milliseconds)
 	{
-		if(typeof milliseconds !== 'number')
+		if (typeof milliseconds !== 'number')
 		{
 			return false;
 		}
@@ -450,7 +449,7 @@ export const date = {
 	 */
 	toMonths(milliseconds)
 	{
-		if(typeof milliseconds === 'number')
+		if (typeof milliseconds === 'number')
 		{
 			return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 30));
 		}
@@ -465,7 +464,7 @@ export const date = {
 	 */
 	toDays(milliseconds)
 	{
-		if(typeof milliseconds !== 'number')
+		if (typeof milliseconds !== 'number')
 		{
 			return false;
 		}
@@ -481,7 +480,7 @@ export const date = {
 	 */
 	toHours(milliseconds)
 	{
-		if(typeof milliseconds !== 'number')
+		if (typeof milliseconds !== 'number')
 		{
 			return false;
 		}
@@ -497,7 +496,7 @@ export const date = {
 	 */
 	toMinutes(milliseconds)
 	{
-		if(typeof milliseconds !== 'number')
+		if (typeof milliseconds !== 'number')
 		{
 			return false;
 		}
@@ -513,7 +512,7 @@ export const date = {
 	 */
 	toSeconds(milliseconds)
 	{
-		if(typeof milliseconds !== 'number')
+		if (typeof milliseconds !== 'number')
 		{
 			return false;
 		}
@@ -531,7 +530,7 @@ export const date = {
 	getDifference(startDate, endDate)
 	{
 		/* we want to convert the dates to objects */
-		let start = new Date(startDate),
+		const start = new Date(startDate),
 		end = new Date(endDate),
 
 		/* we want to subtract the start time from the end */

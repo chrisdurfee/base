@@ -1,5 +1,5 @@
 import { base } from '../../main/base.js';
-import { builder } from '../layout/layout-builder.js';
+import { builder } from '../layout/builder.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 

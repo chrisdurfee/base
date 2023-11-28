@@ -1,10 +1,11 @@
-import {base} from '../../main/core.js';
-import {ElementParser} from './element/element-parser.js';
-import {dataBinder} from '../data-binder/data-binder.js';
-import {htmlBuilder, normalizeAttr, removeEventPrefix} from '../html-builder/html-builder.js';
-import {Directives} from './directives/directives.js';
-import {WatcherHelper} from './watcher-helper.js';
-import {Jot} from "../component/jot.js";
+import { base } from '../../main/base.js';
+import { ElementParser } from './element/element-parser.js';
+import { dataBinder } from '../data-binder/data-binder.js';
+import { Html } from '../html/html.js';
+import { Directives } from './directives/directives.js';
+import { DataTracker } from '../../main/data-tracker/data-tracker.js';
+import { WatcherHelper } from './watcher-helper.js';
+import { Jot } from "../component/jot.js";
 
 /**
  * This will create a watch element.
@@ -30,9 +31,9 @@ export const Watch = function(data, prop)
  * This will track the context from an atom to remove
  * it when the element is removed.
  */
-base.dataTracker.addType('context', function(data)
+DataTracker.addType('context', (data) =>
 {
-	if(!data)
+	if (!data)
 	{
 		return false;
 	}
@@ -48,9 +49,8 @@ const parser = new ElementParser();
  * This will build JSON layouts.
  *
  * @class
- * @augments htmlBuilder
  */
-export class LayoutBuilder extends htmlBuilder
+export class Builder
 {
 	registerDirectives()
 	{
@@ -148,14 +148,14 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	addAttr(obj, attr, value, parent)
 	{
-		if(value === '' || !attr)
+		if (value === '' || !attr)
 		{
 			return false;
 		}
 
 		/* we want to check to add a value or an event listener */
-		let type = typeof value;
-		if(type === 'function')
+		const type = typeof value;
+		if (type === 'function')
 		{
 			/* this will add the event using the base events
 			so the event is tracked */
@@ -182,22 +182,22 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	render(layout, container, parent)
 	{
-		if(!layout)
+		if (!layout)
 		{
 			return;
 		}
 
-		switch(typeof layout)
+		switch (typeof layout)
 		{
 			case 'object':
-				if(layout.isUnit === true)
+				if (layout.isUnit === true)
 				{
 					this.createComponent(layout, container, parent);
 					return layout;
 				}
 			default:
-				let component = Jot(layout);
-				let jot = new component();
+				const component = Jot(layout);
+				const jot = new component();
 				this.createComponent(jot, container, parent);
 				return jot;
 		}
@@ -213,7 +213,7 @@ export class LayoutBuilder extends htmlBuilder
 	 */
 	build(obj, container, parent)
 	{
-		let fragment = this.createDocFragment();
+		const fragment = this.createDocFragment();
 
 		if (Array.isArray(obj))
 		{

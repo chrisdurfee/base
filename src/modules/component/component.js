@@ -1,12 +1,12 @@
 import { Unit } from './unit.js';
-import { state } from '../state/state.js';
+import { StateTracker } from '../state/state-tracker.js';
 import { EventHelper } from './event-helper.js';
 import { StateHelper } from './state-helper.js';
 import { Objects } from '../../shared/objects.js';
 
 export { Unit } from './unit.js';
 export { Jot } from './jot.js';
-export { Watch } from '../layout/layout-builder.js';
+export { Watch } from '../layout/builder.js';
 
 /**
  * Component
@@ -78,7 +78,7 @@ export class Component extends Unit
 	setupStateTarget(id)
 	{
 		const targetId = id || this.stateTargetId || this.id;
-		this.state = state.getTarget(targetId);
+		this.state = StateTracker.getTarget(targetId);
 	}
 
 	/**
@@ -156,7 +156,7 @@ export class Component extends Unit
 		}
 
 		this.stateHelper.removeRemoteStates();
-		state.remove();
+		StateTracker.remove();
 	}
 
 	/**
