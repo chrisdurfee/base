@@ -1,14 +1,18 @@
-import { base } from '../../main/base.js';
+import { Dom } from '../../shared/dom.js';
+import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Data } from '../data/data.js';
 export { NavLink } from './nav-link.js';
 import { Utils } from './utils.js';
 import { Route } from './route.js';
 import { HistoryController } from './history/history-controller.js';
+import { Events } from '../../main/events/events.js';
 
-/* this will register the route system to the
-data tracker to remove routes that have been
-nested in layouts. */
-base.dataTracker.addType('routes', (data) =>
+/**
+ * This will register the route system to the data
+ * tracker to remove routes that have been nested
+ * in layouts.
+ */
+DataTracker.addType('routes', (data) =>
 {
 	if (!data)
 	{
@@ -22,7 +26,7 @@ base.dataTracker.addType('routes', (data) =>
 	}
 });
 
-base.dataTracker.addType('switch', (data) =>
+DataTracker.addType('switch', (data) =>
 {
 	if (!data)
 	{
@@ -343,7 +347,7 @@ export class Router
 		this.data.set('path', this.getPath());
 
 		this.callBackLink = this.checkLink.bind(this);
-		base.on('click', document, this.callBackLink);
+		Events.on('click', document, this.callBackLink);
 
 		/* this will route to the first url entered
 		when the router loads. this will fix the issue
@@ -411,7 +415,7 @@ export class Router
 			}
 		}
 
-		if (target.target === '_blank' || base.data(target, 'cancel-route'))
+		if (target.target === '_blank' || Dom.data(target, 'cancel-route'))
 		{
 			return true;
 		}
@@ -765,7 +769,7 @@ export class Router
 	 */
 	destroy()
 	{
-		base.off('click', document, this.callBackLink);
+		Events.off('click', document, this.callBackLink);
 	}
 
 	/**
