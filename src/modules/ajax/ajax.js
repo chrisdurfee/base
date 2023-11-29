@@ -1,5 +1,7 @@
 import { base } from '../../main/base.js';
+import { Events } from '../../main/events/events.js';
 import { Objects } from '../../shared/objects.js';
+import { Strings } from '../../shared/strings.js';
 
 /**
  * This is the default xhr (ajax) settings.
@@ -114,7 +116,7 @@ base.augment(
 	{
 		if (typeof settingsObj === 'object')
 		{
-			this.xhrSettings = this.extendClass(base.xhrSettings, settingsObj);
+			this.xhrSettings = Objects.extendClass(base.xhrSettings, settingsObj);
 		}
 	},
 
@@ -152,7 +154,7 @@ base.augment(
  *
  * @return {object} xhr object.
  */
-export const ajax = (...args) =>
+export const Ajax = (...args) =>
 {
 	/* we want to save the args so we can check
 	which way we are adding the ajax settings */
@@ -296,7 +298,7 @@ export class XhrRequest
 
 		if (addingType === 'string')
 		{
-			addingParams = base.parseQueryString(addingParams, false);
+			addingParams = Strings.parseQueryString(addingParams, false);
 		}
 
 		if (params instanceof FormData)
@@ -473,9 +475,8 @@ export class XhrRequest
 		after the events are completed, aborted, or errored */
 		const removeEvents = () =>
 		{
-			const events = base.events;
-			events.removeEvents(xhr.upload);
-			events.removeEvents(xhr);
+			Events.removeEvents(xhr.upload);
+			Events.removeEvents(xhr);
 		};
 
 		const settings = this.settings;
@@ -551,8 +552,8 @@ export class XhrRequest
 		}
 
 		const xhr = this.xhr,
-		callBack = base.bind(this, this.update);
-		base.on(['load', 'error', 'abort'], xhr, callBack);
-		base.on('progress', xhr.upload, callBack);
+		callBack = this.update.bind(this);
+		Events.on(['load', 'error', 'abort'], xhr, callBack);
+		Events.on('progress', xhr.upload, callBack);
 	}
 }

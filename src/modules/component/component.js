@@ -6,7 +6,6 @@ import { Objects } from '../../shared/objects.js';
 
 export { Unit } from './unit.js';
 export { Jot } from './jot.js';
-export { Watch } from '../layout/builder.js';
 
 /**
  * Component

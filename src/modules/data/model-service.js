@@ -1,5 +1,6 @@
-import { ajax } from '../ajax/ajax.js';
-import { base } from '../../main/base.js';
+import { Ajax } from '../ajax/ajax.js';
+import { Strings } from '../../shared/strings.js';
+import { Encode } from '../../shared/encode/encode.js';
 
 /**
  * ModelService
@@ -144,7 +145,7 @@ export class ModelService
 		params = params || {};
 		if (typeof params === 'string')
 		{
-			params = base.parseQueryString(params, false);
+			params = Strings.parseQueryString(params, false);
 		}
 
 		if (!addingParams)
@@ -154,7 +155,7 @@ export class ModelService
 
 		if (typeof addingParams === 'string')
 		{
-			addingParams = base.parseQueryString(addingParams, false);
+			addingParams = Strings.parseQueryString(addingParams, false);
 		}
 
 		if (this._isFormData(params))
@@ -229,7 +230,7 @@ export class ModelService
 	setupObjectData()
 	{
 		const item = this.model.get();
-		return this.objectType + '=' + base.prepareJsonUrl(item);
+		return this.objectType + '=' + Encode.prepareJsonUrl(item);
 	}
 
 	/**
@@ -390,7 +391,7 @@ export class ModelService
 			settings.headers = {};
 		}
 
-		return ajax(settings);
+		return Ajax(settings);
 	}
 
 	/**
