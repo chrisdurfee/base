@@ -9,11 +9,13 @@ import { useContext, addContext, context } from './context/context-directives.js
 import { onCreated } from './reactive/on-created.js';
 import { addRoute } from './route.js';
 import { addSwitch } from './switch.js';
+import { onDestroyed } from './reactive/on-destroyed.js';
 import { Directives } from '../directives.js';
 
 Directives
 	.add('cache', cache)
 	.add('onCreated', onCreated)
+	.add('onDestroyed', onDestroyed)
 	.add('bind', Bind)
 	.add('onSet', onSet)
 	.add('onState', onState)
