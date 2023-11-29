@@ -111,8 +111,7 @@ const updateElement = (ele, callBack, prop, value, parent) =>
  */
 const rebuild = (ele, layout, parent) =>
 {
-	Html.removeAll(ele);
-	Builder.build(layout, ele, parent);
+	Builder.rebuild(layout, ele, parent);
 };
 
 /**

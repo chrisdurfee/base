@@ -1,6 +1,6 @@
 import { base } from '../../main/base.js';
-import { builder } from '../layout/builder.js';
-import { dataBinder } from '../data-binder/data-binder.js';
+import { Builder } from '../layout/builder.js';
+import { Html } from '../html/html.js';
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 
 /**
@@ -320,7 +320,7 @@ export class Unit
 		const layout = this.prepareLayout();
 		this.build(layout, this.container);
 
-		base.dataTracker.add(this.panel, 'components',
+		DataTracker.add(this.panel, 'components',
 		{
 			component: this
 		});
@@ -338,7 +338,7 @@ export class Unit
 	 */
 	build(layout, container)
 	{
-		return builder.build(layout, container, this);
+		return Builder.build(layout, container, this);
 	}
 
 	/**
@@ -353,7 +353,7 @@ export class Unit
 	prepend(layout, container, optionalNode)
 	{
 		const frag = this.build(layout, null);
-		builder.prepend(container, frag, optionalNode);
+		Html.prepend(container, frag, optionalNode);
 	}
 
 	/**
@@ -366,7 +366,7 @@ export class Unit
 	 */
 	rebuild(layout, container)
 	{
-		return builder.rebuild(container, layout, this);
+		return Builder.rebuild(container, layout, this);
 	}
 
 	/**
@@ -416,7 +416,7 @@ export class Unit
 	 */
 	removeAll(ele)
 	{
-		return builder.removeAll(ele);
+		return Html.removeAll(ele);
 	}
 
 	/**
@@ -496,8 +496,8 @@ export class Unit
 		this.prepareDestroy();
 		this.removeContext();
 
-		let panel = this.panel || this.id;
-		builder.removeElement(panel);
+		const panel = this.panel || this.id;
+		Html.removeElement(panel);
 	}
 
 	/**
@@ -531,23 +531,5 @@ export class Unit
 	destroy()
 	{
 		this.remove();
-	}
-
-	/**
-	 * This will bind and element to data.
-	 *
-	 * @protected
-	 * @param {object} element
-	 * @param {object} data
-	 * @param {string} prop
-	 * @param {function} filter
-	 * @returns {void}
-	 */
-	bindElement(element, data, prop, filter)
-	{
-		if (element)
-		{
-			dataBinder.bind(element, data, prop, filter);
-		}
 	}
 }

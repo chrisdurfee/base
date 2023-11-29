@@ -75,12 +75,27 @@ export class Builder
 	}
 
 	/**
+	 * This will rebuild a layout.
+	 *
+	 * @param {object} ele
+	 * @param {object} layout
+	 * @param {object} parent
+	 * @return {object}
+	 */
+	static rebuild(ele, layout, parent)
+	{
+		HtmlHelper.removeAll(ele);
+		return this.build(layout, ele, parent);
+	}
+
+	/**
 	 * This will build an element or component.
 	 *
 	 * @protected
 	 * @param {object} obj
 	 * @param {object} container
 	 * @param {object} [parent] The component adding the layout.
+	 * @return {void}
 	 */
 	static buildElement(obj, container, parent)
 	{
@@ -105,6 +120,7 @@ export class Builder
 	 * @param {object} obj
 	 * @param {object} container
 	 * @param {object} [parent] The component adding the layout.
+	 * @return {void}
 	 */
 	static createElement(obj, container, parent)
 	{
@@ -149,6 +165,7 @@ export class Builder
 	 * @param {object} ele
 	 * @param {array} directives
 	 * @param {object} parent
+	 * @return {void}
 	 */
 	static setDirectives(ele, directives, parent)
 	{
@@ -165,6 +182,7 @@ export class Builder
 	 * @param {object} ele
 	 * @param {object} attrDirective
 	 * @param {object} parent
+	 * @return {void}
 	 */
 	static handleDirective(ele, attrDirective, parent)
 	{
@@ -205,6 +223,7 @@ export class Builder
 	 * @param {object} obj
 	 * @param {object} container
 	 * @param {object} parent
+	 * @return {void}
 	 */
 	static createComponent(obj, container, parent)
 	{
