@@ -1,29 +1,8 @@
 import { base } from '../../main/base.js';
 import { Parser } from './element/parser.js';
-import { Dom } from '../../shared/dom.js';
 import { HtmlHelper } from './html-helper.js';
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Jot } from "../component/jot.js";
-
-/**
- * This will create a watch element.
- *
- * @param {object} data
- * @param {string} prop
- * @returns {function}
- */
-export const Watch = function(data, prop)
-{
-	return function(callBack)
-	{
-		return {
-			onSet: [data, prop, (ele, value) =>
-			{
-				return callBack(value);
-			}]
-		};
-	};
-};
 
 /**
  * This will track the context from an atom to remove
