@@ -13,21 +13,21 @@ const routePattern = (uri) =>
 	let uriQuery = "";
 	if (uri)
 	{
-		let filter = /\//g;
+		const filter = /\//g;
 		uriQuery = uri.replace(filter, "\/");
 
 		/* this will setup for optional slashes before the optional params */
-		let optionalSlash = /(\/):[^\/(]*?\?/g;
+		const optionalSlash = /(\/):[^\/(]*?\?/g;
 		uriQuery = uriQuery.replace(optionalSlash, (str) =>
 		{
-			let pattern = /\//g;
+			const pattern = /\//g;
 			return str.replace(pattern, '(?:$|\/)');
 		});
 
 		/* this will setup for optional params and params
 		and stop at the last slash or query start */
-		let param = /(:[^\/?&($]+)/g;
-		let optionalParams = /(\?\/+\*?)/g;
+		const param = /(:[^\/?&($]+)/g;
+		const optionalParams = /(\?\/+\*?)/g;
 		uriQuery = uriQuery.replace(optionalParams, '?\/*');
 		uriQuery = uriQuery.replace(param, (str) =>
 		{
@@ -36,7 +36,7 @@ const routePattern = (uri) =>
 
 		/* we want to setup the wild card and param
 		checks to be modified to the route uri string */
-		let allowAll = /(\*)/g;
+		const allowAll = /(\*)/g;
 		uriQuery = uriQuery.replace(allowAll, '.*');
 	}
 
@@ -80,10 +80,10 @@ const paramPattern = (uri) =>
 		return params;
 	}
 
-	let filter = /[\*?]/g;
+	const filter = /[\*?]/g;
 	uri = uri.replace(filter, '');
 
-	let pattern = /:(.[^.\/?&($]+)\?*/g,
+	const pattern = /:(.[^.\/?&($]+)\?*/g,
 	matches = uri.match(pattern);
 	if (matches === null)
 	{
@@ -119,10 +119,10 @@ export class Route extends SimpleData
 	 */
 	constructor(settings)
 	{
-		let uri = settings.baseUri;
+		const uri = settings.baseUri;
 
 		const paramKeys = paramPattern(uri);
-		let params = getParamDefaults(paramKeys);
+		const params = getParamDefaults(paramKeys);
 		super(params);
 
 		this.uri = uri;
@@ -370,23 +370,27 @@ export class Route extends SimpleData
 	 */
 	setParams(values)
 	{
-		if(values && typeof values === 'object')
+		if (!values || typeof values !== 'object')
 		{
-			let keys = this.paramKeys;
-			if(keys)
+			return;
+		}
+
+		const keys = this.paramKeys;
+		if (!keys)
+		{
+			return;
+		}
+
+		const params = {};
+		for (var i = 0, maxL = keys.length; i < maxL; i++)
+		{
+			var key = keys[i];
+			if (typeof key !== 'undefined')
 			{
-				let params = {};
-				for(var i = 0, maxL = keys.length; i < maxL; i++)
-				{
-					var key = keys[i];
-					if(typeof key !== 'undefined')
-					{
-						params[key] = values[i];
-					}
-				}
-				this.set(params);
+				params[key] = values[i];
 			}
 		}
+		this.set(params);
 	}
 
 	/**
