@@ -1,6 +1,20 @@
 import { DataTracker } from "../../../../../main/data-tracker/data-tracker.js";
 
 /**
+ * This will track the context from an atom to remove
+ * it when the element is removed.
+ */
+DataTracker.addType('context', (data) =>
+{
+	if (!data)
+	{
+		return false;
+	}
+
+	data.parent.removeContextBranch(data.branch);
+});
+
+/**
  * This will get the parent context.
  *
  * @param {object|null} parent

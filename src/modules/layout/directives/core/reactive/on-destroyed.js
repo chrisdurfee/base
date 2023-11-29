@@ -11,7 +11,7 @@ DataTracker.addType('destroyed', (data) =>
 		return false;
 	}
 
-	data.callBack();
+	data.callBack(data.ele);
 });
 
 /**
@@ -38,6 +38,7 @@ const track = (ele, callBack) =>
 {
     DataTracker.add(ele, 'destroyed',
     {
+        ele,
         callBack
     });
 };
