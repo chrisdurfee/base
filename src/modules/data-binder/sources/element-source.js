@@ -24,7 +24,7 @@ const SetAttr = (element, attr, value) =>
  */
 const UpdateRadioAttr = (element, attr, value) =>
 {
-	element.checked = (element.value === value);
+	element.checked = (element.value == value);
 };
 
 /**

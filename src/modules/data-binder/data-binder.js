@@ -392,7 +392,7 @@ export class DataBinder
 	 */
 	addEvents()
 	{
-		Events.on(["change", "keyup", "paste"], document, this.changeHandler, false);
+		Events.on(["change", "paste", "input"], document, this.changeHandler, false);
 	}
 
 	/**
@@ -403,7 +403,7 @@ export class DataBinder
 	 */
 	removeEvents()
 	{
-		Events.off(["change", "keyup", "paste"], document, this.changeHandler, false);
+		Events.off(["change", "paste", "input"], document, this.changeHandler, false);
 	}
 }
 
