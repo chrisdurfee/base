@@ -1,5 +1,3 @@
-import { base } from '../../../main/base.js';
-import { Types } from '../../../shared/types.js';
 import { Objects } from '../../../shared/objects.js';
 
 /**

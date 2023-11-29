@@ -1,4 +1,4 @@
-import { base } from '../../main/base.js';
+import { Events } from '../../shared/events.js';
 export { DataPubSub } from './data-pub-sub.js';
 import { OneWayConnection } from './connection-tracker/connections/one-way-connection.js';
 import { TwoWayConnection } from './connection-tracker/connections/two-way-connection.js';
@@ -392,7 +392,7 @@ export class DataBinder
 	 */
 	addEvents()
 	{
-		base.on(["change", "keyup", "paste"], document, this.changeHandler, false);
+		Events.on(["change", "keyup", "paste"], document, this.changeHandler, false);
 	}
 
 	/**
@@ -403,7 +403,7 @@ export class DataBinder
 	 */
 	removeEvents()
 	{
-		base.off(["change", "keyup", "paste"], document, this.changeHandler, false);
+		Events.off(["change", "keyup", "paste"], document, this.changeHandler, false);
 	}
 }
 

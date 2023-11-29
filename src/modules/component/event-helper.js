@@ -1,4 +1,4 @@
-import { base } from '../../main/base.js';
+import { Events } from "../../main/events/events.js";
 
 /**
  * EventHelper
@@ -55,7 +55,7 @@ export class EventHelper
 	 */
 	on(event, obj, callBack, capture)
 	{
-		base.on(event, obj, callBack, capture);
+		Events.on(event, obj, callBack, capture);
 
 		this.events.push({
 			event,
@@ -76,7 +76,7 @@ export class EventHelper
 	 */
 	off(event, obj, callBack, capture)
 	{
-		base.off(event, obj, callBack, capture);
+		Events.off(event, obj, callBack, capture);
 
 		let option,
 		events = this.events;
@@ -103,7 +103,7 @@ export class EventHelper
 		for (var i = 0, length = events.length; i < length; i++)
 		{
 			event = events[i];
-			base.on(event.event, event.obj, event.callBack, event.capture);
+			Events.on(event.event, event.obj, event.callBack, event.capture);
 		}
 	}
 
@@ -119,7 +119,7 @@ export class EventHelper
 		for (var i = 0, length = events.length; i < length; i++)
 		{
 			event = events[i];
-			base.off(event.event, event.obj, event.callBack, event.capture);
+			Events.off(event.event, event.obj, event.callBack, event.capture);
 		}
 	}
 
