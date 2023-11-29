@@ -290,7 +290,7 @@ export class Builder
 
 		/* we want to recursively add the children to
 		the new element */
-		let children = settings.children;
+		const children = settings.children;
 		if (children.length > 0)
 		{
 			let child;

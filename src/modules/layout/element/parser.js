@@ -79,15 +79,13 @@ export class Parser
 
 		if (tag === 'button')
 		{
-            let type = obj.type || 'button';
+            const type = obj.type || 'button';
             attr.push(Attribute('type', type));
 		}
 
 		this.setupChildren(obj);
 
 		var value, directive;
-		const allDirectives = Directives;
-
 		for (var key in obj)
 		{
 			if (!obj.hasOwnProperty(key))
@@ -101,7 +99,7 @@ export class Parser
 				continue;
 			}
 
-			if ((directive = allDirectives.get(key)) !== null)
+			if ((directive = Directives.get(key)) !== null)
 			{
 				directives.push(AttributeDirective(
 					Attribute(key, value),
@@ -118,7 +116,7 @@ export class Parser
 				if (type === 'function')
 				{
 					const callback = value;
-					calue = function(e)
+					value = function(e)
 					{
 						callback.call(this, e, parent);
 					};
@@ -139,7 +137,7 @@ export class Parser
 				{
 					directives.push(AttributeDirective(
 						Attribute(key, value),
-						allDirectives.get('watch')
+						Directives.get('watch')
 					));
 					continue;
 				}
