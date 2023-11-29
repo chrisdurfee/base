@@ -1,4 +1,21 @@
 /**
+ * This will cache the element in the parent.
+ *
+ * @param {object} ele
+ * @param {string} propName
+ * @param {object} parent
+ */
+export const cache = (ele, propName, parent) =>
+{
+    if (!propName || !parent)
+    {
+        return;
+    }
+
+    parent[propName] = ele;
+};
+
+/**
  * This will pass the parent state to the callBack.
  *
  * @param {object} ele
