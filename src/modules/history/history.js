@@ -1,4 +1,5 @@
-import { base } from '../../main/base.js';
+import { Events } from "../../main/events/events.js";
+import { equals } from "../../main/equals.js";
 
 const updateTitle =  (title) =>
 {
@@ -33,12 +34,12 @@ export const history =
 			fn(e);
 		};
 
-		base.events.add('popstate', window, popEvent, capture, true, fn);
+		Events.add('popstate', window, popEvent, capture, true, fn);
 	},
 
 	removeEvent(fn, capture)
 	{
-		base.off('popstate', window, fn, capture);
+		Events.off('popstate', window, fn, capture);
 	},
 
 	pushState(object, title, url)
@@ -48,7 +49,7 @@ export const history =
 
 		/* we want to check if the object is not already
 		the last saved state */
-		if(!lastState || base.equals(lastState, object) === false)
+		if(!lastState || equals(lastState, object) === false)
 		{
 			title = getStateTitle(title, object);
 			updateTitle(title);

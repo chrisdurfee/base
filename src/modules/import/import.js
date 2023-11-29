@@ -1,4 +1,5 @@
-import { builder } from '../layout/builder.js';
+import { Builder } from '../layout/builder.js';
+import { Html } from '../html/html.js';
 import { Jot } from "../component/jot.js";
 
 /**
@@ -124,7 +125,7 @@ class Group
             });
         }
 
-        builder.build(atom, document.head);
+        Builder.build(atom, document.head);
     }
 
     /**
@@ -227,7 +228,7 @@ const isConstructor = (object) =>
  */
 const render = (layout, ele, parent) =>
 {
-    const frag = builder.build(layout, null, parent);
+    const frag = Builder.build(layout, null, parent);
     const firstChild = frag.firstChild;
     ele.after(frag);
     return firstChild;
@@ -424,7 +425,7 @@ const ImportWrapper = Jot(
             return;
         }
 
-        builder.removeElement(this.layoutRoot);
+        Html.removeElement(this.layoutRoot);
     }
 });
 

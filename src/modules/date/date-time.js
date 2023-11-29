@@ -2,7 +2,7 @@
  * This will add date functions to the base framework.
  *
  */
-export const date = {
+export const DateTime = {
 
 	/**
 	 * @member {array} monthName
