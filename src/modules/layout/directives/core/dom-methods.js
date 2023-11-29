@@ -1,5 +1,6 @@
 import { Html } from "../../../html/html.js";
 import { Dom } from "../../../../shared/dom.js";
+import { Builder } from "../../../builder.js";
 import { dataBinder } from "../../../data-binder/data-binder.js";
 
 /**
@@ -111,7 +112,7 @@ const updateElement = (ele, callBack, prop, value, parent) =>
 const rebuild = (ele, layout, parent) =>
 {
 	Html.removeAll(ele);
-	this.build(layout, ele, parent);
+	Builder.build(layout, ele, parent);
 };
 
 /**
