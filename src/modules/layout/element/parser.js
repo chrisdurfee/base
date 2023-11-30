@@ -68,8 +68,8 @@ export class Parser
 	 */
 	static parse(obj, parent)
 	{
+		let children = [];
 		const attr = [],
-        children = [],
         directives = [],
         tag = this.getTag(obj),
         content = ElementContent(obj);

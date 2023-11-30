@@ -1,5 +1,5 @@
 import { Dom } from '../../shared/dom.js';
-import { Html } from '../html/html.js';
+import { Html, normalizeAttr } from '../html/html.js';
 
 /**
  * HtmlHelper
