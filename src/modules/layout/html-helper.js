@@ -23,22 +23,22 @@ export class HtmlHelper extends Html
 	 */
 	static create(nodeName, attrs, container, parent)
 	{
-		const obj = document.createElement(nodeName);
-		this.addAttributes(obj, attrs, parent);
-		Html.append(container, obj);
-		return obj;
+		const ele = document.createElement(nodeName);
+		this.addAttributes(ele, attrs, parent);
+		Html.append(container, ele);
+		return ele;
 	}
 
 	/**
 	 * This will add the element attributes.
 	 *
 	 * @protected
-	 * @param {object} obj
+	 * @param {object} ele
 	 * @param {array} attrs
 	 * @param {object} parent
      * @return {void}
 	 */
-	static addAttributes(obj, attrs, parent)
+	static addAttributes(ele, attrs, parent)
 	{
 		var length;
         if (!attrs || (length = attrs.length) < 1)
@@ -67,12 +67,12 @@ export class HtmlHelper extends Html
 	/**
 	 * This will add an element attribute.
 	 *
-	 * @param {object} obj
+	 * @param {object} ele
 	 * @param {object} attr
 	 * @param {string} value
      * @return {void}
 	 */
-	static addAttr(obj, attr, value, parent)
+	static addAttr(ele, attr, value, parent)
 	{
 		if (value === '' || !attr)
 		{
@@ -86,7 +86,7 @@ export class HtmlHelper extends Html
 			/* this will add the event using the base events
 			so the event is tracked */
 			attr = removeEventPrefix(attr);
-			Events.add(attr, obj, function(e)
+			Events.add(attr, ele, function(e)
 			{
 				value.call(this, e, parent);
 			});
@@ -94,7 +94,7 @@ export class HtmlHelper extends Html
 		else
 		{
 			const attrName = normalizeAttr(attr);
-			obj[attrName] = value;
+			ele[attrName] = value;
 		}
 	}
 
