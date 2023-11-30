@@ -1,3 +1,4 @@
+import { Events } from "../../main/events/events.js";
 import { Dom } from '../../shared/dom.js';
 import { Html, normalizeAttr } from '../html/html.js';
 
@@ -58,7 +59,7 @@ export class HtmlHelper extends Html
 			}
 			else
 			{
-				this.addAttr(ele, item);
+				this.addAttr(ele, prop, value, parent);
 			}
         }
 	}
@@ -85,7 +86,7 @@ export class HtmlHelper extends Html
 			/* this will add the event using the base events
 			so the event is tracked */
 			attr = removeEventPrefix(attr);
-			base.addListener(attr, obj, function(e)
+			Events.add(attr, obj, function(e)
 			{
 				value.call(this, e, parent);
 			});
