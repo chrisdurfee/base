@@ -1,4 +1,5 @@
 import { Dom } from '../../shared/dom.js';
+import { Types } from '../../shared/types.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 
 const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
@@ -19,7 +20,7 @@ export const WatcherHelper =
 	 */
 	hasParams(string)
 	{
-		if (!string)
+		if (!string || Types.isString(string) === false)
 		{
 			return false;
 		}
