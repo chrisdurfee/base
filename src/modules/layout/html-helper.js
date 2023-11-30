@@ -17,17 +17,20 @@ export class HtmlHelper extends Html
 	 * @override
 	 * @param {string} nodeName The node name.
 	 * @param {array} attrs The node attributes.
+	 * @param {object} content The node content.
 	 * @param {object} container The node container.
 	 * @param {object} parent
 	 * @return {object} The new element.
 	 */
-	static create(nodeName, attrs, container, parent)
+	create(nodeName, attrs, content, container, parent)
 	{
-		const ele = document.createElement(nodeName);
-		this.addAttributes(ele, attrs, parent);
-		Html.append(container, ele);
+		let ele = document.createElement(nodeName);
+        this.addAttributes(ele, attrs, parent);
+        this.addContent(ele, content);
+
+		container.appendChild(ele);
 		return ele;
-	}
+    }
 
 	/**
 	 * This will add the element attributes.
@@ -97,6 +100,29 @@ export class HtmlHelper extends Html
 			ele[attrName] = value;
 		}
 	}
+
+	/**
+     * This will add content to an element.
+     *
+     * @param {object} ele
+     * @param {object|null} content
+     */
+    addContent(ele, content)
+    {
+        if (!content)
+        {
+            return;
+        }
+
+        if (content.textContent !== null)
+        {
+            ele.textContent = content.textContent;
+        }
+        else if (content.innerHTML)
+        {
+            ele.innerHTML = content.innerHTML;
+        }
+    }
 
 	/**
 	 * This will append a child element to a parent.

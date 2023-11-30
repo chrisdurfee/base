@@ -272,7 +272,7 @@ export class Builder
 			return HtmlHelper.createComment(text, container);
 		}
 
-		return HtmlHelper.create(tag, settings.attr, container, parent);
+		return HtmlHelper.create(tag, settings.attr, settings.content, container, parent);
 	}
 }
 
