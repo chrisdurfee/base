@@ -1,3 +1,5 @@
+import { Types } from "./types.js";
+
 /**
  * Objects
  *
@@ -113,7 +115,7 @@ export const Objects =
 	 */
 	isEmpty(obj)
 	{
-		if (this.isObject(obj) === false)
+		if (Types.isObject(obj) === false)
 		{
 			return true;
 		}
