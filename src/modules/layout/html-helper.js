@@ -22,7 +22,7 @@ export class HtmlHelper extends Html
 	 * @param {object} parent
 	 * @return {object} The new element.
 	 */
-	create(nodeName, attrs, content, container, parent)
+	static create(nodeName, attrs, content, container, parent)
 	{
 		let ele = document.createElement(nodeName);
         this.addAttributes(ele, attrs, parent);
