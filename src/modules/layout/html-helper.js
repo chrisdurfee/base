@@ -107,7 +107,7 @@ export class HtmlHelper extends Html
      * @param {object} ele
      * @param {object|null} content
      */
-    addContent(ele, content)
+    static addContent(ele, content)
     {
         if (!content)
         {
