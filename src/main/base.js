@@ -7,6 +7,7 @@
  */
 
 import { Arrays } from '../shared/arrays.js';
+import { Objects } from '../shared/objects.js';
 import { Types } from '../shared/types.js';
 import { DataTracker } from './data-tracker/data-tracker.js';
 import { equals } from './equals.js';
