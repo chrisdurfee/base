@@ -1,4 +1,4 @@
-import { Events } from '../../shared/events.js';
+import { Events } from '../../main/events/events.js';
 import { Types } from '../../shared/types.js';
 import { ConnectionTracker } from './connection-tracker/connection-tracker.js';
 import { OneWayConnection } from './connection-tracker/connections/one-way-connection.js';
