@@ -7,7 +7,7 @@
  *
  * @class
  */
-class Tracker
+export class Tracker
 {
     /**
      * This will create a new tracker.
