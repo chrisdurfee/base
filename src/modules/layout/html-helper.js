@@ -15,15 +15,15 @@ export class HtmlHelper extends Html
 	 *
 	 * @override
 	 * @param {string} nodeName The node name.
-	 * @param {object} attrObject The node attributes.
+	 * @param {array} attrs The node attributes.
 	 * @param {object} container The node container.
 	 * @param {object} parent
 	 * @return {object} The new element.
 	 */
-	static create(nodeName, attrObject, container, parent)
+	static create(nodeName, attrs, container, parent)
 	{
 		const obj = document.createElement(nodeName);
-		this.addAttributes(obj, attrObject, parent);
+		this.addAttributes(obj, attrs, parent);
 		Html.append(container, obj);
 		return obj;
 	}
@@ -33,55 +33,34 @@ export class HtmlHelper extends Html
 	 *
 	 * @protected
 	 * @param {object} obj
-	 * @param {object} attrObject
+	 * @param {array} attrs
 	 * @param {object} parent
      * @return {void}
 	 */
-	static addAttributes(obj, attrObject, parent)
+	static addAttributes(obj, attrs, parent)
 	{
-		/* we want to check if we have attrributes to add */
-		if (!attrObject || typeof attrObject !== 'object')
-		{
-			return;
-		}
+		var length;
+        if (!attrs || (length = attrs.length) < 1)
+        {
+            return;
+        }
 
-		/* we need to add the type if set to stop ie
-		from removing the value if set after the value is
-		added */
-		const type = attrObject.type;
-		if (typeof type !== 'undefined')
-		{
-			Dom.setAttr(obj, 'type', type);
-		}
+        for (var i = 0; i < length; i++)
+        {
+            var item = attrs[i];
+            var prop = item.key;
+            var value = item.value;
 
-		/* we want to add each attr to the obj */
-		for (var prop in attrObject)
-		{
-			/* we have already added the type so we need to
-			skip if the prop is type */
-			if (attrObject.hasOwnProperty(prop) === false || prop === 'type')
-			{
-				continue;
-			}
-
-			var attrPropValue = attrObject[prop];
-
-			/* we want to check to add the attr settings
-				by property name */
-			if (prop === 'innerHTML')
-			{
-				obj.innerHTML = attrPropValue;
-			}
-			else if (prop.indexOf('-') !== -1)
+            if (prop.substr(4, 1) === '-')
 			{
 				// this will handle data and aria attributes
-				Dom.setAttr(obj, prop, attrPropValue);
+				Dom.setAttr(ele, prop, value);
 			}
 			else
 			{
-				this.addAttr(obj, prop, attrPropValue, parent);
+				this.addAttr(ele, item);
 			}
-		}
+        }
 	}
 
 	/**
