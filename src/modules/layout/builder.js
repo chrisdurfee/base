@@ -1,7 +1,7 @@
 import { base } from '../../main/base.js';
 import { Jot } from "../component/jot.js";
-import { Directives } from '../directives.js';
 import { addContext, context, useContext } from './context/context-directives.js';
+import { Directives } from './directives/directives.js';
 import { Parser } from './element/parser.js';
 import { HtmlHelper } from './html-helper.js';
 import { addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
