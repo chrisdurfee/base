@@ -1,7 +1,7 @@
 import { Dom } from "../../../../shared/dom.js";
-import { Builder } from "../../../builder.js";
 import { dataBinder } from "../../../data-binder/data-binder.js";
 import { Html } from "../../../html/html.js";
+import { Builder } from "../../builder.js";
 
 /**
  * This will setup a data watcher.
