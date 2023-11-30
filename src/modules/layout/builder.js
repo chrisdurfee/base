@@ -1,7 +1,7 @@
 import { base } from '../../main/base.js';
+import { Jot } from "../component/jot.js";
 import { Parser } from './element/parser.js';
 import { HtmlHelper } from './html-helper.js';
-import { Jot } from "../component/jot.js";
 
 /**
  * Builder

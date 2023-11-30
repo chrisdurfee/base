@@ -6,18 +6,24 @@
  * functions to work in many browsers and versions.
  */
 
-import { Types } from '../shared/types.js';
 import { Arrays } from '../shared/arrays.js';
+import { Types } from '../shared/types.js';
 import { DataTracker } from './data-tracker/data-tracker.js';
-import { EventMethods } from './events/event-methods.js';
 import { equals } from './equals.js';
+import { EventMethods } from './events/event-methods.js';
 
 /**
- * base framework constructor
+ * Base
+ *
+ * This is the base framework.
  * @class
  */
 class Base
 {
+	/**
+	 * This will create an instance of base.
+	 * @constructor
+	 */
 	constructor()
 	{
 		/**
@@ -90,6 +96,7 @@ class Base
 	 * This will add an error.
 	 *
 	 * @param {object} err
+	 * @return {void}
 	 */
 	addError(err)
 	{
@@ -101,7 +108,7 @@ class Base
 	 *
 	 * @param {object} obj
 	 * @param {string} property
-	 * @param {*} [defaultText] A value if no value is set.
+	 * @param {mixed} [defaultText] A value if no value is set.
 	 * @return {string}
 	 */
 	getProperty(obj, property, defaultText)

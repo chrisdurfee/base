@@ -1,8 +1,8 @@
 import { Directives } from '../directives/directives.js';
-import { Element } from './element.js';
-import { Attribute } from './attribute.js';
-import { AttributeDirective } from './attribute-directive.js';
 import { WatcherHelper } from '../watcher-helper.js';
+import { AttributeDirective } from './attribute-directive.js';
+import { Attribute } from './attribute.js';
+import { Element } from './element.js';
 
 /**
  * This will setup the element content.

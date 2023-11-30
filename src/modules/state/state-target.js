@@ -1,6 +1,6 @@
 
- import { SimpleData } from '../data/data.js';
- import { StateTracker } from './state-tracker.js';
+import { SimpleData } from '../data/data.js';
+import { StateTracker } from './state-tracker.js';
 
  /**
  * StateTarget

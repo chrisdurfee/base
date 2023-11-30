@@ -1,5 +1,5 @@
 
- import { StateTarget } from './state-target.js';
+import { StateTarget } from './state-target.js';
 
  /**
  * StateTracker

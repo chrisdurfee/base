@@ -1,6 +1,6 @@
-import { ComponentHelper } from './component-helper.js';
 import { SimpleData } from '../data/data.js';
 import { Import } from '../import/import.js';
+import { ComponentHelper } from './component-helper.js';
 
 /**
  * This will setup a route uri pattern.

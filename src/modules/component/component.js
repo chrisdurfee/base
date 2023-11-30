@@ -1,11 +1,11 @@
-import { Unit } from './unit.js';
+import { Objects } from '../../shared/objects.js';
 import { StateTracker } from '../state/state-tracker.js';
 import { EventHelper } from './event-helper.js';
 import { StateHelper } from './state-helper.js';
-import { Objects } from '../../shared/objects.js';
+import { Unit } from './unit.js';
 
-export { Unit } from './unit.js';
 export { Jot } from './jot.js';
+export { Unit } from './unit.js';
 
 /**
  * Component

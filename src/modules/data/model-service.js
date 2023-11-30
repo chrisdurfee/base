@@ -1,6 +1,6 @@
-import { Ajax } from '../ajax/ajax.js';
-import { Strings } from '../../shared/strings.js';
 import { Encode } from '../../shared/encode/encode.js';
+import { Strings } from '../../shared/strings.js';
+import { Ajax } from '../ajax/ajax.js';
 
 /**
  * ModelService

@@ -1,5 +1,5 @@
-import { Movement } from './movement.js';
 import { Arrays } from '../../shared/arrays.js';
+import { Movement } from './movement.js';
 
 export class AttrMovement extends Movement
 {

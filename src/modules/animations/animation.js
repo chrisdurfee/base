@@ -49,9 +49,6 @@ export class Animation
 		}
 	}
 
-	/* this will step the animation movements by the
-	delta.
-	@param (number) delta */
 	step(delta)
 	{
 		let movements = this.movements,

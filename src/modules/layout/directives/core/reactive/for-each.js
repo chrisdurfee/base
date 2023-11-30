@@ -1,5 +1,5 @@
-import { Html } from "../../../../html/html.js";
 import { dataBinder } from "../../../../data-binder/data-binder.js";
+import { Html } from "../../../../html/html.js";
 import { getParentData } from './get-parent-data.js';
 
 /**

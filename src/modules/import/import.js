@@ -1,6 +1,6 @@
-import { Builder } from '../layout/builder.js';
-import { Html } from '../html/html.js';
 import { Jot } from "../component/jot.js";
+import { Html } from '../html/html.js';
+import { Builder } from '../layout/builder.js';
 
 /**
  * This will track previously loaded scripts and styles.

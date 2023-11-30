@@ -1,7 +1,7 @@
-import { BasicData } from './basic-data.js';
 import { Objects } from '../../shared/objects.js';
-import { DataUtils as utils } from './data-utils.js';
 import { dataBinder } from '../data-binder/data-binder.js';
+import { BasicData } from './basic-data.js';
+import { DataUtils as utils } from './data-utils.js';
 
 /**
  * Data

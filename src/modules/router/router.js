@@ -1,11 +1,11 @@
-import { Dom } from '../../shared/dom.js';
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
-import { Data } from '../data/data.js';
-export { NavLink } from './nav-link.js';
-import { Utils } from './utils.js';
-import { Route } from './route.js';
-import { HistoryController } from './history/history-controller.js';
 import { Events } from '../../main/events/events.js';
+import { Dom } from '../../shared/dom.js';
+import { Data } from '../data/data.js';
+import { HistoryController } from './history/history-controller.js';
+import { Route } from './route.js';
+import { Utils } from './utils.js';
+export { NavLink } from './nav-link.js';
 
 /**
  * This will register the route system to the data

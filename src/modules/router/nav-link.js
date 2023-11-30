@@ -1,5 +1,5 @@
-import { router } from './router.js';
 import { Component } from '../component/component.js';
+import { router } from './router.js';
 
 /**
  * NavLink

@@ -1,16 +1,5 @@
 import { Animation } from './animation.js';
 
-/*
-	AnimationController
-
-	this will create an animation controller object
-	that will animate a target property or properties
-	on an element over a duration.
-
-	@param (object) settings = the animation settings
-	@param [(function)] callBack = the function to call back
-	when the animation is done
-*/
 export class AnimationController
 {
 	constructor(settings, callBack)

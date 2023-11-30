@@ -1,5 +1,5 @@
-import { BasicData } from './basic-data.js';
 import { dataBinder } from '../data-binder/data-binder.js';
+import { BasicData } from './basic-data.js';
 
 /**
  * SimpleData

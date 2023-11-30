@@ -1,4 +1,5 @@
-import {base} from '../../core.js';
+import { base } from '../../core.js';
+import { Dom } from '../../shared/dom.js';
 
 /**
  * This will remove a class and hide an element.
@@ -27,7 +28,7 @@ const removeAnimationClass = (obj, animationClass, callBack) =>
 		callBack.call();
 	}
 
-	base.removeClass(obj, animationClass);
+	Dom.removeClass(obj, animationClass);
 	animate.animating.remove(obj);
 };
 
@@ -57,7 +58,7 @@ export const animate =
 		 */
 		add(object, className, timer)
 		{
-			if(!object)
+			if (!object)
 			{
 				return;
 			}
@@ -78,26 +79,26 @@ export const animate =
 		 */
 		remove(object, removeClass)
 		{
-			if(!object)
+			if (!object)
 			{
 				return;
 			}
 
-			let animations = this.checkAnimating(object);
-			if(animations === false)
+			const animations = this.checkAnimating(object);
+			if (animations === false)
 			{
 				return;
 			}
 
 			let animation, indexNumber,
 			objects = this.objects;
-			for(var i = 0, maxLength = animations.length; i < maxLength; i++)
+			for (var i = 0, maxLength = animations.length; i < maxLength; i++)
 			{
 				animation = animations[i];
 				/* we want to stop the timer */
 				this.stopTimer(animation);
 
-				if(removeClass)
+				if (removeClass)
 				{
 					/* we want to remove the className */
 					base.removeClass(animation.object, animation.className);
@@ -106,7 +107,7 @@ export const animate =
 				/* we want to remove the animation fron the object array */
 				//var indexNumber = this.objects.indexOf(animation);
 				indexNumber = objects.indexOf(animation);
-				if(indexNumber > -1)
+				if (indexNumber > -1)
 				{
 					objects.splice(indexNumber, 1);
 				}
@@ -119,9 +120,9 @@ export const animate =
 		 */
 		stopTimer(animation)
 		{
-			if(animation)
+			if (animation)
 			{
-				let timer = animation.timer;
+				const timer = animation.timer;
 				window.clearTimeout(timer);
 			}
 		},
@@ -137,11 +138,11 @@ export const animate =
 			animationArray = [];
 
 			/* we want to get any timers set for our object */
-			let objects = this.objects;
-			for(var i = 0, maxLength = objects.length; i < maxLength; i++)
+			const objects = this.objects;
+			for (var i = 0, maxLength = objects.length; i < maxLength; i++)
 			{
 				animation = objects[i];
-				if(animation.object === obj)
+				if (animation.object === obj)
 				{
 					animationArray.push(animation);
 				}
@@ -179,9 +180,9 @@ export const animate =
 	 */
 	create(obj, animationClass, duration, callBack, endCallBack)
 	{
-		let animationCallBack = base.createCallBack(null, callBack, [obj, animationClass, endCallBack]);
+		const animationCallBack = () => callBack(obj, animationClass, endCallBack);
 
-		let timer = window.setTimeout(animationCallBack, duration);
+		const timer = window.setTimeout(animationCallBack, duration);
 		this.animating.add(obj, animationClass, timer);
 	},
 
@@ -195,8 +196,8 @@ export const animate =
 	 */
 	hide(object, animationClass, duration, endCallBack)
 	{
-		let obj = getElement(object);
-		base.addClass(obj, animationClass);
+		const obj = getElement(object);
+		Dom.addClass(obj, animationClass);
 
 		this.create(obj, animationClass, duration, removeClassAndHide, endCallBack);
 	},
@@ -211,8 +212,8 @@ export const animate =
 	 */
 	show(object, animationClass, duration, endCallBack)
 	{
-		let obj = getElement(object);
-		base.addClass(obj, animationClass);
+		const obj = getElement(object);
+		Dom.addClass(obj, animationClass);
 		obj.style.display = 'block';
 
 		this.create(obj, animationClass, duration, removeAnimationClass, endCallBack);
@@ -228,8 +229,8 @@ export const animate =
 	 */
 	set(object, animationClass, duration, endCallBack)
 	{
-		let obj = getElement(object);
-		base.addClass(obj, animationClass);
+		const obj = getElement(object);
+		Dom.addClass(obj, animationClass);
 
 		this.create(obj, animationClass, duration, removeAnimationClass, endCallBack);
 	}

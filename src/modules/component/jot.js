@@ -1,5 +1,5 @@
-import { Unit } from './unit.js';
 import { Component } from './component.js';
+import { Unit } from './unit.js';
 
 /**
  * This will store the jot shorthand method alaises.

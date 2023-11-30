@@ -1,6 +1,6 @@
+import { setupAttrSettings } from './attrs.js';
 import { Data } from './deep-data.js';
 import { ModelService } from './model-service.js';
-import { setupAttrSettings } from './attrs.js';
 
 /**
  * This will get the defaults from the settings.

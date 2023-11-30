@@ -1,5 +1,5 @@
 import { Objects } from "../objects.js";
-import { encode, decode, prepareUrl } from "./json.js";
+import { decode, encode, prepareUrl } from "./json.js";
 
 /**
  * Encode

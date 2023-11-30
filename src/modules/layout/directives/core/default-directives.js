@@ -1,16 +1,16 @@
+import { Directives } from '../directives.js';
+import { addContext, context, useContext } from './context/context-directives.js';
+import { addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
 import { Bind } from './reactive/bind.js';
+import { forEach } from './reactive/for-each.js';
+import { map } from './reactive/map.js';
+import { onCreated } from './reactive/on-created.js';
+import { onDestroyed } from './reactive/on-destroyed.js';
 import { onSet } from './reactive/on-set.js';
 import { onState } from './reactive/on-state.js';
 import { watch } from './reactive/watch.js';
-import { map } from './reactive/map.js';
-import { forEach } from './reactive/for-each.js';
-import { cache, useParent, useData, useState, addState } from './parent/parent-directives.js';
-import { useContext, addContext, context } from './context/context-directives.js';
-import { onCreated } from './reactive/on-created.js';
 import { addRoute } from './route.js';
 import { addSwitch } from './switch.js';
-import { onDestroyed } from './reactive/on-destroyed.js';
-import { Directives } from '../directives.js';
 
 Directives
 	.add('cache', cache)

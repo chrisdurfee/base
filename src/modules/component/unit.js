@@ -1,7 +1,6 @@
-import { base } from '../../main/base.js';
-import { Builder } from '../layout/builder.js';
-import { Html } from '../html/html.js';
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
+import { Html } from '../html/html.js';
+import { Builder } from '../layout/builder.js';
 
 /**
  * This will register the component system to the data

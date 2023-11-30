@@ -1,9 +1,9 @@
 import { Events } from '../../shared/events.js';
-export { DataPubSub } from './data-pub-sub.js';
+import { Types } from '../../shared/types.js';
+import { ConnectionTracker } from './connection-tracker/connection-tracker.js';
 import { OneWayConnection } from './connection-tracker/connections/one-way-connection.js';
 import { TwoWayConnection } from './connection-tracker/connections/two-way-connection.js';
-import { ConnectionTracker } from './connection-tracker/connection-tracker.js';
-import { Types } from '../../shared/types.js';
+export { DataPubSub } from './data-pub-sub.js';
 
 /**
  * DataBinder

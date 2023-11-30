@@ -1,5 +1,5 @@
-import { Movement } from './movement.js';
 import { base } from '../../main/base.js';
+import { Movement } from './movement.js';
 
 export class CssMovement extends Movement
 {
@@ -9,9 +9,6 @@ export class CssMovement extends Movement
 		super(element, settings);
 	}
 
-	/* this will get start value of the property being animated.
-	@param (string) value = the value being modified
-	@return (string) the type of units */
 	getStartValue(value, end)
 	{
 		let start = 0;
@@ -63,10 +60,6 @@ export class CssMovement extends Movement
 		return this.getCssValue(text);
 	}
 
-	/* this will get the number from an value and remove
-	any other marks including chars.
-	@param (mixed) text = the text to get the value from
-	@return (number) the number value */
 	getCssValue(text)
 	{
 		let textType = typeof text;
@@ -102,10 +95,6 @@ export class CssMovement extends Movement
 		return 0;
 	}
 
-	/* this will create a new value object array for the
-	property values to be updated.
-	@param (object) settings
-	@return (array) the values array */
 	createValue(settings)
 	{
 		let valueArray = [],

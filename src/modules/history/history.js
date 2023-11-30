@@ -1,5 +1,5 @@
-import { Events } from "../../main/events/events.js";
 import { equals } from "../../main/equals.js";
+import { Events } from "../../main/events/events.js";
 
 const updateTitle =  (title) =>
 {

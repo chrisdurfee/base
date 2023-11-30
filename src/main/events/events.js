@@ -1,6 +1,5 @@
-
-import { Types } from '../../shared/types.js';
 import { Arrays } from '../../shared/arrays.js';
+import { Types } from '../../shared/types.js';
 import { DataTracker } from '../data-tracker/data-tracker.js';
 
 /**
