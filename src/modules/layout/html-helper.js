@@ -1,6 +1,6 @@
 import { Events } from "../../main/events/events.js";
 import { Dom } from '../../shared/dom.js';
-import { Html, normalizeAttr } from '../html/html.js';
+import { Html, normalizeAttr, removeEventPrefix } from '../html/html.js';
 
 /**
  * HtmlHelper
