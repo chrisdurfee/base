@@ -1,4 +1,4 @@
-import { WatcherHelper } from 'modules/layout/helpers/watcher-helper.js';
+import { WatcherHelper } from '../../../watcher-helper.js';
 
 /**
  * This will add a watcher.
