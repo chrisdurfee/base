@@ -304,7 +304,7 @@ export class DataBinder
 	 */
 	publish(msg, value, committer)
 	{
-		pubSub.publish(msg, value, committer);
+		this.pubSub.publish(msg, value, committer);
 		return this;
 	}
 
@@ -367,7 +367,7 @@ export class DataBinder
 				const value = connection.element.get();
 				/* this will publish to the ui and to the
 				model that subscribes to the element */
-				pubSub.publish(id, value, target);
+				this.pubSub.publish(id, value, target);
 			}
 		}
 		evt.stopPropagation();
