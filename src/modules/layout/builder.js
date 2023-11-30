@@ -104,7 +104,7 @@ export class Builder
 			return;
 		}
 
-		if (obj.component || obj.isUnit === true)
+		if (obj.isUnit === true)
 		{
 			this.createComponent(obj, container, parent);
 			return;
@@ -127,11 +127,11 @@ export class Builder
 		const settings = Parser.parse(obj),
 		ele = this.createNode(settings, container, parent);
 
-		// const propName = obj.cache;
-		// if (parent && propName)
-		// {
-		// 	parent[propName] = ele;
-		// }
+		const propName = obj.cache;
+		if (parent && propName)
+		{
+			parent[propName] = ele;
+		}
 
 		const directives = settings.directives;
 		if (directives && directives.length)
@@ -227,8 +227,7 @@ export class Builder
 	 */
 	static createComponent(obj, container, parent)
 	{
-		// this will allow both cached components or native components
-		const component = obj.component || obj;
+		const component = obj;
 		component.parent = parent;
 
 		if (parent && parent.persist === true && component.persist !== false)
