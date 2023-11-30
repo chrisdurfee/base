@@ -403,7 +403,7 @@ export class Router
 			return true;
 		}
 
-		const target = evt.target || evt.srcElement;
+		let target = evt.target || evt.srcElement;
 		if (target.nodeName.toLowerCase() !== 'a')
 		{
 			/* this will check to get the parent to check
