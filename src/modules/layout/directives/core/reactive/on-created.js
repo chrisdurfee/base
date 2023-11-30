@@ -5,7 +5,7 @@
  * @param {function} callBack
  * @param {object} parent
  */
-const onCreated = (ele, callBack, parent) =>
+export const onCreated = (ele, callBack, parent) =>
 {
     callBack(ele);
 };
