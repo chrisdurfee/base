@@ -1,4 +1,4 @@
-import { DataTracker } from '../../main/data-tracker.js';
+import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Events } from '../../main/events/events.js';
 import { Dom } from '../../shared/dom.js';
 import { dataBinder } from '../data-binder/data-binder.js';

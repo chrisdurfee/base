@@ -1,4 +1,4 @@
-import { DataTracker } from "../../../../main/data-tracker/data-tracker.js";
+import { DataTracker } from "../../../../../main/data-tracker/data-tracker.js";
 
 /**
  * This will register the directive with the data tracker

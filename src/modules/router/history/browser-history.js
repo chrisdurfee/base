@@ -1,4 +1,4 @@
-import { Events } from "../../main/events/events.js";
+import { Events } from "../../../main/events/events.js";
 import { History } from "./history.js";
 
 /**
