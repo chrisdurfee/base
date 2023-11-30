@@ -1,4 +1,4 @@
-import { onUpdate } from '../on-update.js';
+import { onUpdate } from '../dom-methods.js';
 import { getParentData } from './get-parent-data.js';
 
 /**

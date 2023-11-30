@@ -1,4 +1,4 @@
-import { onUpdate } from '../on-update.js';
+import { onUpdate } from '../dom-methods.js';
 
 /**
  * This will add an onState watcher.
@@ -10,4 +10,4 @@ import { onUpdate } from '../on-update.js';
 export const onState = (ele, onState, parent) =>
 {
     onUpdate(ele, parent.state, onState, parent);
-}
+};
