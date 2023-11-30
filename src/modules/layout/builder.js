@@ -263,13 +263,13 @@ export class Builder
 		{
 			const attr = settings.attr;
 			const text = attr.textContent || attr.text;
-			return HtmlHelper.createComment(text, container);
+			return HtmlHelper.createText(text, container);
 		}
 		else if (tag === 'comment')
 		{
 			const attr = settings.attr;
 			const text = attr.text;
-			return HtmlHelper.createText(text, container);
+			return HtmlHelper.createComment(text, container);
 		}
 
 		return HtmlHelper.create(tag, settings.attr, container, parent);
