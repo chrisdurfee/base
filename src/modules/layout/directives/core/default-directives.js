@@ -1,14 +1,14 @@
-import { addContext, context, useContext } from './core/context/context-directives.js';
-import { addState, cache, useData, useParent, useState } from './core/parent/parent-directives.js';
-import { forEach } from './core/reactive/for-each.js';
-import { map } from './core/reactive/map.js';
-import { onCreated } from './core/reactive/on-created.js';
-import { onDestroyed } from './core/reactive/on-destroyed.js';
-import { onSet } from './core/reactive/on-set.js';
-import { onState } from './core/reactive/on-state.js';
-import { watch } from './core/reactive/watch.js';
-import { addRoute } from './core/route.js';
-import { addSwitch } from './core/switch.js';
+import { addContext, context, useContext } from './context/context-directives.js';
+import { addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
+import { forEach } from './reactive/for-each.js';
+import { map } from './reactive/map.js';
+import { onCreated } from './reactive/on-created.js';
+import { onDestroyed } from './reactive/on-destroyed.js';
+import { onSet } from './reactive/on-set.js';
+import { onState } from './reactive/on-state.js';
+import { watch } from './reactive/watch.js';
+import { addRoute } from './route.js';
+import { addSwitch } from './switch.js';
 
 Directives
 	.add('cache', cache)
