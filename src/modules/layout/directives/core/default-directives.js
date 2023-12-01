@@ -1,6 +1,7 @@
 import { Directives } from '../directives.js';
 import { addContext, context, useContext } from './context/context-directives.js';
 import { addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
+import { bind } from './reactive/bind.js';
 import { forEach } from './reactive/for-each.js';
 import { map } from './reactive/map.js';
 import { onCreated } from './reactive/on-created.js';
