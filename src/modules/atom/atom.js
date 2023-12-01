@@ -1,4 +1,34 @@
 /**
+ * This will prepare the children.
+ *
+ * @param {mixed} value
+ * @returns {mixed}
+ */
+const prepareChildren = (value) =>
+{
+	if (typeof value !== 'string')
+	{
+		return value;
+	}
+
+	return setChildString(value);
+};
+
+/**
+ * This will set the child string.
+ *
+ * @param {string} value
+ * @returns {array}
+ */
+const setChildString = (value) =>
+{
+	return [{
+		tag: 'text',
+		textContent: value
+	}];
+};
+
+/**
  * This will parse the arguments passed to the atom.
  *
  * @param {Array} args
@@ -16,7 +46,7 @@ const parseArgs = (args) =>
     {
     	return {
         	props: {},
-            text: first
+            children: setChildString(first)
         };
     }
 
@@ -30,7 +60,7 @@ const parseArgs = (args) =>
 
     return {
     	props: first,
-        children: args[1] || null
+        children: prepareChildren(args[1])
     };
 };
 

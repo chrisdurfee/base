@@ -270,8 +270,8 @@ export class Builder
 		const tag = settings.tag;
 		if (tag === 'text')
 		{
-			const attr = settings.attr;
-			const text = attr.textContent || attr.text;
+			const child = settings.attr[0];
+			const text = (child)? child.value : '';
 			return HtmlHelper.createText(text, container);
 		}
 		else if (tag === 'comment')
@@ -281,7 +281,7 @@ export class Builder
 			return HtmlHelper.createComment(text, container);
 		}
 
-		return HtmlHelper.create(tag, settings.attr, settings.content, container, parent);
+		return HtmlHelper.create(tag, settings.attr, container, parent);
 	}
 }
 

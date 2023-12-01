@@ -177,7 +177,7 @@ export class ElementSource extends TwoWaySource
 		 * If no custom attr has been requested we will get the
 		 * default attr of the element.
 		 */
-		const attr = 'textContent';
+		let attr = 'textContent';
 		const element = this.element;
 		if (!element || typeof element !== 'object')
 		{
