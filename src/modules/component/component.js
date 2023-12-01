@@ -60,7 +60,16 @@ export class Component extends Unit
 		this.setupContext();
 		this.addStates();
 		this.beforeSetup();
-		this.buildLayout();
+	}
+
+	/**
+	 * This will activate the post build actions.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
+	afterLayout()
+	{
 		this.addEvents();
 		this.afterSetup();
 	}

@@ -1,6 +1,5 @@
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Html } from '../html/html.js';
-import { Builder } from '../layout/builder.js';
 
 /**
  * This will register the component system to the data
@@ -314,58 +313,26 @@ export class Unit
 	 * @protected
 	 * @return {void}
 	 */
-	buildLayout()
+	afterBuild()
 	{
-		const layout = this.prepareLayout();
-		this.build(layout, this.container);
-
 		DataTracker.add(this.panel, 'components',
 		{
 			component: this
 		});
 
 		this.rendered = true;
+		this.afterLayout();
 	}
 
 	/**
-	 * This will build a layout.
+	 * This will activate the post build actions.
 	 *
 	 * @protected
-	 * @param {object} layout
-	 * @param {object} container
-	 * @return {object}
-	 */
-	build(layout, container)
-	{
-		return Builder.build(layout, container, this);
-	}
-
-	/**
-	 * This will prepend layout to a container.
-	 *
-	 * @protected
-	 * @param {object} layout
-	 * @param {object} container
-	 * @param {object} [optionalNode]
 	 * @return {void}
 	 */
-	prepend(layout, container, optionalNode)
+	afterLayout()
 	{
-		const frag = this.build(layout, null);
-		Html.prepend(container, frag, optionalNode);
-	}
-
-	/**
-	 * This will rebuild a layout.
-	 *
-	 * @protected
-	 * @param {object} layout
-	 * @param {object} container
-	 * @return {object}
-	 */
-	rebuild(layout, container)
-	{
-		return Builder.rebuild(container, layout, this);
+		this.afterSetup();
 	}
 
 	/**

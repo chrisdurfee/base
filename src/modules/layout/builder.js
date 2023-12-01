@@ -240,7 +240,16 @@ export class Builder
 			parent[component.cache] = component;
 		}
 
+		/**
+		 * This will set up the component, build the layout, and
+		 * call the afterBuild method.
+		 */
 		component.setup(container);
+
+		const layout = component.prepareLayout();
+		this.build(layout, component.container, component);
+
+		component.afterBuild();
 
 		if (obj.component && typeof obj.onCreated === 'function')
 		{
