@@ -101,12 +101,12 @@ export class Parser
 				return false;
 			}
 
-			if (value[0].indexOf('[[') === 0)
+			if (WatcherHelper.hasParams(value[0]))
 			{
-				return false;
+				return true;
 			}
 
-			return true;
+			return false;
 		}
 		return WatcherHelper.hasParams(value);
 	}
