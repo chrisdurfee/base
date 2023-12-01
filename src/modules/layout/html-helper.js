@@ -17,16 +17,14 @@ export class HtmlHelper extends Html
 	 * @override
 	 * @param {string} nodeName The node name.
 	 * @param {array} attrs The node attributes.
-	 * @param {object} content The node content.
 	 * @param {object} container The node container.
 	 * @param {object} parent
 	 * @return {object} The new element.
 	 */
-	static create(nodeName, attrs, content, container, parent)
+	static create(nodeName, attrs, container, parent)
 	{
 		let ele = document.createElement(nodeName);
         this.addAttributes(ele, attrs, parent);
-        this.addContent(ele, content);
 
 		container.appendChild(ele);
 		return ele;
@@ -59,11 +57,10 @@ export class HtmlHelper extends Html
 			{
 				// this will handle data and aria attributes
 				Dom.setAttr(ele, prop, value);
+				continue;
 			}
-			else
-			{
-				this.addAttr(ele, prop, value, parent);
-			}
+
+			this.addAttr(ele, prop, value, parent);
         }
 	}
 
