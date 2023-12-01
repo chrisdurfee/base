@@ -1,6 +1,7 @@
 import { Directives } from '../directives.js';
 import { addContext, context, useContext } from './context/context-directives.js';
 import { addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
+import { addAria, addRole } from './aria/aria.js';
 import { bind } from './reactive/bind.js';
 import { forEach } from './reactive/for-each.js';
 import { map } from './reactive/map.js';
@@ -26,7 +27,7 @@ Directives
 	.add('addState', addState)
 	.add('map', map)
 	.add('for', forEach)
-	.add('html', addHtml)
+	//.add('html', addHtml)
 	.add('useContext', useContext)
 	.add('addContext', addContext)
 	.add('context', context)
