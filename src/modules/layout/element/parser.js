@@ -87,13 +87,27 @@ export class Parser
 	/**
 	 * This will check if the value is a watcher.
 	 *
-	 * @param {string} value
+	 * @param {mixed} value
 	 * @return {boolean}
 	 * @static
 	 * @private
 	 */
 	static isWatching(value)
 	{
+		if (Array.isArray(value))
+		{
+			if (typeof value[0] !== 'string')
+			{
+				return false;
+			}
+
+			if (value[0].indexOf('[[') === 0)
+			{
+				return false;
+			}
+
+			return true;
+		}
 		return WatcherHelper.hasParams(value);
 	}
 
