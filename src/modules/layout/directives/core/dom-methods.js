@@ -77,7 +77,7 @@ export const onUpdate = (ele, data, settings, parent) =>
  */
 const updateElement = (ele, callBack, prop, value, parent) =>
 {
-    let result = callBack(ele, value, parent);
+    let result = callBack(value, ele, parent);
     switch (typeof result)
     {
         case 'object':
@@ -93,7 +93,7 @@ const updateElement = (ele, callBack, prop, value, parent) =>
 
                 state.set(key, result);
             }
-            rebuild(ele, result, parent);
+            rebuild(result, ele, parent);
             break;
         case 'string':
             Html.addHtml(ele, result);
@@ -105,11 +105,11 @@ const updateElement = (ele, callBack, prop, value, parent) =>
  * This will reset an element innerHTML and rebuild.
  *
  * @private
- * @param {object} ele
  * @param {object} layout
+ * @param {object} ele
  * @param {object} parent
  */
-const rebuild = (ele, layout, parent) =>
+const rebuild = (layout, ele, parent) =>
 {
 	Builder.rebuild(layout, ele, parent);
 };

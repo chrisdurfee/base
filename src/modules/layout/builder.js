@@ -77,12 +77,12 @@ export class Builder
 	/**
 	 * This will rebuild a layout.
 	 *
-	 * @param {object} ele
 	 * @param {object} layout
+	 * @param {object} ele
 	 * @param {object} parent
 	 * @return {object}
 	 */
-	static rebuild(ele, layout, parent)
+	static rebuild(layout, ele, parent)
 	{
 		HtmlHelper.removeAll(ele);
 		return this.build(layout, ele, parent);
