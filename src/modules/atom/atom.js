@@ -12,13 +12,21 @@ const parseArgs = (args) =>
     }
 
     const first = args[0];
-    if (typeof first === 'string' || Array.isArray(first))
+    if (typeof first === 'string')
     {
     	return {
         	props: {},
-            children: first
+            text: first
         };
     }
+
+	if (Array.isArray(first))
+	{
+		return {
+			props: {},
+			children: first
+		};
+	}
 
     return {
     	props: first,

@@ -1,4 +1,5 @@
 import { getParentData } from './get-parent-data.js';
+import { dataBinder } from '../../../../data-binder/data-binder.js';
 
 /**
  * This will bind an element to data.
