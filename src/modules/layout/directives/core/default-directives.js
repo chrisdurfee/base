@@ -1,3 +1,4 @@
+import { Directives } from '../directives.js';
 import { addContext, context, useContext } from './context/context-directives.js';
 import { addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
 import { forEach } from './reactive/for-each.js';
