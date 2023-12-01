@@ -53,6 +53,12 @@ export class HtmlHelper extends Html
             var prop = item.key;
             var value = item.value;
 
+			if (prop === 'innerHTML')
+			{
+				obj.innerHTML = value;
+				continue;
+			}
+
             if (prop.substr(4, 1) === '-')
 			{
 				// this will handle data and aria attributes
