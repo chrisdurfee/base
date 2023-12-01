@@ -128,6 +128,7 @@ export class Parser
 				if (key === 'children')
 				{
 					children = children.concat(value);
+					continue;
 				}
 
 				/**

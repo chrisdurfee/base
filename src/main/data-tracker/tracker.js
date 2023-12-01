@@ -1,3 +1,5 @@
+import { TrackerTypes } from './tracker-types.js';
+
 /**
  * Tracker
  *
