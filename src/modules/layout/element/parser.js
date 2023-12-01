@@ -199,6 +199,15 @@ export class Parser
 					continue;
 				}
 
+				/**
+				 * This will check if the value is a watcher.
+				 */
+				if (this.isWatching(value))
+				{
+					this.setTextAsWatcher(directives, key, value);
+					continue;
+				}
+
 				children.push(value);
 				continue;
 			}
