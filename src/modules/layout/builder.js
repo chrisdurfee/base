@@ -124,7 +124,7 @@ export class Builder
 	 */
 	static createElement(obj, container, parent)
 	{
-		const settings = Parser.parse(obj),
+		const settings = Parser.parse(obj, parent),
 		ele = this.createNode(settings, container, parent);
 
 		const propName = obj.cache;
