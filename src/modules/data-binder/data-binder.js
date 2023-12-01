@@ -168,7 +168,7 @@ export class DataBinder
 		 * This will create the element source and subscribe
 		 * the data to the element.
 		 */
-		const elementSource = connection.addElement(element, customAttr, filter);
+		const elementSource = connection.addElement(element, customAttr, filter, this.pubSub);
 		elementSource.subscribe(msg);
 
 		this.addConnection(id, 'bind', connection);
