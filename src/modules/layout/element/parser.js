@@ -9,12 +9,11 @@ import { Element } from './element.js';
  *
  * @param {string} key
  * @param {mixed} value
- * @param {object} settings
  * @param {array} attr
  * @param {array} children
  * @return {bool}
  */
-const setElementContent = (key, value, settings, attr, children) =>
+const setElementContent = (key, value, attr, children) =>
 {
 	if (key === 'text')
 	{
@@ -215,7 +214,7 @@ export class Parser
 			/**
 			 * This will set the element text and html content.
 			 */
-			const contentAdded = setElementContent(key, value, obj, attr, children);
+			const contentAdded = setElementContent(key, value, attr, children);
 			if (contentAdded)
 			{
 				continue;
