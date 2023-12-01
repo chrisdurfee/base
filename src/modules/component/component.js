@@ -3,8 +3,6 @@ import { StateTracker } from '../state/state-tracker.js';
 import { EventHelper } from './event-helper.js';
 import { StateHelper } from './state-helper.js';
 import { Unit } from './unit.js';
-
-export { Jot } from './jot.js';
 export { Unit } from './unit.js';
 
 /**
