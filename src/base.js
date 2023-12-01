@@ -7,6 +7,7 @@ import { Jot } from './modules/component/jot.js';
 import { dataBinder } from './modules/data-binder/data-binder.js';
 import { Data, Model, SimpleData } from './modules/data/data.js';
 import { Directives } from './modules/layout/directives/directives.js';
+import {} from './modules/layout/directives/core/default-directives.js';
 import { Builder } from './modules/layout/builder.js';
 import { NavLink, router } from './modules/router/router.js';
 import { StateTracker as State } from './modules/state/state-tracker.js';
