@@ -135,7 +135,7 @@ export class Parser
 		var value, directive;
 		for (var key in obj)
 		{
-			if (!obj.hasOwnProperty(key))
+			if (!obj.hasOwnProperty(key) || key === 'tag')
 			{
 				continue;
 			}
