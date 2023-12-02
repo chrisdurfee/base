@@ -3,6 +3,7 @@ import { WatcherHelper } from '../watcher-helper.js';
 import { AttributeDirective } from './attribute-directive.js';
 import { Attribute } from './attribute.js';
 import { Element } from './element.js';
+import { normalizeAttr } from '../../html/html.js';
 
 /**
  * Parser
@@ -91,6 +92,17 @@ export class Parser
 	 */
 	static setTextAsWatcher(directives, key, value)
 	{
+		/**
+		 * This will convert the watcher to a custom
+		 * watcher object.
+		 *
+		 * We also need to normalize the attribute name.
+		 */
+		value = {
+			attr: normalizeAttr(key),
+			value
+		};
+
 		directives.push(AttributeDirective(
 			Attribute(key, value),
 			Directives.get('watch')

@@ -245,7 +245,7 @@ export const WatcherHelper =
 			callBack = (value, committer) =>
 			{
 				value = (isMultiProp !== true)? value : this.getPropValues(data, props, isDataArray);
-				overrideCallBack(ele, value, committer);
+				overrideCallBack(value, ele, committer);
 			};
 		}
 		else
