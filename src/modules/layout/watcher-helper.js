@@ -13,6 +13,33 @@ const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
 export const WatcherHelper =
 {
 	/**
+	 * This will check if the value is a watcher.
+	 *
+	 * @param {mixed} value
+	 * @return {boolean}
+	 * @static
+	 * @private
+	 */
+	isWatching(value)
+	{
+		if (Array.isArray(value))
+		{
+			if (typeof value[0] !== 'string')
+			{
+				return false;
+			}
+
+			if (this.hasParams(value[0]))
+			{
+				return true;
+			}
+
+			return false;
+		}
+		return this.hasParams(value);
+	},
+
+	/**
 	 * This will check if a string has params.
 	 *
 	 * @param {string} string

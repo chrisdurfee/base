@@ -5,37 +5,6 @@ import { Attribute } from './attribute.js';
 import { Element } from './element.js';
 
 /**
- * This will setup the element content.
- *
- * @param {string} key
- * @param {mixed} value
- * @param {array} attr
- * @param {array} children
- * @return {bool}
- */
-const setElementContent = (key, value, attr, children) =>
-{
-	if (key === 'text')
-	{
-		children.push({
-			tag: 'text',
-			textContent: value
-		});
-
-		return true;
-	}
-
-	if (key === 'html' || key === 'innerHTML')
-	{
-		attr.push(Attribute('innerHTML', value));
-
-		return true;
-	}
-
-	return false;
-};
-
-/**
  * Parser
  *
  * This will parse JSON layouts.
@@ -85,30 +54,34 @@ export class Parser
 	}
 
 	/**
-	 * This will check if the value is a watcher.
+	 * This will setup the element content.
 	 *
+	 * @param {string} key
 	 * @param {mixed} value
-	 * @return {boolean}
-	 * @static
-	 * @private
+	 * @param {array} attr
+	 * @param {array} children
+	 * @return {bool}
 	 */
-	static isWatching(value)
+	static setElementContent(key, value, attr, children)
 	{
-		if (Array.isArray(value))
+		if (key === 'text')
 		{
-			if (typeof value[0] !== 'string')
-			{
-				return false;
-			}
+			children.push({
+				tag: 'text',
+				textContent: value
+			});
 
-			if (WatcherHelper.hasParams(value[0]))
-			{
-				return true;
-			}
-
-			return false;
+			return true;
 		}
-		return WatcherHelper.hasParams(value);
+
+		if (key === 'html' || key === 'innerHTML')
+		{
+			attr.push(Attribute('innerHTML', value));
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -202,7 +175,7 @@ export class Parser
 				/**
 				 * This will check if the value is a watcher.
 				 */
-				if (this.isWatching(value))
+				if (WatcherHelper.isWatching(value))
 				{
 					this.setTextAsWatcher(directives, key, value);
 					continue;
@@ -228,7 +201,7 @@ export class Parser
 			/**
 			 * This will check if the value is a watcher.
 			 */
-			if (this.isWatching(value))
+			if (WatcherHelper.isWatching(value))
 			{
 				this.setTextAsWatcher(directives, key, value);
 				continue;
