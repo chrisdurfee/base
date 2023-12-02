@@ -413,8 +413,6 @@ export class Unit
 	{
 		this.setupContext();
 		this.beforeSetup();
-		this.buildLayout();
-		this.afterSetup();
 	}
 
 	/**
