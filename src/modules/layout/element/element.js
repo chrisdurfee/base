@@ -5,16 +5,14 @@
  * @param {array} attr
  * @param {array} directives
  * @param {array} children
- * @param {object} content
  * @returns {object}
  */
-export const Element = (tag, attr, directives, children, content) =>
+export const Element = (tag, attr, directives, children) =>
 {
     return {
         tag,
         attr,
         directives,
         children,
-        content
     };
 };
