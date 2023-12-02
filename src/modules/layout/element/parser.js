@@ -28,11 +28,6 @@ export class Parser
 		if (typeof node !== 'undefined')
 		{
 			type = node;
-
-			/**
-			 * this will prevent this from being checked again.
-			 */
-			obj.tag = null;
 		}
 
 		return type;
