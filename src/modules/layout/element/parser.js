@@ -210,7 +210,7 @@ export class Parser
 			/**
 			 * This will set the element text and html content.
 			 */
-			const contentAdded = setElementContent(key, value, attr, children);
+			const contentAdded = this.setElementContent(key, value, attr, children);
 			if (contentAdded)
 			{
 				continue;
