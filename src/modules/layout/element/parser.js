@@ -44,7 +44,7 @@ export class Parser
 		if (obj.nest)
 		{
 			obj.children = obj.nest;
-			obj.nest = null;
+			delete obj.nest;
 		}
 	}
 
