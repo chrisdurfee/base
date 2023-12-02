@@ -93,7 +93,7 @@ export class NavLink extends Component
 
         watchers.push({
             value: ['[[path]]', data],
-            callBack(value, ele)
+            callBack: (value, ele) =>
             {
                 const path = ele.pathname + ele.hash;
 				const selected = exact? (value === path) : (new RegExp('^' + ele.pathname + '($|#|\/|\\.).*').test(value));
