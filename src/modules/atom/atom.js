@@ -52,11 +52,21 @@ const parseArgs = (args) =>
         };
     }
 
-	if (Array.isArray(first) && WatcherHelper.isWatching(first) === false)
+	if (Array.isArray(first))
 	{
+		if (WatcherHelper.isWatching(first) === false)
+		{
+			return {
+				props: {},
+				children: first
+			};
+		}
+
 		return {
-			props: {},
-			children: first
+			props: {
+				watch: first
+			},
+			children: []
 		};
 	}
 
