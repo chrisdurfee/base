@@ -71,7 +71,7 @@ const parseArgs = (args) =>
 	}
 
     return {
-    	props: first,
+    	props: first || {},
         children: prepareChildren(args[1])
     };
 };
