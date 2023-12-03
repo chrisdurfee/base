@@ -1,3 +1,5 @@
+import { Builder } from "../../../builder.js";
+
 /**
  * This will map children to the element.
  *
@@ -32,5 +34,5 @@ export const map = (ele, settings, parent) =>
         children.push(layout);
     }
 
-    return this.build(children, ele, parent);
+    return Builder.build(children, ele, parent);
 };
