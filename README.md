@@ -128,6 +128,7 @@ Render the component to the DOM:
 
 ```javascript
 import { Builder } from '@base-framework/base';
+import { Page } from './components/page.js';
 
 /**
  * This will create a new instance of the Page component.
