@@ -37,7 +37,7 @@ export const Objects =
 
 		for (var property in sourceObj)
 		{
-			if (sourceObj.hasOwnProperty(property) && typeof targetObj[property] === 'undefined')
+			if (Object.prototype.hasOwnProperty.call(sourceObj, property) && typeof targetObj[property] === 'undefined')
 			{
 				targetObj[property] = sourceObj[property];
 			}
@@ -124,7 +124,7 @@ export const Objects =
 		check if it belongs to the object directly */
 		for (var key in obj)
 		{
-			if (obj.hasOwnProperty(key))
+			if (Object.prototype.hasOwnProperty.call(obj, key))
 			{
 				return false;
 			}
