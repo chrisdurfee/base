@@ -87,7 +87,7 @@ import { base, Component } from '@base-framework/base';
  * @class Page
  * @extends {Component}
  */
-class Page extends Component
+export class Page extends Component
 {
     render()
     {
@@ -106,6 +106,7 @@ User the builder to create a new instance of the component:
 
 ```javascript
 import { Builder } from '@base-framework/base';
+import { Page } from './components/page.js';
 
 /**
  * This will create a new instance of the Page component.
