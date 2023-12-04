@@ -23,7 +23,7 @@ export class HtmlHelper extends Html
 	 */
 	static create(nodeName, attrs, container, parent)
 	{
-		let ele = document.createElement(nodeName);
+		const ele = document.createElement(nodeName);
         this.addAttributes(ele, attrs, parent);
 
 		container.appendChild(ele);
@@ -41,7 +41,7 @@ export class HtmlHelper extends Html
 	 */
 	static addAttributes(ele, attrs, parent)
 	{
-		var length;
+		let length;
         if (!attrs || (length = attrs.length) < 1)
         {
             return;
