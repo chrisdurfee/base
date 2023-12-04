@@ -1,4 +1,4 @@
-import { Movement } from './movement.js';
+import { MovementFactory } from './movement-factory.js';
 
 export class Animation
 {
@@ -29,7 +29,7 @@ export class Animation
 
 		const addMovement = (movementSettings) =>
 		{
-			movement = Movement.create(element, movementSettings);
+			movement = MovementFactory.create(element, movementSettings);
 			this.addMovement(movement);
 		};
 

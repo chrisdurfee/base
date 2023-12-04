@@ -1,4 +1,4 @@
-import { base } from '../../main/base.js';
+import { Dom } from '../../shared/dom.js';
 import { Movement } from './movement.js';
 
 export class CssMovement extends Movement
@@ -19,7 +19,7 @@ export class CssMovement extends Movement
 			method = this.method;
 			if(method)
 			{
-				let values = base.getCss(element, property);
+				let values = Dom.getCss(element, property);
 				if(values !== 'none')
 				{
 					let cssPattern = new RegExp('(?:' + method + '\((.+)\))', 'g');
@@ -44,7 +44,7 @@ export class CssMovement extends Movement
 			}
 			else
 			{
-				let params = base.getCss(element, property);
+				let params = Dom.getCss(element, property);
 				start = (typeof params === 'string')? params.split(' ') : null;
 			}
 		}

@@ -1,6 +1,5 @@
 
 import { SimpleData } from '../data/data.js';
-import { StateTracker } from './state-tracker.js';
 
  /**
  * StateTarget
@@ -23,26 +22,6 @@ export class StateTarget extends SimpleData
 	{
 		super();
 		this.id = id;
-	}
-
-	/**
-	 * This will restore a state to the controller.
-	 *
-	 * @return {void}
-	 */
-	restore()
-	{
-		StateTracker.restore(this.id, this);
-	}
-
-	/**
-	 * This will remove the target from the controller.
-	 *
-	 * @return {void}
-	 */
-	remove()
-	{
-		StateTracker.remove(this.id);
 	}
 
 	/**

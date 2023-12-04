@@ -1,5 +1,4 @@
-import { AttrMovement } from './attr-movement.js';
-import { CssMovement } from './css-movement.js';
+import { Value } from './value.js';
 
 export class Movement
 {
@@ -17,30 +16,9 @@ export class Movement
 		this.setupProperty(settings);
 	}
 
-	setupMovementType(element, settings)
-	{
-		let movement,
-		type = this.getType(element, settings);
-		switch(type)
-		{
-			case 'css':
-				movement = new CssMovement(element, settings);
-				break;
-			case 'attr':
-				movement = new AttrMovement(element, settings);
-				break;
-		}
-		return movement;
-	}
-
-	getType(element, settings)
-	{
-		return (element.style && settings.property in element.style)? 'css' : 'attr';
-	}
-
 	createValue(settings)
 	{
-		let values = this.getValue(settings);
+		const values = this.getValue(settings);
 		return new Value(values);
 	}
 
@@ -87,8 +65,3 @@ export class Movement
 
 	}
 }
-
-Movement.create = function(element, settings)
-{
-	return this.prototype.setupMovementType(element, settings);
-};
