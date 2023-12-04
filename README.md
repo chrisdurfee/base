@@ -128,6 +128,7 @@ Render the component to the DOM:
 
 ```javascript
 import { Builder } from '@base-framework/base';
+import { Page } from './components/page.js';
 
 /**
  * This will create a new instance of the Page component.
@@ -135,7 +136,7 @@ import { Builder } from '@base-framework/base';
 const page = new Page();
 
 // Render the component to the DOM.
-container = document.body;
+const container = document.body;
 Builder.render(page, container);
 ```
 
