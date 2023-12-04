@@ -133,12 +133,6 @@ export class Builder
 			parent[propName] = ele;
 		}
 
-		const directives = settings.directives;
-		if (directives && directives.length)
-		{
-			this.setDirectives(ele, directives, parent);
-		}
-
 		/* we want to recursively add the children to
 		the new element */
 		const children = settings.children;
@@ -155,6 +149,12 @@ export class Builder
 
 				this.buildElement(child, ele, parent);
 			}
+		}
+
+		const directives = settings.directives;
+		if (directives && directives.length)
+		{
+			this.setDirectives(ele, directives, parent);
 		}
 	}
 
