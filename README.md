@@ -135,8 +135,8 @@ import { Builder } from '@base-framework/base';
 const page = new Page();
 
 // Render the component to the DOM.
-constainer = document.body;
-Builder.render(page, constainer);
+container = document.body;
+Builder.render(page, container);
 ```
 
 ## Contributing
