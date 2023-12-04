@@ -3,6 +3,37 @@
  */
 
 /**
+ * Version 2.6.0 atoms
+ */
+Section({
+    nest: [
+        Article({
+            class: 'post',
+            nest: [
+                Header({
+                    nest: [
+                        H1({
+                            text: 'Title'
+                        })
+                    ]
+                })
+            ]
+        })
+    ]
+})
+
+/**
+ * Next version atoms
+ */
+Section([
+    Article({ class: 'post' }, [
+        Header([
+            H1('Title')
+        ])
+    ])
+])
+
+/**
  * Atoms
  *
  * -- Update atoms to use composition instead of inheritance.
@@ -22,9 +53,7 @@ Div({class: 'test'}, [
 ]);
 
 // html nesting
-Div({class: 'test'}, {
-    html: '<span>test</span>'
-})
+Div({class: 'test', html: '<span>test</span>'})
 
 // atom optional args
 Div({class: 'text'}) // props only
