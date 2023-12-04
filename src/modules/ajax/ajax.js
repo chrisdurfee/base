@@ -251,9 +251,9 @@ export class XhrRequest
 		const params = [];
 		for (var prop in object)
 		{
-			if (object.hasOwnProperty(prop))
+			if (Object.prototype.hasOwnProperty.call(object, prop))
 			{
-				params.push(prop + '=' + object[prop]);
+				params.push(prop + '=' + encodeURIComponent(object[prop]));
 			}
 		}
 		return params.join('&');
@@ -305,7 +305,7 @@ export class XhrRequest
 		{
 			for (var key in addingParams)
 			{
-				if (addingParams.hasOwnProperty(key))
+				if (Object.prototype.hasOwnProperty.call(addingParams, key))
 				{
 					params.append(key, addingParams[key]);
 				}
@@ -453,7 +453,7 @@ export class XhrRequest
 		let headers = settings.headers;
 		for (var header in headers)
 		{
-			if (headers.hasOwnProperty(header))
+			if (Object.prototype.hasOwnProperty.call(headers, header))
 			{
 				this.xhr.setRequestHeader(header, headers[header]);
 			}

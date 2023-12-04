@@ -40,14 +40,17 @@ const parseArgs = (args) =>
 {
 	if (!args)
     {
-    	return;
+		return {
+			props: {},
+			children: []
+		};
     }
 
     const first = args[0];
     if (typeof first === 'string')
     {
-    	return {
-        	props: {},
+		return {
+			props: {},
             children: setChildString(first)
         };
     }
@@ -71,7 +74,7 @@ const parseArgs = (args) =>
 	}
 
     return {
-    	props: first || {},
+		props: first || {},
         children: prepareChildren(args[1])
     };
 };
@@ -94,7 +97,7 @@ export const Atom = (callBack) =>
 		/**
 		 * Thi swill allow the atom to access optional args.
 		 */
-    	const {props, children} = parseArgs(args);
+		const {props, children} = parseArgs(args);
         return callBack(props, children);
     };
 };

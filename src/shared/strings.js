@@ -48,7 +48,7 @@ export class Strings
 			return false;
 		}
 
-		const regExp = /(-|\s|\_)+\w{1}/g;
+		const regExp = /(-|\s|_)+\w{1}/g;
 		return str.replace(regExp, (match) =>
 		{
 			return match[1].toUpperCase();

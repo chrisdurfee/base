@@ -112,8 +112,8 @@ export class DataBinder
 		 * We want to get the starting value of the data and
 		 * et it on our element.
 		 */
-		const connectionElement = connection.element,
-		value = data.get(bindProp);
+		const connectionElement = connection.element;
+		let value = data.get(bindProp);
 		if (typeof value !== 'undefined')
 		{
 			connectionElement.set(value);

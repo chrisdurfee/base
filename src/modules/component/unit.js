@@ -91,7 +91,7 @@ export class Unit
 
 		for (var prop in props)
 		{
-			if (props.hasOwnProperty(prop))
+			if (Object.prototype.hasOwnProperty.call(props, prop))
 			{
 				this[prop] = props[prop];
 			}

@@ -18,7 +18,7 @@ export class Builder
 	 * @param {object|function} layout
 	 * @param {object} container
 	 * @param {object} [parent]
-	 * @returns {object} The layout Unit or Component
+	 * @returns {object|null} The layout Unit, Component, or null.
 	 */
 	static render(layout, container, parent)
 	{
@@ -27,6 +27,7 @@ export class Builder
 			return;
 		}
 
+		let component, jot;
 		switch (typeof layout)
 		{
 			case 'object':
@@ -35,9 +36,14 @@ export class Builder
 					this.createComponent(layout, container, parent);
 					return layout;
 				}
+				/* falls through */
 			default:
-				const component = Jot(layout);
-				const jot = new component();
+				/**
+				 * This will convert the object to a component
+				 * and render it.
+				 */
+				component = Jot(layout);
+				jot = new component();
 				this.createComponent(jot, container, parent);
 				return jot;
 		}

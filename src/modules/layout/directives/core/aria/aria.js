@@ -60,7 +60,7 @@ export const addAria = (ele, attributes, parent) =>
 
     for (var prop in attributes)
     {
-        if (attributes.hasOwnProperty(prop) === false || attributes[prop] === null)
+        if (!Object.prototype.hasOwnProperty.call(attributes, prop) || attributes[prop] === null)
         {
             continue;
         }

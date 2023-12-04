@@ -111,11 +111,11 @@ export class Html
 		}
 
 		/* we want to add each attr to the obj */
-		for (var prop in attrObject)
+		for (var prop in attrs)
 		{
 			/* we have already added the type so we need to
 			skip if the prop is type */
-			if (attrs.hasOwnProperty(prop) === false || prop === 'type')
+			if (!Object.prototype.hasOwnProperty.call(attrs, prop) || prop === 'type')
 			{
 				continue;
 			}
@@ -370,7 +370,7 @@ export class Html
 		const children = container.childNodes;
 		for (var child in children)
 		{
-			if (children.hasOwnProperty(child))
+			if (Object.prototype.hasOwnProperty.call(children, child))
 			{
 				this.removeElementData(children[child]);
 			}

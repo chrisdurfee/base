@@ -55,7 +55,7 @@ export class HtmlHelper extends Html
 
 			if (prop === 'innerHTML')
 			{
-				obj.innerHTML = value;
+				ele.innerHTML = value;
 				continue;
 			}
 

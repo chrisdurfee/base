@@ -72,7 +72,7 @@ export class StateHelper
 		const actions = [];
 		for (var prop in action)
 		{
-			if (action.hasOwnProperty(prop) === false)
+			if (!Object.prototype.hasOwnProperty.call(action, prop))
 			{
 				continue;
 			}
@@ -124,7 +124,7 @@ export class StateHelper
 
 			for (var prop in remote)
 			{
-				if (remote.hasOwnProperty(prop) === false || prop === 'id')
+				if (!Object.prototype.hasOwnProperty.call(remote, prop) || prop === 'id')
 				{
 					continue;
 				}

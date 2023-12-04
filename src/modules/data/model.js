@@ -24,7 +24,7 @@ const setupDefaultAttr = (settings) =>
 
 	for (var prop in defaults)
 	{
-		if (!defaults.hasOwnProperty(prop))
+		if (!Object.prototype.hasOwnProperty.call(defaults, prop))
 		{
 			continue;
 		}

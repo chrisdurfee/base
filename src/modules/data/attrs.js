@@ -17,7 +17,7 @@ export const setupAttrSettings = (settings) =>
 	settings = Objects.clone(settings);
 	for (var prop in settings)
 	{
-		if (!settings.hasOwnProperty(prop))
+		if (!Object.prototype.hasOwnProperty.call(settings, prop))
 		{
 			continue;
 		}

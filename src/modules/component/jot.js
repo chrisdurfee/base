@@ -51,7 +51,7 @@ const JotComponent = (settings) =>
 
     for (var prop in settings)
     {
-        if (settings.hasOwnProperty(prop) === false)
+        if (!Object.prototype.hasOwnProperty.call(settings, prop))
         {
             continue;
         }

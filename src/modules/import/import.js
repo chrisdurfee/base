@@ -307,7 +307,7 @@ const ImportWrapper = Jot(
      */
     getLayout(module)
     {
-        const layout = module.default;
+        let layout = module.default;
         if (!layout)
         {
             return null;

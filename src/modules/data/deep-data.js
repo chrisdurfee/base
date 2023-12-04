@@ -130,7 +130,7 @@ export class Data extends BasicData
 
 		for (var prop in value)
 		{
-			if (value.hasOwnProperty(prop))
+			if (Object.prototype.hasOwnProperty.call(value, prop))
 			{
 				this.link(data, attr + '.' + prop, prop);
 			}
@@ -392,7 +392,7 @@ export class Data extends BasicData
 		{
 			for (var prop in obj)
 			{
-				if (!obj.hasOwnProperty(prop))
+				if (!Object.prototype.hasOwnProperty.call(obj, prop))
 				{
 					continue;
 				}

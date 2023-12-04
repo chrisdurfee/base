@@ -1,6 +1,7 @@
 import { SimpleData } from '../data/data.js';
 import { Import } from '../import/import.js';
 import { ComponentHelper } from './component-helper.js';
+import { router } from './router.js';
 
 /**
  * This will setup a route uri pattern.
@@ -14,24 +15,24 @@ const routePattern = (uri) =>
 	if (uri)
 	{
 		const filter = /\//g;
-		uriQuery = uri.replace(filter, "\/");
+		uriQuery = uri.replace(filter, "/");
 
 		/* this will setup for optional slashes before the optional params */
-		const optionalSlash = /(\/):[^\/(]*?\?/g;
+		const optionalSlash = /(\/):[^/(]*?\?/g;
 		uriQuery = uriQuery.replace(optionalSlash, (str) =>
 		{
 			const pattern = /\//g;
-			return str.replace(pattern, '(?:$|\/)');
+			return str.replace(pattern, '(?:$|/)');
 		});
 
 		/* this will setup for optional params and params
 		and stop at the last slash or query start */
-		const param = /(:[^\/?&($]+)/g;
+		const param = /(:[^/?&($]+)/g;
 		const optionalParams = /(\?\/+\*?)/g;
-		uriQuery = uriQuery.replace(optionalParams, '?\/*');
+		uriQuery = uriQuery.replace(optionalParams, '?/*');
 		uriQuery = uriQuery.replace(param, (str) =>
 		{
-			return (str.indexOf('.') < 0)? '([^\/|?]+)' : '([^\/|?]+.*)';
+			return (str.indexOf('.') < 0)? '([^/|?]+)' : '([^/|?]+.*)';
 		});
 
 		/* we want to setup the wild card and param
@@ -80,10 +81,10 @@ const paramPattern = (uri) =>
 		return params;
 	}
 
-	const filter = /[\*?]/g;
+	const filter = /[*?]/g;
 	uri = uri.replace(filter, '');
 
-	const pattern = /:(.[^.\/?&($]+)\?*/g,
+	const pattern = /:(.[^./?&($]+)\?*/g,
 	matches = uri.match(pattern);
 	if (matches === null)
 	{
@@ -167,7 +168,7 @@ export class Route extends SimpleData
 	 */
 	setTitle(title)
 	{
-		base.router.updateTitle({
+		router.updateTitle({
 			title: title,
 			stage: this.stage
 		});

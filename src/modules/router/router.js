@@ -523,10 +523,10 @@ export class Router
 					const params = route.stage;
 					for (var prop in params)
 					{
-						if (params.hasOwnProperty(prop))
+						if (Object.prototype.hasOwnProperty.call(params, prop))
 						{
-							var param = params[prop],
-							pattern = new RegExp(':' + prop, 'gi');
+							var param = params[prop];
+							var pattern = new RegExp(':' + prop, 'gi');
 							str = str.replace(pattern, param);
 						}
 					}
@@ -603,7 +603,7 @@ export class Router
 		const switches = this.switches;
 		for (var id in switches)
 		{
-			if (switches.hasOwnProperty(id) === false)
+			if (!Object.prototype.hasOwnProperty.call(switches, id))
 			{
 				continue;
 			}

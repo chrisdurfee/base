@@ -124,9 +124,9 @@ export class ModelService
 		const params = [];
 		for (var prop in object)
 		{
-			if (object.hasOwnProperty(prop))
+			if (Object.prototype.hasOwnProperty.call(object, prop))
 			{
-				params.push(prop + '=' + object[prop]);
+				params.push(prop + '=' + encodeURIComponent(object[prop]));
 			}
 		}
 		return params.join('&');
@@ -162,7 +162,7 @@ export class ModelService
 		{
 			for (var key in addingParams)
 			{
-				if (addingParams.hasOwnProperty(key))
+				if (Object.prototype.hasOwnProperty.call(addingParams, key))
 				{
 					params.append(key, addingParams[key]);
 				}

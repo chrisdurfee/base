@@ -100,7 +100,7 @@ export class ConnectionTracker
 		{
 			for (var prop in connections)
 			{
-				if (!connections.hasOwnProperty(prop))
+				if (!Object.prototype.hasOwnProperty.call(connections, prop))
 				{
 					continue;
 				}

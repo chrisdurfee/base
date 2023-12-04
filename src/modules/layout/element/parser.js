@@ -1,9 +1,9 @@
+import { normalizeAttr } from '../../html/html.js';
 import { Directives } from '../directives/directives.js';
 import { WatcherHelper } from '../watcher-helper.js';
 import { AttributeDirective } from './attribute-directive.js';
 import { Attribute } from './attribute.js';
 import { Element } from './element.js';
-import { normalizeAttr } from '../../html/html.js';
 
 /**
  * Parser
@@ -147,7 +147,7 @@ export class Parser
 		var value, directive;
 		for (var key in obj)
 		{
-			if (!obj.hasOwnProperty(key) || key === 'tag')
+			if (!Object.prototype.hasOwnProperty.call(obj, key) || key === 'tag')
 			{
 				continue;
 			}

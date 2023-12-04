@@ -162,7 +162,7 @@ export class BasicData
 
 		for(var attr in items)
 		{
-			if (!items.hasOwnProperty(attr))
+			if (!Object.prototype.hasOwnProperty.call(items, attr))
 			{
 				continue;
 			}
@@ -433,7 +433,7 @@ export class BasicData
 		const tokens = [];
 		for (var prop in attr)
 		{
-			if (attr.hasOwnProperty(prop) === false)
+			if (!Object.prototype.hasOwnProperty.call(attr, prop))
 			{
 				continue;
 			}

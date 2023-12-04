@@ -125,7 +125,7 @@ const addClass = (ele, stateStyles, newValue) =>
 {
     for (var prop in stateStyles)
     {
-        if (!stateStyles.hasOwnProperty(prop) || !prop)
+        if (!Object.prototype.hasOwnProperty.call(stateStyles, prop) || !prop)
         {
             continue;
         }

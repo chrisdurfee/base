@@ -2,8 +2,8 @@
  * This will add date functions to the base framework.
  *
  */
-export const DateTime = {
-
+export const DateTime =
+{
 	/**
 	 * @member {array} monthName
 	 */
@@ -54,12 +54,11 @@ export const DateTime = {
 	 */
 	convertDate(dateString, addYear)
 	{
-		const baseDate = base.date;
 		dateString = (dateString)? dateString.replace(/\s/, 'T'): ''; //For safari
 
 		const date = new Date(dateString),
 		year = (addYear === true)? ' ' + date.getFullYear() : '';
-		return baseDate.getDayName(date.getDay()) + ', ' + baseDate.getMonthName(date.getMonth(), true) + ' ' + baseDate.padNumber(date.getDate()) + year;
+		return this.getDayName(date.getDay()) + ', ' + this.getMonthName(date.getMonth(), true) + ' ' + this.padNumber(date.getDate()) + year;
 	},
 
 	/**
@@ -254,22 +253,23 @@ export const DateTime = {
 	{
 		const milliseconds = this.getDiffFromNow(date);
 
-		let age = '';
+		let age = '',
+		days = '';
 		switch(true)
 		{
 			case milliseconds < 86400000:
 				age = '1 day';
 				break;
 			case milliseconds < 604800000:
-				var days = this.toDays(milliseconds);
+				days = this.toDays(milliseconds);
 				age = (days) + ' days';
 				break;
 			case milliseconds < 1209600000:
 				age = '1 week';
 				break;
 			case milliseconds < 2592000000:
-				var days = this.toDays(milliseconds),
-				weeks = Math.floor(days / 7);
+				days = this.toDays(milliseconds);
+				var weeks = Math.floor(days / 7);
 				age = weeks + ' weeks';
 				break;
 			case milliseconds < 5184000000:
@@ -307,27 +307,28 @@ export const DateTime = {
 	convertToEstimate(milliseconds)
 	{
 		let timeFrame = '';
+		let days, weeks, years, months, hours, minutes, seconds;
 
 		if (milliseconds <= 0)
 		{
 			switch (true)
 			{
 				case milliseconds < -63072000000:
-					var years = this.toYears(Math.abs(milliseconds));
+					years = this.toYears(Math.abs(milliseconds));
 					timeFrame = 'in ' + years + ' years';
 					break;
 				case milliseconds < -31536000000:
 					timeFrame = 'in a year';
 					break;
 				case milliseconds < -5184000000:
-					var months = this.toMonths(Math.abs(milliseconds));
+					months = this.toMonths(Math.abs(milliseconds));
 					timeFrame = 'in ' + months + ' months';
 					break;
 				case milliseconds < -2592000000:
 					timeFrame = 'in a month';
 					break;
 				case milliseconds < -1209600000:
-					var days = this.toDays(Math.abs(milliseconds)),
+					days = this.toDays(Math.abs(milliseconds)),
 					weeks = Math.floor(days / 7);
 					timeFrame = 'in ' + weeks + ' weeks';
 					break;
@@ -335,28 +336,28 @@ export const DateTime = {
 					timeFrame = 'in a week';
 					break;
 				case milliseconds < -172800000:
-					var days = this.toDays(Math.abs(milliseconds));
+					days = this.toDays(Math.abs(milliseconds));
 					timeFrame = 'in ' + (days) + ' days';
 					break;
 				case milliseconds < -86400000:
 					timeFrame = 'tomorrow';
 					break;
 				case milliseconds < -7200000:
-					var hours = this.toHours(Math.abs(milliseconds));
+					hours = this.toHours(Math.abs(milliseconds));
 					timeFrame = 'in ' + hours + ' hours';
 					break;
 				case milliseconds <= -3600000:
 					timeFrame = 'in an hour';
 					break;
 				case milliseconds < -120000:
-					var minutes = this.toMinutes(Math.abs(milliseconds));
+					minutes = this.toMinutes(Math.abs(milliseconds));
 					timeFrame = 'in ' + minutes + ' minutes';
 					break;
 				case milliseconds < -60000:
 					timeFrame = 'in a minute';
 					break;
 				case milliseconds < -2000:
-					var seconds = this.toSeconds(Math.abs(milliseconds));
+					seconds = this.toSeconds(Math.abs(milliseconds));
 					timeFrame = 'in ' + seconds + ' seconds';
 					break;
 				case milliseconds < -1:
@@ -374,35 +375,35 @@ export const DateTime = {
 					timeFrame = '1 second ago';
 					break;
 				case milliseconds < 60000:
-					var seconds = this.toSeconds(milliseconds);
+					seconds = this.toSeconds(milliseconds);
 					timeFrame = seconds + ' seconds ago';
 					break;
 				case milliseconds < 120000:
 					timeFrame = '1 minute ago';
 					break;
 				case milliseconds < 3600000:
-					var minutes = this.toMinutes(milliseconds);
+					minutes = this.toMinutes(milliseconds);
 					timeFrame = minutes + ' minutes ago';
 					break;
 				case milliseconds < 7200000:
 					timeFrame = '1 hour ago';
 					break;
 				case milliseconds < 86400000:
-					var hours = this.toHours(milliseconds);
+					hours = this.toHours(milliseconds);
 					timeFrame = hours + ' hours ago';
 					break;
 				case milliseconds < 172800000:
 					timeFrame = 'yesterday';
 					break;
 				case milliseconds < 604800000:
-					var days = this.toDays(milliseconds);
+					days = this.toDays(milliseconds);
 					timeFrame = (days) + ' days ago';
 					break;
 				case milliseconds < 1209600000:
 					timeFrame = 'a week ago';
 					break;
 				case milliseconds < 2592000000:
-					var days = this.toDays(milliseconds),
+					days = this.toDays(milliseconds),
 					weeks = Math.floor(days / 7);
 					timeFrame = weeks + ' weeks ago';
 					break;
@@ -410,14 +411,14 @@ export const DateTime = {
 					timeFrame = 'a month ago';
 					break;
 				case milliseconds < 31536000000:
-					var months = this.toMonths(milliseconds);
+					months = this.toMonths(milliseconds);
 					timeFrame = months + ' months ago';
 					break;
 				case milliseconds < 63072000000:
 					timeFrame = 'a year ago';
 					break;
 				default:
-					var years = this.toYears(milliseconds);
+					years = this.toYears(milliseconds);
 					timeFrame = years + ' years ago';
 			}
 		}

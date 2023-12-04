@@ -42,7 +42,7 @@ const sanitize = (text, removeNewLines) =>
 
     /* we want to re-encode the double quotes so they
     will be escaped by the json encoder */
-    const pattern = /\%22/g;
+    const pattern = /%22/g;
     return text.replace(pattern, '"');
 };
 
@@ -70,7 +70,7 @@ export const prepareUrl = (data, removeNewLines) =>
     let value;
     for (var prop in data)
     {
-        if (!data.hasOwnProperty(prop))
+        if (!Object.prototype.hasOwnProperty.call(data, prop))
         {
             continue;
         }
@@ -81,7 +81,7 @@ export const prepareUrl = (data, removeNewLines) =>
             continue;
         }
 
-        data[prop] = (typeof value)? prepareUrl(value, removeNewLines) : sanitize(value, removeNewLines);
+        data[prop] = (typeof value === 'string') ? prepareUrl(value, removeNewLines) : sanitize(value, removeNewLines);
     }
     return data;
 };

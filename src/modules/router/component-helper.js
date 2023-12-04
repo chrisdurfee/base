@@ -1,3 +1,4 @@
+import { Jot } from "../component/jot.js";
 import { Builder } from "../layout/builder.js";
 
 /**
