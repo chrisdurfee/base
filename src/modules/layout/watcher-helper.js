@@ -126,10 +126,10 @@ export const WatcherHelper =
 			let count = 0,
 			value = string.replace(WATCHER_PATTERN, function()
 			{
-				let watcherData = (isArray)? data[count] : data;
+				const watcherData = (isArray)? data[count] : data;
 				count++;
 
-				let result = watcherData.get(arguments[2]);
+				const result = watcherData.get(arguments[2]);
 				return (typeof result !== 'undefined'? result : '');
 			});
 			this.updateAttr(ele, attr, value);
@@ -180,23 +180,21 @@ export const WatcherHelper =
 			};
 		}
 
-		let value = settings.value;
+		const value = settings.value;
 		if (Array.isArray(value) === false)
 		{
 			/**
 			 * This will setup an array watcher based on a string.
 			 */
-			value = [value, this.getParentData(parent)];
+			return [value, this.getParentData(parent)];
 		}
-		else
+
+		/**
+		 * This will check to add the default data.
+		 */
+		if (value.length < 2)
 		{
-			/**
-			 * This will check to add the default data.
-			 */
-			if (value.length < 2)
-			{
-				value.push(this.getParentData(parent));
-			}
+			value.push(this.getParentData(parent));
 		}
 		return value;
 	},
@@ -301,10 +299,33 @@ export const WatcherHelper =
 
 		if (Array.isArray(settings))
 		{
-			settings = {
-				attr: settings[2],
-				value: [settings[0], settings[1]]
-			};
+			const value = [settings[0], settings[1]];
+
+			/**
+			 * This will check if we are supporting the new watcher format
+			 * with callback function or the old format with attr.
+			 */
+			const lastItem = settings[2];
+			if (typeof lastItem === 'function')
+			{
+				/**
+				 * This will setup a watcher with a callBack.
+				 */
+				settings = {
+					value,
+					callBack: lastItem
+				};
+			}
+			else
+			{
+				/**
+				 * This will setup a watcher with an attr.
+				 */
+				settings = {
+					attr: lastItem,
+					value: [settings[0], settings[1]]
+				};
+			}
 		}
 
 		this.addDataWatcher(ele, settings, parent);

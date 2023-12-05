@@ -164,17 +164,17 @@ console.log(layout)
  * -- Update the atom properties to use the bracket and array
  * data watching on any attribute.
  */
-// new binding
+// new watcher
 Div({class: '[[propName]]'})
 
-// multi attribute binding
+// multi attribute watching
 A({href: '/account/user/[[userId]]'}, '[[userName]] and [[age]]')
 
-// custom data binding
+// custom data watching
 Div({class: ['[[propName]]', data]})
 
-// multi data binding
-Div({class: ['[[propName]] [[otherPropName]]', data, otherData]})
+// multi data watcher
+Div({class: ['[[propName]] [[otherPropName]]', [data, otherData]]})
 
 // with callback
 const callBack = ({propName, otherProp}) =>
@@ -183,7 +183,7 @@ const callBack = ({propName, otherProp}) =>
     return `${active} ${otherProp}}`;
 };
 
-Div({class: [callBack, data, otherData]})
+Div({class: ['[[propName]] [[otherPropName]]', [data, otherData], callBack]})
 
 /**
  * Component

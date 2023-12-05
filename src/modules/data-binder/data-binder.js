@@ -249,7 +249,7 @@ export class DataBinder
 	 */
 	watch(element, data, prop, callBack)
 	{
-		if (!element || typeof element !== 'object')
+		if (Types.isObject(element) === false)
 		{
 			return;
 		}
@@ -287,7 +287,7 @@ export class DataBinder
 	{
 		if (Types.isObject(element) === false)
 		{
-			return false;
+			return;
 		}
 
 		const id = element[this.attr];
@@ -317,7 +317,7 @@ export class DataBinder
 	 *
 	 * @protected
 	 * @param {object} element
-	 * @return {boolean}
+	 * @return {number|boolean}
 	 */
 	isDataBound(element)
 	{
