@@ -1,4 +1,3 @@
-
 /**
  * This will prepare the children.
  *

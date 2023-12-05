@@ -172,6 +172,7 @@ export class Unit
 	 * @protected
 	 * @param {string} branchName
 	 * @param {mixed} value
+	 * @returns {void}
 	 */
 	addContextBranch(branchName, value)
 	{
