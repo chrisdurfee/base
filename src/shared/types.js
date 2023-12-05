@@ -43,7 +43,7 @@ export class Types
 	 */
 	static isObject(obj)
 	{
-		return (obj || typeof obj === 'object');
+		return (obj && typeof obj === 'object' && this.isArray(obj) === false);
 	}
 
 	/**
