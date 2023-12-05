@@ -1,5 +1,6 @@
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Html } from '../html/html.js';
+import { parseArgs } from './parse-args.js';
 
 /**
  * This will register the component system to the data
@@ -47,9 +48,10 @@ export class Unit
 	 * This will create a unit.
 	 *
 	 * @constructor
-	 * @param {object} [props]
+	 * @param {array} args
+	 * @returns {Unit}
 	 */
-	constructor(props)
+	constructor(...args)
 	{
 		/**
 		 * @param {bool} isUnit
@@ -57,7 +59,14 @@ export class Unit
 		this.isUnit = true;
 
 		this.init();
+
+		/**
+		 * This will allow the unit to access optional args.
+		 */
+		const {props, children} = parseArgs(args);
 		this.setupProps(props);
+		this.children ??= children;
+
 		this.onCreated();
 
 		this.rendered = false;

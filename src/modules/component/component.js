@@ -30,11 +30,11 @@ export class Component extends Unit
 	 * This will create a component.
 	 *
 	 * @constructor
-	 * @param {object} [props]
+	 * @param {array} args
 	 */
-	constructor(props)
+	constructor(...args)
 	{
-		super(props);
+		super(...args);
 
 		/**
 		 * @param {bool} isComponent
