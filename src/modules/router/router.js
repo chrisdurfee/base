@@ -4,6 +4,7 @@ import { Dom } from '../../shared/dom.js';
 import { Data } from '../data/data.js';
 import { HistoryController } from './history/history-controller.js';
 import { Route } from './route.js';
+import { setTitle } from './set-title.js';
 import { Utils } from './utils.js';
 export { NavLink } from './nav-link.js';
 
@@ -103,8 +104,7 @@ export class Router
 		const uri = settings.uri || '*';
 		settings.baseUri = this.createURI(uri);
 
-		const route = new Route(settings);
-		return route;
+		return new Route(settings, this.updateTitle.bind(this));
 	}
 
 	/**
@@ -498,66 +498,8 @@ export class Router
 			return this;
 		}
 
-		const getTitle = (title) =>
-		{
-			/* this will uppercase each word in a string
-			@param (string) str = the string to uppercase
-			@return (string) the uppercase string */
-			const toTitleCase = (str) =>
-			{
-				const pattern = /\w\S*/;
-				return str.replace(pattern, (txt) =>
-				{
-					return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
-				});
-			};
-
-
-			/* this will replace the params in the title
-			@param (string) str = the route title
-			@return (string) the title string */
-			const replaceParams = (str) =>
-			{
-				if (str.indexOf(':') > -1)
-				{
-					const params = route.stage;
-					for (var prop in params)
-					{
-						if (Object.prototype.hasOwnProperty.call(params, prop))
-						{
-							var param = params[prop];
-							var pattern = new RegExp(':' + prop, 'gi');
-							str = str.replace(pattern, param);
-						}
-					}
-				}
-				return str;
-			};
-
-			if (title)
-			{
-				if (typeof title === 'function')
-				{
-					title = title(route.stage);
-				}
-
-				/* we want to replace any params in the title
-				and uppercase the title */
-				title = replaceParams(title);
-				title = toTitleCase(title);
-
-				/* we want to check to add the base title to the
-				to the end of the title */
-				if (this.title !== '')
-				{
-					title += " - " + this.title;
-				}
-			}
-			return title;
-		};
-
 		const title = route.title;
-		document.title = getTitle(title);
+		document.title = setTitle(route, title, this.title);
 	}
 
 	/**
