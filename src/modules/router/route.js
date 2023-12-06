@@ -124,13 +124,14 @@ export class Route extends SimpleData
 
 		const paramKeys = paramPattern(uri);
 		const params = getParamDefaults(paramKeys);
-		super(params);
+		const proxy = super(params);
 
 		this.uri = uri;
 		this.paramKeys = paramKeys;
 
 		this.setupRoute(settings);
 		this.set('active', false);
+		return proxy;
 	}
 
 	/**

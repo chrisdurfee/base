@@ -80,8 +80,9 @@ export class Model extends Data
 	 */
 	constructor(settings)
 	{
-		super(settings);
+		const proxy = super(settings);
 		this.initialize();
+		return proxy;
 	}
 
 	/**

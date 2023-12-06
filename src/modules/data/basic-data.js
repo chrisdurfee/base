@@ -1,5 +1,6 @@
 import { DataPubSub } from '../data-binder/data-pub-sub.js';
 import { setupAttrSettings } from './attrs.js';
+import { DataProxy } from './data-proxy.js';
 
 let dataNumber = 0;
 
@@ -40,6 +41,8 @@ export class BasicData
 		/* this will set the construct attributes */
 		let attributes = setupAttrSettings(settings);
 		this.set(attributes);
+
+		return DataProxy(this);
 	}
 
 	/**
