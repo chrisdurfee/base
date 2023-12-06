@@ -242,7 +242,7 @@ const render = (layout, ele, parent) =>
  */
 const Comment = (props) => ({
     tag: 'comment',
-    text: 'import placeholder',
+    textContent: 'import placeholder',
     onCreated: props.onCreated
 });
 
