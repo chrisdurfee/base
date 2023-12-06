@@ -282,8 +282,8 @@ export class Builder
 		}
 		else if (tag === 'comment')
 		{
-			const child = settings.children[0];
-			const text = child.textContent;
+			const child = settings.attr[0];
+			const text = (child)? child.value : '';
 			return HtmlHelper.createComment(text, container);
 		}
 
