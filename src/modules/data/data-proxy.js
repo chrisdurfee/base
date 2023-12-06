@@ -1,3 +1,5 @@
+import { Types } from "../../shared/types.js";
+
 /**
  * This will get hte path of the prop.
  *
@@ -24,10 +26,12 @@ function getNewPath(path, prop)
 /**
  * This will create a handler for the proxy.
  *
+ * @param {object} data
  * @param {string} path
+ * @param {string} root
  * @returns {Proxy}
  */
-function createHandler(path = '')
+function createHandler(data, path = '', dataRoot = '')
 {
     return {
 
@@ -41,17 +45,25 @@ function createHandler(path = '')
          */
         get(target, prop, receiver)
         {
-            /**
-             * We want to get the path of the prop to publish updates.
-             */
-            const newPath = getNewPath(path, prop);
-
-            const value = Reflect.get(target, prop, receiver);
-            if (value && typeof value === 'object')
+            // Directly return the property if it's on the root level and we're at the root path
+            if (path === '' && prop in target)
             {
-                return new Proxy(value, createHandler(newPath));
+                return target[prop];
             }
-            return value;
+
+            // Access the property within the dataRoot
+            const dataTarget = target[dataRoot] || target;
+            const value = Reflect.get(dataTarget, prop, receiver);
+
+            // Return the value directly if it's not an object
+            if (!Types.isObject(value))
+            {
+                return value;
+            }
+
+            // Create a new handler for nested properties
+            const newPath = getNewPath(path, prop);
+            return new Proxy(value, createHandler(data, newPath, dataRoot));
         },
 
         /**
@@ -65,17 +77,19 @@ function createHandler(path = '')
          */
         set(target, prop, value, receiver)
         {
-            /**
-             * We want to get the path of the prop to publish updates.
-             */
-            const newPath = getNewPath(path, prop);
-
-            if (typeof value === 'object')
+            // Set the property at the root level if we're at the root path
+            if (path === '' && prop in target)
             {
-                return new Proxy(target[prop], createHandler(newPath));
+                target[prop] = value;
+                return true;
             }
 
-            return Reflect.set(target, prop, value, receiver);
+            // Set the property within the dataRoot
+            const dataTarget = target[dataRoot] || target;
+            const newPath = getNewPath(path, prop);
+
+            data.set(newPath, value);
+            return Reflect.set(dataTarget, prop, value, receiver);
         }
     };
 }
@@ -86,4 +100,4 @@ function createHandler(path = '')
  * @param {object} data
  * @returns {Proxy}
  */
-export const DataProxy = (data) => new Proxy(data, createHandler());
+export const DataProxy = (data, root = 'stage') => new Proxy(data, createHandler(data, '', root));
