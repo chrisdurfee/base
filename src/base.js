@@ -8,6 +8,7 @@ import { Unit } from './modules/component/unit.js';
 import { dataBinder } from './modules/data-binder/data-binder.js';
 import { Data, Model, SimpleData } from './modules/data/data.js';
 import { Html } from './modules/html/html.js';
+import { Import } from './modules/import/import.js';
 import { Builder } from './modules/layout/builder.js';
 import { } from './modules/layout/directives/core/default-directives.js';
 import { Directives } from './modules/layout/directives/directives.js';
@@ -29,6 +30,6 @@ base.augment(
 });
 
 export {
-    Ajax, Atom, Builder, Component, Data, DataTracker, Directives, Html, Jot, Model, NavLink, SimpleData, State, Unit, base, dataBinder, router
+    Ajax, Atom, Builder, Component, Data, DataTracker, Directives, Html, Import, Jot, Model, NavLink, SimpleData, State, Unit, base, dataBinder, router
 };
 
