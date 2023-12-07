@@ -1,10 +1,17 @@
 import { BrowserRender } from './browser-render.js';
 import { ServerRender } from './server-render.js';
 
+/**
+ * RenderController
+ *
+ * This will set up the render engine.
+ *
+ * @class
+ */
 export class RenderController
 {
     /**
-     * This will check if browser based navigation is supported
+     * This will check if we are in the browser.
      *
      * @returns boolean
      */
@@ -16,16 +23,15 @@ export class RenderController
     /**
      * This will create a History Object based on navigation support
      *
-     * @param {Router} router
-     * @returns History
+     * @returns Render
      */
-    static setup(router)
+    static setup()
     {
         if (this.browserIsSupported())
         {
-            return new BrowserRender(router).setup();
+            return new BrowserRender();
         }
 
-        return new ServerRender(router).setup();
+        return new ServerRender();
     }
 }

@@ -2,6 +2,12 @@ import { base } from '../../main/base.js';
 import { Jot } from "../component/jot.js";
 import { Parser } from './element/parser.js';
 import { HtmlHelper } from './html-helper.js';
+import { RenderController } from './render-controller.js';
+
+/**
+ * This will set up the render engine.
+ */
+const render = RenderController.setup();
 
 /**
  * Builder
@@ -257,21 +263,7 @@ export class Builder
 	 */
 	static createNode(settings, container, parent)
 	{
-		const tag = settings.tag;
-		if (tag === 'text')
-		{
-			const child = settings.attr[0];
-			const text = (child)? child.value : '';
-			return HtmlHelper.createText(text, container);
-		}
-		else if (tag === 'comment')
-		{
-			const child = settings.attr[0];
-			const text = (child)? child.value : '';
-			return HtmlHelper.createComment(text, container);
-		}
-
-		return HtmlHelper.create(tag, settings.attr, container, parent);
+		return render.createNode(settings, container, parent);
 	}
 }
 

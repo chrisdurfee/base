@@ -2,7 +2,7 @@ import { HtmlHelper } from '../html-helper.js';
 import { Render } from './render.js';
 
 /**
- * Browser
+ * BrowserRender
  *
  * This will redner the layout in the browser.
  *
