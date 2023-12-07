@@ -35,13 +35,13 @@ export class NavLink extends Component
 
         return {
             tag: 'a',
-            className: this.className || null,
+            class: this.class || this.className || null,
             onState: ['selected', {
                 [this.selectedClass]: true
             }],
             href: this.getString(href),
             text: this.getString(text),
-            children: this.children,
+            nest: this.nest || this.children,
             watch: watchers
         };
     }
