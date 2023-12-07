@@ -118,7 +118,7 @@ export class Tracker
             const types = this.types;
             for (var prop in types)
             {
-                if (types.hasOwnProperty(prop))
+                if (Object.prototype.hasOwnProperty.call(types, prop))
                 {
                     type = types[prop];
                     if (!type)

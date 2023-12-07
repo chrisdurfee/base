@@ -128,7 +128,7 @@ export class DataTracker
 		check if it belongs to the object directly */
 		for (var key in obj)
 		{
-			if (obj.hasOwnProperty(key))
+			if (Object.prototype.hasOwnProperty.call(obj, key))
 			{
 				return false;
 			}

@@ -1,3 +1,4 @@
+import { Types } from '../../shared/types.js';
 import { Events } from './events.js';
 
 /**
@@ -192,7 +193,7 @@ export const EventMethods =
         eventType = 'CustomEvent';
         for (var prop in eventTypes)
         {
-            if (eventTypes.hasOwnProperty(prop))
+            if (Object.prototype.hasOwnProperty.call(eventTypes, prop))
             {
                 value = eventTypes[prop];
                 if (event.match(value))

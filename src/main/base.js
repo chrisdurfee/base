@@ -59,7 +59,7 @@ class Base
 		const prototype = this.constructor.prototype;
 		for (var property in methods)
 		{
-			if (methods.hasOwnProperty(property))
+			if (Object.prototype.hasOwnProperty.call(methods, property))
 			{
 				prototype[property] = methods[property];
 			}
