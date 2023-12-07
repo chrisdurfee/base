@@ -133,11 +133,7 @@ export class Builder
 		const settings = Parser.parse(obj, parent),
 		ele = this.createNode(settings, container, parent);
 
-		const propName = obj.cache;
-		if (parent && propName)
-		{
-			parent[propName] = ele;
-		}
+		this.cache(ele, obj.cache, parent);
 
 		/* we want to recursively add the children to
 		the new element */
@@ -196,25 +192,13 @@ export class Builder
 	}
 
 	/**
-	 * This will be called when an element onCreated directive is called.
-	 *
-	 * @param {object} ele
-	 * @param {function} callBack
-	 * @param {object} parent
-	 */
-	onCreated(ele, callBack, parent)
-	{
-		callBack(ele);
-	}
-
-	/**
 	 * This will cache an element ot the parent.
 	 *
 	 * @param {object} ele
 	 * @param {object} propName
 	 * @param {object} parent
 	 */
-	cache(ele, propName, parent)
+	static cache(ele, propName, parent)
 	{
 		if (parent && propName)
 		{
