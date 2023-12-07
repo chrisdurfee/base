@@ -1,7 +1,10 @@
+/**
+ * This is a utility class for data.
+ */
 export const DataUtils =
 {
     /**
-     * @param {RexExp} deepDataPattern
+     * @member {RexExp} deepDataPattern
      */
 	deepDataPattern: /(\w+)|(?:\[(\d)\))/g,
 
@@ -17,13 +20,14 @@ export const DataUtils =
 	},
 
 	/**
-	 * This will get the deep data segments
+	 * This will get the deep data segments.
+	 *
 	 * @param {string} str
 	 * @return {array}
 	 */
 	getSegments(str)
 	{
-		var pattern = this.deepDataPattern;
+		const pattern = this.deepDataPattern;
 		return str.match(pattern);
 	}
 };

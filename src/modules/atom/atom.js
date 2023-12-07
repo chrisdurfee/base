@@ -1,54 +1,103 @@
-import {Objects} from "../../shared/objects.js";
+import { WatcherHelper } from "../layout/watcher-helper.js";
 
 /**
- * Atom
+ * This will prepare the children.
  *
- * This will create an interface for atoms to
- * extend from a parent atom.
- * @class
+ * @param {mixed} value
+ * @returns {mixed}
  */
-export const Atom = function()
+const prepareChildren = (value) =>
 {
+	if (typeof value !== 'string')
+	{
+		return value;
+	}
 
+	return setChildString(value);
 };
 
 /**
- * This will extend the atom to a child atom.
- * @static
- * @param {(object|function)}
- * @return {function} The child atom constructor.
+ * This will set the child string.
+ *
+ * @param {string} value
+ * @returns {array}
  */
-Atom.extend = function extend(childLayout)
+const setChildString = (value) =>
 {
-	let parent = this;
+	return [{
+		tag: 'text',
+		textContent: value
+	}];
+};
 
-	/*
-	this will setup a layout function to call to standardize
-	the interface for non function atoms.
-	*/
-	if(typeof childLayout === 'object')
+/**
+ * This will parse the arguments passed to the atom.
+ *
+ * @param {Array} args
+ * @returns {Object}
+ */
+const parseArgs = (args) =>
+{
+	if (!args)
+    {
+		return {
+			props: {},
+			children: []
+		};
+    }
+
+    const first = args[0];
+    if (typeof first === 'string')
+    {
+		return {
+			props: {},
+            children: setChildString(first)
+        };
+    }
+
+	if (Array.isArray(first))
 	{
-		let layoutObject = childLayout;
-		childLayout = (props) =>
+		if (WatcherHelper.isWatching(first) === false)
 		{
-			return Objects.cloneObject(layoutObject);
+			return {
+				props: {},
+				children: first
+			};
+		}
+
+		return {
+			props: {
+				watch: first
+			},
+			children: []
 		};
 	}
 
-	const child = (props = {}) =>
-	{
-		props = props || {};
-		let layout = childLayout(props),
+    return {
+		props: first || {},
+        children: prepareChildren(args[1])
+    };
+};
 
-		// we want to check to merge the layout with the parent layout
-		parentLayout = parent(props);
-		if(typeof parentLayout === 'object')
-		{
-			layout = Objects.extendObject(parentLayout, layout);
-		}
-		return layout;
-	};
-
-	child.extend = extend;
-	return child;
+/**
+ * This will create an atom.
+ *
+ * @param {function} callBack
+ * @returns {function}
+ */
+export const Atom = (callBack) =>
+{
+	/**
+	 * This will create a closure that will
+	 * parse the arguments and then call the
+	 * callback.
+	 */
+	return (...args) =>
+    {
+		/**
+		 * Thi swill allow the atom to access optional args.
+		 */
+		const {props, children} = parseArgs(args);
+        return callBack(props, children);
+    };
 };

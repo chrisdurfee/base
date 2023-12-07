@@ -1,4 +1,4 @@
-import {base} from '../../core.js';
+import { Events } from "../../main/events/events.js";
 
 /**
  * Mouse
@@ -37,7 +37,7 @@ export class Mouse
 	{
 		let selectedMode = 'page';
 
-		switch(mode)
+		switch (mode)
 		{
 			case 'client':
 			case 'screen':
@@ -58,11 +58,11 @@ export class Mouse
 	{
 		let x, y;
 
-		if(e)
+		if (e)
 		{
 			/* we need to check if the mode is set to
 			client or return page position */
-			switch(this.mode)
+			switch (this.mode)
 			{
 				case 'client':
 				case 'screen':
@@ -86,22 +86,22 @@ export class Mouse
 	 */
 	start()
 	{
-		let callBackFn = this.callBackFn;
+		const callBackFn = this.callBackFn;
 		/* we want to update mouse position and
 		standardize the return */
 		const mouseResults = (e) =>
 		{
-			let position = this.position = this.updatePosition(e);
+			const position = this.position = this.updatePosition(e);
 
 			/* we can now send the mouse wheel results to
 			the call back function */
-			if(typeof callBackFn === 'function')
+			if (typeof callBackFn === 'function')
 			{
 				callBackFn.call(position, e);
 			}
 		};
 
-		base.events.add('mousemove', this.obj, mouseResults, this.capture, true, callBackFn);
+		Events.add('mousemove', this.obj, mouseResults, this.capture, true, callBackFn);
 	}
 
 	/**
@@ -109,6 +109,6 @@ export class Mouse
 	 */
 	stop()
 	{
-		base.off('mousemove', this.obj, this.callBackFn, this.capture);
+		Events.off('mousemove', this.obj, this.callBackFn, this.capture);
 	}
 }

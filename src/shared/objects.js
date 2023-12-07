@@ -1,4 +1,13 @@
+import { Types } from "./types.js";
 
+/**
+ * Objects
+ *
+ * This will contain methods for working with objects.
+ *
+ * @module
+ * @name Objects
+ */
 export const Objects =
 {
     /**
@@ -7,7 +16,7 @@ export const Objects =
 	 * @param {object} [object] An object to extend.
 	 * @return {object}
 	 */
-	createObject(object)
+	create(object)
 	{
 		return Object.create(object);
 	},
@@ -21,14 +30,14 @@ export const Objects =
 	 */
 	extendObject(sourceObj, targetObj)
 	{
-		if(typeof sourceObj === 'undefined' || typeof targetObj === 'undefined')
+		if (typeof sourceObj === 'undefined' || typeof targetObj === 'undefined')
 		{
 			return false;
 		}
 
-		for(var property in sourceObj)
+		for (var property in sourceObj)
 		{
-			if(sourceObj.hasOwnProperty(property) && typeof targetObj[property] === 'undefined')
+			if (Object.prototype.hasOwnProperty.call(sourceObj, property) && typeof targetObj[property] === 'undefined')
 			{
 				targetObj[property] = sourceObj[property];
 			}
@@ -43,9 +52,9 @@ export const Objects =
 	 * @param {object} obj
 	 * @return {object}
 	 */
-	cloneObject(obj)
+	clone(obj)
 	{
-		if(!obj)
+		if (!obj)
 		{
 			return {};
 		}
@@ -56,10 +65,11 @@ export const Objects =
 	/**
 	 * This will get the class prototype.
 	 *
+	 * @protected
 	 * @param {(function|object)} object
 	 * @return {object}
 	 */
-	_getClassObject(object)
+	getClassObject(object)
 	{
 		return (typeof object === 'function')? object.prototype : object;
 	},
@@ -75,25 +85,50 @@ export const Objects =
 	{
 		/* if we are using a class constructor function
 		we want to get the class prototype object */
-		let source = this._getClassObject(sourceClass),
-		target = this._getClassObject(targetClass);
+		const source = this.getClassObject(sourceClass),
+		target = this.getClassObject(targetClass);
 
-		if(typeof source !== 'object' || typeof target !== 'object')
+		if (typeof source !== 'object' || typeof target !== 'object')
 		{
 			return false;
 		}
 
 		/* we want to create a new object and add the source
 		prototype to the new object */
-		let obj = Object.create(source);
+		const obj = Object.create(source);
 
 		/* we want to add any additional properties from the
 		target class to the new object */
-		for(var prop in target)
+		for (var prop in target)
 		{
 			obj[prop] = target[prop];
 		}
 
 		return obj;
+	},
+
+	/**
+	 * This will check if an object is empty.
+	 *
+	 * @param {object} obj
+	 * @return {boolean}
+	 */
+	isEmpty(obj)
+	{
+		if (Types.isObject(obj) === false)
+		{
+			return true;
+		}
+
+		/* we want to loop through each property and
+		check if it belongs to the object directly */
+		for (var key in obj)
+		{
+			if (Object.prototype.hasOwnProperty.call(obj, key))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 };

@@ -1,12 +1,8 @@
-import {base} from '../../core.js';
-import {Unit} from './unit.js';
-import {state} from '../state/state.js';
-import {EventHelper} from './event-helper.js';
-import {StateHelper} from './state-helper.js';
-
-export {Unit} from './unit.js';
-export {Jot} from './jot.js';
-export {Watch} from '../layout/layout-builder.js';
+import { Objects } from '../../shared/objects.js';
+import { StateTracker } from '../state/state-tracker.js';
+import { EventHelper } from './event-helper.js';
+import { StateHelper } from './state-helper.js';
+import { Unit } from './unit.js';
 
 /**
  * Component
@@ -18,14 +14,8 @@ export {Watch} from '../layout/layout-builder.js';
  * from a single factory.
  *
  * @example
- * class QuickFlashPanel extends base.Component
+ * class QuickFlashPanel extends Component
  *	{
- *		constructor(props)
- *		{
- *			// this will setup the component id
- *			super(props);
- *		},
- *
  *		render()
  *		{
  *			return {
@@ -37,12 +27,14 @@ export {Watch} from '../layout/layout-builder.js';
 export class Component extends Unit
 {
 	/**
+	 * This will create a component.
+	 *
 	 * @constructor
-	 * @param {object} [props]
+	 * @param {array} args
 	 */
-	constructor(props)
+	constructor(...args)
 	{
-		super(props);
+		super(...args);
 
 		/**
 		 * @param {bool} isComponent
@@ -59,14 +51,25 @@ export class Component extends Unit
 
 	/**
 	 * This will initialize the component.
+	 *
 	 * @protected
+	 * @return {object}
 	 */
 	initialize()
 	{
 		this.setupContext();
 		this.addStates();
 		this.beforeSetup();
-		this.buildLayout();
+	}
+
+	/**
+	 * This will activate the post build actions.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
+	afterLayout()
+	{
 		this.addEvents();
 		this.afterSetup();
 	}
@@ -79,12 +82,14 @@ export class Component extends Unit
 	 */
 	setupStateTarget(id)
 	{
-		let targetId = id || this.stateTargetId || this.id;
-		this.state = state.getTarget(targetId);
+		const targetId = id || this.stateTargetId || this.id;
+		this.state = StateTracker.getTarget(targetId);
 	}
 
 	/**
 	 * Override this to setup the component states.
+	 *
+	 * @protected
 	 * @return {object}
 	 */
 	setupStates()
@@ -114,14 +119,16 @@ export class Component extends Unit
 
 	/**
 	 * This will add the states.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	addStates()
 	{
 		/* this will check to restore previous a previous state if the
 		component has been preserved. */
-		let state = this.state;
-		if(state)
+		const state = this.state;
+		if (state)
 		{
 			this.stateHelper.restore(state);
 			return;
@@ -129,8 +136,8 @@ export class Component extends Unit
 
 		/* this will only setupa state manager if
 		we have states */
-		let states = this.setupStates();
-		if(base.isEmpty(states))
+		const states = this.setupStates();
+		if (Objects.isEmpty(states))
 		{
 			return;
 		}
@@ -141,28 +148,31 @@ export class Component extends Unit
 
 	/**
 	 * This will remove the states.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	removeStates()
 	{
-		let state = this.state;
-		if(!state)
+		const state = this.state;
+		if (!state)
 		{
 			return false;
 		}
 
 		this.stateHelper.removeRemoteStates();
-		state.remove();
+		StateTracker.remove();
 	}
 
 	/**
 	 * This will setup the event helper.
 	 *
 	 * @protected
+	 * @return {void}
 	 */
 	setupEventHelper()
 	{
-		if(!this.events)
+		if (!this.events)
 		{
 			this.events = new EventHelper();
 		}
@@ -185,11 +195,12 @@ export class Component extends Unit
 	 * This will add the events.
 	 *
 	 * @protected
+	 * @return {void}
 	 */
 	addEvents()
 	{
-		let events = this.setupEvents();
-		if(events.length < 1)
+		const events = this.setupEvents();
+		if (events.length < 1)
 		{
 			return false;
 		}
@@ -200,12 +211,14 @@ export class Component extends Unit
 
 	/**
 	 * This will remove the events.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	removeEvents()
 	{
-		let events = this.events;
-		if(events)
+		const events = this.events;
+		if (events)
 		{
 			events.reset();
 		}
@@ -213,6 +226,9 @@ export class Component extends Unit
 
 	/**
 	 * This will prepare the component to be destroyed.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	prepareDestroy()
 	{
@@ -222,7 +238,7 @@ export class Component extends Unit
 		this.removeStates();
 		this.removeContext();
 
-		if(this.data && this.persist === false)
+		if (this.data && this.persist === false)
 		{
 			this.data.unlink();
 		}

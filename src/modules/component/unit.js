@@ -1,19 +1,21 @@
-import {base} from '../../core.js';
-import {builder} from '../layout/layout-builder.js';
-import {dataBinder} from '../data-binder/data-binder.js';
+import { DataTracker } from '../../main/data-tracker/data-tracker.js';
+import { Html } from '../html/html.js';
+import { parseArgs } from './parse-args.js';
 
-/* this will register the component system to the
-data tracker to remove components that have been
-nested in layouts. */
-base.dataTracker.addType('components', (data) =>
+/**
+ * This will register the component system to the data
+ * tracker to remove components that have been nested
+ * in layouts.
+ */
+DataTracker.addType('components', (data) =>
 {
-	if(!data)
+	if (!data)
 	{
 		return;
 	}
 
-	let component = data.component;
-	if(component && component.rendered === true)
+	const component = data.component;
+	if (component && component.rendered === true)
 	{
 		component.prepareDestroy();
 	}
@@ -30,29 +32,26 @@ let unitNumber = 0;
  * from a single factory.
  *
  * @example
- * var Alert = base.Unit.extend(
+ * class Alert extends Unit
  *	{
- *		constructor: function(props)
- *		{
- *			// this will setup the component id
- *			base.Component.call(this, props);
- *		},
- *
- *		render: function()
+ *		render()
  *		{
  *			return {
  *
  *			};
  *		}
- *	});
+ *	}
  */
 export class Unit
 {
 	/**
+	 * This will create a unit.
+	 *
 	 * @constructor
-	 * @param {object} [props]
+	 * @param {array} args
+	 * @returns {Unit}
 	 */
-	constructor(props)
+	constructor(...args)
 	{
 		/**
 		 * @param {bool} isUnit
@@ -60,7 +59,14 @@ export class Unit
 		this.isUnit = true;
 
 		this.init();
+
+		/**
+		 * This will allow the unit to access optional args.
+		 */
+		const {props, children} = parseArgs(args);
 		this.setupProps(props);
+		this.children ??= children;
+
 		this.onCreated();
 
 		this.rendered = false;
@@ -70,7 +76,9 @@ export class Unit
 	/**
 	 * This will setup the component number and unique
 	 * instance id for the component elements.
+	 *
 	 * @protected
+	 * @returns {void}
 	 */
 	init()
 	{
@@ -81,17 +89,18 @@ export class Unit
 	 * This will setup the component props.
 	 *
 	 * @param {object} [props]
+	 * @return {void}
 	 */
 	setupProps(props)
 	{
-		if(!props || typeof props !== 'object')
+		if (!props || typeof props !== 'object')
 		{
-			return false;
+			return;
 		}
 
-		for(var prop in props)
+		for (var prop in props)
 		{
-			if(props.hasOwnProperty(prop))
+			if (Object.prototype.hasOwnProperty.call(props, prop))
 			{
 				this[prop] = props[prop];
 			}
@@ -105,7 +114,7 @@ export class Unit
 	 */
 	getParentContext()
 	{
-		if(!this.parent)
+		if (!this.parent)
 		{
 			return null;
 		}
@@ -120,9 +129,9 @@ export class Unit
 	 */
 	setupContext()
 	{
-		let parentContext = this.getParentContext();
-		let context = this.setContext(parentContext);
-		if(context)
+		const parentContext = this.getParentContext();
+		const context = this.setContext(parentContext);
+		if (context)
 		{
 			this.context = context;
 			return;
@@ -139,15 +148,15 @@ export class Unit
 	 */
 	setupAddingContext()
 	{
-		let parentContext = this.context;
-		let context = this.addContext(parentContext);
-		if(!context)
+		const parentContext = this.context;
+		const context = this.addContext(parentContext);
+		if (!context)
 		{
 			return;
 		}
 
-		let branchName = context[0];
-		if(!branchName)
+		const branchName = context[0];
+		if (!branchName)
 		{
 			return;
 		}
@@ -160,8 +169,10 @@ export class Unit
 	/**
 	 * This will add a branch to the context.
 	 *
+	 * @protected
 	 * @param {string} branchName
 	 * @param {mixed} value
+	 * @returns {void}
 	 */
 	addContextBranch(branchName, value)
 	{
@@ -194,11 +205,12 @@ export class Unit
 	/**
 	 * This will remove the added context from the parent.
 	 *
+	 * @protected
 	 * @returns {void}
 	 */
 	removeContext()
 	{
-		if(!this.addingContext)
+		if (!this.addingContext)
 		{
 			return;
 		}
@@ -209,12 +221,13 @@ export class Unit
 	/**
 	 * This will remove a context branch.
 	 *
+	 * @protected
 	 * @param {string} branch
 	 * @returns {void}
 	 */
 	removeContextBranch(branch)
 	{
-		if(!branch)
+		if (!branch)
 		{
 			return;
 		}
@@ -225,6 +238,7 @@ export class Unit
 	/**
 	 * This will get the context.
 	 *
+	 * @protected
 	 * @returns {object|null}
 	 */
 	getContext()
@@ -234,6 +248,8 @@ export class Unit
 
 	/**
 	 * override this to do something when created.
+	 *
+	 * @returns {void}
 	 */
 	onCreated()
 	{
@@ -259,12 +275,12 @@ export class Unit
 	 */
 	_cacheRoot(layout)
 	{
-		if(!layout)
+		if (!layout)
 		{
 			return layout;
 		}
 
-		if(!layout.id)
+		if (!layout.id)
 		{
 			layout.id = this.getId();
 		}
@@ -275,12 +291,13 @@ export class Unit
 
 	/**
 	 * This will create the component layout.
+	 *
 	 * @protected
 	 * @return {object}
 	 */
 	_createLayout()
 	{
-		if(this.persist)
+		if (this.persist)
 		{
 			return this._layout || (this._layout = this.render());
 		}
@@ -296,67 +313,42 @@ export class Unit
 	 */
 	prepareLayout()
 	{
-		let layout = this._createLayout();
+		const layout = this._createLayout();
 		return this._cacheRoot(layout);
 	}
 
 	/**
 	 * This will build the layout.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
-	buildLayout()
+	afterBuild()
 	{
-		let layout = this.prepareLayout();
-		this.build(layout, this.container);
-
-		base.dataTracker.add(this.panel, 'components',
+		DataTracker.add(this.panel, 'components',
 		{
 			component: this
 		});
 
 		this.rendered = true;
+		this.afterLayout();
 	}
 
 	/**
-	 * This will build a layout.
+	 * This will activate the post build actions.
 	 *
-	 * @param {object} layout
-	 * @param {object} container
-	 * @return {object}
+	 * @protected
+	 * @return {void}
 	 */
-	build(layout, container)
+	afterLayout()
 	{
-		return builder.build(layout, container, this);
-	}
-
-	/**
-	 * This will prepend layout to a container.
-	 *
-	 * @param {object} layout
-	 * @param {object} container
-	 * @param {object} [optionalNode]
-	 */
-	prepend(layout, container, optionalNode)
-	{
-		var frag = this.build(layout, null);
-		builder.prepend(container, frag, optionalNode);
-	}
-
-	/**
-	 * This will rebuild a layout.
-	 *
-	 * @param {object} layout
-	 * @param {object} container
-	 * @return {object}
-	 */
-	rebuild(layout, container)
-	{
-		return builder.rebuild(container, layout, this);
+		this.afterSetup();
 	}
 
 	/**
 	 * This will render the content on condition of a property.
 	 *
+	 * @protected
 	 * @param {mixed} prop
 	 * @param {mixed} content
 	 * @returns {object}
@@ -369,21 +361,22 @@ export class Unit
 	/**
 	 * This will map an array to children elements.
 	 *
+	 * @protected
 	 * @param {array} items
 	 * @param {function} callBack
 	 * @returns {array}
 	 */
 	map(items, callBack)
 	{
-		let children = [];
-		if(!items || items.length < 1)
+		const children = [];
+		if (!items || items.length < 1)
 		{
 			return children;
 		}
 
-		for(var i = 0, length = items.length; i < length; i++)
+		for (var i = 0, length = items.length; i < length; i++)
 		{
-			var item = callBack(items[i], i);
+			const item = callBack(items[i], i);
 			children.push(item);
 		}
 		return children;
@@ -392,51 +385,14 @@ export class Unit
 	/**
 	 * This will remove children from an element.
 	 *
+	 * @protected
 	 * @param {object} layout
 	 * @param {object} container
 	 * @return {object}
 	 */
 	removeAll(ele)
 	{
-		return builder.removeAll(ele);
-	}
-
-	/**
-	 * This will cache an element when its created by
-	 * saving a reference to it as a property on the
-	 * component.
-	 *
-	 * @param {string} propName The name to use as
-	 * the reference.
-	 * @param {object} layout
-	 * @param {function} [callBack]
-	 * @return {object}
-	 */
-	cache(propName, layout, callBack)
-	{
-		if(!layout || typeof layout !== 'object')
-		{
-			return false;
-		}
-
-		if(layout.isUnit === true)
-		{
-			layout =
-			{
-				component: layout
-			};
-		}
-
-		layout.onCreated = (element) =>
-		{
-			this[propName] = element;
-
-			if(typeof callBack === 'function')
-			{
-				callBack(element);
-			}
-		};
-		return layout;
+		return Html.removeAll(ele);
 	}
 
 	/**
@@ -450,7 +406,7 @@ export class Unit
 	getId(id)
 	{
 		let mainId = this.id;
-		if(typeof id === 'string')
+		if (typeof id === 'string')
 		{
 			mainId += '-' + id;
 		}
@@ -459,18 +415,21 @@ export class Unit
 
 	/**
 	 * This will initialize the component.
+	 *
 	 * @protected
+	 * @returns {void}
 	 */
 	initialize()
 	{
 		this.setupContext();
 		this.beforeSetup();
-		this.buildLayout();
-		this.afterSetup();
 	}
 
 	/**
 	 * override this to do something before setup.
+	 *
+	 * @protected
+	 * @returns {void}
 	 */
 	beforeSetup()
 	{
@@ -479,6 +438,9 @@ export class Unit
 
 	/**
 	 * override this to do something after setup.
+	 *
+	 * @protected
+	 * @returns {void}
 	 */
 	afterSetup()
 	{
@@ -487,7 +449,9 @@ export class Unit
 
 	/**
 	 * This will setup and render the component.
+	 *
 	 * @param {object} container
+	 * @returns {void}
 	 */
 	setup(container)
 	{
@@ -497,19 +461,24 @@ export class Unit
 
 	/**
 	 * This will remove the component.
+	 *
 	 * @protected
+	 * @returns {void}
 	 */
 	remove()
 	{
 		this.prepareDestroy();
 		this.removeContext();
 
-		let panel = this.panel || this.id;
-		builder.removeElement(panel);
+		const panel = this.panel || this.id;
+		Html.removeElement(panel);
 	}
 
 	/**
 	 * This will prepare the component to be destroyed.
+	 *
+	 * @protected
+	 * @returns {void}
 	 */
 	prepareDestroy()
 	{
@@ -519,6 +488,9 @@ export class Unit
 
 	/**
 	 * Override this to do something before destroy.
+	 *
+	 * @protected
+	 * @returns {void}
 	 */
 	beforeDestroy()
 	{
@@ -527,25 +499,11 @@ export class Unit
 
 	/**
 	 * This will destroy the component.
+	 *
+	 * @returns {void}
 	 */
 	destroy()
 	{
 		this.remove();
-	}
-
-	/**
-	 * This will bind and element to data.
-	 *
-	 * @param {object} element
-	 * @param {object} data
-	 * @param {string} prop
-	 * @param {function} filter
-	 */
-	bindElement(element, data, prop, filter)
-	{
-		if(element)
-		{
-			dataBinder.bind(element, data, prop, filter);
-		}
 	}
 }

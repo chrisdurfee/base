@@ -1,44 +1,80 @@
-import {base} from '../../core.js';
+import { base } from '../../main/base.js';
+import { Events } from '../../main/events/events.js';
+import { Objects } from '../../shared/objects.js';
+import { Strings } from '../../shared/strings.js';
 
 /**
  * This is the default xhr (ajax) settings.
  */
-let XhrDefaultSettings =
+const XhrDefaultSettings =
 {
+	/**
+	 * @member {string} url This is the url of the server
+	 */
 	url: '',
 
-	/* this is the responseType of the server
-	response (string) */
-	responseType:  'json',
+	/**
+	 * @member {string} params This is the responseType of the server
+	 */
+	responseType: 'json',
 
-	/* this is the server method */
+	/**
+	 * @member {string} method This is the method of the request
+	 */
 	method: 'POST',
 
-	/* this can fix a param string to be added
-	to every ajax request */
+	/**
+	 * @member {object|string} params This can fix a param string
+	 * to be added to every ajax request.
+	 */
 	fixedParams: '',
 
-	/* headers (object) */
+	/**
+	 * @member {object} headers This is the headers of the request
+	 */
 	headers:
 	{
 		'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
 	},
 
+	/**
+	 * @member {array} beforeSend This is an array of callbacks
+	 */
 	beforeSend: [],
 
-	/* this will set the ajax request to async (bool) */
+	/**
+	 * @member {boolean} async This is the async of the request
+	 */
 	async: true,
 
-	/* cross domain (bool) */
+	/**
+	 * @member {boolean} crossDomain This will allow cross domain requests
+	 */
 	crossDomain: false,
 
-	/* cors with credentials (bool) */
+	/**
+	 * @member {boolean} withCredentials CORS with credentials
+	 */
 	withCredentials: false,
 
-	/* events (function) */
+	/**
+	 * @member {function|null} completed This is the completed callback
+	 */
 	completed: null,
+
+	/**
+	 * @member {function|null} failed This is the failed callback
+	 */
 	failed: null,
+
+	/**
+	 * @member {function|null} aborted This is the aborted callback
+	 */
 	aborted: null,
+
+	/**
+	 * @member {function|null} progress This is the progress callback
+	 */
 	progress: null
 };
 
@@ -78,9 +114,9 @@ base.augment(
 	 */
 	ajaxSettings(settingsObj)
 	{
-		if(typeof settingsObj === 'object')
+		if (typeof settingsObj === 'object')
 		{
-			this.xhrSettings = this.extendClass(base.xhrSettings, settingsObj);
+			this.xhrSettings = Objects.extendClass(base.xhrSettings, settingsObj);
 		}
 	},
 
@@ -118,7 +154,7 @@ base.augment(
  *
  * @return {object} xhr object.
  */
-export const ajax = (...args) =>
+export const Ajax = (...args) =>
 {
 	/* we want to save the args so we can check
 	which way we are adding the ajax settings */
@@ -130,11 +166,14 @@ export const ajax = (...args) =>
  * XhrRequest
  *
  * This will create an xhr request object.
+ *
  * @class
  */
 export class XhrRequest
 {
 	/**
+	 * This will create an xhr request object.
+	 *
 	 * @constructor
 	 * @param {*} args
 	 */
@@ -156,8 +195,8 @@ export class XhrRequest
 	{
 		this.getXhrSettings(args);
 
-		let xhr = this.xhr = this.createXHR();
-		if(xhr === false)
+		const xhr = this.xhr = this.createXHR();
+		if (xhr === false)
 		{
 			return false;
 		}
@@ -177,22 +216,23 @@ export class XhrRequest
 	/**
 	 * This will call all before send callbacks.
 	 *
+	 * @protected
 	 * @returns {void}
 	 */
 	beforeSend()
 	{
-		let items = base.xhrSettings.beforeSend;
-		if(items.length < 1)
+		const items = base.xhrSettings.beforeSend;
+		if (items.length < 1)
 		{
 			return;
 		}
 
-		let xhr = this.xhr;
-		let settings = this.settings;
-		for(var i = 0, length = items.length; i < length; i++)
+		const xhr = this.xhr;
+		const settings = this.settings;
+		for (var i = 0, length = items.length; i < length; i++)
 		{
 			var callBack = items[i];
-			if(callBack)
+			if (callBack)
 			{
 				callBack(xhr, settings);
 			}
@@ -208,12 +248,12 @@ export class XhrRequest
 	 */
 	objectToString(object)
 	{
-		let params = [];
+		const params = [];
 		for (var prop in object)
 		{
-			if(object.hasOwnProperty(prop))
+			if (Object.prototype.hasOwnProperty.call(object, prop))
 			{
-				params.push(prop + '=' + object[prop]);
+				params.push(prop + '=' + encodeURIComponent(object[prop]));
 			}
 		}
 		return params.join('&');
@@ -229,72 +269,72 @@ export class XhrRequest
 	 */
 	setupParams(params, addingParams)
 	{
-		let paramsType = typeof params;
-		if(addingParams)
+		const paramsType = typeof params;
+		if (!addingParams)
 		{
-			/* this will convert the adding params to match
-			the params type */
-			let addingType = typeof addingParams;
-			if(paramsType === 'string')
-			{
-				if(addingType !== 'string')
-				{
-					addingParams = this.objectToString(addingParams);
-				}
-
-				const char = (params === '')? '?' : '&';
-				params += char + addingParams;
-			}
-			else
-			{
-				if(addingType === 'string')
-				{
-					addingParams = base.parseQueryString(addingParams, false);
-				}
-
-				if(params instanceof FormData)
-				{
-					for(var key in addingParams)
-					{
-						if(addingParams.hasOwnProperty(key))
-						{
-							params.append(key, addingParams[key]);
-						}
-					}
-				}
-				else if(paramsType === 'object')
-				{
-					/* we don't want to modify the original object
-					so we need to clone the object before extending */
-					params = base.cloneObject(params);
-
-					params = Object.assign(addingParams, params);
-					params = this.objectToString(params);
-				}
-			}
-		}
-		else
-		{
-			if((params instanceof FormData) === false && paramsType === 'object')
+			if ((params instanceof FormData) === false && paramsType === 'object')
 			{
 				params = this.objectToString(params);
 			}
+			return params;
+		}
+
+		/**
+		 * This will convert the adding params to match
+		 * the params type.
+		 */
+		const addingType = typeof addingParams;
+		if (paramsType === 'string')
+		{
+			if (addingType !== 'string')
+			{
+				addingParams = this.objectToString(addingParams);
+			}
+
+			const char = (params === '')? '?' : '&';
+			params += char + addingParams;
+			return params;
+		}
+
+		if (addingType === 'string')
+		{
+			addingParams = Strings.parseQueryString(addingParams, false);
+		}
+
+		if (params instanceof FormData)
+		{
+			for (var key in addingParams)
+			{
+				if (Object.prototype.hasOwnProperty.call(addingParams, key))
+				{
+					params.append(key, addingParams[key]);
+				}
+			}
+		}
+		else if (paramsType === 'object')
+		{
+			/* we don't want to modify the original object
+			so we need to clone the object before extending */
+			params = Objects.clone(params);
+
+			params = Object.assign(addingParams, params);
+			params = this.objectToString(params);
 		}
 		return params;
 	}
 
 	/**
 	 * This will get the params.
+	 *
 	 * @protected
 	 * @return {*}
 	 */
 	getParams()
 	{
-		let settings = this.settings,
-		params = settings.params;
-
-		let fixedParams = settings.fixedParams;
-		if(params)
+		const settings = this.settings;
+		const fixedParams = settings.fixedParams;
+		let params = settings.params;
+		if (params)
 		{
 			params = this.setupParams(params, fixedParams);
 		}
@@ -311,6 +351,7 @@ export class XhrRequest
 	 *
 	 * @protected
 	 * @param {array} args
+	 * @return {void}
 	 */
 	getXhrSettings(args)
 	{
@@ -320,13 +361,13 @@ export class XhrRequest
 
 		/* we want to check if we are adding the ajax settings by
 		individual args or by a settings object */
-		if(args.length >= 2 && typeof args[0] !== 'object')
+		if (args.length >= 2 && typeof args[0] !== 'object')
 		{
-			for(var i = 0, maxLength = args.length; i < maxLength; i++)
+			for (var i = 0, maxLength = args.length; i < maxLength; i++)
 			{
 				var arg = args[i];
 
-				switch(i)
+				switch (i)
 				{
 					case 0:
 						settings.url = arg;
@@ -354,18 +395,18 @@ export class XhrRequest
 		{
 			/* override the default settings with the args
 			settings object */
-			settings = this.settings = base.extendClass(this.settings, args[0]);
+			settings = this.settings = Objects.extendClass(this.settings, args[0]);
 
 			/* we want to check to add the completed callback
 			as the error and aborted if not set */
-			if(typeof settings.completed === 'function')
+			if (typeof settings.completed === 'function')
 			{
-				if(typeof settings.failed !== 'function')
+				if (typeof settings.failed !== 'function')
 				{
 					settings.failed = settings.completed;
 				}
 
-				if(typeof settings.aborted !== 'function')
+				if (typeof settings.aborted !== 'function')
 				{
 					settings.aborted = settings.failed;
 				}
@@ -381,14 +422,11 @@ export class XhrRequest
 	 */
 	createXHR()
 	{
-		/* we want to check to setup the xhr by
-		the crossDomain settings */
-		let settings = this.settings,
-
+		const settings = this.settings,
 		xhr = new XMLHttpRequest();
 		xhr.responseType = settings.responseType;
 
-		if(settings.withCredentials === true)
+		if (settings.withCredentials === true)
 		{
 			xhr.withCredentials = true;
 		}
@@ -398,21 +436,26 @@ export class XhrRequest
 
 	/**
 	 * This will setup the request headers.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	setupHeaders()
 	{
-		let settings = this.settings;
-		if(settings && typeof settings.headers === 'object')
+		const settings = this.settings;
+		if (!settings && typeof settings.headers !== 'object')
 		{
-			/* we want to add a header for each
-			property in the object */
-			let headers = settings.headers;
-			for(var header in headers)
+			return;
+		}
+
+		/* we want to add a header for each
+		property in the object */
+		let headers = settings.headers;
+		for (var header in headers)
+		{
+			if (Object.prototype.hasOwnProperty.call(headers, header))
 			{
-				if(headers.hasOwnProperty(header))
-				{
-					this.xhr.setRequestHeader(header, headers[header]);
-				}
+				this.xhr.setRequestHeader(header, headers[header]);
 			}
 		}
 	}
@@ -420,33 +463,33 @@ export class XhrRequest
 	/**
 	 * This will update the request status.
 	 *
+	 * @protected
 	 * @param {object} e
 	 * @param {string} [overrideType]
 	 */
 	update(e, overrideType)
 	{
-		let xhr = this.xhr;
+		const xhr = this.xhr;
 
 		/* this will remove the xhr events from the active events
 		after the events are completed, aborted, or errored */
-		let removeEvents = () =>
+		const removeEvents = () =>
 		{
-			let events = base.events;
-			events.removeEvents(xhr.upload);
-			events.removeEvents(xhr);
+			Events.removeEvents(xhr.upload);
+			Events.removeEvents(xhr);
 		};
 
-		let settings = this.settings;
-		if(!settings)
+		const settings = this.settings;
+		if (!settings)
 		{
 			return false;
 		}
 
-		let type = overrideType || e.type;
-		switch(type)
+		const type = overrideType || e.type;
+		switch (type)
 		{
 			case 'load':
-				if(typeof settings.completed === 'function')
+				if (typeof settings.completed === 'function')
 				{
 					let response = this.getResponseData();
 					settings.completed(response, this.xhr);
@@ -454,20 +497,20 @@ export class XhrRequest
 				removeEvents();
 				break;
 			case 'error':
-				if(typeof settings.failed === 'function')
+				if (typeof settings.failed === 'function')
 				{
 					settings.failed(false, this.xhr);
 				}
 				removeEvents();
 				break;
 			case 'progress':
-				if(typeof settings.progress === 'function')
+				if (typeof settings.progress === 'function')
 				{
 					settings.progress(e);
 				}
 				break;
 			case 'abort':
-				if(typeof settings.aborted === 'function')
+				if (typeof settings.aborted === 'function')
 				{
 					settings.aborted(false, this.xhr);
 				}
@@ -479,36 +522,38 @@ export class XhrRequest
 	/**
 	 * This will get the response data.
 	 *
+	 * @protected
 	 * @return {*}
 	 */
 	getResponseData()
 	{
-		let xhr = this.xhr,
-		response = xhr.response;
-
+		const xhr = this.xhr;
 		const responseType = xhr.responseType;
-		if(!responseType || responseType === 'text')
+		if (!responseType || responseType === 'text')
 		{
 			return xhr.responseText;
 		}
 
-		return response;
+		return xhr.response;
 	}
 
 	/**
 	 * This will add the xhr events.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	addXhrEvents()
 	{
-		let settings = this.settings;
-		if(!settings)
+		const settings = this.settings;
+		if (!settings)
 		{
 			return;
 		}
 
-		let xhr = this.xhr,
-		callBack = base.bind(this, this.update);
-		base.on(['load', 'error', 'abort'], xhr, callBack);
-		base.on('progress', xhr.upload, callBack);
+		const xhr = this.xhr,
+		callBack = this.update.bind(this);
+		Events.on(['load', 'error', 'abort'], xhr, callBack);
+		Events.on('progress', xhr.upload, callBack);
 	}
 }

@@ -1,11 +1,12 @@
-import {BasicData} from './basic-data.js';
-import {dataBinder} from '../data-binder/data-binder.js';
+import { dataBinder } from '../data-binder/data-binder.js';
+import { BasicData } from './basic-data.js';
 
 /**
  * SimpleData
  *
  * This will extend Data to add a simple data object
  * that doesn't allow deep nested data.
+ *
  * @class
  * @augments BasicData
  */
@@ -20,10 +21,11 @@ export class SimpleData extends BasicData
 	 * @param {*} val
 	 * @param {*} committer
 	 * @param {*} prevValue
+	 * @return {void}
 	 */
 	_publish(attr, val, committer, prevValue)
 	{
-		let message = attr + ':change';
+		const message = attr + ':change';
 		this.eventSub.publish(message, val, committer);
 
 		committer = committer || this;

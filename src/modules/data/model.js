@@ -1,6 +1,6 @@
-import {Data} from './deep-data.js';
-import {ModelService} from './model-service.js';
-import {setupAttrSettings} from './attrs.js';
+import { setupAttrSettings } from './attrs.js';
+import { Data } from './deep-data.js';
+import { ModelService } from './model-service.js';
 
 /**
  * This will get the defaults from the settings.
@@ -10,27 +10,29 @@ import {setupAttrSettings} from './attrs.js';
  */
 const setupDefaultAttr = (settings) =>
 {
-	let attributes = {};
-	if(!settings || typeof settings !== 'object')
+	const attributes = {};
+	if (!settings || typeof settings !== 'object')
 	{
 		return attributes;
 	}
 
-	let defaults = settings.defaults;
-	if(!defaults)
+	const defaults = settings.defaults;
+	if (!defaults)
 	{
 		return attributes;
 	}
 
-	for(var prop in defaults)
+	for (var prop in defaults)
 	{
-		if(defaults.hasOwnProperty(prop))
+		if (!Object.prototype.hasOwnProperty.call(defaults, prop))
 		{
-			var attr = defaults[prop];
-			if(typeof attr !== 'function')
-			{
-				attributes[prop] = attr;
-			}
+			continue;
+		}
+
+		var attr = defaults[prop];
+		if (typeof attr !== 'function')
+		{
+			attributes[prop] = attr;
 		}
 	}
 	delete settings.defaults;
@@ -45,12 +47,12 @@ const setupDefaultAttr = (settings) =>
  */
 const getXhr = (settings) =>
 {
-	if(!settings || typeof settings.xhr !== 'object')
+	if (!settings || typeof settings.xhr !== 'object')
 	{
 		return {};
 	}
 
-	let settingsXhr = settings.xhr,
+	const settingsXhr = settings.xhr,
 	xhr = Object.assign({}, settingsXhr);
 	delete settings.xhr;
 	return xhr;
@@ -64,22 +66,31 @@ let modelTypeNumber = 0;
  *
  * This will extend Data to add a model that can specify
  * a service that connects to a remote source.
+ *
+ * @class
+ * @extends Data
  */
 export class Model extends Data
 {
 	/**
+	 * This will create a new model.
+	 *
 	 * @constructor
 	 * @param {object} [settings]
 	 */
 	constructor(settings)
 	{
-		super(settings);
+		const proxy = super(settings);
 		this.initialize();
+		return proxy;
 	}
 
 	/**
 	 * This adds a method to call if you want the model
 	 * to do something when its initialized.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	initialize()
 	{
@@ -100,7 +111,7 @@ export class Model extends Data
 
 		/* this will setup the default attribute settings for
 		the model */
-		let defaultAttributes = setupDefaultAttr(settings);
+		const defaultAttributes = setupDefaultAttr(settings);
 		class model extends parent
 		{
 			constructor(instanceSettings)

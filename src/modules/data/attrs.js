@@ -1,12 +1,4 @@
-/**
- * This will clone an object.
- *
- * @param {object} obj
- */
-export const cloneObject = (obj) =>
-{
-    return JSON.parse(JSON.stringify(obj));
-};
+import { Objects } from "../../shared/objects.js";
 
 /**
  * This will get the data attribute settings.
@@ -16,24 +8,25 @@ export const cloneObject = (obj) =>
  */
 export const setupAttrSettings = (settings) =>
 {
-	let attributes = {};
-	if(!settings || typeof settings !== 'object')
+	const attributes = {};
+	if (!settings || typeof settings !== 'object')
 	{
 		return attributes;
 	}
 
-	settings = cloneObject(settings);
-
-	for(var prop in settings)
+	settings = Objects.clone(settings);
+	for (var prop in settings)
 	{
-		if(settings.hasOwnProperty(prop))
+		if (!Object.prototype.hasOwnProperty.call(settings, prop))
 		{
-			var setting = settings[prop];
-			if(typeof setting !== 'function')
-			{
-				attributes[prop] = setting;
-				delete settings[prop];
-			}
+			continue;
+		}
+
+		var setting = settings[prop];
+		if (typeof setting !== 'function')
+		{
+			attributes[prop] = setting;
+			delete settings[prop];
 		}
 	}
 	return attributes;

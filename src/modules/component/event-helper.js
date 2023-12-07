@@ -1,19 +1,25 @@
-import {base} from '../../core.js';
+import { Events } from "../../main/events/events.js";
 
 /**
  * EventHelper
  *
  * This will create an event object to make
  * adding and removing events easier.
+ *
  * @class
  */
 export class EventHelper
 {
 	/**
+	 * This will create an event helper.
+	 *
 	 * @constructor
 	 */
 	constructor()
 	{
+		/**
+		 * @member {array} events
+		 */
 		this.events = [];
 	}
 
@@ -24,14 +30,14 @@ export class EventHelper
 	 */
 	addEvents(events)
 	{
-		let length = events.length;
-		if(length < 1)
+		const length = events.length;
+		if (length < 1)
 		{
 			return false;
 		}
 
 		let event;
-		for(var i = 0; i < length; i++)
+		for (var i = 0; i < length; i++)
 		{
 			event = events[i];
 			this.on(...event);
@@ -45,10 +51,11 @@ export class EventHelper
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
+	 * @return {void}
 	 */
 	on(event, obj, callBack, capture)
 	{
-		base.on(event, obj, callBack, capture);
+		Events.on(event, obj, callBack, capture);
 
 		this.events.push({
 			event,
@@ -65,17 +72,18 @@ export class EventHelper
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
+	 * @return {void}
 	 */
 	off(event, obj, callBack, capture)
 	{
-		base.off(event, obj, callBack, capture);
+		Events.off(event, obj, callBack, capture);
 
 		let option,
 		events = this.events;
-		for(var i = 0, length = events.length; i < length; i++)
+		for (var i = 0, length = events.length; i < length; i++)
 		{
 			option = events[i];
-			if(option.event === event && option.obj === obj)
+			if (option.event === event && option.obj === obj)
 			{
 				events.splice(i, 1);
 				break;
@@ -85,31 +93,40 @@ export class EventHelper
 
 	/**
 	 * This will set all events.
+	 *
+	 * @return {void}
 	 */
 	set()
 	{
 		let event,
 		events = this.events;
-		for(var i = 0, length = events.length; i < length; i++)
+		for (var i = 0, length = events.length; i < length; i++)
 		{
 			event = events[i];
-			base.on(event.event, event.obj, event.callBack, event.capture);
+			Events.on(event.event, event.obj, event.callBack, event.capture);
 		}
 	}
 
+	/**
+	 * This will unset all events.
+	 *
+	 * @return {void}
+	 */
 	unset()
 	{
 		let event,
 		events = this.events;
-		for(var i = 0, length = events.length; i < length; i++)
+		for (var i = 0, length = events.length; i < length; i++)
 		{
 			event = events[i];
-			base.off(event.event, event.obj, event.callBack, event.capture);
+			Events.off(event.event, event.obj, event.callBack, event.capture);
 		}
 	}
 
 	/**
 	 * This will reset the events.
+	 *
+	 * @return {void}
 	 */
 	reset()
 	{

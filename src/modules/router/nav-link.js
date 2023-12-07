@@ -1,5 +1,5 @@
-import {router} from './router.js';
-import {Component} from '../component/component.js';
+import { Component } from '../component/component.js';
+import { router } from './router.js';
 
 /**
  * NavLink
@@ -29,7 +29,7 @@ export class NavLink extends Component
      */
     render()
     {
-        let href = this.href,
+        const href = this.href,
         text = this.text,
         watchers = this.setupWatchers(href, text);
 
@@ -54,7 +54,7 @@ export class NavLink extends Component
      */
     getString(string)
     {
-        let type = typeof string;
+        const type = typeof string;
         return (type !== 'object' && type !== 'undefined')? string : null;
     }
 
@@ -68,10 +68,10 @@ export class NavLink extends Component
      */
     setupWatchers(href, text)
     {
-        let exact = (this.exact !== false),
+        const exact = (this.exact !== false),
         data = router.data;
 
-        let watchers = [];
+        const watchers = [];
 
         if(href && typeof href === 'object')
         {
@@ -93,10 +93,10 @@ export class NavLink extends Component
 
         watchers.push({
             value: ['[[path]]', data],
-            callBack: (ele, value) =>
+            callBack: (value, ele) =>
             {
-                let path = ele.pathname + ele.hash;
-				let selected = exact? (value === path) : (new RegExp('^' + ele.pathname + '($|#|\/|\\.).*').test(value));
+                const path = ele.pathname + ele.hash;
+				const selected = exact? (value === path) : (new RegExp('^' + ele.pathname + '($|#|/|\\.).*').test(value));
                 this.update(ele, selected);
             }
         });

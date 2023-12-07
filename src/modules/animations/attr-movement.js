@@ -1,15 +1,6 @@
-import {Movement} from './movement.js';
-import {base} from '../../core.js';
+import { Arrays } from '../../shared/arrays.js';
+import { Movement } from './movement.js';
 
-/*
-	AttrMovement class
-
-	this will create an attr movement object that can
-	update the property when animated.
-
-	@param (object) element
-	@param (object) settings
-*/
 export class AttrMovement extends Movement
 {
 	constructor(element, settings)
@@ -18,13 +9,10 @@ export class AttrMovement extends Movement
 		this.filter = settings.filter;
 	}
 
-	/* this will get start value of the property being animated.
-	@param (string) value = the value being modified
-	@return (string) the type of units */
 	getStartValue(value, end)
 	{
 		let start = 0;
-		if(typeof value === 'undefined')
+		if (typeof value === 'undefined')
 		{
 			start = this.element[this.property];
 		}
@@ -40,7 +28,7 @@ export class AttrMovement extends Movement
 		let filter,
 
 		callBack = this.filter;
-		if(typeof callBack === 'function')
+		if (typeof callBack === 'function')
 		{
 			/* this will add the step to the value */
 			filter = function(value)
@@ -55,7 +43,7 @@ export class AttrMovement extends Movement
 				return value;
 			};
 		}
-		return (this.filterValue = filter).apply(this, base.listToArray(arguments));
+		return (this.filterValue = filter).apply(this, Arrays.toArray(arguments));
 	}
 
 	update(value)

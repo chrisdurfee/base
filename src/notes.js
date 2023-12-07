@@ -3,14 +3,45 @@
  */
 
 /**
+ * Version 2.6.0 atoms
+ */
+Section({
+    nest: [
+        Article({
+            class: 'post',
+            nest: [
+                Header({
+                    nest: [
+                        H1({
+                            text: 'Title'
+                        })
+                    ]
+                })
+            ]
+        })
+    ]
+})
+
+/**
+ * Next version atoms
+ */
+Section([
+    Article({ class: 'post' }, [
+        Header([
+            H1('Title')
+        ])
+    ])
+])
+
+/**
  * Atoms
  *
- * Update atoms to use composition instead of inheritance.
+ * -- Update atoms to use composition instead of inheritance.
  *
- * Update atoms to use two params instead of one. The first
+ * -- Update atoms to use two params instead of one. The first
  * is the props and the second is the children.
  *
- * Update the atoms to allow optional params.
+ * -- Update the atoms to allow optional params.
  */
 Div({class: 'test'}, 'text')
 
@@ -22,9 +53,7 @@ Div({class: 'test'}, [
 ]);
 
 // html nesting
-Div({class: 'test'}, {
-    html: '<span>test</span>'
-})
+Div({class: 'test', html: '<span>test</span>'})
 
 // atom optional args
 Div({class: 'text'}) // props only
@@ -90,22 +119,22 @@ console.log(layout)
 /**
  * Layout
  *
- * Update the layout builder to support string children.
+ * -- Update the layout builder to support string children.
  *
- * Update the layout parse and builder to allow arrays on
+ * -- Update the layout parse and builder to allow arrays on
  * properties other than children.
  *
- * Update the attr to check if the value has a "[[" or is an array
+ * -- Update the attr to check if the value has a "[[" or is an array
  * and to create a watcher on that attr.
  *
- * Update the layout builder to support adding and removing directives.
+ * -- Update the layout builder to support adding directives.
  *
- * Export the default directives.
+ * -- Export the default directives.
  *
- * Swap the ele and value in all onSet, onState, onUpdate methods.
+ * -- Swap the ele and value in all onSet, onState, onUpdate methods.
  * it should return the value first then the ele.
  *
- * Update the watcher callback to swap the ele and value.
+ * -- Update the watcher callback to swap the ele and value.
  *
  * Update the watcher callback to add the result to the
  * element like onSet and onState.
@@ -132,20 +161,20 @@ console.log(layout)
 /**
  * Data Binding and Watching
  *
- * Update the atom properties to use the bracket and array
+ * -- Update the atom properties to use the bracket and array
  * data watching on any attribute.
  */
-// new binding
+// new watcher
 Div({class: '[[propName]]'})
 
-// multi attribute binding
+// multi attribute watching
 A({href: '/account/user/[[userId]]'}, '[[userName]] and [[age]]')
 
-// custom data binding
+// custom data watching
 Div({class: ['[[propName]]', data]})
 
-// multi data binding
-Div({class: ['[[propName]] [[otherPropName]]', data, otherData]})
+// multi data watcher
+Div({class: ['[[propName]] [[otherPropName]]', [data, otherData]]})
 
 // with callback
 const callBack = ({propName, otherProp}) =>
@@ -154,12 +183,12 @@ const callBack = ({propName, otherProp}) =>
     return `${active} ${otherProp}}`;
 };
 
-Div({class: [callBack, data, otherData]})
+Div({class: ['[[propName]] [[otherPropName]]', [data, otherData], callBack]})
 
 /**
  * Component
  *
- * Replace the cache mathod with the cacheable method.
+ * -- Replace the cache mathod with the cacheable method.
  */
 
 /**

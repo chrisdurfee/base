@@ -1,5 +1,6 @@
-import {base} from '../../core.js';
-import {dataBinder} from '../data-binder/data-binder.js';
+import { Dom } from '../../shared/dom.js';
+import { Types } from '../../shared/types.js';
+import { dataBinder } from '../data-binder/data-binder.js';
 
 const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
 
@@ -12,6 +13,49 @@ const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
 export const WatcherHelper =
 {
 	/**
+	 * This will check if the value is a watcher.
+	 *
+	 * @param {mixed} value
+	 * @return {boolean}
+	 * @static
+	 * @private
+	 */
+	isWatching(value)
+	{
+		if (Array.isArray(value))
+		{
+			if (typeof value[0] !== 'string')
+			{
+				return false;
+			}
+
+			if (this.hasParams(value[0]))
+			{
+				return true;
+			}
+
+			return false;
+		}
+		return this.hasParams(value);
+	},
+
+	/**
+	 * This will check if a string has params.
+	 *
+	 * @param {string} string
+	 * @returns {bool}
+	 */
+	hasParams(string)
+	{
+		if (!string || Types.isString(string) === false)
+		{
+			return false;
+		}
+
+		return (string.indexOf('[[') !== -1);
+	},
+
+	/**
 	 * This will get the property names to be watched.
 	 *
 	 * @protected
@@ -22,10 +66,10 @@ export const WatcherHelper =
 	{
 		let pattern = /\[\[(.*?)(\[\d+\])?\]\]/g,
 		matches = string.match(pattern);
-		if(matches)
+		if (matches)
 		{
 			pattern = /(\[\[|\]\])/g;
-			for(var i = 0, length = matches.length; i < length; i++)
+			for (var i = 0, length = matches.length; i < length; i++)
 			{
 				matches[i] = matches[i].replace(pattern, '');
 			}
@@ -43,19 +87,19 @@ export const WatcherHelper =
 	 */
 	updateAttr(ele, attr, value)
 	{
-		if(attr === 'text' || attr === 'textContent')
+		if (attr === 'text' || attr === 'textContent')
 		{
 			ele.textContent = value;
 		}
-		else if(attr === 'innerHTML')
+		else if (attr === 'innerHTML')
 		{
 			ele.innerHTML = value;
 		}
 		else
 		{
-			if(attr.substring(4, 1) === '-')
+			if (attr.substring(4, 1) === '-')
 			{
-				base.setAttr(ele, attr, value);
+				Dom.setAttr(ele, attr, value);
 			}
 			else
 			{
@@ -82,10 +126,10 @@ export const WatcherHelper =
 			let count = 0,
 			value = string.replace(WATCHER_PATTERN, function()
 			{
-				let watcherData = (isArray)? data[count] : data;
+				const watcherData = (isArray)? data[count] : data;
 				count++;
 
-				let result = watcherData.get(arguments[2]);
+				const result = watcherData.get(arguments[2]);
 				return (typeof result !== 'undefined'? result : '');
 			});
 			this.updateAttr(ele, attr, value);
@@ -100,17 +144,17 @@ export const WatcherHelper =
 	 */
 	getParentData(parent)
 	{
-		if(parent.data)
+		if (parent.data)
 		{
 			return parent.data;
 		}
 
-		if(parent.context && parent.context.data)
+		if (parent.context && parent.context.data)
 		{
 			return parent.context.data;
 		}
 
-		if(parent.state)
+		if (parent.state)
 		{
 			return parent.state;
 		}
@@ -128,7 +172,7 @@ export const WatcherHelper =
 	 */
 	getValue(settings, parent)
 	{
-		if(typeof settings === 'string')
+		if (typeof settings === 'string')
 		{
 			settings =
 			{
@@ -136,23 +180,21 @@ export const WatcherHelper =
 			};
 		}
 
-		let value = settings.value;
-		if(Array.isArray(value) === false)
+		const value = settings.value;
+		if (Array.isArray(value) === false)
 		{
 			/**
 			 * This will setup an array watcher based on a string.
 			 */
-			value = [value, this.getParentData(parent)];
+			return [value, this.getParentData(parent)];
 		}
-		else
+
+		/**
+		 * This will check to add the default data.
+		 */
+		if (value.length < 2)
 		{
-			/**
-			 * This will check to add the default data.
-			 */
-			if(value.length < 2)
-			{
-				value.push(this.getParentData(parent));
-			}
+			value.push(this.getParentData(parent));
 		}
 		return value;
 	},
@@ -167,9 +209,9 @@ export const WatcherHelper =
 	 */
 	getPropValues(data, props, isArray)
 	{
-		let values = [];
+		const values = [];
 
-		for(var i = 0, length = props.length; i < length; i++)
+		for (var i = 0, length = props.length; i < length; i++)
 		{
 			var watcherData = (isArray)? data[i] : data;
 			var value = watcherData.get(props[i]);
@@ -194,19 +236,19 @@ export const WatcherHelper =
 	{
 		let callBack,
 		overrideCallBack = settings.callBack;
-		if(typeof overrideCallBack === 'function')
+		if (typeof overrideCallBack === 'function')
 		{
-			let props = string.match(WATCHER_PATTERN);
-			let isMultiProp = (props && props.length > 1);
+			const props = string.match(WATCHER_PATTERN);
+			const isMultiProp = (props && props.length > 1);
 			callBack = (value, committer) =>
 			{
 				value = (isMultiProp !== true)? value : this.getPropValues(data, props, isDataArray);
-				overrideCallBack(ele, value, committer);
+				overrideCallBack(value, ele, committer);
 			};
 		}
 		else
 		{
-			let attr = settings.attr || 'textContent';
+			const attr = settings.attr || 'textContent';
 			callBack = this._getWatcherCallBack(ele, data, string, attr, isDataArray);
 		}
 		return callBack;
@@ -222,17 +264,17 @@ export const WatcherHelper =
 	 */
 	addDataWatcher(ele, settings, parent)
 	{
-		let value = this.getValue(settings, parent),
+		const value = this.getValue(settings, parent),
 		data = value[1];
-		if(!data)
+		if (!data)
 		{
 			return;
 		}
 
-		let string = value[0],
+		const string = value[0],
 		isDataArray = Array.isArray(data);
 
-		let callBack = this.getCallBack(settings, ele, data, string, isDataArray),
+		const callBack = this.getCallBack(settings, ele, data, string, isDataArray),
 		props = this._getWatcherProps(string);
 		for(var i = 0, length = props.length; i < length; i++)
 		{
@@ -250,17 +292,40 @@ export const WatcherHelper =
 	 */
 	setup(ele, settings, parent)
 	{
-		if(!settings)
+		if (!settings)
 		{
 			return;
 		}
 
-		if(Array.isArray(settings))
+		if (Array.isArray(settings))
 		{
-			settings = {
-				attr: settings[2],
-				value: [settings[0], settings[1]]
-			};
+			const value = [settings[0], settings[1]];
+
+			/**
+			 * This will check if we are supporting the new watcher format
+			 * with callback function or the old format with attr.
+			 */
+			const lastItem = settings[2];
+			if (typeof lastItem === 'function')
+			{
+				/**
+				 * This will setup a watcher with a callBack.
+				 */
+				settings = {
+					value,
+					callBack: lastItem
+				};
+			}
+			else
+			{
+				/**
+				 * This will setup a watcher with an attr.
+				 */
+				settings = {
+					attr: lastItem,
+					value: [settings[0], settings[1]]
+				};
+			}
 		}
 
 		this.addDataWatcher(ele, settings, parent);
