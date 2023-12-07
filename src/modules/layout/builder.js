@@ -2,7 +2,7 @@ import { base } from '../../main/base.js';
 import { Jot } from "../component/jot.js";
 import { Parser } from './element/parser.js';
 import { HtmlHelper } from './html-helper.js';
-import { RenderController } from './render-controller.js';
+import { RenderController } from './render/render-controller.js';
 
 /**
  * This will set up the render engine.
