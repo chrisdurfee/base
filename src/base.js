@@ -1,4 +1,5 @@
 import { base } from './main/base.js';
+import { DataTracker } from './main/data-tracker/data-tracker.js';
 import { Ajax } from './modules/ajax/ajax.js';
 import { Atom } from './modules/atom/atom.js';
 import { Component } from './modules/component/component.js';
@@ -28,6 +29,6 @@ base.augment(
 });
 
 export {
-    Ajax, Atom, Builder, Component, Data, Directives, Html, Jot, Model, NavLink, SimpleData, State, Unit, base, dataBinder, router
+    Ajax, Atom, Builder, Component, Data, DataTracker, Directives, Html, Jot, Model, NavLink, SimpleData, State, Unit, base, dataBinder, router
 };
 

@@ -9,7 +9,7 @@ const countProperty = (obj) =>
 	let count = 0;
 	for (var property in obj)
 	{
-		if (!obj.hasOwnProperty(property))
+		if (!Object.prototype.hasOwnProperty.call(obj, property))
 		{
 			continue;
 		}
@@ -54,7 +54,7 @@ const matchProperties = (obj1, obj2) =>
 		 * We want to check if the property is owned by the
 		 * object and that they have matching types.
 		 */
-		if (!obj1.hasOwnProperty(property) || !obj2.hasOwnProperty(property))
+		if (!Object.prototype.hasOwnProperty.call(obj1, property) || !Object.prototype.hasOwnProperty.call(obj2, property))
 		{
 			break;
 		}
