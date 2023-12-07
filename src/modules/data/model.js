@@ -73,6 +73,11 @@ let modelTypeNumber = 0;
 export class Model extends Data
 {
 	/**
+	 * @member {object|null} xhr
+	 */
+	xhr = null;
+
+	/**
 	 * This will create a new model.
 	 *
 	 * @constructor
