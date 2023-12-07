@@ -1,6 +1,6 @@
 import { dataBinder } from "../../../../data-binder/data-binder.js";
 import { Html } from "../../../../html/html.js";
-import { Builder } from "../../builder.js";
+import { Builder } from "../../../builder.js";
 import { getParentData } from './get-parent-data.js';
 
 /**
