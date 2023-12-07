@@ -1,5 +1,6 @@
 import { dataBinder } from "../../../../data-binder/data-binder.js";
 import { Html } from "../../../../html/html.js";
+import { Builder } from "../../builder.js";
 import { getParentData } from './get-parent-data.js';
 
 /**
@@ -57,6 +58,6 @@ export const forEach = (ele, settings, parent) =>
             children.push(layout);
         }
 
-        return this.build(children, ele, parent);
+        return Builder.build(children, ele, parent);
     });
 }
