@@ -8,7 +8,7 @@
  *
  * The dom methods for data, css, attributes, width, height, offset, and position have been moved to the Dom module. Ue the Dom module to access these methods.
  *
- * The core object has been refactored into the shared modules
+ * The core object has been refactored into the shared modules like Strings, Arrays, Objects, and Types.
  *
  * Ajax
  * The ajax object has been changed to uppercase "Ajax" where it used to be lowsercase (ajax) to be more consistent with the other modules.
