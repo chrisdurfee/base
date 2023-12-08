@@ -1,4 +1,4 @@
-import { base } from '../../core.js';
+import { base } from '../../base.js';
 import { Dom } from '../../shared/dom.js';
 
 /**

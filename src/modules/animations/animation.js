@@ -12,7 +12,7 @@ export class Animation
 		this.setupMovements(settings);
 	}
 
-	setup()
+	setup(settings)
 	{
 		this.setupMovements(settings);
 	}

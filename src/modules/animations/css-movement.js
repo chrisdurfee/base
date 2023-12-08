@@ -1,12 +1,13 @@
 import { Dom } from '../../shared/dom.js';
 import { Movement } from './movement.js';
+import { Value } from './value.js';
 
 export class CssMovement extends Movement
 {
 	constructor(element, settings)
 	{
-		this.style = element.style;
 		super(element, settings);
+		this.style = element.style;
 	}
 
 	getStartValue(value, end)
@@ -22,7 +23,7 @@ export class CssMovement extends Movement
 				let values = Dom.getCss(element, property);
 				if(values !== 'none')
 				{
-					let cssPattern = new RegExp('(?:' + method + '\((.+)\))', 'g');
+					let cssPattern = new RegExp('(?:' + method + '((.+)))', 'g');
 					values.replace(cssPattern, (fullMatch, params) =>
 					{
 						start = (typeof params === 'string')? params.split(',') : null;

@@ -41,7 +41,7 @@ export class Value
 
 			/* we need to remove the numbers or plus or minus equals
 			to get the units */
-			let pattern = /([0-9.\-\+=])/g;
+			let pattern = /([0-9.\-+=])/g;
 			return text.replace(pattern, '');
 		}
 		return '';
