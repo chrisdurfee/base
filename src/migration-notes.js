@@ -10,11 +10,14 @@
  *
  * The core object has been refactored into the shared modules like Strings, Arrays, Objects, and Types.
  *
+ * DataTracker
+ * The dataTracker object has been refactored to the DataTracker class. The methods have been converted to static methods.
+ *
  * Ajax
  * The ajax object has been changed to uppercase "Ajax" where it used to be lowsercase (ajax) to be more consistent with the other modules.
  *
  * HtmlBuilder
- * The HtmlBuilder has been refactored to the Html module. The methods have been converted to static methods.
+ * The HtmlBuilder has been refactored to the Html module. The methods have been converted to static methods. Some of the methods have been renamed to be more consistent.
  *
  * Layout
  * The layutBuilder is not called "Builder." The methods have been converted to static methods. The Builder class no longer extends the HtmlBuilder class. It now uses the HtmlHelper class that extends the Html module but overrides some methods to make it easier to build layouts.
@@ -93,6 +96,37 @@ layout = Div({class: 'text'}, [
 ]) // props and array child
 
 /**
+ * Version 2.6.0 atoms
+ */
+Section({
+    nest: [
+        Article({
+            class: 'post',
+            nest: [
+                Header({
+                    nest: [
+                        H1({
+                            text: 'Title'
+                        })
+                    ]
+                })
+            ]
+        })
+    ]
+})
+
+/**
+ * Next version atoms
+ */
+Section([
+    Article({ class: 'post' }, [
+        Header([
+            H1('Title')
+        ])
+    ])
+])
+
+/**
  * Components
  * The components now use the same args pattern as the atoms. The props go first, then children but you can omit the props if you only have children. The children should be wrapped in an array unless you just have a textContent string, then you can just pass the string value.
  *
@@ -107,5 +141,8 @@ layout = Div({class: 'text'}, [
  * The setup method does not render a component.
  *
  * Import
- * We have added a new IMport module to allow loading modules dybamically. This will allow you to load modules on demand.
+ * We have added a new IMport module to allow loading modules dybamically. This will allow you to load modules on demand. The imported module needs to be the default export pf the module.
  */
+Import({
+    src: '/modules/test.js'
+})
