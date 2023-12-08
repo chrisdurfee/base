@@ -1,11 +1,10 @@
 # Base Framework
 
-**Last Updated**: December 4, 2023
-**Version**: 2.6.0
+**Version**: 3.0.4
 
 ## Framework Overview
 
-Our goal with Base is to solve many client-side rendering issues. Base focuses on reusability, scalability, polymorphism, and performance.
+Our goal with Base is to solve many client-side rendering issues. Base focuses on reusability, scalability, and performance.
 
 Base has a core that supports adding and removing events, custom events, data-tracking, element class and attribute modifying, object and type utils, etc.
 
@@ -15,23 +14,39 @@ The framework is modular and has additional modules to help with ajax, HTML, lay
 
 Base framework uses components to render an application. Base creates and renders components using native JavaScript. Layouts are scaffolded using JavaScript object literals. Because the layouts are rendered client-side using native JavaScript, the framework does not require a compiling or build process.
 
-[Learn about layouts](#)
-
 ## Components and Atoms
 
 Components are encapsulated layouts that contain the presentation and functionality. They are reusable and extensible, helping to reduce redundant code through abstract types.
+
+```javascript
+import { Component } from '@base-framework/base';
+
+/**
+ * Page
+ *
+ * This will create a page component.
+ *
+ * @class Page
+ * @extends {Component}
+ */
+export class Page extends Component
+{
+    render()
+    {
+        return {
+            class: 'page'
+        };
+    }
+}
+```
 
 Components have lifecycle methods for actions during creation, setup, and destruction.
 
 Atoms are the building blocks for reusable layouts, allowing common design patterns and elements to be shared between multiple components and other atoms.
 
-[Learn about components](#)
-
 ## Element Directives
 
 Elements created by Base have access to custom directives, enabling more functionalities than standard HTML elements. These include caching, adding states, binding and watching data, re-rendering contents, declarative routing and switching, array mapping and binding, event listeners, and more.
-
-[Learn about directives](#)
 
 ## Data Binding, Watching, and Linking
 
@@ -41,8 +56,6 @@ Types of bindables include:
 - **Data**: A generic object with complex, deep nested data.
 - **SimpleData**: A shallow data object.
 - **Models**: Child of Data, with default attributes and server resource connectivity.
-
-[Learn about data binding](#)
 
 ## Performance
 
@@ -102,7 +115,7 @@ export class Page extends Component
 }
 ```
 
-User the builder to create a new instance of the component:
+Use the builder to create a new instance of the component:
 
 ```javascript
 import { Builder } from '@base-framework/base';
@@ -159,7 +172,7 @@ Base Framework is licensed under the MIT License. See the LICENSE file for detai
 
 For questions, suggestions, or issues, contact us:
 
-Email:
-GitHub Issues: github.com/chrisdurfee/base/issues
-Community Chat: Discord coming soon
-Follow us on Social Media:
+- Email:
+- GitHub Issues: github.com/chrisdurfee/base/issues
+- Community Chat: Discord coming soon
+- Follow us on Social Media:
