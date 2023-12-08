@@ -1,4 +1,3 @@
-import { base } from '../../base.js';
 import { Dom } from '../../shared/dom.js';
 
 /**
@@ -101,7 +100,7 @@ export const animate =
 				if (removeClass)
 				{
 					/* we want to remove the className */
-					base.removeClass(animation.object, animation.className);
+					Dom.removeClass(animation.object, animation.className);
 				}
 
 				/* we want to remove the animation fron the object array */
