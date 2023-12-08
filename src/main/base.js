@@ -30,7 +30,7 @@ class Base
 		/**
 		 * @member {string} version
 		 */
-		this.version = '3.0.0';
+		this.version = '3.0.4';
 
 		/**
 		 * @member {array} errors
