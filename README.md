@@ -154,6 +154,10 @@ const container = document.body;
 Builder.render(page, container);
 ```
 
+## Example Project Using Base Framework
+
+[Base Framework Example](https://github.com/chrisdurfee/next-app-shell)
+
 ## Contributing
 
 Contributions to Base Framework are welcome. Follow these steps to contribute:
