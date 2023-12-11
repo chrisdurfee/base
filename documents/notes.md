@@ -1,10 +1,13 @@
-/**
- * Base Goals for the next version.
- */
+# Technical Research Notes on Framework Enhancements
 
-/**
- * Version 2.6.0 atoms
- */
+## Overview
+This document outlines the base goals and proposed changes for the next version of our software framework, focusing on improvements in atom elements, layout management, data binding, and request handling.
+
+### Base Goals for Version 2.6.0
+
+#### Version 2.6.0 Atoms
+Introducing a nested structure for creating sections and articles.
+```javascript
 Section({
     nest: [
         Article({
@@ -21,10 +24,13 @@ Section({
         })
     ]
 })
+```
 
-/**
- * Next version atoms
- */
+### Proposed Changes for Next Version
+
+#### Next Version Atoms
+Refining the atom structure to be more concise and clear.
+```javascript
 Section([
     Article({ class: 'post' }, [
         Header([
@@ -32,17 +38,35 @@ Section([
         ])
     ])
 ])
+```
 
-/**
- * Atoms
- *
- * -- Update atoms to use composition instead of inheritance.
- *
- * -- Update atoms to use two params instead of one. The first
- * is the props and the second is the children.
- *
- * -- Update the atoms to allow optional params.
- */
+#### Atoms Enhancements
+- **Composition Over Inheritance**: Update atoms to use composition instead of inheritance.
+- **Two-Parameter Structure**: Atoms to use two parameters - the first for properties and the second for children.
+- **Optional Parameters**: Allowing atoms to have optional parameters.
+```javascript
+Div({class: 'test'}, 'text')
+```
+
+### Atom Nesting
+Supporting both strings and arrays for nested atom structures.
+```javascript
+Div({class: 'test'}, [
+    Header({class: 'test'}, [
+        H1({class: 'name'}, 'title')
+    ])
+]);
+```
+
+### HTML Nesting
+Enabling HTML nesting within atom structures.
+```javascript
+Div({class: 'test', html: '<span>test</span>'})
+```
+
+### Atom Functionality
+Implementation of atom functionality with support for various use cases.
+```javascript
 Div({class: 'test'}, 'text')
 
 // atom nesting (supports both strings and arrays)
@@ -115,31 +139,12 @@ console.log(layout)
 
 layout = Checkbox();
 console.log(layout)
+```
 
-/**
- * Layout
- *
- * -- Update the layout builder to support string children.
- *
- * -- Update the layout parse and builder to allow arrays on
- * properties other than children.
- *
- * -- Update the attr to check if the value has a "[[" or is an array
- * and to create a watcher on that attr.
- *
- * -- Update the layout builder to support adding directives.
- *
- * -- Export the default directives.
- *
- * -- Swap the ele and value in all onSet, onState, onUpdate methods.
- * it should return the value first then the ele.
- *
- * -- Update the watcher callback to swap the ele and value.
- *
- * Update the watcher callback to add the result to the
- * element like onSet and onState.
- */
-// swapped elel and value
+### Layout Management
+Proposed updates to the layout builder, including support for string children and array properties.
+```javascript
+// swapped ele and value
 {
     onSet: ['propName', (val, ele) =>
     {
@@ -157,13 +162,11 @@ console.log(layout)
         }
     }]
 }
+```
 
-/**
- * Data Binding and Watching
- *
- * -- Update the atom properties to use the bracket and array
- * data watching on any attribute.
- */
+### Data Binding and Watching
+Enhancements in data binding and watching mechanisms.
+```javascript
 // new watcher
 Div({class: '[[propName]]'})
 
@@ -184,18 +187,14 @@ const callBack = ({propName, otherProp}) =>
 };
 
 Div({class: ['[[propName]] [[otherPropName]]', [data, otherData], callBack]})
+```
 
-/**
- * Component
- *
- * -- Replace the cache mathod with the cacheable method.
- */
+### Component Updates
+Replacing the cache method with a more efficient 'cacheable' approach.
 
-/**
- * Data
- *
- * Update the data objects to use proxies instead of getters and setters.
- */
+### Data Handling
+Transitioning to proxies for managing data objects.
+```javascript
 const data = new Data({
     name: 'test',
     class: 'active',
@@ -271,10 +270,11 @@ proxy2.items[0].name = 'test';
 DataBinder.publish(data, 'path', value);
 
 console.log(proxy2);
+```
 
-/**
- * Requests
- *
- * Replace ajax requests that use xhr with fetch. This should still support
- * aborting a request.
- */
+### Requests
+Replacing traditional AJAX requests with the Fetch API, while maintaining support for request aborting.
+```javascript
+// Fetch API implementation details
+// ...
+```
