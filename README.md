@@ -1,7 +1,5 @@
 # Base Framework
 
-**Version**: 3.0.4
-
 ## Framework Overview
 
 Our goal with Base is to solve many client-side rendering issues. Base focuses on reusability, scalability, and performance.
