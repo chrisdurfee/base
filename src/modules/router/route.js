@@ -13,6 +13,9 @@ const routePattern = (uri) =>
 	let uriQuery = "";
 	if (uri)
 	{
+		const filter = /\//g;
+		uriQuery = uri.replace(filter, "/");
+
 		/* this will setup for optional slashes before the optional params */
 		const optionalSlash = /(\/):[^/(]*?\?/g;
 		uriQuery = uriQuery.replace(optionalSlash, (str) =>
