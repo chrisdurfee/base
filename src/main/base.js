@@ -1,6 +1,6 @@
 /**
  * Base Framework
- * @version 3.0.5
+ * @version 3.0.6
  * @author Chris Durfee
  * @file This is a javascript framework to allow complex
  * functions to work in many browsers and versions.
@@ -30,7 +30,7 @@ class Base
 		/**
 		 * @member {string} version
 		 */
-		this.version = '3.0.5';
+		this.version = '3.0.6';
 
 		/**
 		 * @member {array} errors
