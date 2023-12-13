@@ -68,6 +68,19 @@ export const Li = Atom((props, children) => Tag({ ...props, tag: 'li' }, childre
 export const Img = Atom((props) => Tag({ ...props, tag: 'img' }, null));
 
 /**
+ * Create a br element.
+ *
+ * @param {object} props - Properties for the br element.
+ * @return {object} - Returns an object representing the br element.
+ */
+export const Br = Atom((props) => Tag({ ...props, tag: 'br' }, null));
+
+/**
+ * Creates a horizontal rule (hr) element.
+ */
+export const Hr = Atom((props) => Tag({ ...props, tag: 'hr' }, null));
+
+/**
  * Creates a header 1 (h1) element.
  */
 export const H1 = Atom((props, children) => Tag({ ...props, tag: 'h1' }, children));
