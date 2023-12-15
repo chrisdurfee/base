@@ -81,6 +81,11 @@ export const Br = Atom((props) => Tag({ ...props, tag: 'br' }, null));
 export const Hr = Atom((props) => Tag({ ...props, tag: 'hr' }, null));
 
 /**
+ * Creates a text (text) element.
+ */
+export const Text = Atom((props, children) => Tag({ ...props, tag: 'text' }, children));
+
+/**
  * Creates a header 1 (h1) element.
  */
 export const H1 = Atom((props, children) => Tag({ ...props, tag: 'h1' }, children));
