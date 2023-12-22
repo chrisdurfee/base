@@ -126,7 +126,7 @@ export class ModelService
 		{
 			if (Object.prototype.hasOwnProperty.call(object, prop))
 			{
-				params.push(prop + '=' + encodeURIComponent(object[prop]));
+				params.push(prop + '=' + object[prop]);
 			}
 		}
 		return params.join('&');
