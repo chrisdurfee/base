@@ -28,15 +28,12 @@ const replaceParams = (str, route) =>
     }
 
     const params = route.stage;
-    for (var prop in params)
+    for (const [key, value] of Object.entries(params))
     {
-        if (Object.prototype.hasOwnProperty.call(params, prop))
-        {
-            var param = params[prop];
-            var pattern = new RegExp(':' + prop, 'gi');
-            str = str.replace(pattern, param);
-        }
+        const pattern = new RegExp(':' + key, 'gi');
+        str = str.replace(pattern, value);
     }
+
     return str;
 };
 

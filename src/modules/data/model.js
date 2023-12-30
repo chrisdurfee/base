@@ -1,3 +1,4 @@
+import { Types } from '../../shared/types.js';
 import { setupAttrSettings } from './attrs.js';
 import { Data } from './deep-data.js';
 import { ModelService } from './model-service.js';
@@ -11,31 +12,22 @@ import { ModelService } from './model-service.js';
 const setupDefaultAttr = (settings) =>
 {
 	const attributes = {};
-	if (!settings || typeof settings !== 'object')
+	if (!Types.isObject(settings) || !settings.defaults)
 	{
 		return attributes;
 	}
 
-	const defaults = settings.defaults;
-	if (!defaults)
+	const { defaults } = settings;
+    Object.keys(defaults).forEach(prop =>
 	{
-		return attributes;
-	}
-
-	for (var prop in defaults)
-	{
-		if (!Object.prototype.hasOwnProperty.call(defaults, prop))
+        const attr = defaults[prop];
+        if (typeof attr !== 'function')
 		{
-			continue;
-		}
+            attributes[prop] = attr;
+        }
+    });
 
-		var attr = defaults[prop];
-		if (typeof attr !== 'function')
-		{
-			attributes[prop] = attr;
-		}
-	}
-	delete settings.defaults;
+    delete settings.defaults;
 	return attributes;
 };
 
@@ -52,10 +44,9 @@ const getXhr = (settings) =>
 		return {};
 	}
 
-	const settingsXhr = settings.xhr,
-	xhr = Object.assign({}, settingsXhr);
-	delete settings.xhr;
-	return xhr;
+	const xhr = { ...settings.xhr };
+    delete settings.xhr;
+    return xhr;
 };
 
 /* this will track the number of model types */
@@ -117,18 +108,18 @@ export class Model extends Data
 		/* this will setup the default attribute settings for
 		the model */
 		const defaultAttributes = setupDefaultAttr(settings);
-		class model extends parent
+
+		class ExtendedModel extends parent
 		{
 			constructor(instanceSettings)
 			{
 				/* this will get the instance attributes that
 				the model will set as attribute data */
-				let instanceAttr = setupAttrSettings(instanceSettings);
+				const instanceAttr = {
+                    ...defaultAttributes,
+                    ...setupAttrSettings(instanceSettings)
+                };
 
-				/* we want to extend the default attr with the
-				instance attr before we set the data and call
-				the parent constructor */
-				instanceAttr = Object.assign({}, defaultAttributes, instanceAttr);
 				super(instanceAttr);
 
 				/* this will setup the model service and
@@ -136,13 +127,13 @@ export class Model extends Data
 				this.xhr = new service(this);
 			}
 
-			dataTypeId = 'bm' + (modelTypeNumber++);
+			dataTypeId = `bm${modelTypeNumber++}`;
 		}
 
-		Object.assign(model.prototype, settings);
-		model.prototype.service = service;
+		Object.assign(ExtendedModel.prototype, settings);
+		ExtendedModel.prototype.service = service;
 
-		return model;
+		return ExtendedModel;
 	}
 }
 

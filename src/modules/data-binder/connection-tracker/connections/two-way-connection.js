@@ -66,7 +66,7 @@ export class TwoWayConnection extends Connection
 	 * This will unsubscribe from a source.
 	 *
 	 * @param {object} source
-	 * @return {void}
+	 * @return {object}
 	 */
 	unsubscribeSource(source)
 	{
@@ -74,13 +74,14 @@ export class TwoWayConnection extends Connection
 		{
 			source.unsubscribe();
 		}
+		return this;
 	}
 
 	/**
 	 * This will be used to unsubscribe.
 	 *
 	 * @override
-	 * @return {void}
+	 * @return {object}
 	 */
 	unsubscribe()
 	{
@@ -89,5 +90,6 @@ export class TwoWayConnection extends Connection
 
 		this.element = null;
 		this.data = null;
+		return this;
 	}
 }

@@ -37,7 +37,7 @@ export const Objects =
 
 		for (var property in sourceObj)
 		{
-			if (Object.prototype.hasOwnProperty.call(sourceObj, property) && typeof targetObj[property] === 'undefined')
+			if (this.hasOwnProp(sourceObj, property) && typeof targetObj[property] === 'undefined')
 			{
 				targetObj[property] = sourceObj[property];
 			}
@@ -108,6 +108,18 @@ export const Objects =
 	},
 
 	/**
+	 * This will check if an object has a property.
+	 *
+	 * @param {object} obj
+	 * @param {string} prop
+	 * @return {boolean}
+	 */
+	hasOwnProp(obj, prop)
+	{
+		return Object.prototype.hasOwnProperty.call(obj, prop);
+	},
+
+	/**
 	 * This will check if an object is empty.
 	 *
 	 * @param {object} obj
@@ -124,7 +136,7 @@ export const Objects =
 		check if it belongs to the object directly */
 		for (var key in obj)
 		{
-			if (Object.prototype.hasOwnProperty.call(obj, key))
+			if (this.hasOwnProp(obj, key))
 			{
 				return false;
 			}

@@ -1,5 +1,5 @@
-import { getParentData } from './get-parent-data.js';
 import { dataBinder } from '../../../../data-binder/data-binder.js';
+import { getParentData } from './get-parent-data.js';
 
 /**
  * This will bind an element to data.
@@ -16,11 +16,6 @@ export const bind = (ele, bind, parent) =>
     if (typeof bind === 'string')
     {
         data = getParentData(parent);
-        if (!data)
-        {
-            return false;
-        }
-
         prop = bind;
     }
     else if (Array.isArray(bind))
@@ -28,14 +23,7 @@ export const bind = (ele, bind, parent) =>
         if ((typeof bind[0] !== 'object'))
         {
             const dataSource = getParentData(parent);
-            if (!dataSource)
-            {
-                return false;
-            }
-            else
-            {
-                bind.unshift(dataSource);
-            }
+            bind.unshift(dataSource);
         }
 
         [data, prop, filter] = bind;

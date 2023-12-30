@@ -141,14 +141,13 @@ class Group
             return;
         }
 
-        for (var i = 0, length = files.length; i < length; i++)
+        files.forEach(src =>
         {
-            var src = files[i];
             if (!isLoaded(src))
             {
                 this.add(src);
             }
-        }
+        });
     }
 
     /**

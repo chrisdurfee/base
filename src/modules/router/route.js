@@ -59,10 +59,11 @@ const getParamDefaults = (params) =>
 	}
 
 	const defaults = {};
-	for (var i = 0, length = params.length; i < length; i++)
+	params.forEach((param) =>
 	{
-		defaults[params[i]] = null;
-	}
+		defaults[param] = null;
+	});
+
 	return defaults;
 };
 
@@ -90,15 +91,15 @@ const paramPattern = (uri) =>
 		return params;
 	}
 
-	for (var i = 0, maxLength = matches.length; i < maxLength; i++)
+	matches.forEach((param) =>
 	{
-		var param = matches[i];
 		if (param)
 		{
 			param = param.replace(':', '');
 			params.push(param);
 		}
-	}
+	});
+
 	return params;
 };
 

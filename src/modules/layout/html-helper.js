@@ -41,33 +41,30 @@ export class HtmlHelper extends Html
 	 */
 	static addAttributes(ele, attrs, parent)
 	{
-		let length;
-        if (!attrs || (length = attrs.length) < 1)
+        if (!attrs || attrs.length < 1)
         {
             return;
         }
 
-        for (var i = 0; i < length; i++)
-        {
-            var item = attrs[i];
-            var prop = item.key;
-            var value = item.value;
+        attrs.forEach(item =>
+		{
+            const { key: prop, value } = item;
 
 			if (prop === 'innerHTML')
 			{
 				ele.innerHTML = value;
-				continue;
+				return;
 			}
 
             if (prop.substr(4, 1) === '-')
 			{
 				// this will handle data and aria attributes
 				Dom.setAttr(ele, prop, value);
-				continue;
+				return;
 			}
 
 			this.addAttr(ele, prop, value, parent);
-        }
+        });
 	}
 
 	/**

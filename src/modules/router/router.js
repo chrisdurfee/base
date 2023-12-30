@@ -259,11 +259,11 @@ export class Router
 		const id = this.switchCount++;
 		const switchArray = this.getSwitchGroup(id);
 
-		for (var i = 0, length = group.length; i < length; i++)
+		group.forEach((item) =>
 		{
-			var route = this.createRoute(group[i]);
+			const route = this.createRoute(item);
 			switchArray.push(route);
-		}
+		});
 
 		this.checkGroup(switchArray, this.getPath());
 		return id;
@@ -281,12 +281,12 @@ export class Router
 		const id = this.switchCount++;
 		const switchArray = this.getSwitchGroup(id);
 
-		for (var i = 0, length = group.length; i < length; i++)
+		group.forEach((item) =>
 		{
-			var route = group[i].component.route;
+			const route = item.component.route;
 			route.resume(container);
 			switchArray.push(route);
-		}
+		});
 
 		this.checkGroup(switchArray, this.getPath());
 		return id;

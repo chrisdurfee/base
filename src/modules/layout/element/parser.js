@@ -1,3 +1,4 @@
+import { Objects } from '../../../shared/objects.js';
 import { normalizeAttr } from '../../html/html.js';
 import { Directives } from '../directives/directives.js';
 import { WatcherHelper } from '../watcher-helper.js';
@@ -24,14 +25,7 @@ export class Parser
 	 */
 	static getTag(obj)
 	{
-		let type = 'div',
-		node = obj.tag;
-		if (typeof node !== 'undefined')
-		{
-			type = node;
-		}
-
-		return type;
+		return obj.tag || 'div';
 	}
 
 	/**
@@ -147,7 +141,7 @@ export class Parser
 		var value, directive;
 		for (var key in obj)
 		{
-			if (!Object.prototype.hasOwnProperty.call(obj, key) || key === 'tag')
+			if (!Objects.hasOwnProp(obj, key) || key === 'tag')
 			{
 				continue;
 			}
@@ -217,8 +211,7 @@ export class Parser
 			/**
 			 * This will set the element text and html content.
 			 */
-			const contentAdded = this.setElementContent(key, value, attr, children);
-			if (contentAdded)
+			if (this.setElementContent(key, value, attr, children))
 			{
 				continue;
 			}

@@ -19,12 +19,11 @@ export const addSwitch = (ele, group, parent) =>
 	// 	return;
 	// }
 
-	for (var i = 0, length = group.length; i < length; i++)
+	group.forEach((item) =>
 	{
-		route = group[i];
-		route.container = ele;
-		route.parent = parent;
-	}
+		item.container = ele;
+		item.parent = parent;
+	});
 
 	const id = router.addSwitch(group);
 	trackSwitch(ele, id);

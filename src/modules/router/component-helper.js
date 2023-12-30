@@ -65,30 +65,47 @@ export class ComponentHelper
 		const type = typeof template;
 		if (type === 'function')
 		{
-			this.component = new this.template({
-				route: this.route,
-				persist: this.persist,
-				parent: this.parent
-			});
+			this.initializeComponent();
 		}
 		else if (type === 'object')
 		{
-			if (!this.template.isUnit)
-			{
-				this.template = Jot(this.template);
-			}
-
-			const comp = this.component = this.template;
-			const persist = (comp.persist !== false);
-
-			comp.route = this.route;
-			comp.persist = persist;
-			comp.parent = this.parent;
-			this.persist = persist;
+			this.initializeTemplateObject();
 		}
 
 		this.hasTemplate = true;
 	}
+
+	/**
+	 * This will initialize the component.
+	 *
+	 * @protected
+	 */
+	initializeComponent()
+	{
+        this.component = new this.template({
+            route: this.route,
+            persist: this.persist,
+            parent: this.parent
+        });
+    }
+
+	/**
+	 * This will initialize the template object.
+	 *
+	 * @protected
+	 */
+	initializeTemplateObject()
+	{
+        if (!this.template.isUnit)
+		{
+            this.template = Jot(this.template);
+        }
+
+        const comp = this.template;
+        this.persist = comp.persist !== false;
+        Object.assign(comp, { route: this.route, persist: this.persist, parent: this.parent });
+        this.component = comp;
+    }
 
 	/**
 	 * This will create the route component.

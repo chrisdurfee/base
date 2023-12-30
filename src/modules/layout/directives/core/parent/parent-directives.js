@@ -7,12 +7,12 @@
  */
 export const cache = (ele, propName, parent) =>
 {
-    if (!propName || !parent)
-    {
-        return;
-    }
+    // if (!propName || !parent)
+    // {
+    //     return;
+    // }
 
-    parent[propName] = ele;
+    // parent[propName] = ele;
 };
 
 /**

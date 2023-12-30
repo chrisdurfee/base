@@ -27,7 +27,7 @@ export class HistoryController
      */
     static setup(router)
     {
-        if (HistoryController.browserIsSupported())
+        if (this.browserIsSupported())
         {
             return new BrowserHistory(router).setup();
         }

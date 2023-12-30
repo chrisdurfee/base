@@ -17,22 +17,22 @@ export const map = (ele, settings, parent) =>
 
     const item = settings[1];
     const children = [];
-    for (var i = 0, length = items.length; i < length; i++)
+
+    items.forEach((row, i) =>
     {
-        var row = items[i];
         if (!row)
         {
-            continue;
+            return;
         }
 
-        var layout = item(row, i);
+        const layout = item(row, i);
         if (layout === null)
         {
-            continue;
+            return;
         }
 
         children.push(layout);
-    }
+    });
 
     return Builder.build(children, ele, parent);
 };

@@ -1,6 +1,7 @@
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Events } from '../../main/events/events.js';
 import { Dom } from '../../shared/dom.js';
+import { Types } from '../../shared/types.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 
 /**
@@ -111,31 +112,22 @@ export class Html
 		}
 
 		/* we want to add each attr to the obj */
-		for (var prop in attrs)
+		for (const [prop, value] of Object.entries(attrs))
 		{
-			/* we have already added the type so we need to
-			skip if the prop is type */
-			if (!Object.prototype.hasOwnProperty.call(attrs, prop) || prop === 'type')
-			{
-				continue;
-			}
-
-			var attrPropValue = attrs[prop];
-
 			/* we want to check to add the attr settings
 			 by property name */
 			if (prop === 'innerHTML')
 			{
-				obj.innerHTML = attrPropValue;
+				obj.innerHTML = value;
 			}
 			else if (prop.indexOf('-') !== -1)
 			{
 				// this will handle data and aria attributes
-				Dom.setAttr(obj, prop, attrPropValue);
+				Dom.setAttr(obj, prop, value);
 			}
 			else
 			{
-				this.addAttr(obj, prop, attrPropValue);
+				this.addAttr(obj, prop, value);
 			}
 		}
 	}
@@ -256,21 +248,20 @@ export class Html
 	 */
 	static setupSelectOptions(selectElem, optionArray, defaultValue)
 	{
-		if (!selectElem || typeof selectElem !== 'object')
+		if (!Types.isObject(selectElem))
 		{
 			return false;
 		}
 
-		if (!optionArray || !optionArray.length)
+		if (!Types.isArray(optionArray))
 		{
 			return false;
 		}
 
-		/* create each option then add it to the select */
-		for (var n = 0, maxLength = optionArray.length; n < maxLength; n++)
+		optionArray.forEach((settings) =>
 		{
-			var settings = optionArray[n];
-			var option = selectElem.options[n] = new Option(settings.label, settings.value);
+			const option = new Option(settings.label, settings.value);
+			selectElem.options.add(option);
 
 			/* we can select an option if a default value
 			has been sumbitted */
@@ -278,7 +269,7 @@ export class Html
 			{
 				option.selected = true;
 			}
-		}
+		});
 	}
 
 	/**
@@ -362,7 +353,7 @@ export class Html
 	 */
 	static removeAll(container)
 	{
-		if (typeof container !== 'object')
+		if (!Types.isObject(container))
 		{
 			return this;
 		}
@@ -375,6 +366,7 @@ export class Html
 				this.removeElementData(children[child]);
 			}
 		}
+
 		container.innerHTML = '';
 		return this;
 	}
@@ -429,7 +421,7 @@ export class Html
 	 */
 	static clone(node, deepCopy = false)
 	{
-		if (!node || typeof node !== 'object')
+		if (!Types.isObject(node))
 		{
 			return false;
 		}

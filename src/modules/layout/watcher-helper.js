@@ -24,17 +24,7 @@ export const WatcherHelper =
 	{
 		if (Array.isArray(value))
 		{
-			if (typeof value[0] !== 'string')
-			{
-				return false;
-			}
-
-			if (this.hasParams(value[0]))
-			{
-				return true;
-			}
-
-			return false;
+			return typeof value[0] === 'string' && this.hasParams(value[0]);
 		}
 		return this.hasParams(value);
 	},
@@ -47,12 +37,7 @@ export const WatcherHelper =
 	 */
 	hasParams(string)
 	{
-		if (!string || Types.isString(string) === false)
-		{
-			return false;
-		}
-
-		return (string.indexOf('[[') !== -1);
+		return Types.isString(string) && string.includes('[[');
 	},
 
 	/**
@@ -64,17 +49,15 @@ export const WatcherHelper =
 	 */
 	_getWatcherProps(string)
 	{
-		let pattern = /\[\[(.*?)(\[\d+\])?\]\]/g,
-		matches = string.match(pattern);
-		if (matches)
+		let pattern = /\[\[(.*?)(\[\d+\])?\]\]/g;
+		const matches = string.match(pattern);
+		if (matches === null)
 		{
-			pattern = /(\[\[|\]\])/g;
-			for (var i = 0, length = matches.length; i < length; i++)
-			{
-				matches[i] = matches[i].replace(pattern, '');
-			}
+			return null
 		}
-		return matches;
+
+		pattern = /(\[\[|\]\])/g;
+		return matches.map(match => match.replace(pattern, ''));
 	},
 
 	/**
@@ -87,25 +70,24 @@ export const WatcherHelper =
 	 */
 	updateAttr(ele, attr, value)
 	{
-		if (attr === 'text' || attr === 'textContent')
-		{
-			ele.textContent = value;
-		}
-		else if (attr === 'innerHTML')
-		{
-			ele.innerHTML = value;
-		}
-		else
-		{
-			if (attr.substring(4, 1) === '-')
-			{
-				Dom.setAttr(ele, attr, value);
-			}
-			else
-			{
+		switch (attr) {
+            case 'text':
+            case 'textContent':
+                ele.textContent = value;
+                break;
+            case 'innerHTML':
+                ele.innerHTML = value;
+                break;
+            default:
+                if (attr.substring(4, 1) === '-')
+				{
+                    Dom.setAttr(ele, attr, value);
+					break;
+                }
+
 				ele[attr] = value;
-			}
-		}
+                break;
+        }
 	},
 
 	/**

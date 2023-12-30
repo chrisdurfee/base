@@ -161,8 +161,8 @@ export class DataBinder
 		 * element so it will subscribe to the two
 		 * data changes.
 		 */
-		const dataId = data.getDataId(),
-		msg = dataId + ':' + prop;
+		const dataId = data.getDataId();
+		const msg = `${dataId}:${prop}`;
 
 		/**
 		 * This will create the element source and subscribe
@@ -184,11 +184,12 @@ export class DataBinder
 	 * @param {string} id
 	 * @param {string} attr
 	 * @param {object} connection
-	 * @return {void}
+	 * @return {object}
 	 */
 	addConnection(id, attr, connection)
 	{
 		this.connections.add(id, attr, connection);
+		return this;
 	}
 
 	/**
@@ -245,13 +246,13 @@ export class DataBinder
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {function} callBack
-	 * @return {void}
+	 * @return {object}
 	 */
 	watch(element, data, prop, callBack)
 	{
 		if (Types.isObject(element) === false)
 		{
-			return;
+			return this;
 		}
 
 		const connection = new OneWayConnection();
@@ -273,6 +274,7 @@ export class DataBinder
 		{
 			callBack(value);
 		}
+		return this;
 	}
 
 	/**
@@ -281,13 +283,13 @@ export class DataBinder
 	 * @param {object} element
 	 * @param {object} data
 	 * @param {string} prop
-	 * @return {void}
+	 * @return {object}
 	 */
 	unwatch(element, data, prop)
 	{
 		if (Types.isObject(element) === false)
 		{
-			return;
+			return this;
 		}
 
 		const id = element[this.attr];
@@ -296,6 +298,7 @@ export class DataBinder
 			const attr = data.getDataId() + ':' + prop;
 			this.connections.remove(id, attr);
 		}
+		return this;
 	}
 
 	/**

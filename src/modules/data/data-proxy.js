@@ -9,18 +9,13 @@ import { Types } from "../../shared/types.js";
  */
 function getNewPath(path, prop)
 {
+    const propPath = (isNaN(Number(prop)))? prop : `[${prop}]`;
 	if (path === '')
     {
-        path = prop;
-        return (!isNaN(path))? `[${prop}]` : path;
+        return propPath;
     }
 
-	if (!isNaN(prop))
-    {
-        return `${path}[${prop}]`
-    }
-
-    return `${path}.${prop}`;
+	return `${path}.${propPath}`;
 }
 
 /**

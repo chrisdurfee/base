@@ -39,7 +39,7 @@ export class BasicData
 		this.eventSub = new DataPubSub();
 
 		/* this will set the construct attributes */
-		let attributes = setupAttrSettings(settings);
+		const attributes = setupAttrSettings(settings);
 		this.set(attributes);
 
 		return DataProxy(this);
@@ -163,20 +163,15 @@ export class BasicData
 
 		const [items, committer, stopMerge] = args;
 
-		for(var attr in items)
+		Object.entries(items).forEach(([attr, value]) =>
 		{
-			if (!Object.prototype.hasOwnProperty.call(items, attr))
+			if (typeof value === 'function')
 			{
-				continue;
+				return;
 			}
+			this._setAttr(attr, value, committer, stopMerge);
+		});
 
-			var item = items[attr];
-			if(typeof item === 'function')
-			{
-				continue;
-			}
-			this._setAttr(attr, item, committer, stopMerge);
-		}
 		return this;
 	}
 
@@ -434,15 +429,11 @@ export class BasicData
 		}
 
 		const tokens = [];
-		for (var prop in attr)
+		Object.entries(attr).forEach(([prop]) =>
 		{
-			if (!Object.prototype.hasOwnProperty.call(attr, prop))
-			{
-				continue;
-			}
-
 			tokens.push(this.remoteLink(data, prop));
-		}
+		});
+
 		return tokens;
 	}
 
@@ -502,7 +493,7 @@ export class BasicData
 	}
 
 	/**
-	 * This will remove a link or all links.
+	 * This will remove a link or all links if no token is provided.
 	 *
 	 * @param {string} [token]
 	 * @return {void}
@@ -516,14 +507,16 @@ export class BasicData
 		}
 
 		const links = this.links;
-		if (links.length)
+		if (links.length < 1)
 		{
-			for (var i = 0, length = links.length; i < length; i++)
-			{
-				this.removeLink(links[i], false);
-			}
-			this.links = [];
+			return;
 		}
+
+		links.forEach(token =>
+		{
+			this.removeLink(token, false);
+		});
+		this.links = [];
 	}
 
 	/**

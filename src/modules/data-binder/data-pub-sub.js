@@ -18,10 +18,10 @@ export class DataPubSub
 	constructor()
 	{
 		/**
-		 * @member {object} callBacks
+		 * @member {Map} callBacks
 		 * @protected
 		 */
-		this.callBacks = {};
+		this.callBacks = new Map();
 
 		/**
 		 * @member {int} lastToken
@@ -38,8 +38,11 @@ export class DataPubSub
 	 */
 	get(msg)
 	{
-		const callBacks = this.callBacks;
-		return (callBacks[msg] || (callBacks[msg] = []));
+		if (!this.callBacks.has(msg))
+		{
+            this.callBacks.set(msg, []);
+        }
+        return this.callBacks.get(msg);
 	}
 
 	/**
@@ -49,7 +52,7 @@ export class DataPubSub
 	 */
 	reset()
 	{
-		this.callBacks = {};
+		this.callBacks.clear();
 		this.lastToken = -1;
 		lastToken = -1;
 	}
@@ -63,12 +66,14 @@ export class DataPubSub
 	 */
 	on(msg, callBack)
 	{
-		const token = (++lastToken),
-		list = this.get(msg);
-		list.push({
-			token: token,
-			callBack: callBack
-		});
+		const token = (++lastToken);
+
+		this.get(msg)
+			.push({
+				token,
+				callBack
+			});
+
 		return token;
 	}
 
@@ -81,23 +86,18 @@ export class DataPubSub
 	 */
 	off(msg, token)
 	{
-		const list = this.callBacks[msg];
+		const list = this.callBacks.get(msg);
 		if (!list)
 		{
 			return;
 		}
 
-		const length = list.length;
-		for (var i = 0; i < length; i++ )
+		const index = list.findIndex(item => item.token === token);
+		if (index !== -1)
 		{
-			var item = list[i];
-			if (item.token === token)
-			{
-				list.splice(i, 1);
-				break;
-			}
+			list.splice(index, 1);
 		}
-	}
+}
 
 	/**
 	 * This will delete a message.
@@ -107,11 +107,7 @@ export class DataPubSub
 	 */
 	remove(msg)
 	{
-		const callBacks = this.callBacks;
-		if (callBacks[msg])
-		{
-			delete callBacks[msg];
-		}
+		this.callBacks.delete(msg);
 	}
 
 	/**
@@ -122,24 +118,21 @@ export class DataPubSub
 	 * @param {object} committer
 	 * @return {void}
 	 */
-	publish(msg)
+	publish(msg, ...args)
 	{
-		const list = this.callBacks[msg] || false;
-		if (list === false)
+		const list = this.callBacks.get(msg);
+		if (!list)
 		{
 			return;
 		}
 
-		const args = Array.prototype.slice.call(arguments, 1);
-		const length = list.length;
-		for (var i = 0; i < length; i++)
+		for (const { callBack } of list)
 		{
-			var item = list[i];
-			if (!item)
+			if (!callBack)
 			{
 				continue;
 			}
-			item.callBack.apply(this, args);
+			callBack.apply(this, args);
 		}
 	}
 }

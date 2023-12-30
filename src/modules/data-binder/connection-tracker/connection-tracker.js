@@ -1,4 +1,3 @@
-import { Objects } from '../../../shared/objects.js';
 
 /**
  * ConnectionTracker
@@ -18,9 +17,9 @@ export class ConnectionTracker
 	constructor()
 	{
 		/**
-		 * @member {object} connections
+		 * @member {Map} connections
 		 */
-		this.connections = {};
+		this.connections = new Map();
 	}
 
 	/**
@@ -34,7 +33,8 @@ export class ConnectionTracker
 	add(id, attr, connection)
 	{
 		const connections = this.find(id);
-		return (connections[attr] = connection);
+		connections.set(attr, connection);
+		return connection;
 	}
 
 	/**
@@ -46,10 +46,10 @@ export class ConnectionTracker
 	 */
 	get(id, attr)
 	{
-		const connections = this.connections[id];
+		const connections = this.connections.get(id);
 		if (connections)
 		{
-			return (connections[attr] || false);
+			return (connections.get(attr) || false);
 		}
 		return false;
 	}
@@ -62,57 +62,60 @@ export class ConnectionTracker
 	 */
 	find(id)
 	{
-		const connections = this.connections;
-		return (connections[id] || (connections[id] = {}));
+		const connections = this.connections.get(id);
+		if (connections)
+		{
+			return connections;
+		}
+
+		const map = new Map();
+		this.connections.set(id, map);
+		return map;
 	}
 
 	/**
 	 * This will remove a connection or all connections by id.
 	 * @param {string} id
 	 * @param {string} [attr]
+	 * @return {void}
 	 */
 	remove(id, attr)
 	{
-		const connections = this.connections[id];
+		const connections = this.connections.get(id);
 		if (!connections)
 		{
-			return false;
+			return;
 		}
 
 		let connection;
 		if (attr)
 		{
-			connection = connections[attr];
+			connection = connections.get(attr);
 			if (connection)
 			{
 				connection.unsubscribe();
-				delete connections[attr];
+				connections.delete(attr);
 			}
 
 			/* this will remove the msg from the elements
 			if no elements are listed under the msg */
-			if (Objects.isEmpty(connections))
+			if (connections.size === 0)
 			{
-				delete this.connections[id];
+				this.connections.delete(id);
 			}
 		}
 		else
 		{
-			for (var prop in connections)
+			for (let prop of connections)
 			{
-				if (!Object.prototype.hasOwnProperty.call(connections, prop))
-				{
-					continue;
-				}
-
-				connection = connections[prop];
+				connection = connections.get(prop);
 				if (connection)
 				{
 					connection.unsubscribe();
 				}
 			}
 
-			delete this.connections[id];
+			this.connections.delete(id);
 		}
 	}
 }

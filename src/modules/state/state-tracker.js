@@ -13,10 +13,10 @@ import { StateTarget } from './state-target.js';
 export class StateTracker
 {
 	/**
-	 * @member {object} targets
+	 * @member {Map} targets
 	 * @private
 	 */
-	static targets = {};
+	static targets = new Map();
 
 	/**
 	 * This will restore a state target.
@@ -27,7 +27,7 @@ export class StateTracker
 	 */
 	static restore(id, target)
 	{
-		this.targets[id] = target;
+		this.targets.set(id, target);
 	}
 
 	/**
@@ -38,8 +38,11 @@ export class StateTracker
 	 */
 	static getTarget(id)
 	{
-		const targets = this.targets;
-		return (targets[id] || (targets[id] = new StateTarget(id)));
+		if (!this.targets.has(id))
+		{
+            this.targets.set(id, new StateTarget(id));
+        }
+        return this.targets.get(id);
 	}
 
 	/**
@@ -142,7 +145,7 @@ export class StateTracker
 	static remove(targetId, action, token)
 	{
 		const targets = this.targets,
-		target = targets[targetId];
+		target = targets.get(targetId);
 		if (!target)
 		{
 			return;
@@ -154,7 +157,7 @@ export class StateTracker
 			return;
 		}
 
-		delete targets[targetId];
+		this.targets.delete(targetId);
 	}
 
 	/**

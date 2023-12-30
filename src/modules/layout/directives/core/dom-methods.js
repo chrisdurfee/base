@@ -20,16 +20,16 @@ export const onUpdate = (ele, data, settings, parent) =>
 
     if (Array.isArray(settings[0]))
     {
-        for (var i = 0, maxLength = settings.length; i < maxLength; i++)
+        settings.forEach((itemSettings) =>
         {
-            var itemSettings = settings[i];
             if (!itemSettings)
             {
-                continue;
+                return;
             }
 
             onUpdate(ele, data, itemSettings, parent);
-        }
+        });
+
         return;
     }
 
@@ -123,14 +123,14 @@ const rebuild = (layout, ele, parent) =>
  */
 const addClass = (ele, stateStyles, newValue) =>
 {
-    for (var prop in stateStyles)
+    for (const [prop, value] of Object.entries(stateStyles))
     {
-        if (!Object.prototype.hasOwnProperty.call(stateStyles, prop) || !prop)
+        if (!prop)
         {
             continue;
         }
 
-        if (stateStyles[prop] === newValue)
+        if (value === newValue)
         {
             Dom.addClass(ele, prop);
         }

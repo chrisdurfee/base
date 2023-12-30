@@ -46,17 +46,17 @@ export const forEach = (ele, settings, parent) =>
         }
 
         const children = [];
-        for (var i = 0, length = items.length; i < length; i++)
+        items.forEach((item, index) =>
         {
-            var scoped = (scopeData)? data.scope(prop + '[' + i + ']') : null;
-            var layout = item(items[i], i, scoped);
+            const scoped = (scopeData)? data.scope(prop + '[' + index + ']') : null;
+            const layout = item(items[index], index, scoped);
             if (layout === null)
             {
-                continue;
+                return;
             }
 
             children.push(layout);
-        }
+        });
 
         return Builder.build(children, ele, parent);
     });

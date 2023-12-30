@@ -18,10 +18,10 @@ export const addRoute = (ele, route, parent) =>
 
     if (Array.isArray(route))
     {
-        for (var i = 0, length = route.length; i < length; i++)
+        route.forEach((item) =>
         {
-            setupRoute(ele, route[i], parent);
-        }
+            addRoute(ele, item, parent);
+        });
     }
     else
     {

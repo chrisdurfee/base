@@ -1,3 +1,5 @@
+const replacements = { '\n': '\\n', '\r': '\\n', '\t': '\\t' };
+
 /**
  * This will escape chars.
  *
@@ -11,14 +13,8 @@ const escapeChars = (str, removeNewLines) =>
         str = String(str);
     }
 
-    if (removeNewLines)
-    {
-        const newLine = /(\n|\r\n)/g;
-        str = str.replace(newLine, "\\n");
-    }
-
-    let tab = /\t/g;
-    return str.replace(tab, "\\t");
+    const pattern = removeNewLines ? /[\n\r\t]/g : /\t/g;
+    return str.replace(pattern, match => replacements[match]);
 };
 
 /**
@@ -67,22 +63,15 @@ export const prepareUrl = (data, removeNewLines) =>
         return data;
     }
 
-    let value;
-    for (var prop in data)
+    Object.entries(data).forEach(([prop, value]) =>
     {
-        if (!Object.prototype.hasOwnProperty.call(data, prop))
-        {
-            continue;
-        }
-
-        value = data[prop];
         if (value === null)
         {
-            continue;
+            return;
         }
 
         data[prop] = (typeof value === 'string') ? prepareUrl(value, removeNewLines) : sanitize(value, removeNewLines);
-    }
+    });
     return data;
 };
 

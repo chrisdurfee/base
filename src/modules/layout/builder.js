@@ -30,29 +30,19 @@ export class Builder
 	{
 		if (!layout)
 		{
-			return;
+			return null;
 		}
 
-		let component, jot;
-		switch (typeof layout)
+		if (typeof layout === 'object' && layout.isUnit === true)
 		{
-			case 'object':
-				if (layout.isUnit === true)
-				{
-					this.createComponent(layout, container, parent);
-					return layout;
-				}
-				/* falls through */
-			default:
-				/**
-				 * This will convert the object to a component
-				 * and render it.
-				 */
-				component = Jot(layout);
-				jot = new component();
-				this.createComponent(jot, container, parent);
-				return jot;
-		}
+            this.createComponent(layout, container, parent);
+            return layout;
+        }
+
+		const Component = Jot(layout);
+        const componentInstance = new Component();
+        this.createComponent(componentInstance, container, parent);
+        return componentInstance;
 	}
 
 	/**
@@ -66,18 +56,8 @@ export class Builder
 	static build(obj, container, parent)
 	{
 		const fragment = HtmlHelper.createDocFragment();
-
-		if (Array.isArray(obj))
-		{
-			for (var i = 0, length = obj.length; i < length; i++)
-			{
-				this.buildElement(obj[i], fragment, parent);
-			}
-		}
-		else
-		{
-			this.buildElement(obj, fragment, parent);
-		}
+		const elements = Array.isArray(obj) ? obj : [obj];
+        elements.forEach(element => this.buildElement(element, fragment, parent));
 
 		if (container && typeof container === 'object')
 		{
@@ -143,21 +123,13 @@ export class Builder
 
 		/* we want to recursively add the children to
 		the new element */
-		const children = settings.children;
-		if (children.length > 0)
+		settings.children.forEach(child =>
 		{
-			let child;
-			for (var i = 0, length = children.length; i < length; i++)
+            if (child !== null)
 			{
-				child = children[i];
-				if (child === null)
-				{
-					continue;
-				}
-
-				this.buildElement(child, ele, parent);
-			}
-		}
+                this.buildElement(child, ele, parent);
+            }
+        });
 
 		const directives = settings.directives;
 		if (directives && directives.length)
@@ -177,10 +149,10 @@ export class Builder
 	 */
 	static setDirectives(ele, directives, parent)
 	{
-		for (var i = 0, length = directives.length; i < length; i++)
+		directives.forEach(directive =>
 		{
-			this.handleDirective(ele, directives[i], parent);
-		}
+            this.handleDirective(ele, directive, parent);
+        });
 	}
 
 	/**

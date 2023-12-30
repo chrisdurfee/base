@@ -1,4 +1,5 @@
 import { Objects } from "../../shared/objects.js";
+import { Types } from "../../shared/types.js";
 
 /**
  * This will get the data attribute settings.
@@ -9,25 +10,19 @@ import { Objects } from "../../shared/objects.js";
 export const setupAttrSettings = (settings) =>
 {
 	const attributes = {};
-	if (!settings || typeof settings !== 'object')
+	if (!Types.isObject(settings))
 	{
 		return attributes;
 	}
 
-	settings = Objects.clone(settings);
-	for (var prop in settings)
+	const clonedSettings = Objects.clone(settings);
+	Object.keys(clonedSettings).forEach(prop =>
 	{
-		if (!Object.prototype.hasOwnProperty.call(settings, prop))
+		const settingValue = clonedSettings[prop];
+        if (typeof settingValue !== 'function')
 		{
-			continue;
-		}
-
-		var setting = settings[prop];
-		if (typeof setting !== 'function')
-		{
-			attributes[prop] = setting;
-			delete settings[prop];
-		}
-	}
+            attributes[prop] = settingValue;
+        }
+	});
 	return attributes;
 };

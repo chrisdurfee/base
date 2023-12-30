@@ -60,7 +60,7 @@ export class DataTracker
      */
     static getTrackingId(obj)
     {
-        return obj.trackingId || (obj.trackingId = 'dt' + this.trackingCount++);
+        return obj.trackingId || (obj.trackingId = `dt${this.trackingCount++}`);
     }
 
     /**
@@ -74,7 +74,6 @@ export class DataTracker
     {
         const id = this.getTrackingId(obj),
         tracker = this.find(id);
-
         tracker.add(type, data);
     }
 
@@ -107,8 +106,7 @@ export class DataTracker
      */
     static find(id)
     {
-        const trackers = this.trackers;
-        return (trackers[id] || (trackers[id] = new Tracker()));
+        return this.trackers[id] || (this.trackers[id] = new Tracker());
     }
 
     /**
@@ -124,16 +122,7 @@ export class DataTracker
 			return true;
 		}
 
-		/* we want to loop through each property and
-		check if it belongs to the object directly */
-		for (var key in obj)
-		{
-			if (Object.prototype.hasOwnProperty.call(obj, key))
-			{
-				return false;
-			}
-		}
-		return true;
+		return (Object.keys(obj).length === 0);
 	}
 
     /**

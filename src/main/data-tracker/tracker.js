@@ -112,25 +112,19 @@ export class Tracker
         if (type)
         {
             this.removeType(type);
+            return;
         }
-        else
-        {
-            const types = this.types;
-            for (var prop in types)
-            {
-                if (Object.prototype.hasOwnProperty.call(types, prop))
-                {
-                    type = types[prop];
-                    if (!type)
-                    {
-                        continue;
-                    }
 
-                    this.removeType(prop);
-                }
+        Object.keys(this.types).forEach(typeKey =>
+        {
+            if (!typeKey)
+            {
+                return;
             }
 
-            delete this.types;
-        }
+            this.removeType(typeKey);
+        });
+
+        delete this.types;
     }
 }

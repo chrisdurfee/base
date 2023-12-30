@@ -1,4 +1,3 @@
-import { Arrays } from '../../shared/arrays.js';
 import { Types } from '../../shared/types.js';
 import { DataTracker } from '../data-tracker/data-tracker.js';
 
@@ -278,12 +277,7 @@ export const Events =
      */
     isSwappable(event)
     {
-        /**
-         * We want to check if the event type is in the
-         * swapped event array.
-         */
-        const index = Arrays.inArray(this.swap, event);
-        return (index > -1);
+        return this.swap.includes(event);
     }
 };
 

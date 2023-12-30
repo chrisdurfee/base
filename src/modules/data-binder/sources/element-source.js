@@ -125,7 +125,7 @@ export class ElementSource extends TwoWaySource
 	 * @private
 	 * @param {object} element
 	 * @param {string} attr
-	 * @return {void}
+	 * @return {object}
 	 */
 	addSetMethod(element, attr)
 	{
@@ -133,7 +133,7 @@ export class ElementSource extends TwoWaySource
 		{
 			this.setValue = SetAttr;
 			this.getValue = GetAttr;
-			return;
+			return this;
 		}
 
 		this.getValue = GetAttribute;
@@ -153,6 +153,7 @@ export class ElementSource extends TwoWaySource
 		}
 
 		this.setValue = UpdateAttr;
+		return this;
 	}
 
 	/**
@@ -231,15 +232,15 @@ export class ElementSource extends TwoWaySource
 	/**
 	 * This will set a value on an element.
 	 *
-	 * @param {*} value
-	 * @return {void}
+	 * @param {mixed} value
+	 * @return {object}
 	 */
 	set(value)
 	{
 		const element = this.element;
 		if (!element || typeof element !== 'object')
 		{
-			return;
+			return this;
 		}
 
 		/* this will check to apply the option filter before
@@ -250,10 +251,13 @@ export class ElementSource extends TwoWaySource
 		}
 
 		this.setValue(element, this.attr, value);
+		return this;
 	}
 
 	/**
 	 * This will get the value from an element.
+	 *
+	 * @return {mixed}
 	 */
 	get()
 	{
@@ -271,6 +275,7 @@ export class ElementSource extends TwoWaySource
 	 *
 	 * @param {*} value
 	 * @param {object} committer
+	 * @return {object}
 	 */
 	callBack(value, committer)
 	{
@@ -278,5 +283,6 @@ export class ElementSource extends TwoWaySource
 		{
 			this.set(value);
 		}
+		return this;
 	}
 }
