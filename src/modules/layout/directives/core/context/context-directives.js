@@ -1,4 +1,7 @@
 import { DataTracker } from "../../../../../main/data-tracker/data-tracker.js";
+import { Builder } from "../../../builder.js";
+import { Parser } from "../../../element/parser.js";
+import { HtmlHelper } from "../../../html-helper.js";
 
 /**
  * This will track the context from an atom to remove
@@ -47,8 +50,9 @@ export const context = (ele, context, parent) =>
         return;
     }
 
-    this._addElementAttrs(ele, attributes, parent);
-    this.addElementDirectives(ele, attributes, parent);
+    const parsed = Parser.parse(attributes, parent);
+    HtmlHelper.addAttributes(ele, parsed.attr, parent);
+    Builder.setDirectives(ele, parsed.directives, parent);
 };
 
 /**

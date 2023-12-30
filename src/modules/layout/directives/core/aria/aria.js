@@ -1,4 +1,5 @@
 import { Dom } from "../../../../../shared/dom.js";
+import { onSet } from "../reactive/on-set.js";
 
 /**
  * This will add aria attributes.
@@ -69,7 +70,7 @@ export const addAria = (ele, attributes, parent) =>
         if (Array.isArray(value))
         {
             value.push(onSetCallBack(attr));
-            this.onSet(ele, value, parent);
+            onSet(ele, value, parent);
         }
         else
         {
