@@ -20,7 +20,7 @@ export class DataTracker
      * @member trackers This is an object that stores all tracker
      * objects by tracking id.
      */
-    static trackers = {};
+    static trackers = new Map();
 
     /**
      * @private
@@ -88,7 +88,7 @@ export class DataTracker
     static get(obj, type)
     {
         const id = obj.trackingId;
-        const tracker = this.trackers[id];
+        const tracker = this.trackers.get(id);
         if (!tracker)
         {
             return false;
@@ -106,7 +106,11 @@ export class DataTracker
      */
     static find(id)
     {
-        return this.trackers[id] || (this.trackers[id] = new Tracker());
+        if (!this.trackers.has(id))
+        {
+            this.trackers.set(id, new Tracker());
+        }
+        return this.trackers.get(id);
     }
 
     /**
@@ -122,7 +126,7 @@ export class DataTracker
 			return true;
 		}
 
-		return (Object.keys(obj).length === 0);
+		return (obj.size === 0);
 	}
 
     /**
@@ -135,16 +139,12 @@ export class DataTracker
     static remove(obj, type)
     {
         const id = obj.trackingId;
-        if (!id)
+        if (!id || !this.trackers.has(id))
         {
             return true;
         }
 
-        const tracker = this.trackers[id];
-        if (!tracker)
-        {
-            return false;
-        }
+        const tracker = this.trackers.get(id);
 
         if (type)
         {
@@ -154,14 +154,13 @@ export class DataTracker
             if no elements are listed under the msg */
             if (this.isEmpty(tracker.types))
             {
-                delete this.trackers[id];
+                this.trackers.delete(id);
             }
         }
         else
         {
             tracker.remove();
-
-            delete this.trackers[id];
+            this.trackers.delete(id);
         }
     }
 }

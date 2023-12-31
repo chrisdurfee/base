@@ -42,12 +42,10 @@ export const EventMethods =
         const events = this.events;
         if (Array.isArray(event))
         {
-            let evt;
-            for (var i = 0, length = event.length; i < length; i++)
+            event.forEach((evt) =>
             {
-                evt = event[i];
                 events.add(evt, obj, fn, capture);
-            }
+            });
         }
         else
         {
@@ -70,12 +68,10 @@ export const EventMethods =
         const events = this.events;
         if (Array.isArray(event))
         {
-            var evt;
-            for (var i = 0, length = event.length; i < length; i++)
+            event.forEach((evt) =>
             {
-                evt = event[i];
                 events.remove(evt, obj, fn, capture);
-            }
+            });
         }
         else
         {
@@ -189,18 +185,13 @@ export const EventMethods =
             'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
         };
 
-        let value,
-        eventType = 'CustomEvent';
-        for (var prop in eventTypes)
+        let eventType = 'CustomEvent';
+        for (const [prop, value] of Object.entries(eventTypes))
         {
-            if (Object.prototype.hasOwnProperty.call(eventTypes, prop))
+            if (event.match(value))
             {
-                value = eventTypes[prop];
-                if (event.match(value))
-                {
-                    eventType = prop;
-                    break;
-                }
+                eventType = prop;
+                break;
             }
         }
         return eventType;

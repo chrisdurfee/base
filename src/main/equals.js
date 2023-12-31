@@ -45,7 +45,7 @@ const matchProperties = (obj1, obj2) =>
 	 * We want to check each object1 property to the
 	 * object 2 property.
 	 */
-	for (let property in Object.entries(obj1))
+	for (let [property, value1] of Object.entries(obj1))
 	{
 		/**
 		 * We want to check if the property is owned by the
@@ -56,9 +56,7 @@ const matchProperties = (obj1, obj2) =>
 			break;
 		}
 
-		const value1 = obj1[property],
-		value2 = obj2[property];
-
+		const value2 = obj2[property];
 		if (typeof value1 !== typeof value2)
 		{
 			break;
