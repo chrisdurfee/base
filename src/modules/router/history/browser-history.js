@@ -57,22 +57,16 @@ export class BrowserHistory extends History
 	 * This will create a state object.
 	 *
 	 * @param {string} uri
-	 * @param {*} data
+	 * @param {mixed} data
 	 * @return {object}
 	 */
-	createState(uri, data)
+	createState(uri, data = {})
 	{
-		let stateObj = {
+		return {
 			location: this.locationId,
-			uri: uri
+			...data,
+			uri
 		};
-
-		if (data && typeof data === 'object')
-		{
-			stateObj = Object.assign(stateObj, data);
-		}
-
-		return stateObj;
 	}
 
 	/**
@@ -85,7 +79,7 @@ export class BrowserHistory extends History
 	 */
 	addState(uri, data, replace = false)
 	{
-		let history = window.history,
+		const history = window.history,
 		lastState = history.state;
 		if (lastState && lastState.uri === uri)
 		{

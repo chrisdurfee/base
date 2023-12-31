@@ -1,19 +1,23 @@
-import { Jot } from "../component/jot.js";
-import { Builder } from "../layout/builder.js";
+import { Jot } from "../../component/jot.js";
+import { Builder } from "../../layout/builder.js";
 
 /**
  * ComponentHelper
  *
  * This will create a helper to create and destroy components
  * that are added to a route.
+ *
  * @class
  */
 export class ComponentHelper
 {
 	/**
+	 * This will create a component helper.
+	 *
 	 * @constructor
 	 * @param {object} route
 	 * @param {object} settings
+	 * @return {ComponentHelper}
 	 */
 	constructor(route, settings)
 	{
@@ -35,6 +39,7 @@ export class ComponentHelper
 	 * This will create the component.
 	 *
 	 * @param {object} params
+	 * @return {void}
 	 */
 	focus(params)
 	{
@@ -48,7 +53,9 @@ export class ComponentHelper
 
 	/**
 	 * This will setup the template.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	setupTemplate()
 	{
@@ -79,6 +86,7 @@ export class ComponentHelper
 	 * This will initialize the component.
 	 *
 	 * @protected
+	 * @return {void}
 	 */
 	initializeComponent()
 	{
@@ -93,6 +101,7 @@ export class ComponentHelper
 	 * This will initialize the template object.
 	 *
 	 * @protected
+	 * @return {void}
 	 */
 	initializeTemplateObject()
 	{
@@ -109,7 +118,9 @@ export class ComponentHelper
 
 	/**
 	 * This will create the route component.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	create()
 	{
@@ -131,6 +142,8 @@ export class ComponentHelper
 
 	/**
 	 * This will remove the component.
+	 *
+	 * @return {void}
 	 */
 	remove()
 	{
@@ -164,6 +177,7 @@ export class ComponentHelper
 	 *
 	 * @protected
 	 * @param {object} params
+	 * @return {void}
 	 */
 	update(params)
 	{

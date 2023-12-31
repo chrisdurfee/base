@@ -3,7 +3,7 @@ import { Events } from '../../main/events/events.js';
 import { Dom } from '../../shared/dom.js';
 import { Data } from '../data/data.js';
 import { HistoryController } from './history/history-controller.js';
-import { Route } from './route.js';
+import { Route } from './routes/route.js';
 import { setTitle } from './set-title.js';
 import { Utils } from './utils.js';
 export { NavLink } from './nav-link.js';
@@ -27,6 +27,11 @@ DataTracker.addType('routes', (data) =>
 	}
 });
 
+/**
+ * This will register the switch system to the data
+ * tracker to remove switches that have been nested
+ * in layouts.
+ */
 DataTracker.addType('switch', (data) =>
 {
 	if (!data)
@@ -42,6 +47,7 @@ DataTracker.addType('switch', (data) =>
  * Router
  *
  * This will create a browser router.
+ *
  * @class
  */
 export class Router
@@ -53,21 +59,26 @@ export class Router
 		 */
 		this.version = '1.0.2';
 
-		/* this is the root of the uri for the routing object
-		and the base title */
+		/**
+		 * This is the root of the uri for the routing object
+		 * and the base title.
+		 */
 		this.baseURI = '/';
 		this.title = '';
 
 		this.lastPath = null;
 		this.path = null;
 
-		/* this will be used to access our history object */
+		/**
+		 * This will be used to access our history object.
+		 */
 		this.history = null;
 		this.callBackLink = null;
 		this.location = window.location;
 
-		/* this will store each route added to the
-		router. */
+		/**
+		 * This will store each route added to the router.
+		 */
 		this.routes = [];
 		this.switches = {};
 		this.switchCount = 0;
@@ -134,6 +145,12 @@ export class Router
 		return route;
 	}
 
+	/**
+	 * This will add a route.
+	 *
+	 * @param {object} route
+	 * @return {void}
+	 */
 	addRoute(route)
 	{
 		this.routes.push(route);
@@ -145,6 +162,7 @@ export class Router
 	 *
 	 * @param {object} route
 	 * @param {object} container
+	 * @return {void}
 	 */
 	resume(route, container)
 	{
@@ -539,6 +557,7 @@ export class Router
 	 *
 	 * @protected
 	 * @param {string} [path]
+	 * @return {void}
 	 */
 	checkSwitches(path)
 	{
@@ -561,6 +580,7 @@ export class Router
 	 * @protected
 	 * @param {object} group
 	 * @param {string} path
+	 * @return {void}
 	 */
 	checkGroup(group, path)
 	{
@@ -660,6 +680,7 @@ export class Router
 	 *
 	 * @param {object} route
 	 * @param {string} [path]
+	 * @return {boolean}
 	 */
 	check(route, path)
 	{
@@ -682,12 +703,13 @@ export class Router
 	 * This will select the route.
 	 *
 	 * @param {object} route
+	 * @return {void}
 	 */
 	select(route)
 	{
 		if (!route)
 		{
-			return false;
+			return;
 		}
 
 		route.setPath(this.path, this.lastPath);
@@ -708,6 +730,8 @@ export class Router
 
 	/**
 	 * This will remove the router events.
+	 *
+	 * @return {void}
 	 */
 	destroy()
 	{
@@ -734,4 +758,9 @@ export class Router
 	}
 }
 
+/**
+ * This will create a new router.
+ *
+ * @type {Router}
+ */
 export const router = new Router();

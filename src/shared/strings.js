@@ -62,14 +62,12 @@ export class Strings
 	 * @param {string} delimiter
 	 * @return {(string|boolean)} The string or false.
 	 */
-	static uncamelCase(str, delimiter)
+	static uncamelCase(str, delimiter = '-')
 	{
 		if (typeof str !== 'string')
 		{
 			return false;
 		}
-
-		delimiter = delimiter || '-';
 
 		const regExp = /([A-Z]{1,})/g;
 		return str.replace(regExp, (match) =>
