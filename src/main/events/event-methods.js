@@ -8,7 +8,7 @@ import { Events } from './events.js';
 export const EventMethods =
 {
     /**
-     * @param object events
+     * @member {Events} events
      */
     events: Events,
 

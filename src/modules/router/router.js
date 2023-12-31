@@ -495,7 +495,9 @@ export class Router
 
 	/**
 	 * This will update the data path.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	updatePath()
 	{
@@ -508,6 +510,7 @@ export class Router
 	 *
 	 * @protected
 	 * @param {object} route
+	 * @return {void}
 	 */
 	updateTitle(route)
 	{
@@ -525,6 +528,7 @@ export class Router
 	 *
 	 * @protected
 	 * @param {string} [path]
+	 * @return {void}
 	 */
 	checkActiveRoutes(path)
 	{

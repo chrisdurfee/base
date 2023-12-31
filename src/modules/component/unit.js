@@ -49,12 +49,12 @@ export class Unit
 	 *
 	 * @constructor
 	 * @param {array} args
-	 * @returns {Unit}
+	 * @return {Unit}
 	 */
 	constructor(...args)
 	{
 		/**
-		 * @param {bool} isUnit
+		 * @member {bool} isUnit
 		 */
 		this.isUnit = true;
 

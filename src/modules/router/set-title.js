@@ -2,7 +2,7 @@
  * This will convert a string to title case.
  *
  * @param {string} str
- * @returns {string}
+ * @return {string}
  */
 const toTitleCase = (str) =>
 {
@@ -18,7 +18,7 @@ const toTitleCase = (str) =>
  *
  * @param {string} str
  * @param {object} route
- * @returns {string}
+ * @return {string}
  */
 const replaceParams = (str, route) =>
 {
@@ -43,7 +43,7 @@ const replaceParams = (str, route) =>
  * @param {object} route
  * @param {mixed} title
  * @param {string} rootTitle
- * @returns {string}
+ * @return {string}
  */
 export const setTitle = (route, title, rootTitle) =>
 {

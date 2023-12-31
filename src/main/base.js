@@ -17,12 +17,14 @@ import { EventMethods } from './events/event-methods.js';
  * Base
  *
  * This is the base framework.
+ *
  * @class
  */
 class Base
 {
 	/**
 	 * This will create an instance of base.
+	 *
 	 * @constructor
 	 */
 	constructor()
@@ -70,8 +72,7 @@ class Base
 	 * @param {string} methodName the method name being overriden.
 	 * @param {function} overrideMethod The new function to call.
 	 * @param {array} args The args to pass to the first function call.
-	 *
-	 * @return {*} The results of the function being called.
+	 * @return {mixed} The results of the function being called.
 	 */
 	override(obj, methodName, overrideMethod, args)
 	{
@@ -134,7 +135,6 @@ class Base
 	 * @param {array} [argArray] Default args to pass.
 	 * @param {boolean} [addArgs] Set to add merge args from the
 	 * curried function.
-	 *
 	 * @return {(function|boolean)} The callBack function or false.
 	 */
 	createCallBack(obj, method, argArray = [], addArgs = false)

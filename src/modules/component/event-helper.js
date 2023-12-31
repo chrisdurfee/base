@@ -14,6 +14,7 @@ export class EventHelper
 	 * This will create an event helper.
 	 *
 	 * @constructor
+	 * @return {EventHelper}
 	 */
 	constructor()
 	{
@@ -27,6 +28,7 @@ export class EventHelper
 	 * This will add an array of events.
 	 *
 	 * @param {array} events
+	 * @return {void}
 	 */
 	addEvents(events)
 	{

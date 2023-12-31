@@ -7,11 +7,11 @@ import { Unit } from './unit.js';
 /**
  * Component
  *
- * @class
- * @augments Unit
- *
  * This will allow components to be extended
  * from a single factory.
+ *
+ * @class
+ * @augments Unit
  *
  * @example
  * class QuickFlashPanel extends Component
@@ -31,6 +31,7 @@ export class Component extends Unit
 	 *
 	 * @constructor
 	 * @param {array} args
+	 * @return {Component}
 	 */
 	constructor(...args)
 	{
@@ -79,6 +80,7 @@ export class Component extends Unit
 	 *
 	 * @protected
 	 * @param {string} [id]
+	 * @return {void}
 	 */
 	setupStateTarget(id)
 	{

@@ -16,6 +16,7 @@ export class NavLink extends Component
      * This will configure the link active class.
      *
      * @protected
+     * @return {void}
      */
     beforeSetup()
     {
@@ -104,6 +105,12 @@ export class NavLink extends Component
         return watchers;
     }
 
+    /**
+     * This will setup the states.
+     *
+     * @protected
+     * @return {object}
+     */
     setupStates()
     {
         return {
