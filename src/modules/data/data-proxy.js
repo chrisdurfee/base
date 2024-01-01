@@ -37,7 +37,7 @@ function createHandler(data, path = '', dataRoot = '')
         get(target, prop, receiver)
         {
             // Directly return the property if it's on the root level and we're at the root path
-            if (path === '' && prop in target)
+            if (path === '' && prop in target || Types.isFunction(target[prop]))
             {
                 return target[prop];
             }

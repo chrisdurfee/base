@@ -48,6 +48,17 @@ export class Types
 
 	/**
 	 * This will check if the request is an object.
+	 *
+	 * @param {object} obj
+	 * @return {boolean}
+	 */
+	static isFunction(obj)
+	{
+		return (typeof obj === 'function');
+	}
+
+	/**
+	 * This will check if the request is an object.
      *
 	 * @param {object} obj
 	 * @return {boolean}
