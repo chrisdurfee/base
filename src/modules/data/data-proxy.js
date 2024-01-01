@@ -37,7 +37,7 @@ function createHandler(data, path = '', dataRoot = '')
         get(target, prop, receiver)
         {
             // Directly return the property if it's on the root level and we're at the root path
-            if (path === '' && prop in target || Types.isFunction(target[prop]))
+            if (path === '' && prop in target)
             {
                 return target[prop];
             }
@@ -45,6 +45,12 @@ function createHandler(data, path = '', dataRoot = '')
             // Access the property within the dataRoot
             const dataTarget = target[dataRoot] || target;
             const value = dataTarget[prop];
+
+             // Check if the property is a function and bind it
+             if (typeof value === 'function')
+             {
+                return value.bind(dataTarget);
+            }
 
             // Return the value directly if it's not an object
             if (!Types.isObject(value) || Objects.isPlainObject(value) === false)
