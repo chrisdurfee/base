@@ -22,6 +22,20 @@ let routeCount = 0;
 export class Route extends SimpleData
 {
 	/**
+	 * This will set up the prpoerties before the constructor
+	 * to allow the proxy to work.
+	 */
+	uriQuery = null;
+	controller = null;
+	paramKeys = null;
+	titleCallBack = null;
+	path = null;
+	referralPath = null;
+	params = null;
+	callBack = null;
+	title = null;
+
+	/**
 	 * This will create a route.
 	 *
 	 * @constructor

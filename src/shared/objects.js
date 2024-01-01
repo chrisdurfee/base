@@ -120,6 +120,17 @@ export const Objects =
 	},
 
 	/**
+	 * This will check if an object is a plain object.
+	 *
+	 * @param {object} obj
+	 * @return {boolean}
+	 */
+	isPlainObject(obj)
+	{
+		return Object.prototype.toString.call(obj) === '[object Object]';
+	},
+
+	/**
 	 * This will check if an object is empty.
 	 *
 	 * @param {object} obj
