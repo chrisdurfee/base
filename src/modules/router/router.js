@@ -362,7 +362,7 @@ export class Router
 
 		this.setupHistory();
 
-		this.data.set('path', this.getPath());
+		this.data.path = this.getPath();
 
 		this.callBackLink = this.checkLink.bind(this);
 		Events.on('click', document, this.callBackLink);
@@ -495,14 +495,12 @@ export class Router
 
 	/**
 	 * This will update the data path.
-	 *
 	 * @protected
-	 * @return {void}
 	 */
 	updatePath()
 	{
 		const path = this.getPath();
-		this.data.set('path', path);
+		this.data.path = path;
 	}
 
 	/**
@@ -510,7 +508,6 @@ export class Router
 	 *
 	 * @protected
 	 * @param {object} route
-	 * @return {void}
 	 */
 	updateTitle(route)
 	{
@@ -528,7 +525,6 @@ export class Router
 	 *
 	 * @protected
 	 * @param {string} [path]
-	 * @return {void}
 	 */
 	checkActiveRoutes(path)
 	{
