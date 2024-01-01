@@ -10,13 +10,8 @@ import { Types } from "../../shared/types.js";
  */
 function getNewPath(path, prop)
 {
-    const propPath = (isNaN(Number(prop)))? prop : `[${prop}]`;
-	if (path === '')
-    {
-        return propPath;
-    }
-
-	return `${path}.${propPath}`;
+    const propPath = isNaN(Number(prop)) ? prop : `[${prop}]`;
+    return path === '' ? propPath : `${path}.${propPath}`;
 }
 
 /**
@@ -25,7 +20,7 @@ function getNewPath(path, prop)
  * @param {object} data
  * @param {string} path
  * @param {string} root
- * @return {Proxy}
+ * @return {object}
  */
 function createHandler(data, path = '', dataRoot = '')
 {
