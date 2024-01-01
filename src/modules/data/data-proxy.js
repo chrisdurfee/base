@@ -1,3 +1,4 @@
+import { Objects } from "../../shared/objects.js";
 import { Types } from "../../shared/types.js";
 
 /**
@@ -48,10 +49,10 @@ function createHandler(data, path = '', dataRoot = '')
 
             // Access the property within the dataRoot
             const dataTarget = target[dataRoot] || target;
-            const value = Reflect.get(dataTarget, prop, receiver);
+            const value = dataTarget[prop];
 
             // Return the value directly if it's not an object
-            if (!Types.isObject(value))
+            if (!Types.isObject(value) || Objects.isPlainObject(value) === false)
             {
                 return value;
             }
@@ -84,7 +85,8 @@ function createHandler(data, path = '', dataRoot = '')
             const newPath = getNewPath(path, prop);
 
             data.set(newPath, value);
-            return Reflect.set(dataTarget, prop, value, receiver);
+            dataTarget[prop] = value;
+            return true;
         }
     };
 }
