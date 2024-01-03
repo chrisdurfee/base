@@ -6,9 +6,7 @@ esbuild
         outdir: 'dist',
         bundle: true,
         sourcemap: true,
-        minify: false,
-        minifyWhitespace: true,
-        minifyIdentifiers: true,
+        minify: true,
         splitting: true,
         format: 'esm',
         target: ['esnext']

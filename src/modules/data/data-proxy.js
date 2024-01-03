@@ -46,9 +46,9 @@ function createHandler(data, path = '', dataRoot = '')
             const dataTarget = target[dataRoot] || target;
             const value = dataTarget[prop];
 
-             // Check if the property is a function and bind it
-             if (typeof value === 'function')
-             {
+            // Check if the property is a function and bind it
+            if (typeof value === 'function')
+            {
                 return value.bind(dataTarget);
             }
 
