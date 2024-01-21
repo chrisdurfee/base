@@ -6,6 +6,7 @@ import { Builder } from "../../../builder.js";
  * @param {object} ele
  * @param {array} settings
  * @param {object} parent
+ * @returns {void}
  */
 export const map = (ele, settings, parent) =>
 {
@@ -34,5 +35,5 @@ export const map = (ele, settings, parent) =>
         children.push(layout);
     });
 
-    return Builder.build(children, ele, parent);
+    Builder.build(children, ele, parent);
 };

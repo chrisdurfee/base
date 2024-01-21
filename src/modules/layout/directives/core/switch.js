@@ -8,6 +8,7 @@ import { router } from "../../../router/router.js";
  * @param {object} ele
  * @param {array} group
  * @param {object} parent
+ * @return {void}
  */
 export const addSwitch = (ele, group, parent) =>
 {
@@ -57,6 +58,7 @@ export const addSwitch = (ele, group, parent) =>
  *
  * @param {object} ele
  * @param {int} id
+ * @returns {void}
  */
 const trackSwitch = (ele, id) =>
 {

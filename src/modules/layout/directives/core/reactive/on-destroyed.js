@@ -22,6 +22,7 @@ DataTracker.addType('destroyed', (data) =>
  * @param {object} ele
  * @param {(object|array)} route
  * @param {object} parent
+ * @return {void}
  */
 export const onDestroyed = (ele, callBack, parent) =>
 {
@@ -33,6 +34,7 @@ export const onDestroyed = (ele, callBack, parent) =>
  *
  * @param {object} ele
  * @param {function} callBack
+ * @returns {void}
  */
 const track = (ele, callBack) =>
 {

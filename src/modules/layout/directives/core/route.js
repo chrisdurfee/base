@@ -8,6 +8,7 @@ import { router } from "../../../router/router.js";
  * @param {object} ele
  * @param {(object|array)} route
  * @param {object} parent
+ * @return {void}
  */
 export const addRoute = (ele, route, parent) =>
 {
@@ -36,6 +37,7 @@ export const addRoute = (ele, route, parent) =>
  * @param {object} ele
  * @param {object} route
  * @param {object} parent
+ * @return {void}
  */
 const setupRoute = (ele, route, parent) =>
 {
@@ -48,8 +50,8 @@ const setupRoute = (ele, route, parent) =>
 
     route.container = ele;
     route.parent = parent;
-    let newRoute = router.add(route);
 
+    const newRoute = router.add(route);
     trackRoute(ele, newRoute);
 };
 
@@ -81,6 +83,7 @@ const setupRoute = (ele, route, parent) =>
  *
  * @param {object} ele
  * @param {object} route
+ * @returns {void}
  */
 const trackRoute = (ele, route) =>
 {

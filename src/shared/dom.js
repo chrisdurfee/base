@@ -150,19 +150,17 @@ export class Dom
 
 		/* we want to check if we have an inherited
 		value */
-		let currentValue = null,
-		currentStyle = obj.currentStyle;
+		let currentValue = null;
+		const currentStyle = obj.currentStyle;
 		if (currentStyle && (currentValue = currentStyle[property]))
 		{
-			css = currentValue;
+			return currentValue;
 		}
-		else
+
+		const inheritedStyle = window.getComputedStyle(obj, null);
+		if (inheritedStyle)
 		{
-			const inheritedStyle = window.getComputedStyle(obj, null);
-			if (inheritedStyle)
-			{
-				css = inheritedStyle[property];
-			}
+			return inheritedStyle[property];
 		}
 
 		return css;

@@ -10,6 +10,7 @@ import { getParentData } from './get-parent-data.js';
  * @param {object} ele
  * @param {array} settings
  * @param {object} parent
+ * @returns {void}
  */
 export const forEach = (ele, settings, parent) =>
 {

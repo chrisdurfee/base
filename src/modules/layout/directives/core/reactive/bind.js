@@ -7,7 +7,8 @@ import { getParentData } from './get-parent-data.js';
  * @protected
  * @param {object} ele
  * @param {(string|array)} bind
- * @param {*} parent
+ * @param {mixed} parent
+ * @return {void}
  */
 export const bind = (ele, bind, parent) =>
 {

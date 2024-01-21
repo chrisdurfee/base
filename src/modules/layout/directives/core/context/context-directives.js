@@ -35,6 +35,7 @@ const getParentContext = (parent) =>
  * @param {object} ele
  * @param {function} context
  * @param {object} [parent]
+ * @returns {void}
  */
 export const context = (ele, context, parent) =>
 {

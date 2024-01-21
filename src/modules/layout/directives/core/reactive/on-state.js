@@ -6,6 +6,7 @@ import { onUpdate } from '../dom-methods.js';
  * @param {object} ele
  * @param {array} onState
  * @param {object} parent
+ * @return {void}
  */
 export const onState = (ele, onState, parent) =>
 {

@@ -11,6 +11,7 @@ import { Builder } from "../../builder.js";
  * @param {string} prop
  * @param {(function|object)} callBack
  * @param {string} parent
+ * @return {void}
  */
 export const onUpdate = (ele, data, settings, parent) =>
 {
@@ -108,6 +109,7 @@ const updateElement = (ele, callBack, prop, value, parent) =>
  * @param {object} layout
  * @param {object} ele
  * @param {object} parent
+ * @returns {void}
  */
 const rebuild = (layout, ele, parent) =>
 {
@@ -119,7 +121,8 @@ const rebuild = (layout, ele, parent) =>
  *
  * @param {object} ele
  * @param {object} stateStyles
- * @param {*} newValue
+ * @param {mixed} newValue
+ * @returns {void}
  */
 const addClass = (ele, stateStyles, newValue) =>
 {

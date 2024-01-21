@@ -4,6 +4,7 @@
  * @param {object} ele
  * @param {function} callBack
  * @param {object} parent
+ * @returns {void}
  */
 export const onCreated = (ele, callBack, parent) =>
 {

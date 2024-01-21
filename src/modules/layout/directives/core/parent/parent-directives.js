@@ -4,6 +4,7 @@
  * @param {object} ele
  * @param {string} propName
  * @param {object} parent
+ * @returns {void}
  */
 export const cache = (ele, propName, parent) =>
 {
@@ -21,6 +22,7 @@ export const cache = (ele, propName, parent) =>
  * @param {object} ele
  * @param {function} callBack
  * @param {object} parent
+ * @returns {void}
  */
 export const useParent = (ele, callBack, parent) =>
 {
@@ -38,6 +40,7 @@ export const useParent = (ele, callBack, parent) =>
  * @param {object} ele
  * @param {function} callBack
  * @param {object} parent
+ * @returns {void}
  */
 export const useData = (ele, callBack, parent) =>
 {
@@ -55,6 +58,7 @@ export const useData = (ele, callBack, parent) =>
  * @param {object} ele
  * @param {function} callBack
  * @param {object} parent
+ * @returns {void}
  */
 export const useState = (ele, callBack, parent) =>
 {
@@ -72,6 +76,7 @@ export const useState = (ele, callBack, parent) =>
  * @param {object} ele
  * @param {function} callBack
  * @param {object} parent
+ * @returns {void}
  */
 export const addState = (ele, callBack, parent) =>
 {
