@@ -19,7 +19,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object} An instance of base.
+     * @return {object}
      */
     addListener(event, obj, fn, capture)
     {
@@ -35,7 +35,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object} An instance of base.
+     * @return {object}
      */
     on(event, obj, fn, capture)
     {
@@ -61,7 +61,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object} An instance of base.
+     * @return {object}
      */
     off(event, obj, fn, capture)
     {
@@ -87,7 +87,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object} An instance of base.
+     * @return {object}
      */
     removeListener(event, obj, fn, capture)
     {

@@ -17,7 +17,7 @@ export class DataTracker
     /**
      * @private
      * @static
-     * @member trackers This is an object that stores all tracker
+     * @member {Map} trackers This is an object that stores all tracker
      * objects by tracking id.
      */
     static trackers = new Map();
@@ -36,6 +36,7 @@ export class DataTracker
      * @param {string} type The new type.
      * @param {function} callBack The callBack to help clean
      * up data when removed.
+     * @return {void}
      */
     static addType(type, callBack)
     {
@@ -45,6 +46,7 @@ export class DataTracker
     /**
      * This will remove a type from the data tracker.
      * @param {string} type
+     * @return {void}
      */
     static removeType(type)
     {
@@ -68,7 +70,8 @@ export class DataTracker
      *
      * @param {object} obj
      * @param {string} type The type name.
-     * @param {*} data The data to track.
+     * @param {mixed} data The data to track.
+     * @return {void}
      */
     static add(obj, type, data)
     {
@@ -83,7 +86,7 @@ export class DataTracker
      *
      * @param {object} obj
      * @param {string} [type]
-     * @return {*}
+     * @return {mixed}
      */
     static get(obj, type)
     {
@@ -135,13 +138,14 @@ export class DataTracker
      *
      * @param {object} obj
      * @param {stirng} [type]
+     * @return {void}
      */
     static remove(obj, type)
     {
         const id = obj.trackingId;
         if (!id || !this.trackers.has(id))
         {
-            return true;
+            return;
         }
 
         const tracker = this.trackers.get(id);

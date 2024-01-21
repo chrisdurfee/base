@@ -17,6 +17,7 @@ export const TrackerTypes =
      * @param {string} type
      * @param {function} callBack The function to call when an object
      * is having the type removed.
+     * @return {void}
      */
     add(type, callBack)
     {
@@ -27,6 +28,7 @@ export const TrackerTypes =
      * This will get a type or return false.
      * @param {string} type
      * @return {(function|boolean)} The callBack or false.
+     * @return {mixed}
      */
     get(type)
     {
@@ -36,6 +38,7 @@ export const TrackerTypes =
     /**
      * This will remove a type.
      * @param {string} type
+     * @return {void}
      */
     remove(type)
     {
