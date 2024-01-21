@@ -97,7 +97,7 @@ export class DataPubSub
 		{
 			list.splice(index, 1);
 		}
-}
+	}
 
 	/**
 	 * This will delete a message.

@@ -4,6 +4,8 @@ import { Builder } from '../layout/builder.js';
 
 /**
  * This will track previously loaded scripts and styles.
+ *
+ * @type {array}
  */
 const loaded = [];
 

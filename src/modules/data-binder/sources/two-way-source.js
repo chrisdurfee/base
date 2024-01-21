@@ -31,6 +31,7 @@ export class TwoWaySource extends Source
 	 * This will subscribe to a message.
 	 *
 	 * @param {string} msg
+	 * @return {void}
 	 */
 	subscribe(msg)
 	{

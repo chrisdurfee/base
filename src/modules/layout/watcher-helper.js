@@ -258,7 +258,7 @@ export const WatcherHelper =
 
 		const callBack = this.getCallBack(settings, ele, data, string, isDataArray),
 		props = this._getWatcherProps(string);
-		for(var i = 0, length = props.length; i < length; i++)
+		for (var i = 0, length = props.length; i < length; i++)
 		{
 			var watcherData = (isDataArray)? data[i] : data;
 			this.addWatcher(ele, watcherData, props[i], callBack);

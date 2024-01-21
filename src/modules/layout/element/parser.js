@@ -33,6 +33,7 @@ export class Parser
 	 *
 	 * @static
 	 * @param {object} obj
+	 * @return {void}
 	 */
 	static setupChildren(obj)
 	{
