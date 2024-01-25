@@ -17,6 +17,10 @@ export const bind = (ele, bind, parent) =>
     if (typeof bind === 'string')
     {
         data = getParentData(parent);
+        if (!data)
+        {
+            return;
+        }
         prop = bind;
     }
     else if (Array.isArray(bind))
@@ -24,7 +28,14 @@ export const bind = (ele, bind, parent) =>
         if ((typeof bind[0] !== 'object'))
         {
             const dataSource = getParentData(parent);
-            bind.unshift(dataSource);
+            if (!dataSource)
+            {
+                return false;
+            }
+            else
+            {
+                bind.unshift(dataSource);
+            }
         }
 
         [data, prop, filter] = bind;

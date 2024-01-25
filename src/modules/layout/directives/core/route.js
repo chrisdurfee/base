@@ -21,7 +21,7 @@ export const addRoute = (ele, route, parent) =>
     {
         route.forEach((item) =>
         {
-            addRoute(ele, item, parent);
+            setupRoute(ele, item, parent);
         });
     }
     else
