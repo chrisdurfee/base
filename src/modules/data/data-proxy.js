@@ -37,20 +37,15 @@ function createHandler(data, path = '', dataRoot = '')
         get(target, prop, receiver)
         {
             // Directly return the property if it's on the root level and we're at the root path
+            if(prop === 'path')console.log('get', target, prop, prop in target);
             if (path === '' && prop in target)
             {
-                return target[prop];
+                return Reflect.get(target, prop, receiver);
             }
 
             // Access the property within the dataRoot
             const dataTarget = target[dataRoot] || target;
-            const value = dataTarget[prop];
-
-            // Check if the property is a function and bind it
-            if (typeof value === 'function')
-            {
-                return value.bind(dataTarget);
-            }
+            const value = Reflect.get(dataTarget, prop, receiver);
 
             // Return the value directly if it's not an object
             if (!Types.isObject(value) || Objects.isPlainObject(value) === false)
@@ -77,17 +72,16 @@ function createHandler(data, path = '', dataRoot = '')
             // Set the property at the root level if we're at the root path
             if (path === '' && prop in target)
             {
-                target[prop] = value;
-                return true;
+                return Reflect.set(target, prop, value, receiver);
             }
 
             // Set the property within the dataRoot
             const dataTarget = target[dataRoot] || target;
+            const dataReciever = receiver[dataRoot] || receiver;
             const newPath = getNewPath(path, prop);
 
             data.set(newPath, value);
-            dataTarget[prop] = value;
-            return true;
+            return Reflect.set(dataTarget, prop, value, dataReciever);
         }
     };
 }
