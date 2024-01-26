@@ -46,6 +46,12 @@ function createHandler(data, path = '', dataRoot = '')
             const dataTarget = target[dataRoot] || target;
             const value = Reflect.get(dataTarget, prop, receiver);
 
+            // Check if the property is a function and bind it
+            if (typeof value === 'function')
+            {
+                return value.bind(dataTarget);
+            }
+
             // Return the value directly if it's not an object
             if (!Types.isObject(value) || Objects.isPlainObject(value) === false)
             {
