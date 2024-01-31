@@ -25,6 +25,7 @@ export class Route extends SimpleData
 	 * This will set up the prpoerties before the constructor
 	 * to allow the proxy to work.
 	 */
+	uri = null;
 	uriQuery = null;
 	controller = null;
 	paramKeys = null;
