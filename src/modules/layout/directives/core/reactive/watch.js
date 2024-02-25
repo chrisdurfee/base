@@ -7,12 +7,13 @@ import { WatcherHelper } from '../../../watcher-helper.js';
  * @param {object} ele
  * @param {(array|object)} watcher
  * @param {object} [parent]
+ * @return {void}
  */
 export const watch = (ele, watcher, parent) =>
 {
     if (!watcher)
     {
-        return false;
+        return;
     }
 
     if (Array.isArray(watcher) && typeof watcher[0] !== 'string')

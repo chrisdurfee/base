@@ -1,6 +1,7 @@
-import { Dom } from '../../shared/dom.js';
 import { Types } from '../../shared/types.js';
 import { dataBinder } from '../data-binder/data-binder.js';
+import { getParentData } from './directives/core/reactive/get-parent-data.js';
+import { HtmlHelper } from './html-helper.js';
 
 const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
 
@@ -79,13 +80,7 @@ export const WatcherHelper =
                 ele.innerHTML = value;
                 break;
             default:
-                if (attr.substring(4, 1) === '-')
-				{
-                    Dom.setAttr(ele, attr, value);
-					break;
-                }
-
-				ele[attr] = value;
+                HtmlHelper.addAttr(ele, attr, value);
                 break;
         }
 	},
@@ -119,32 +114,6 @@ export const WatcherHelper =
 	},
 
 	/**
-	 * This will get the parent data.
-	 *
-	 * @param {object} parent
-	 * @returns {object|null}
-	 */
-	getParentData(parent)
-	{
-		if (parent.data)
-		{
-			return parent.data;
-		}
-
-		if (parent.context && parent.context.data)
-		{
-			return parent.context.data;
-		}
-
-		if (parent.state)
-		{
-			return parent.state;
-		}
-
-		return null;
-	},
-
-	/**
 	 * This will get a watcher value.
 	 *
 	 * @private
@@ -168,7 +137,7 @@ export const WatcherHelper =
 			/**
 			 * This will setup an array watcher based on a string.
 			 */
-			return [value, this.getParentData(parent)];
+			return [value, getParentData(parent)];
 		}
 
 		/**
@@ -176,7 +145,7 @@ export const WatcherHelper =
 		 */
 		if (value.length < 2)
 		{
-			value.push(this.getParentData(parent));
+			value.push(getParentData(parent));
 		}
 		return value;
 	},

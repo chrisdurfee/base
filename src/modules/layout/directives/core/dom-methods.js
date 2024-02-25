@@ -45,7 +45,7 @@ export const onUpdate = (ele, data, settings, parent) =>
 
     if (!data || !prop)
     {
-        return false;
+        return;
     }
 
     switch (typeof callBack)

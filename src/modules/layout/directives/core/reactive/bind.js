@@ -30,12 +30,10 @@ export const bind = (ele, bind, parent) =>
             const dataSource = getParentData(parent);
             if (!dataSource)
             {
-                return false;
+                return;
             }
-            else
-            {
-                bind.unshift(dataSource);
-            }
+
+            bind.unshift(dataSource);
         }
 
         [data, prop, filter] = bind;

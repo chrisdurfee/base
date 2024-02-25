@@ -25,16 +25,11 @@ export const forEach = (ele, settings, parent) =>
         }
 
         data = parentData;
-        prop = settings[0];
-        item = settings[1];
-        scope = settings[2];
+        [prop, item, scope] = settings;
     }
     else
     {
-        data = settings[0];
-        prop = settings[1];
-        item = settings[2];
-        scope = settings[3];
+        [data, prop, item, scope] = settings;
     }
 
     const scopeData = (scope !== false);

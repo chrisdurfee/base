@@ -8,6 +8,7 @@ import { Html, normalizeAttr, removeEventPrefix } from '../html/html.js';
  * This will build JSON layouts.
  *
  * @class
+ * @extends Html
  */
 export class HtmlHelper extends Html
 {
@@ -56,14 +57,7 @@ export class HtmlHelper extends Html
 				return;
 			}
 
-            if (prop.substr(4, 1) === '-')
-			{
-				// this will handle data and aria attributes
-				Dom.setAttr(ele, prop, value);
-				return;
-			}
-
-			this.addAttr(ele, prop, value, parent);
+            this.addAttr(ele, prop, value, parent);
         });
 	}
 
@@ -93,12 +87,18 @@ export class HtmlHelper extends Html
 			{
 				value.call(this, e, parent);
 			});
+			return;
 		}
-		else
+
+		if (attr.substr(4, 1) === '-')
 		{
-			const attrName = normalizeAttr(attr);
-			ele[attrName] = value;
+			// this will handle data and aria attributes
+			Dom.setAttr(ele, attr, value);
+			return;
 		}
+
+		const attrName = normalizeAttr(attr);
+		ele[attrName] = value;
 	}
 
 	/**
