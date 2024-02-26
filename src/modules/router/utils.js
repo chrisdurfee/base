@@ -18,11 +18,17 @@ export const Utils =
 			return '';
 		}
 
+		/**
+		 * Remove the first slash.
+		 */
 		if (uri.substring(0, 1) === '/')
 		{
 			uri = uri.substring(1);
 		}
 
+		/**
+		 * Remove the last slash.
+		 */
 		if (uri.substring(-1) === '/')
 		{
 			uri = uri.substring(0, uri.length - 1);

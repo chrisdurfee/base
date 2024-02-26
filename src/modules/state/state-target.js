@@ -1,4 +1,3 @@
-
 import { SimpleData } from '../data/data.js';
 
  /**

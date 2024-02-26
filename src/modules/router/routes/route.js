@@ -192,6 +192,7 @@ export class Route extends SimpleData
 	 *
 	 * @param {string} path
 	 * @param {string} referralPath
+	 * @returns {void}
 	 */
 	setPath(path, referralPath)
 	{
@@ -301,6 +302,8 @@ export class Route extends SimpleData
 
 	/**
 	 * This will reset the params.
+	 *
+	 * @returns {void}
 	 */
 	resetParams()
 	{

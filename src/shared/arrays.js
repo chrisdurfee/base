@@ -24,8 +24,8 @@ export class Arrays
 	 *
 	 * @param {array} array
 	 * @param {string} element
-	 * @param {int} [fromIndex]
-	 * @return {int} This will return -1 if not found.
+	 * @param {number} [fromIndex]
+	 * @return {number} This will return -1 if not found.
 	 */
 	static inArray(array, element, fromIndex)
 	{

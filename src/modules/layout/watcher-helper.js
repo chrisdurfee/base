@@ -76,9 +76,6 @@ export const WatcherHelper =
             case 'textContent':
                 ele.textContent = value;
                 break;
-            case 'innerHTML':
-                ele.innerHTML = value;
-                break;
             default:
                 HtmlHelper.addAttr(ele, attr, value);
                 break;

@@ -31,6 +31,8 @@ export class Encode
 
 	/**
 	 * This will encode and decode json data.
+	 *
+	 * @member {object} json
 	 */
 	static json = {
 		encode,

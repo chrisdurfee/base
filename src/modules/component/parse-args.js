@@ -31,8 +31,8 @@ const setChildString = (value) =>
 /**
  * This will parse the arguments passed to the atom.
  *
- * @param {Array} args
- * @return {Object}
+ * @param {array} args
+ * @return {object}
  */
 export const parseArgs = (args) =>
 {

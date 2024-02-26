@@ -25,7 +25,7 @@ export class DataTracker
     /**
      * @private
      * @static
-     * @member {int} trackingCount
+     * @member {number} trackingCount
      */
     static trackingCount = 0;
 
@@ -150,20 +150,23 @@ export class DataTracker
 
         const tracker = this.trackers.get(id);
 
-        if (type)
-        {
-            tracker.remove(type);
-
-            /* this will remove the msg from the elements
-            if no elements are listed under the msg */
-            if (this.isEmpty(tracker.types))
-            {
-                this.trackers.delete(id);
-            }
-        }
-        else
+        /**
+         * if no type is set then remove the whole tracker.
+         */
+        if (!type)
         {
             tracker.remove();
+            this.trackers.delete(id);
+            return;
+        }
+
+        tracker.remove(type);
+
+        /**
+         * if the tracker is empty then remove the tracker.
+         */
+        if (this.isEmpty(tracker.types))
+        {
             this.trackers.delete(id);
         }
     }

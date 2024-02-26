@@ -51,7 +51,7 @@ export class Dom
 	 *
 	 * @param {string} selector
 	 * @param {boolean} single Set to true if you only want one result.
-	 * @return {*}
+	 * @return {mixed}
 	 */
 	static getBySelector(selector, single)
 	{

@@ -58,7 +58,7 @@ export const Events =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object} An instance of base.
+     * @return {object} The events object.
      */
     on(event, obj, fn, capture)
     {
@@ -85,7 +85,7 @@ export const Events =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object} An instance of base.
+     * @return {object} The events object.
      */
     off(event, obj, fn, capture)
     {

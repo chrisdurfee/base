@@ -50,14 +50,7 @@ export class HtmlHelper extends Html
         attrs.forEach(item =>
 		{
             const { key: prop, value } = item;
-
-			if (prop === 'innerHTML')
-			{
-				ele.innerHTML = value;
-				return;
-			}
-
-            this.addAttr(ele, prop, value, parent);
+			this.addAttr(ele, prop, value, parent);
         });
 	}
 
@@ -74,6 +67,12 @@ export class HtmlHelper extends Html
 		if (value === '' || !attr)
 		{
 			return false;
+		}
+
+		if (attr === 'innerHTML')
+		{
+			ele.innerHTML = value;
+			return;
 		}
 
 		/* we want to check to add a value or an event listener */

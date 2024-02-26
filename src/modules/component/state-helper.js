@@ -45,7 +45,7 @@ export class StateHelper
 	 * This will create a state object.
 	 *
 	 * @param {string} action
-	 * @param {*} state
+	 * @param {mixed} state
 	 * @param {function} callBack
 	 * @param {string} [targetId]
 	 * @return {object}

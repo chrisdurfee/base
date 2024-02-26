@@ -1,3 +1,8 @@
+/**
+ * This will store the replacements.
+ *
+ * @type {object} replacements
+ */
 const replacements = { '\n': '\\n', '\r': '\\n', '\t': '\\t' };
 
 /**
@@ -45,7 +50,7 @@ const sanitize = (text, removeNewLines) =>
 /**
  * This will prepare the url.
  *
- * @param {*} data
+ * @param {mixed} data
  * @param {boolean} [removeNewLines]
  * @returns {string}
  */
@@ -79,7 +84,7 @@ export const prepareUrl = (data, removeNewLines) =>
  * This will parse JSON data.
  *
  * @param {string} data
- * @return {*}
+ * @return {mixed}
  */
 export function decode(data)
 {
@@ -89,7 +94,7 @@ export function decode(data)
 /**
  * This will encode JSON data.
  *
- * @param {*} data
+ * @param {mixed} data
  * @return {string}
  */
 export function encode(data)

@@ -9,6 +9,7 @@ import { router } from './router.js';
  * href.
  *
  * @class
+ * @extends Component
  */
 export class NavLink extends Component
 {
@@ -122,6 +123,7 @@ export class NavLink extends Component
      * This will update the class on the element.
      *
      * @param {bool} selected
+     * @return {void}
      */
     update(selected)
     {

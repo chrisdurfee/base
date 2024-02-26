@@ -21,6 +21,11 @@ import { Objects } from './shared/objects.js';
 import { Strings } from './shared/strings.js';
 import { Types } from './shared/types.js';
 
+/**
+ * This will set the base module classes to the base object. This is
+ * used to make the modules available to the application. This is
+ * to support legacy code.
+ */
 base.augment(
 {
     Ajax,
@@ -35,5 +40,8 @@ base.augment(
     Component
 });
 
+/**
+ * This will export base and all the modules.
+ */
 export { Ajax, Arrays, Atom, Builder, Component, Data, DataTracker, DateTime, Directives, Dom, Html, Import, Jot, Model, NavLink, Objects, SimpleData, State, Strings, Types, Unit, base, dataBinder, router };
 

@@ -1,4 +1,3 @@
-
 import { StateTarget } from './state-target.js';
 
  /**

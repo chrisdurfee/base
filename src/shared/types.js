@@ -11,7 +11,7 @@ export class Types
     /**
 	 * This will get the type of a variable.
 	 *
-	 * @param {*} data
+	 * @param {mixed} data
 	 * @return {string}
 	 */
 	static getType(data)
@@ -29,6 +29,7 @@ export class Types
 	 * This will check if a request is undefined.
 	 *
 	 * @param {mixed} data
+	 * @return {boolean}
 	 */
 	static isUndefined(data)
 	{
@@ -71,7 +72,7 @@ export class Types
     /**
 	 * This will check if the data is an array.
      *
-	 * @param {*} data
+	 * @param {mixed} data
 	 * @return {boolean}
 	 */
 	static isArray(data)

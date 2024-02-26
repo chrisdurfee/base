@@ -4,7 +4,7 @@ import { Objects } from '../shared/objects.js';
  * This will count the properties of an object.
  *
  * @param {object} obj
- * @return {int}
+ * @return {number}
  */
 const countProperty = (obj) =>
 {
