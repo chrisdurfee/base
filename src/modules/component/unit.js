@@ -176,7 +176,7 @@ export class Unit
 	 */
 	addContextBranch(branchName, value)
 	{
-		this.context = this.context || {};
+		this.context ??= {};
 		this.context[branchName] = value;
 	}
 

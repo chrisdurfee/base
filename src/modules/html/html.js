@@ -56,6 +56,7 @@ export const removeEventPrefix = (prop) =>
  * Html
  *
  * This will create html elements.
+ *
  * @class
  */
 export class Html
@@ -93,13 +94,14 @@ export class Html
 	 * @protected
 	 * @param {object} obj
 	 * @param {object} attrs
+	 * @return {void}
 	 */
 	static addAttributes(obj, attrs)
 	{
 		/* we want to check if we have attrributes to add */
 		if (!attrs || typeof attrs !== 'object')
 		{
-			return false;
+			return;
 		}
 
 		/* we need to add the type if set to stop ie

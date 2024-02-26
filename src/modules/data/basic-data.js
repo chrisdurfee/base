@@ -123,7 +123,7 @@ export class BasicData
 	 *
 	 * @protected
 	 * @param {string} attr
-	 * @param {*} val
+	 * @param {mixed} val
 	 * @param {object} committer
 	 * @return {void}
 	 */
@@ -146,7 +146,7 @@ export class BasicData
 	 * This will set the data value of an attribute or attributes.
 	 *
 	 * @param {string} key
-	 * @param {*} value
+	 * @param {mixed} value
 	 *
 	 * or
 	 *

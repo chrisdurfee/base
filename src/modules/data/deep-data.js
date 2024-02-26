@@ -32,7 +32,7 @@ export class Data extends BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @param {*} val
+	 * @param {mixed} val
 	 * @return {void}
 	 */
 	_updateAttr(obj, attr, val)
@@ -76,7 +76,7 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} attr
-	 * @param {*} val
+	 * @param {mixed} val
 	 * @param {object} committer
 	 * @param {boolean} stopMerge
 	 * @return {void}
@@ -166,7 +166,7 @@ export class Data extends BasicData
 	 * the result.
 	 *
 	 * @param {string} attr
-	 * @param {int} index
+	 * @param {number} index
 	 * @return {object} this
 	 */
 	splice(attr, index)
@@ -273,8 +273,8 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} attr
-	 * @param {*} val
-	 * @param {*} committer
+	 * @param {mixed} val
+	 * @param {mixed} committer
 	 * @return {void}
 	 */
 	_publish(attr, val, committer)
@@ -287,7 +287,7 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} attr
-	 * @param {*} val
+	 * @param {mixed} val
 	 * @param {object} committer
 	 * @return {void}
 	 */
@@ -363,8 +363,8 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} pathString
-	 * @param {*} obj
-	 * @param {*} committer
+	 * @param {mixed} obj
+	 * @param {mixed} committer
 	 * @return {void}
 	 */
 	publish(pathString, obj, committer)
@@ -410,7 +410,7 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} subPath
-	 * @param {*} val
+	 * @param {mixed} val
 	 * @param {object} committer
 	 * @return {void}
 	 */
@@ -431,7 +431,7 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} subPath
-	 * @param {*} val
+	 * @param {mixed} val
 	 * @param {object} committer
 	 * @return {void}
 	 */
@@ -488,7 +488,7 @@ export class Data extends BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @return {*}
+	 * @return {void}
 	 */
 	_deleteAttr(obj, attr)
 	{
@@ -531,7 +531,7 @@ export class Data extends BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @return {*}
+	 * @return {mixed}
 	 */
 	_getAttr(obj, attr)
 	{

@@ -136,8 +136,8 @@ export class ModelService
 	 * This will add the params.
 	 *
 	 * @protected
-	 * @param {*} params
-	 * @param {*} addingParams
+	 * @param {mixed} params
+	 * @param {mixed} addingParams
 	 * @return {(string|object)}
 	 */
 	addParams(params, addingParams)
