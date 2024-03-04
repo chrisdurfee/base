@@ -127,7 +127,7 @@ export const Objects =
 	 */
 	isPlainObject(obj)
 	{
-		return Object.prototype.toString.call(obj) === '[object Object]';
+		return (obj && Object.prototype.toString.call(obj) === '[object Object]');
 	},
 
 	/**

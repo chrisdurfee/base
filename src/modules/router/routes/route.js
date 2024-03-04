@@ -22,21 +22,6 @@ let routeCount = 0;
 export class Route extends SimpleData
 {
 	/**
-	 * This will set up the prpoerties before the constructor
-	 * to allow the proxy to work.
-	 */
-	uri = null;
-	uriQuery = null;
-	controller = null;
-	paramKeys = null;
-	titleCallBack = null;
-	path = null;
-	referralPath = null;
-	params = null;
-	callBack = null;
-	title = null;
-
-	/**
 	 * This will create a route.
 	 *
 	 * @constructor
@@ -59,6 +44,28 @@ export class Route extends SimpleData
 		this.setupRoute(settings);
 		this.set('active', false);
 		return proxy;
+	}
+
+	/**
+	 * This will setup the data object.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
+	setup()
+	{
+		this.stage = {};
+		this.id = null;
+		this.uri = null;
+		this.uriQuery = null;
+		this.controller = null;
+		this.paramKeys = null;
+		this.titleCallBack = null;
+		this.path = null;
+		this.referralPath = null;
+		this.params = null;
+		this.callBack = null;
+		this.title = null;
 	}
 
 	/**
@@ -156,6 +163,7 @@ export class Route extends SimpleData
 	setupComponentHelper(settings)
 	{
 		const component = this.getLayout(settings);
+		console.log('get layout', component, settings)
 		if (!component)
 		{
 			return;

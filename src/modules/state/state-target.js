@@ -24,6 +24,19 @@ export class StateTarget extends SimpleData
 	}
 
 	/**
+	 * This will setup the state target object.
+	 *
+	 * @protected
+	 * @return {void}
+	 * @override
+	 */
+	setup()
+	{
+		this.stage = {};
+		this.id = null;
+	}
+
+	/**
 	 * This will add an action to the target.
 	 *
 	 * @param {string} action

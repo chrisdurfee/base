@@ -64,11 +64,6 @@ let modelTypeNumber = 0;
 export class Model extends Data
 {
 	/**
-	 * @member {object|null} xhr
-	 */
-	xhr = null;
-
-	/**
 	 * This will create a new model.
 	 *
 	 * @constructor
@@ -79,6 +74,23 @@ export class Model extends Data
 		const proxy = super(settings);
 		this.initialize();
 		return proxy;
+	}
+
+	/**
+	 * This will setup the stage and attributes object.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
+	setup()
+	{
+		this.attributes = {};
+		this.stage = {};
+
+		/**
+		 * @member {object|null} xhr
+		 */
+		this.xhr = null;
 	}
 
 	/**
