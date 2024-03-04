@@ -362,7 +362,7 @@ export class Router
 
 		this.setupHistory();
 
-		this.data.set('path', this.getPath());
+		this.data.path = this.getPath();
 
 		this.callBackLink = this.checkLink.bind(this);
 		Events.on('click', document, this.callBackLink);
@@ -500,7 +500,7 @@ export class Router
 	updatePath()
 	{
 		const path = this.getPath();
-		this.data.set('path', path);
+		this.data.path = path;
 	}
 
 	/**

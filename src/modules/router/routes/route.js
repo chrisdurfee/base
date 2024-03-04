@@ -163,7 +163,6 @@ export class Route extends SimpleData
 	setupComponentHelper(settings)
 	{
 		const component = this.getLayout(settings);
-		console.log('get layout', component, settings)
 		if (!component)
 		{
 			return;

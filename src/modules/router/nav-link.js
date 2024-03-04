@@ -127,6 +127,6 @@ export class NavLink extends Component
      */
     update(selected)
     {
-        this.state.set('selected', selected);
+        this.state.selected = selected;
     }
 }
