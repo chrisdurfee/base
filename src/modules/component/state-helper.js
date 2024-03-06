@@ -1,3 +1,4 @@
+import { Objects } from '../../shared/objects.js';
 import { StateTracker } from '../state/state-tracker.js';
 
 /**
@@ -65,43 +66,30 @@ export class StateHelper
 	 * This will convert an action object to a state array.
 	 *
 	 * @protected
-	 * @param {object} action
+	 * @param {object} actions
 	 * @return {array}
 	 */
-	convertStates(action)
+	convertStates(actions)
 	{
-		const actions = [];
-		for (var prop in action)
+		const convertedActions = [];
+        for (const prop in actions)
 		{
-			if (!Object.prototype.hasOwnProperty.call(action, prop))
+            if (!Objects.hasOwnProp(actions, prop))
 			{
-				continue;
-			}
+                continue;
+            }
 
+			const action = actions[prop] ?? {};
 			if (prop === 'remotes')
 			{
-				this.setupRemoteStates(action[prop], actions);
+				this.setupRemoteStates(action, convertedActions);
 				continue;
 			}
 
-			var targetId = null,
-			callBack = null,
-			state = action[prop];
-			if (state && typeof state === 'object')
-			{
-				callBack = state.callBack;
-				targetId = state.id || state.targetId;
-				state = state.state;
-			}
-
-			actions.push(this.createState(
-				prop,
-				state,
-				callBack,
-				targetId
-			));
-		}
-		return actions;
+			const { callBack = null, id: targetId = null, state } = action;
+			convertedActions.push(this.createState(prop, state, callBack, targetId));
+        }
+        return convertedActions;
 	}
 
 	/**
@@ -114,39 +102,25 @@ export class StateHelper
 	 */
 	setupRemoteStates(remotes, actions)
 	{
-		let remote;
-		for (var i = 0, length = remotes.length; i < length; i++)
+		remotes.forEach(remote =>
 		{
-			remote = remotes[i];
-			if (!remote)
+            if (!remote)
 			{
-				continue;
-			}
+                return;
+            }
 
-			for (var prop in remote)
+			for (const prop in remote)
 			{
-				if (!Object.prototype.hasOwnProperty.call(remote, prop) || prop === 'id')
+				if (!Objects.hasOwnProp(remote, prop) || prop === 'id')
 				{
 					continue;
 				}
 
-				var callBack = null,
-				value = remote[prop],
-				state = (value !== null)? value : undefined;
-				if (state && typeof state === 'object')
-				{
-					callBack = state.callBack;
-					state = state.state;
-				}
-
-				actions.push(this.createState(
-					prop,
-					state,
-					callBack,
-					remote.id
-				));
+				const action = remote[prop] ?? {};
+				const { callBack = null, state } = action;
+				actions.push(this.createState(prop, state, callBack, remote.id));
 			}
-		}
+        });
 	}
 
 	/**
@@ -156,11 +130,7 @@ export class StateHelper
 	 */
 	removeRemoteStates()
 	{
-		const remoteStates = this.remoteStates;
-		if (remoteStates)
-		{
-			this.removeActions(remoteStates);
-		}
+		this.removeActions(this.remoteStates);
 	}
 
 	/**
@@ -171,16 +141,10 @@ export class StateHelper
 	 */
 	removeActions(actions)
 	{
-		if (actions.length < 1)
+		actions.forEach(action =>
 		{
-			return;
-		}
-
-		for (var i = 0, length = actions.length; i < length; i++)
-		{
-			var action = actions[i];
-			StateTracker.remove(action.targetId, action.action, action.token);
-		}
+            StateTracker.remove(action.targetId, action.action, action.token);
+        });
 	}
 
 	/**
@@ -192,18 +156,10 @@ export class StateHelper
 	restore(state)
 	{
 		StateTracker.restore();
-
-		const remotes = this.remoteStates;
-		if (!remotes)
+        this.remoteStates.forEach(action =>
 		{
-			return;
-		}
-
-		for (var i = 0, length = remotes.length; i < length; i++)
-		{
-			var action = remotes[i];
-			action.token = this.bindRemoteState(state, action.action, action.targetId);
-		}
+            action.token = this.bindRemoteState(state, action.action, action.targetId);
+        });
 	}
 
 	/**
@@ -230,24 +186,15 @@ export class StateHelper
 	 */
 	addStatesToTarget(state, actions)
 	{
-		const remotes = this.remoteStates;
-
-		for (var i = 0, length = actions.length; i < length; i++)
+		actions.forEach(action =>
 		{
-			var action = actions[i],
-			token = this.addAction(state, action);
-
-			if (action.targetId)
+            const token = this.addAction(state, action);
+            if (action.targetId)
 			{
-				action.token = token;
-				remotes.push(action);
-			}
-		}
-
-		if (remotes.length < 1)
-		{
-			this.remoteStates = null;
-		}
+                action.token = token;
+                this.remoteStates.push(action);
+            }
+        });
 	}
 
 	/**
@@ -255,7 +202,7 @@ export class StateHelper
 	 *
 	 * @param {object} target
 	 * @param {object} action
-	 * @return {string}
+	 * @return {string|undefined}
 	 */
 	addAction(target, action)
 	{
