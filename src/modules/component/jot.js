@@ -11,7 +11,7 @@ const JOT_SHORTHAND_METHODS =
 {
     created: 'onCreated',
     state: 'setupStates',
-    events: 'setupEevents',
+    events: 'setupEvents',
     before: 'beforeSetup',
     render: 'render',
     after: 'afterSetup',
@@ -27,11 +27,7 @@ const JOT_SHORTHAND_METHODS =
  */
 const getJotShorthandMethod = (value) =>
 {
-    const valueType = (typeof value);
-    return (valueType === 'function')? value : function()
-    {
-        return value;
-    };
+    return (typeof value === 'function')? value : () => value;
 };
 
 /**
@@ -49,60 +45,28 @@ const JotComponent = (settings) =>
         return component;
     }
 
-    for (var prop in settings)
+    Object.entries(settings).forEach(([prop, value]) =>
     {
-        if (!Object.prototype.hasOwnProperty.call(settings, prop))
-        {
-            continue;
-        }
-
-        const value = settings[prop];
-        const alias = JOT_SHORTHAND_METHODS[prop];
-        if (alias)
-        {
-            component[alias] = getJotShorthandMethod(value);
-            continue;
-        }
-
-        component[prop] = value;
-    }
+        const alias = JOT_SHORTHAND_METHODS[prop] || prop;
+        component[alias] = getJotShorthandMethod(value);
+    });
 
     return component;
 };
 
 /**
- * This will create a component class.
+ * This will create a class.
  *
+ * @param {class} Base
  * @param {object} settings
  * @return {class}
  */
-const createComponentClass = (settings) =>
+const createClass = (Base, settings) =>
 {
-    class Child extends Component
-    {
-
-    }
-
+    class Child extends Base {}
     Object.assign(Child.prototype, settings);
     return Child;
 };
-
-/**
- * This will create a unit class.
- *
- * @param {object} settings
- * @return {class}
- */
- const createUnitClass = (settings) =>
- {
-    class Child extends Unit
-    {
-
-    }
-
-    Object.assign(Child.prototype, settings);
-    return Child;
- };
 
 /**
  * This will create a shorthand component.
@@ -110,7 +74,7 @@ const createComponentClass = (settings) =>
  * @param {object|function} layout
  * @return {function}
  */
-export const Jot = function(layout)
+export const Jot = (layout) =>
 {
     if (!layout)
     {
@@ -118,30 +82,14 @@ export const Jot = function(layout)
     }
 
     let settings;
-    switch (typeof layout)
+    const layoutType = typeof layout;
+    if (layoutType === 'object' && layout.render)
     {
-        case 'object':
-            if (layout.render)
-            {
-                settings = JotComponent(layout);
-                return createComponentClass(settings);
-            }
-
-            settings = {
-                render()
-                {
-                    return layout;
-                }
-            };
-
-            // this will create a stateless and dataless unit
-            return createUnitClass(settings);
-        case 'function':
-            settings = {
-                render: layout
-            };
-
-            // this will create a stateless and dataless unit
-            return createUnitClass(settings);
+        settings = JotComponent(layout);
+        return createClass(Component, settings);
     }
+
+    const render = (layoutType === 'function')? layout : () => layout;
+    settings = { render };
+    return createClass(Unit, settings);
 };
