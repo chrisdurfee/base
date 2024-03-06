@@ -110,17 +110,17 @@ export const EventMethods =
     _createEvent(event, eventType, settings, params)
     {
         let e;
-        if (eventType === 'HTMLEvents')
+        switch (eventType)
         {
-            e = new Event(event);
-        }
-        else if (eventType === 'MouseEvents')
-        {
-            e = new MouseEvent(event, settings);
-        }
-        else
-        {
-            e = new CustomEvent(event, params);
+            case 'HTMLEvents':
+                e = new Event(event);
+                break;
+            case 'MouseEvents':
+                e = new MouseEvent(event, settings);
+                break;
+            default:
+                e = new CustomEvent(event, params);
+                break;
         }
         return e;
     },
@@ -200,7 +200,7 @@ export const EventMethods =
     /**
      * This will trigger an event.
      *
-     * @param {(string|object)} event
+     * @param {string|object} event
      * @param {object} obj
      * @param {object} [params]
      * @return {object}
@@ -231,9 +231,6 @@ export const EventMethods =
      */
     getWheelEventType()
     {
-        /* this will check what mouse wheel type
-        the client supports
-        @return (string) the event name */
         const getMouseWheelType = () =>
         {
             let type = 'wheel';

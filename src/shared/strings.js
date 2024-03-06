@@ -39,7 +39,7 @@ export class Strings
 	 * This will camelCase a string.
 	 *
 	 * @param {string} str
-	 * @return {(string|boolean)} The string or false.
+	 * @return {string|boolean} The string or false.
 	 */
 	static camelCase(str)
 	{
@@ -49,10 +49,7 @@ export class Strings
 		}
 
 		const regExp = /(-|\s|_)+\w{1}/g;
-		return str.replace(regExp, (match) =>
-		{
-			return match[1].toUpperCase();
-		});
+		return str.replace(regExp, (match) =>  match[1].toUpperCase());
 	}
 
 	/**
@@ -60,7 +57,7 @@ export class Strings
 	 *
 	 * @param {string} str
 	 * @param {string} delimiter
-	 * @return {(string|boolean)} The string or false.
+	 * @return {string|boolean} The string or false.
 	 */
 	static uncamelCase(str, delimiter = '-')
 	{
@@ -70,9 +67,6 @@ export class Strings
 		}
 
 		const regExp = /([A-Z]{1,})/g;
-		return str.replace(regExp, (match) =>
-		{
-			return delimiter + match.toLowerCase();
-		}).toLowerCase();
+		return str.replace(regExp, (match) => delimiter + match.toLowerCase()).toLowerCase();
 	}
 }

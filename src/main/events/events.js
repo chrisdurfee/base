@@ -64,12 +64,7 @@ export const Events =
     {
         if (Array.isArray(event))
         {
-            let evt;
-            for (var i = 0, length = event.length; i < length; i++)
-            {
-                evt = event[i];
-                this.add(evt, obj, fn, capture);
-            }
+            event.forEach((evt) => this.add(evt, obj, fn, capture));
         }
         else
         {
@@ -92,11 +87,7 @@ export const Events =
         if (Array.isArray(event))
         {
             var evt;
-            for (var i = 0, length = event.length; i < length; i++)
-            {
-                evt = event[i];
-                this.remove(evt, obj, fn, capture);
-            }
+            event.forEach((evt) => this.remove(evt, obj, fn, capture));
         }
         else
         {
@@ -111,7 +102,7 @@ export const Events =
      * @param {string} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {(object|boolean)} [capture]
+     * @param {object|boolean} [capture]
      * @param {boolean} [swapped]
      * @param {function} [originalFn]
      */
@@ -138,7 +129,7 @@ export const Events =
      * @param {string} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {(object|boolean)} [capture]
+     * @param {object|boolean} [capture]
      * @return {object} a reference to the event object.
      */
     remove(event, obj, fn, capture = false)
@@ -207,7 +198,7 @@ export const Events =
      *
      * @param {object} eventObj
      * @param {array} events
-     * @return {(object|boolean)}
+     * @return {object|boolean}
      */
     search(eventObj, events)
     {

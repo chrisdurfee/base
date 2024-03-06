@@ -16,7 +16,7 @@ export class Dom
 	 * This will select an element by id.
 	 *
 	 * @param {string} id
-	 * @return {(object|boolean)} The element object or false.
+	 * @return {object|boolean} The element object or false.
 	 */
 	static getById(id)
 	{
@@ -33,7 +33,7 @@ export class Dom
 	 * This will select elements by name.
 	 *
 	 * @param {string} name
-	 * @return {(object|boolean)} The elements array or false.
+	 * @return {object|boolean} The elements array or false.
 	 */
 	static getByName(name)
 	{
@@ -87,7 +87,7 @@ export class Dom
 	 * @param {string} [html] If the html is not set, the html of the
 	 * element will be returned.
 	 *
-	 * @return {(string|void)}
+	 * @return {mixed}
 	 */
 	static html(obj, html)
 	{
@@ -132,7 +132,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} property
-	 * @return {(string|null)}
+	 * @return {mixed}
 	 */
 	static getCss(obj, property)
 	{
@@ -172,7 +172,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {(string|void)}
+	 * @return {mixed}
 	 */
 	static css(obj, property, value)
 	{
@@ -236,7 +236,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {(string|void)}
+	 * @return {mixed}
 	 */
 	static attr(obj, property, value)
 	{
@@ -334,7 +334,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {(string|void)}
+	 * @return {mixed}
 	 */
 	static data(obj, property, value)
 	{
@@ -445,7 +445,7 @@ export class Dom
 	 * This will get the size of an element.
 	 *
 	 * @param {object} obj
-	 * @return {(object|boolean)} A size object or false.
+	 * @return {object|boolean} A size object or false.
 	 */
 	static getSize(obj)
 	{

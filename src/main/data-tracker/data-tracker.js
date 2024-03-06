@@ -45,6 +45,7 @@ export class DataTracker
 
     /**
      * This will remove a type from the data tracker.
+     *
      * @param {string} type
      * @return {void}
      */
@@ -137,7 +138,7 @@ export class DataTracker
      * no type is set.
      *
      * @param {object} obj
-     * @param {stirng} [type]
+     * @param {string} [type]
      * @return {void}
      */
     static remove(obj, type)

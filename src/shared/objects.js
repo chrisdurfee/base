@@ -66,7 +66,7 @@ export const Objects =
 	 * This will get the class prototype.
 	 *
 	 * @protected
-	 * @param {(function|object)} object
+	 * @param {function|object} object
 	 * @return {object}
 	 */
 	getClassObject(object)
@@ -77,8 +77,8 @@ export const Objects =
 	/**
 	 * This will extend an object to another object.
 	 *
-	 * @param {(function|object)} sourceClass
-	 * @param {(function|object)} targetClass
+	 * @param {function|object} sourceClass
+	 * @param {function|object} targetClass
 	 * @return {object}
 	 */
 	extendClass(sourceClass, targetClass)

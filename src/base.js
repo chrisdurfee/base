@@ -11,7 +11,7 @@ import { DateTime } from "./modules/date/date-time.js";
 import { Html } from './modules/html/html.js';
 import { Import } from './modules/import/import.js';
 import { Builder } from './modules/layout/builder.js';
-import { } from './modules/layout/directives/core/default-directives.js';
+import './modules/layout/directives/core/default-directives.js';
 import { Directives } from './modules/layout/directives/directives.js';
 import { NavLink, router } from './modules/router/router.js';
 import { StateTracker as State } from './modules/state/state-tracker.js';

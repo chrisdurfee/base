@@ -135,7 +135,7 @@ class Base
 	 * @param {array} [argArray] Default args to pass.
 	 * @param {boolean} [addArgs] Set to add merge args from the
 	 * curried function.
-	 * @return {(function|boolean)} The callBack function or false.
+	 * @return {function|boolean} The callBack function or false.
 	 */
 	createCallBack(obj, method, argArray = [], addArgs = false)
 	{
@@ -172,7 +172,6 @@ class Base
  * This will return the base prototype to allow the module
  * to be added to base as a module.
  *
- * @static
  * @return {object} the base prototype.
  */
 Base.prototype.extend = (function()
