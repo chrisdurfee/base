@@ -19,14 +19,14 @@ export const DateTime =
 	 *
 	 * @param {number} [day]
 	 * @param {boolean} [shortenName=false]
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	getDayName(day = new Date().getDay(), shortenName = false)
 	{
 		const days = this.dayNames;
 		if (day > days.length)
 		{
-			return false;
+			return null;
 		}
 
 		/* we want to check to shorten name */
@@ -38,7 +38,7 @@ export const DateTime =
 	 * This will convert month to js.
 	 *
 	 * @param {number} month
-	 * @returns {number}
+	 * @returns {string}
 	 */
 	convertJsMonth(month)
 	{
@@ -121,7 +121,7 @@ export const DateTime =
 	 *
 	 * @param {string} dateString
 	 * @param {number} format
-	 * @returns {stirng}
+	 * @returns {string}
 	 */
 	formatTime(dateString, format)
 	{
@@ -169,13 +169,13 @@ export const DateTime =
 		const months = this.monthNames;
 		if (month > months.length)
 		{
-			return false;
+			return '';
 		}
 
 		const monthName = months[month];
 		if (!monthName)
 		{
-			return false;
+			return '';
 		}
 		return (shortenName)? monthName.substring(0, 3) : monthName;
 	},
@@ -225,13 +225,13 @@ export const DateTime =
 	 * This will get the difference from now.
 	 *
 	 * @param {string} date
-	 * @param {boolean} setHours
+	 * @param {boolean} [setHours]
 	 * @returns {number}
 	 */
-	getDiffFromNow(date, setHours)
+	getDiffFromNow(date, setHours = false)
 	{
 		date = date.replace(/\s/, 'T'); //For safari
-		date = new Date(date);
+		const diffDate = new Date(date);
 
 		const now = new Date();
 		if (setHours === true)
@@ -239,7 +239,7 @@ export const DateTime =
 			now.setHours(0,0,0,0);
 		}
 
-		let timeDiff = now.getTime() - date.getTime();
+		let timeDiff = now.getTime() - diffDate.getTime();
 		return timeDiff;
 	},
 
@@ -253,8 +253,8 @@ export const DateTime =
 	{
 		const milliseconds = this.getDiffFromNow(date);
 
-		let age = '',
-		days = '';
+		let age,
+		days;
 		switch(true)
 		{
 			case milliseconds < 86400000:
@@ -284,7 +284,7 @@ export const DateTime =
 				age = years;
 		}
 
-		return age;
+		return String(age);
 	},
 
 	/**
@@ -436,7 +436,7 @@ export const DateTime =
 	{
 		if (typeof milliseconds !== 'number')
 		{
-			return false;
+			return 0;
 		}
 
 		return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 365.26));
@@ -454,7 +454,7 @@ export const DateTime =
 		{
 			return Math.floor(milliseconds / (1000 * 60 * 60 * 24 * 30));
 		}
-		return false;
+		return 0;
 	},
 
 	/**
@@ -467,7 +467,7 @@ export const DateTime =
 	{
 		if (typeof milliseconds !== 'number')
 		{
-			return false;
+			return 0;
 		}
 
 		return Math.floor(milliseconds / (60 * 60 * 1000 * 24) * 1);
@@ -483,7 +483,7 @@ export const DateTime =
 	{
 		if (typeof milliseconds !== 'number')
 		{
-			return false;
+			return 0;
 		}
 
 		return Math.floor((milliseconds % (60 * 60 * 1000 * 24)) / (60 * 60 * 1000) * 1);
@@ -499,7 +499,7 @@ export const DateTime =
 	{
 		if (typeof milliseconds !== 'number')
 		{
-			return false;
+			return 0;
 		}
 
 		return Math.floor(((milliseconds % (60 * 60 * 1000 * 24)) % (60 * 60 * 1000)) / (60 * 1000) * 1);
@@ -515,7 +515,7 @@ export const DateTime =
 	{
 		if (typeof milliseconds !== 'number')
 		{
-			return false;
+			return 0;
 		}
 
 		return Math.floor((((milliseconds % (60 * 60 * 1000 * 24)) % (60 * 60 * 1000)) % (60 * 1000)) / 1000 * 1);

@@ -224,7 +224,6 @@ const isConstructor = (object) =>
  * @param {object} layout
  * @param {object} ele
  * @param {object} parent
- * @param {function} callBack
  * @returns {object}
  */
 const render = (layout, ele, parent) =>

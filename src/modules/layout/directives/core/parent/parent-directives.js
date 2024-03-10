@@ -28,7 +28,7 @@ export const useParent = (ele, callBack, parent) =>
 {
     if (!callBack || !parent)
     {
-        return false;
+        return;
     }
 
     callBack(parent, ele);
@@ -46,7 +46,7 @@ export const useData = (ele, callBack, parent) =>
 {
     if (!callBack || !parent)
     {
-        return false;
+        return;
     }
 
     callBack(parent.data, ele);
@@ -64,7 +64,7 @@ export const useState = (ele, callBack, parent) =>
 {
     if (!callBack || !parent)
     {
-        return false;
+        return;
     }
 
     callBack(parent.state, ele);
@@ -82,7 +82,7 @@ export const addState = (ele, callBack, parent) =>
 {
     if (!callBack || !parent)
     {
-        return false;
+        return;
     }
 
     if (parent.stateHelper)

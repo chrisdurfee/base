@@ -207,7 +207,6 @@ export class Dom
 	/**
 	 * This will set an attribute of an element.
 	 *
-	 * @private
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} value

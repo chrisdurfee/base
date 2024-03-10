@@ -27,7 +27,6 @@ export class Route extends SimpleData
 	 * @constructor
 	 * @param {object} settings
 	 * @param {function} titleCallBack
-	 * @returns {DataProxy}
 	 */
 	constructor(settings, titleCallBack)
 	{

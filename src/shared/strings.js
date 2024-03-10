@@ -57,13 +57,13 @@ export class Strings
 	 *
 	 * @param {string} str
 	 * @param {string} delimiter
-	 * @returns {string|boolean} The string or false.
+	 * @returns {string} The string.
 	 */
 	static uncamelCase(str, delimiter = '-')
 	{
 		if (typeof str !== 'string')
 		{
-			return false;
+			return '';
 		}
 
 		const regExp = /([A-Z]{1,})/g;

@@ -59,14 +59,14 @@ export class HtmlHelper extends Html
 	 *
 	 * @param {object} ele
 	 * @param {object} attr
-	 * @param {string} value
+	 * @param {*} value
      * @returns {void}
 	 */
 	static addAttr(ele, attr, value, parent)
 	{
 		if (value === '' || !attr)
 		{
-			return false;
+			return;
 		}
 
 		if (attr === 'innerHTML')

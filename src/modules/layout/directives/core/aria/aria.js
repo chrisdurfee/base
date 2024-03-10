@@ -6,7 +6,7 @@ import { onSet } from "../reactive/on-set.js";
  *
  * @protected
  * @param {object} ele
- * @param {array} role
+ * @param {string} role
  * @param {object} parent
  * @returns {void}
  */
@@ -43,7 +43,7 @@ const onSetCallBack = (attr) =>
  *
  * @protected
  * @param {object} ele
- * @param {array} attributes
+ * @param {object} attributes
  * @param {object} parent
  * @returns {void}
  */

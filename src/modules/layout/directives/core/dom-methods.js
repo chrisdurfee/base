@@ -8,8 +8,7 @@ import { Builder } from "../../builder.js";
  *
  * @param {object} ele
  * @param {object} data
- * @param {string} prop
- * @param {(function|object)} callBack
+ * @param {(function|object)} settings
  * @param {string} parent
  * @returns {void}
  */

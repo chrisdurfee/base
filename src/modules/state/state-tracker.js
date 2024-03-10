@@ -108,7 +108,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {function} callBack
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	static on(targetId, action, callBack)
 	{
@@ -117,7 +117,7 @@ export class StateTracker
 		{
 			return target.on(action, callBack);
 		}
-		return false;
+		return null;
 	}
 
 	/**

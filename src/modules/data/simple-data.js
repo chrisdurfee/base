@@ -15,7 +15,6 @@ export class SimpleData extends BasicData
 	/**
 	 * This will publish an update to the data binder.
 	 *
-	 * @override
 	 * @protected
 	 * @param {string} attr
 	 * @param {*} val

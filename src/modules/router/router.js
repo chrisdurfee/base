@@ -270,7 +270,7 @@ export class Router
 	 * This will add a switch.
 	 *
 	 * @param {array} group
-	 * @returns {string} the switch id.
+	 * @returns {number} the switch id.
 	 */
 	addSwitch(group)
 	{

@@ -1,3 +1,4 @@
+
 let routerNumber = 0;
 
 /**
@@ -28,6 +29,26 @@ export class History
 	setup()
 	{
 		this.addEvent();
+		return this;
+	}
+
+	/**
+	 * This will check to activate the router.
+	 *
+	 * @param {object} evt
+	 */
+	check(evt)
+	{
+
+	}
+
+	/**
+	 * This will add the events.
+	 *
+	 * @returns {object} a reference to the object.
+	 */
+	addEvent()
+	{
 		return this;
 	}
 }

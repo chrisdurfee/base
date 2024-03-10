@@ -72,7 +72,7 @@ const createClass = (Base, settings) =>
  * This will create a shorthand component.
  *
  * @param {object|function} layout
- * @returns {function}
+ * @returns {function|object}
  */
 export const Jot = (layout) =>
 {

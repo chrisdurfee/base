@@ -18,10 +18,9 @@ DataTracker.addType('destroyed', (data) =>
  * This will add a callback to be called when
  * the element is destroyed.
  *
- * @protected
  * @param {object} ele
- * @param {(object|array)} route
- * @param {object} parent
+ * @param {(object|array)} callBack
+ * @param {object} [parent]
  * @returns {void}
  */
 export const onDestroyed = (ele, callBack, parent) =>

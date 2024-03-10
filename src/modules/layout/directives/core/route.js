@@ -14,7 +14,7 @@ export const addRoute = (ele, route, parent) =>
 {
     if (!route)
     {
-        return false;
+        return;
     }
 
     if (Array.isArray(route))

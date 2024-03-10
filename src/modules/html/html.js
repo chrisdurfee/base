@@ -169,7 +169,7 @@ export class Html
 	 *
 	 * @param {object} obj
 	 * @param {object} attr
-	 * @param {string} value
+	 * @param {*} value
 	 * @returns {void}
 	 */
 	static addAttr(obj, attr, value)

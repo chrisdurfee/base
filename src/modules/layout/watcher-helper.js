@@ -151,7 +151,7 @@ export const WatcherHelper =
 	 * This will get the prop values.
 	 *
 	 * @param {object} data
-	 * @param {string} string
+	 * @param {array} props
 	 * @param {boolean} isArray
 	 * @returns {array}
 	 */
@@ -186,7 +186,7 @@ export const WatcherHelper =
 		overrideCallBack = settings.callBack;
 		if (typeof overrideCallBack === 'function')
 		{
-			const props = string.match(WATCHER_PATTERN);
+			const props = string.match(WATCHER_PATTERN) || [];
 			const isMultiProp = (props && props.length > 1);
 			callBack = (value, committer) =>
 			{

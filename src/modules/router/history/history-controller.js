@@ -22,7 +22,7 @@ export class HistoryController
     /**
      * This will create a History Object based on navigation support
      *
-     * @param {Router} router
+     * @param {object} router
      * @returns History
      */
     static setup(router)

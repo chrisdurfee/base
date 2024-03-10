@@ -93,13 +93,13 @@ export class Parser
 		 *
 		 * We also need to normalize the attribute name.
 		 */
-		value = {
+		const dirValue = {
 			attr: normalizeAttr(key),
 			value
 		};
 
 		directives.push(AttributeDirective(
-			Attribute(key, value),
+			Attribute(key, dirValue),
 			Directives.get('watch')
 		));
 	}

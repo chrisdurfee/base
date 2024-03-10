@@ -17,7 +17,6 @@ export class ComponentHelper
 	 * @constructor
 	 * @param {object} route
 	 * @param {object} settings
-	 * @returns {ComponentHelper}
 	 */
 	constructor(route, settings)
 	{
