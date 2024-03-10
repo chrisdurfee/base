@@ -116,7 +116,7 @@ base.augment(
 	{
 		if (typeof settingsObj === 'object')
 		{
-			this.xhrSettings = Objects.extendClass(base.xhrSettings, settingsObj);
+			this.xhrSettings = Objects.extendClass(XhrDefaultSettings, settingsObj);
 		}
 	},
 
@@ -132,6 +132,7 @@ base.augment(
 /**
  * This will make an xhr (ajax) request.
  *
+ * @overload
  * @param {string} url
  * @param {string} params
  * @param {function} callBackFn
@@ -139,8 +140,7 @@ base.augment(
  * @param {string} [method=POST]
  * @param {boolean} async
  *
- * or
- *
+ * @overload
  * @param {object} settings
  * @example
  * {

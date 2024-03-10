@@ -312,8 +312,8 @@ export class ModelService
 	/**
 	 * This will list rows of the model.
 	 *
-	 * @param {string} [instanceParams]
-	 * @param {function} [callBack]
+	 * @param {string} instanceParams
+	 * @param {function} callBack
 	 * @param {number} start
 	 * @param {number} count
 	 * @param {string} filter
@@ -365,7 +365,6 @@ export class ModelService
 	 * @param {(string|object)} params
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @param {object}
 	 * @returns {object}
 	 */
 	setupRequest(url, method, params, callBack, requestCallBack)
@@ -414,7 +413,6 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @param {object}
 	 * @returns {object}
 	 */
 	request(params, instanceParams, callBack, requestCallBack)
@@ -431,7 +429,6 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @param {object}
 	 * @returns {object}
 	 */
 	_get(url, params, instanceParams, callBack, requestCallBack)
@@ -458,7 +455,6 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @param {object}
 	 * @returns {object}
 	 */
 	_post(url, params, instanceParams, callBack, requestCallBack)
@@ -475,7 +471,6 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @param {object}
 	 * @returns {object}
 	 */
 	_put(url, params, instanceParams, callBack, requestCallBack)
@@ -492,7 +487,6 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @param {object}
 	 * @returns {object}
 	 */
 	_patch(url, params, instanceParams, callBack, requestCallBack)
@@ -509,7 +503,6 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @param {object}
 	 * @returns {object}
 	 */
 	_delete(url, params, instanceParams, callBack, requestCallBack)
@@ -527,7 +520,6 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @param {object}
 	 * @returns {object}
 	 */
 	_request(url, method, params, instanceParams, callBack, requestCallBack)

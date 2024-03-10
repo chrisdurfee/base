@@ -39,13 +39,13 @@ export class Strings
 	 * This will camelCase a string.
 	 *
 	 * @param {string} str
-	 * @returns {string|boolean} The string or false.
+	 * @returns {string} The string or false.
 	 */
 	static camelCase(str)
 	{
 		if (typeof str !== 'string')
 		{
-			return false;
+			return '';
 		}
 
 		const regExp = /(-|\s|_)+\w{1}/g;

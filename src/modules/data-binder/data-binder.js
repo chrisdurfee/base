@@ -320,7 +320,7 @@ export class DataBinder
 	 *
 	 * @protected
 	 * @param {object} element
-	 * @returns {number|boolean}
+	 * @returns {string|boolean}
 	 */
 	isDataBound(element)
 	{

@@ -54,7 +54,7 @@ export const Events =
     /**
      * This will add an event to an object.
      *
-     * @param {string} event The event name.
+     * @param {string|array} event The event name.
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
@@ -76,7 +76,7 @@ export const Events =
     /**
      * This will remove an event from an object.
      *
-     * @param {string} event The event name.
+     * @param {string|array} event The event name.
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]

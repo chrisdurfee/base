@@ -24,7 +24,7 @@ function getNewPath(path, prop)
  *
  * @param {object} data
  * @param {string} path
- * @param {string} root
+ * @param {string} dataRoot
  * @returns {Proxy}
  */
 function createHandler(data, path = '', dataRoot = '')

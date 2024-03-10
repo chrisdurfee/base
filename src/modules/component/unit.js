@@ -67,6 +67,21 @@ export class Unit
 		 */
 		this.persist = false;
 
+		/**
+		 * @member {?array} children
+		 */
+		this.children = null;
+
+		/**
+		 * @member {?object} panel
+		 */
+		this.panel = null;
+
+		/**
+		 * @member {?object} parent
+		 */
+		this.parent = null;
+
 		this.init();
 
 		/**
@@ -74,6 +89,7 @@ export class Unit
 		 */
 		const {props, children} = parseArgs(args);
 		this.setupProps(props);
+
 		this.children ??= children;
 
 		this.onCreated();
@@ -395,8 +411,7 @@ export class Unit
 	 * This will remove children from an element.
 	 *
 	 * @protected
-	 * @param {object} layout
-	 * @param {object} container
+	 * @param {object} ele
 	 * @returns {object}
 	 */
 	removeAll(ele)
