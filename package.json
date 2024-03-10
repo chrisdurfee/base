@@ -24,6 +24,7 @@
 	},
 	"devDependencies": {
 		"esbuild": "^0.15.7",
+		"typescript": "^5.4.2",
 		"vite-plugin-dts": "^3.7.3"
 	},
 	"files": [
