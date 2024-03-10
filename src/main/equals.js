@@ -9,7 +9,7 @@ import { Objects } from '../shared/objects.js';
 const countProperty = (obj) =>
 {
 	let count = 0;
-	for (let property of Object.entries(obj))
+	for (let [property, value] of Object.entries(obj))
 	{
 		count++;
 

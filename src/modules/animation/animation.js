@@ -28,7 +28,7 @@ const removeAnimationClass = (obj, animationClass, callBack) =>
 	}
 
 	Dom.removeClass(obj, animationClass);
-	animate.animating.remove(obj);
+	animate.animating.remove(obj, animationClass);
 };
 
 const getElement = (element) =>
@@ -53,7 +53,7 @@ export const animate =
 		 *
 		 * @param {object} object
 		 * @param {string} className
-		 * @param {int} timer
+		 * @param {number} timer
 		 */
 		add(object, className, timer)
 		{
@@ -173,7 +173,7 @@ export const animate =
 	 *
 	 * @param {object} obj
 	 * @param {string} animationClass
-	 * @param {int} duration
+	 * @param {number} duration
 	 * @param {function} callBack
 	 * @param {funtion} endCallBack
 	 */
@@ -190,7 +190,7 @@ export const animate =
 	 *
 	 * @param {object} object
 	 * @param {string} animationClass
-	 * @param {int} duration
+	 * @param {number} duration
 	 * @param {function} endCallBack
 	 */
 	hide(object, animationClass, duration, endCallBack)
@@ -206,7 +206,7 @@ export const animate =
 	 *
 	 * @param {object} object
 	 * @param {string} animationClass
-	 * @param {int} duration
+	 * @param {number} duration
 	 * @param {function} endCallBack
 	 */
 	show(object, animationClass, duration, endCallBack)
@@ -223,7 +223,7 @@ export const animate =
 	 *
 	 * @param {object} object
 	 * @param {string} animationClass
-	 * @param {int} duration
+	 * @param {number} duration
 	 * @param {function} endCallBack
 	 */
 	set(object, animationClass, duration, endCallBack)

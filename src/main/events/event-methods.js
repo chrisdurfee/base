@@ -258,10 +258,10 @@ export const EventMethods =
      * @param {function} callBackFn
      * @param {object} [obj]
      * @param {boolean} [cancelDefault]
-     * @param {boolean} capture
+     * @param {boolean} [capture]
      * @return {object} base object.
      */
-    onMouseWheel(callBackFn, obj, cancelDefault, capture)
+    onMouseWheel(callBackFn, obj, cancelDefault, capture = false)
     {
         if (typeof obj === "undefined")
         {
@@ -299,10 +299,10 @@ export const EventMethods =
      *
      * @param {function} callBackFn
      * @param {object} [obj]
-     * @param {boolean} capture
+     * @param {boolean} [capture]
      * @return {object} base object.
      */
-    offMouseWheel(callBackFn, obj, capture)
+    offMouseWheel(callBackFn, obj, capture = false)
     {
         if (typeof obj === "undefined")
         {

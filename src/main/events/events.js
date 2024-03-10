@@ -13,13 +13,13 @@ export const Events =
      * This will get the events on an element.
      *
      * @param {object} obj
-     * @return {(array|boolean)}
+     * @return {array}
      */
     getEvents(obj)
     {
         if (Types.isObject(obj) === false)
         {
-            return false;
+            return [];
         }
 
         return DataTracker.get(obj, 'events');
@@ -172,7 +172,7 @@ export const Events =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {(object|boolean)}
+     * @return {object|boolean}
      */
     getEvent(event, obj, fn, capture)
     {

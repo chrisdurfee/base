@@ -27,8 +27,7 @@ export const TrackerTypes =
     /**
      * This will get a type or return false.
      * @param {string} type
-     * @return {function|boolean} The callBack or false.
-     * @return {*}
+     * @returns {(Function|false)} The callBack or false.
      */
     get(type)
     {

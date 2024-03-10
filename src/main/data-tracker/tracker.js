@@ -89,6 +89,11 @@ export class Tracker
 
         let data,
         callBack = TrackerTypes.get(removingType);
+        if (!callBack)
+        {
+            return;
+        }
+
         for (var i = 0, length = typeData.length; i < length; i++)
         {
             data = typeData[i];
