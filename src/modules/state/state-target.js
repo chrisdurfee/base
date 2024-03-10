@@ -27,7 +27,7 @@ export class StateTarget extends SimpleData
 	 * This will setup the state target object.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 * @override
 	 */
 	setup()
@@ -41,7 +41,7 @@ export class StateTarget extends SimpleData
 	 *
 	 * @param {string} action
 	 * @param {*} state
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addAction(action, state)
 	{
@@ -55,7 +55,7 @@ export class StateTarget extends SimpleData
 	 * This will get the state of an action.
 	 *
 	 * @param {string} action
-	 * @return {*}
+	 * @returns {*}
 	 */
 	getState(action)
 	{
@@ -69,7 +69,7 @@ export class StateTarget extends SimpleData
 	 *
 	 * @param {string} action
 	 * @param {string} [token]
-	 * @return {void}
+	 * @returns {void}
 	 */
 	removeAction(action, token)
 	{

@@ -84,7 +84,7 @@ export const prepareUrl = (data, removeNewLines) =>
  * This will parse JSON data.
  *
  * @param {string} data
- * @return {mixed}
+ * @returns {mixed}
  */
 export function decode(data)
 {
@@ -95,7 +95,7 @@ export function decode(data)
  * This will encode JSON data.
  *
  * @param {*} data
- * @return {string}
+ * @returns {string}
  */
 export function encode(data)
 {

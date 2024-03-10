@@ -7,7 +7,7 @@ import { ModelService } from './model-service.js';
  * This will get the defaults from the settings.
  *
  * @param {object} settings
- * @return {object}
+ * @returns {object}
  */
 const setupDefaultAttr = (settings) =>
 {
@@ -35,7 +35,7 @@ const setupDefaultAttr = (settings) =>
  * This will get the xhr settings.
  *
  * @param {object} settings
- * @return {object}
+ * @returns {object}
  */
 const getXhr = (settings) =>
 {
@@ -80,7 +80,7 @@ export class Model extends Data
 	 * This will setup the stage and attributes object.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setup()
 	{
@@ -98,7 +98,7 @@ export class Model extends Data
 	 * to do something when its initialized.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	initialize()
 	{
@@ -109,7 +109,7 @@ export class Model extends Data
 	 * This will extend the model to a child model.
 	 *
 	 * @param {object} [settings]
-	 * @return {class}
+	 * @returns {class}
 	 */
 	static extend(settings = {})
 	{

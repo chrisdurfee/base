@@ -74,7 +74,7 @@ export const animate =
 		 * This will remove an animation from an element.
 		 *
 		 * @param {object} object
-		 * @param {string} removeClass
+		 * @param {string|number} removeClass
 		 */
 		remove(object, removeClass)
 		{
@@ -129,7 +129,7 @@ export const animate =
 		/**
 		 * This will check if the element is animating.
 		 * @param {object} obj
-		 * @return {array|boolean}
+		 * @returns {array|boolean}
 		 */
 		checkAnimating(obj)
 		{

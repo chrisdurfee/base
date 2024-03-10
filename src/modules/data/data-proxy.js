@@ -5,7 +5,7 @@ import { Objects } from "../../shared/objects.js";
  *
  * @param {string} path
  * @param {string} prop
- * @return {string}
+ * @returns {string}
  */
 function getNewPath(path, prop)
 {
@@ -75,7 +75,7 @@ function createHandler(data, path = '', dataRoot = '')
          * @param {string} prop
          * @param {*} value
          * @param {object} receiver
-         * @return {*}
+         * @returns {*}
          */
         set(target, prop, value, receiver)
         {

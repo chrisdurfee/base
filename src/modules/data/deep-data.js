@@ -18,7 +18,7 @@ export class Data extends BasicData
 	 * This will setup the stage and attributes object.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setup()
 	{
@@ -33,7 +33,7 @@ export class Data extends BasicData
 	 * @param {object} obj
 	 * @param {string} attr
 	 * @param {*} val
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_updateAttr(obj, attr, val)
 	{
@@ -79,7 +79,7 @@ export class Data extends BasicData
 	 * @param {*} val
 	 * @param {object} committer
 	 * @param {boolean} stopMerge
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_setAttr(attr, val, committer, stopMerge)
 	{
@@ -118,7 +118,7 @@ export class Data extends BasicData
 	 *
 	 * @param {object} data
 	 * @param {string} attr
-	 * @return {void}
+	 * @returns {void}
 	 */
 	linkAttr(data, attr)
 	{
@@ -167,7 +167,7 @@ export class Data extends BasicData
 	 *
 	 * @param {string} attr
 	 * @param {number} index
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	splice(attr, index)
 	{
@@ -182,7 +182,7 @@ export class Data extends BasicData
 	 *
 	 * @param {string} attr
 	 * @param {*} value
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	push(attr, value)
 	{
@@ -202,7 +202,7 @@ export class Data extends BasicData
 	 *
 	 * @param {string} attr
 	 * @param {*} value
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	unshift(attr, value)
 	{
@@ -221,7 +221,7 @@ export class Data extends BasicData
 	 * This will add a value to an array and set the result.
 	 *
 	 * @param {string} attr
-	 * @return {*}
+	 * @returns {*}
 	 */
 	shift(attr)
 	{
@@ -240,7 +240,7 @@ export class Data extends BasicData
 	 * This will pop the last value from an array and set the result.
 	 *
 	 * @param {string} attr
-	 * @return {*}
+	 * @returns {*}
 	 */
 	pop(attr)
 	{
@@ -259,7 +259,7 @@ export class Data extends BasicData
 	 * This will refresh the value.
 	 *
 	 * @param {string} attr
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	refresh(attr)
 	{
@@ -275,7 +275,7 @@ export class Data extends BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {*} committer
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_publish(attr, val, committer)
 	{
@@ -289,7 +289,7 @@ export class Data extends BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {object} committer
-	 * @return {void}
+	 * @returns {void}
 	 */
 	publishDeep(attr, val, committer)
 	{
@@ -365,7 +365,7 @@ export class Data extends BasicData
 	 * @param {string} pathString
 	 * @param {*} obj
 	 * @param {*} committer
-	 * @return {void}
+	 * @returns {void}
 	 */
 	publish(pathString, obj, committer)
 	{
@@ -412,7 +412,7 @@ export class Data extends BasicData
 	 * @param {string} subPath
 	 * @param {*} val
 	 * @param {object} committer
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_checkPublish(subPath, val, committer)
 	{
@@ -433,7 +433,7 @@ export class Data extends BasicData
 	 * @param {string} subPath
 	 * @param {*} val
 	 * @param {object} committer
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_publishAttr(subPath, val, committer)
 	{
@@ -448,7 +448,7 @@ export class Data extends BasicData
 	 * This will merge the attribute with the stage.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	mergeStage()
 	{
@@ -461,7 +461,7 @@ export class Data extends BasicData
 	/**
 	 * This will get the model data.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	getModelData()
 	{
@@ -472,7 +472,7 @@ export class Data extends BasicData
 	/**
 	 * This will revert the stage back to the previous attributes.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	revert()
 	{
@@ -488,7 +488,7 @@ export class Data extends BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_deleteAttr(obj, attr)
 	{
@@ -531,7 +531,7 @@ export class Data extends BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @return {*}
+	 * @returns {*}
 	 */
 	_getAttr(obj, attr)
 	{

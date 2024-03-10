@@ -12,7 +12,7 @@ export const DataUtils =
 	 * This will check if a string has deep data.
 	 *
 	 * @param {string} str
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	hasDeepData(str)
 	{
@@ -23,7 +23,7 @@ export const DataUtils =
 	 * This will get the deep data segments.
 	 *
 	 * @param {string} str
-	 * @return {array}
+	 * @returns {array}
 	 */
 	getSegments(str)
 	{

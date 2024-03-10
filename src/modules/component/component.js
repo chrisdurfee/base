@@ -31,7 +31,7 @@ export class Component extends Unit
 	 *
 	 * @constructor
 	 * @param {array} args
-	 * @return {Component}
+	 * @returns {Component}
 	 */
 	constructor(...args)
 	{
@@ -54,7 +54,7 @@ export class Component extends Unit
 	 * This will initialize the component.
 	 *
 	 * @protected
-	 * @return {object}
+	 * @returns {object}
 	 */
 	initialize()
 	{
@@ -67,7 +67,7 @@ export class Component extends Unit
 	 * This will activate the post build actions.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	afterLayout()
 	{
@@ -80,7 +80,7 @@ export class Component extends Unit
 	 *
 	 * @protected
 	 * @param {string} [id]
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupStateTarget(id)
 	{
@@ -92,7 +92,7 @@ export class Component extends Unit
 	 * Override this to setup the component states.
 	 *
 	 * @protected
-	 * @return {object}
+	 * @returns {object}
 	 */
 	setupStates()
 	{
@@ -123,7 +123,7 @@ export class Component extends Unit
 	 * This will add the states.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addStates()
 	{
@@ -152,7 +152,7 @@ export class Component extends Unit
 	 * This will remove the states.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	removeStates()
 	{
@@ -170,7 +170,7 @@ export class Component extends Unit
 	 * This will setup the event helper.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupEventHelper()
 	{
@@ -184,7 +184,7 @@ export class Component extends Unit
 	 * This will setup the events.
 	 *
 	 * @protected
-	 * @return {array}
+	 * @returns {array}
 	 */
 	setupEvents()
 	{
@@ -197,7 +197,7 @@ export class Component extends Unit
 	 * This will add the events.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addEvents()
 	{
@@ -215,7 +215,7 @@ export class Component extends Unit
 	 * This will remove the events.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	removeEvents()
 	{
@@ -230,7 +230,7 @@ export class Component extends Unit
 	 * This will prepare the component to be destroyed.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	prepareDestroy()
 	{

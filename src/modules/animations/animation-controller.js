@@ -79,14 +79,14 @@ export class AnimationController
 
 	/* this will get the element that is being used.
 	@param (mixed) element = the element selector or object
-	@return (object) the element */
+	@returns (object) the element */
 	getElement(element)
 	{
 		return (typeof element === 'string')? document.querySelector(element) : element;
 	}
 
 	/* this will get the delta to be used with the animation.
-	@return (number) the current delta */
+	@returns (number) the current delta */
 	delta(t)
 	{
 		let delta = 0;

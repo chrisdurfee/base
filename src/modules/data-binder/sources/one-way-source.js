@@ -27,7 +27,7 @@ export class OneWaySource extends Source
 	 *
 	 * @param {string} msg
 	 * @param {function} callBack
-	 * @return {void}
+	 * @returns {void}
 	 */
 	subscribe(msg, callBack)
 	{
@@ -38,7 +38,7 @@ export class OneWaySource extends Source
 	/**
 	 * This will unsubscribe from the message.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	unsubscribe()
 	{

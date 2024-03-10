@@ -2,7 +2,7 @@
  * This will prepare the children.
  *
  * @param {*} value
- * @return {*}
+ * @returns {*}
  */
 const prepareChildren = (value) =>
 {
@@ -18,7 +18,7 @@ const prepareChildren = (value) =>
  * This will set the child string.
  *
  * @param {string} value
- * @return {array}
+ * @returns {array}
  */
 const setChildString = (value) =>
 {
@@ -32,7 +32,7 @@ const setChildString = (value) =>
  * This will parse the arguments passed to the atom.
  *
  * @param {array} args
- * @return {object}
+ * @returns {object}
  */
 export const parseArgs = (args) =>
 {

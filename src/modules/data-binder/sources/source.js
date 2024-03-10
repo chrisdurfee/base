@@ -31,7 +31,7 @@ export class Source
 	 * This will set the token.
 	 *
 	 * @param {string} token
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setToken(token)
 	{

@@ -10,7 +10,7 @@ export class Connection
 	/**
 	 * This will be used to unsubscribe.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	unsubscribe()
 	{

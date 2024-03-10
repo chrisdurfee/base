@@ -13,7 +13,7 @@ export class BrowserHistory extends History
 	/**
 	 * This will add the events.
 	 *
-	 * @return {object} a reference to the object.
+	 * @returns {object} a reference to the object.
 	 */
 	addEvent()
 	{
@@ -24,7 +24,7 @@ export class BrowserHistory extends History
 	/**
 	 * This will remove the events.
 	 *
-	 * @return {object} a reference to the object.
+	 * @returns {object} a reference to the object.
 	 */
 	removeEvent()
 	{
@@ -58,7 +58,7 @@ export class BrowserHistory extends History
 	 *
 	 * @param {string} uri
 	 * @param {*} data
-	 * @return {object}
+	 * @returns {object}
 	 */
 	createState(uri, data = {})
 	{
@@ -75,7 +75,7 @@ export class BrowserHistory extends History
 	 * @param {string} uri
 	 * @param {object} data
 	 * @param {boolean} replace
-	 * @return {object} a reference to the object.
+	 * @returns {object} a reference to the object.
 	 */
 	addState(uri, data, replace = false)
 	{

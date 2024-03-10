@@ -14,7 +14,7 @@ export class Strings
 	 * @param {string} [str] The string to parse or the global
 	 * location will be parsed.
 	 * @param {boolean} [decode]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static parseQueryString(str, decode)
 	{
@@ -39,7 +39,7 @@ export class Strings
 	 * This will camelCase a string.
 	 *
 	 * @param {string} str
-	 * @return {string|boolean} The string or false.
+	 * @returns {string|boolean} The string or false.
 	 */
 	static camelCase(str)
 	{
@@ -57,7 +57,7 @@ export class Strings
 	 *
 	 * @param {string} str
 	 * @param {string} delimiter
-	 * @return {string|boolean} The string or false.
+	 * @returns {string|boolean} The string or false.
 	 */
 	static uncamelCase(str, delimiter = '-')
 	{

@@ -17,7 +17,7 @@ export class ComponentHelper
 	 * @constructor
 	 * @param {object} route
 	 * @param {object} settings
-	 * @return {ComponentHelper}
+	 * @returns {ComponentHelper}
 	 */
 	constructor(route, settings)
 	{
@@ -39,7 +39,7 @@ export class ComponentHelper
 	 * This will create the component.
 	 *
 	 * @param {object} params
-	 * @return {void}
+	 * @returns {void}
 	 */
 	focus(params)
 	{
@@ -55,7 +55,7 @@ export class ComponentHelper
 	 * This will setup the template.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupTemplate()
 	{
@@ -86,7 +86,7 @@ export class ComponentHelper
 	 * This will initialize the component.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	initializeComponent()
 	{
@@ -101,7 +101,7 @@ export class ComponentHelper
 	 * This will initialize the template object.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	initializeTemplateObject()
 	{
@@ -120,7 +120,7 @@ export class ComponentHelper
 	 * This will create the route component.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	create()
 	{
@@ -143,7 +143,7 @@ export class ComponentHelper
 	/**
 	 * This will remove the component.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	remove()
 	{
@@ -177,7 +177,7 @@ export class ComponentHelper
 	 *
 	 * @protected
 	 * @param {object} params
-	 * @return {void}
+	 * @returns {void}
 	 */
 	update(params)
 	{

@@ -14,7 +14,7 @@ export class EventHelper
 	 * This will create an event helper.
 	 *
 	 * @constructor
-	 * @return {EventHelper}
+	 * @returns {EventHelper}
 	 */
 	constructor()
 	{
@@ -28,7 +28,7 @@ export class EventHelper
 	 * This will add an array of events.
 	 *
 	 * @param {array} events
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addEvents(events)
 	{
@@ -51,7 +51,7 @@ export class EventHelper
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
-	 * @return {void}
+	 * @returns {void}
 	 */
 	on(event, obj, callBack, capture)
 	{
@@ -72,7 +72,7 @@ export class EventHelper
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
-	 * @return {void}
+	 * @returns {void}
 	 */
 	off(event, obj, callBack, capture)
 	{
@@ -94,7 +94,7 @@ export class EventHelper
 	/**
 	 * This will set all events.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	set()
 	{
@@ -107,7 +107,7 @@ export class EventHelper
 	/**
 	 * This will unset all events.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	unset()
 	{
@@ -120,7 +120,7 @@ export class EventHelper
 	/**
 	 * This will reset the events.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	reset()
 	{

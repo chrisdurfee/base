@@ -13,7 +13,7 @@ export const Events =
      * This will get the events on an element.
      *
      * @param {object} obj
-     * @return {array}
+     * @returns {array}
      */
     getEvents(obj)
     {
@@ -34,7 +34,7 @@ export const Events =
      * @param {boolean} [capture]
      * @param {boolean} [swapped]
      * @param {function} [originalFn]
-     * @return {object}
+     * @returns {object}
      */
     create(event, obj, fn, capture = false, swapped = false, originalFn = null)
     {
@@ -58,7 +58,7 @@ export const Events =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object} The events object.
+     * @returns {object} The events object.
      */
     on(event, obj, fn, capture)
     {
@@ -80,7 +80,7 @@ export const Events =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object} The events object.
+     * @returns {object} The events object.
      */
     off(event, obj, fn, capture)
     {
@@ -130,7 +130,7 @@ export const Events =
      * @param {object} obj
      * @param {function} fn
      * @param {object|boolean} [capture]
-     * @return {object} a reference to the event object.
+     * @returns {object} a reference to the event object.
      */
     remove(event, obj, fn, capture = false)
     {
@@ -152,7 +152,7 @@ export const Events =
     /**
      * This will remove an event listener.
      * @param {object} listener
-     * @return {object} a reference to the event object.
+     * @returns {object} a reference to the event object.
      */
     removeEvent(listener)
     {
@@ -172,7 +172,7 @@ export const Events =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object|boolean}
+     * @returns {object|boolean}
      */
     getEvent(event, obj, fn, capture)
     {
@@ -198,7 +198,7 @@ export const Events =
      *
      * @param {object} eventObj
      * @param {array} events
-     * @return {object|boolean}
+     * @returns {object|boolean}
      */
     search(eventObj, events)
     {
@@ -225,7 +225,7 @@ export const Events =
      * This will remove all events on an object.
      *
      * @param {object} obj
-     * @return {object} a reference to the events object.
+     * @returns {object} a reference to the events object.
      */
     removeEvents(obj)
     {
@@ -264,7 +264,7 @@ export const Events =
      * This will check if an event is swappable.
      *
      * @param {string} event
-     * @return {boolean}
+     * @returns {boolean}
      */
     isSwappable(event)
     {

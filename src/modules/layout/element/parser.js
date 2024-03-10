@@ -21,7 +21,7 @@ export class Parser
 	 * @static
 	 * @private
 	 * @param {object} obj
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static getTag(obj)
 	{
@@ -33,7 +33,7 @@ export class Parser
 	 *
 	 * @static
 	 * @param {object} obj
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static setupChildren(obj)
 	{
@@ -51,7 +51,7 @@ export class Parser
 	 * @param {*} value
 	 * @param {array} attr
 	 * @param {array} children
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	static setElementContent(key, value, attr, children)
 	{
@@ -83,7 +83,7 @@ export class Parser
 	 * @param {array} directives
 	 * @param {string} key
 	 * @param {string} value
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static setTextAsWatcher(directives, key, value)
 	{
@@ -127,7 +127,7 @@ export class Parser
 	 * @static
 	 * @param {object} obj
 	 * @param {object} parent
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static parse(obj, parent)
 	{

@@ -19,7 +19,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object}
+     * @returns {object}
      */
     addListener(event, obj, fn, capture)
     {
@@ -35,7 +35,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object}
+     * @returns {object}
      */
     on(event, obj, fn, capture)
     {
@@ -61,7 +61,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object}
+     * @returns {object}
      */
     off(event, obj, fn, capture)
     {
@@ -87,7 +87,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {function} fn
      * @param {boolean} [capture]
-     * @return {object}
+     * @returns {object}
      */
     removeListener(event, obj, fn, capture)
     {
@@ -105,7 +105,7 @@ export const EventMethods =
      * @param {string} eventType
      * @param {object} [settings]
      * @param {object} [params]
-     * @return {object}
+     * @returns {object}
      */
     _createEvent(event, eventType, settings, params)
     {
@@ -133,7 +133,7 @@ export const EventMethods =
      * @param {object} obj
      * @param {object} [options]
      * @param {object} [params]
-     * @return {object}
+     * @returns {object}
      */
     createEvent(event, obj, options, params)
     {
@@ -176,7 +176,7 @@ export const EventMethods =
      *
      * @protected
      * @param {string} event
-     * @return {string}
+     * @returns {string}
      */
     _getEventType(event)
     {
@@ -203,7 +203,7 @@ export const EventMethods =
      * @param {string|object} event
      * @param {object} obj
      * @param {object} [params]
-     * @return {object}
+     * @returns {object}
      */
     trigger(event, obj, params)
     {
@@ -227,7 +227,7 @@ export const EventMethods =
      * This will get the system mouse event.
      *
      * @protected
-     * @return {string}
+     * @returns {string}
      */
     getWheelEventType()
     {
@@ -259,7 +259,7 @@ export const EventMethods =
      * @param {object} [obj]
      * @param {boolean} [cancelDefault]
      * @param {boolean} [capture]
-     * @return {object} base object.
+     * @returns {object} base object.
      */
     onMouseWheel(callBackFn, obj, cancelDefault, capture = false)
     {
@@ -300,7 +300,7 @@ export const EventMethods =
      * @param {function} callBackFn
      * @param {object} [obj]
      * @param {boolean} [capture]
-     * @return {object} base object.
+     * @returns {object} base object.
      */
     offMouseWheel(callBackFn, obj, capture = false)
     {
@@ -318,7 +318,7 @@ export const EventMethods =
      * This will prevent default on an event.
      *
      * @param {object} e
-     * @return {object} base object.
+     * @returns {object} base object.
      */
     preventDefault(e)
     {
@@ -338,7 +338,7 @@ export const EventMethods =
      * This will stop an event from propigating.
      *
      * @param {object} e
-     * @return {object} base object.
+     * @returns {object} base object.
      */
     stopPropagation(e)
     {

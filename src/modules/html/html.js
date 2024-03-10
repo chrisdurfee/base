@@ -30,7 +30,7 @@ const NORMALIZED_NAMES =
  * This will get the javascript property name.
  *
  * @param {string} prop
- * @return {string}
+ * @returns {string}
  */
 export const normalizeAttr = (prop) =>
 {
@@ -41,7 +41,7 @@ export const normalizeAttr = (prop) =>
  * This will remove on from a property.
  *
  * @param {string} prop
- * @return {string}
+ * @returns {string}
  */
 export const removeEventPrefix = (prop) =>
 {
@@ -68,7 +68,7 @@ export class Html
 	 * @param {object} attrs The node attributes.
 	 * @param {object} container The node container.
 	 * @param {boolean} [prepend=false] Add to the begining of the container.
-	 * @return {object} The new element.
+	 * @returns {object} The new element.
 	 */
 	static create(node, attrs, container, prepend)
 	{
@@ -94,7 +94,7 @@ export class Html
 	 * @protected
 	 * @param {object} obj
 	 * @param {object} attrs
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static addAttributes(obj, attrs)
 	{
@@ -139,7 +139,7 @@ export class Html
 	 *
 	 * @param {object} obj
 	 * @param {string} content
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static addHtml(obj, content)
 	{
@@ -170,7 +170,7 @@ export class Html
 	 * @param {object} obj
 	 * @param {object} attr
 	 * @param {string} value
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static addAttr(obj, attr, value)
 	{
@@ -198,7 +198,7 @@ export class Html
 	/**
 	 * This will create a doc fragment.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static createDocFragment()
 	{
@@ -210,7 +210,7 @@ export class Html
 	 *
 	 * @param {string} text
 	 * @param {object} container
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static createText(text, container)
 	{
@@ -228,7 +228,7 @@ export class Html
 	 *
 	 * @param {string} text
 	 * @param {object} container
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static createComment(text, container)
 	{
@@ -316,7 +316,7 @@ export class Html
 	 * This will remove an element and its data.
 	 *
 	 * @param {object} obj
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	static removeElement(obj)
 	{
@@ -339,7 +339,7 @@ export class Html
 	 * This will remove an element.
 	 *
 	 * @param {object} child
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	static removeChild(child)
 	{
@@ -351,7 +351,7 @@ export class Html
 	 * This will remove all elements from the container.
 	 *
 	 * @param {object} container
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	static removeAll(container)
 	{
@@ -378,7 +378,7 @@ export class Html
 	 *
 	 * @param {object} child
 	 * @param {object} newParent
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	static changeParent(child, newParent)
 	{
@@ -391,7 +391,7 @@ export class Html
 	 *
 	 * @param {object} parent
 	 * @param {object} child
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	static append(parent, child)
 	{
@@ -405,7 +405,7 @@ export class Html
 	 * @param {object} parent
 	 * @param {object} child
 	 * @param {object} [optionalNode]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static prepend(parent, child, optionalNode)
 	{
@@ -419,7 +419,7 @@ export class Html
 	 *
 	 * @param {object} node
 	 * @param {boolean} deepCopy
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static clone(node, deepCopy = false)
 	{

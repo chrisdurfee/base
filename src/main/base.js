@@ -49,7 +49,7 @@ class Base
 	 * this will augement the base framework with new functionality.
 	 *
 	 * @param {object} methods The new methods to add.
-	 * @return {object} An instance of base.
+	 * @returns {object} An instance of base.
 	 */
 	augment(methods)
 	{
@@ -72,7 +72,7 @@ class Base
 	 * @param {string} methodName the method name being overriden.
 	 * @param {function} overrideMethod The new function to call.
 	 * @param {array} args The args to pass to the first function call.
-	 * @return {*} The results of the function being called.
+	 * @returns {*} The results of the function being called.
 	 */
 	override(obj, methodName, overrideMethod, args)
 	{
@@ -82,7 +82,7 @@ class Base
 	/**
 	 * This will get the last error.
 	 *
-	 * @return {(object|boolean)} The last error or false.
+	 * @returns {(object|boolean)} The last error or false.
 	 */
 	getLastError()
 	{
@@ -94,7 +94,7 @@ class Base
 	 * This will add an error.
 	 *
 	 * @param {object} err
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addError(err)
 	{
@@ -107,7 +107,7 @@ class Base
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {*} [defaultText] A value if no value is set.
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getProperty(obj, property, defaultText)
 	{
@@ -135,7 +135,7 @@ class Base
 	 * @param {array} [argArray] Default args to pass.
 	 * @param {boolean} [addArgs] Set to add merge args from the
 	 * curried function.
-	 * @return {function|boolean} The callBack function or false.
+	 * @returns {function|boolean} The callBack function or false.
 	 */
 	createCallBack(obj, method, argArray = [], addArgs = false)
 	{
@@ -160,7 +160,7 @@ class Base
 	 *
 	 * @param {object} obj
 	 * @param {function} method
-	 * @return {function}
+	 * @returns {function}
 	 */
 	bind(obj, method)
 	{
@@ -172,7 +172,7 @@ class Base
  * This will return the base prototype to allow the module
  * to be added to base as a module.
  *
- * @return {object} the base prototype.
+ * @returns {object} the base prototype.
  */
 Base.prototype.extend = (function()
 {

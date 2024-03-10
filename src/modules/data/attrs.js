@@ -5,7 +5,7 @@ import { Types } from "../../shared/types.js";
  * This will get the data attribute settings.
  *
  * @param {object} settings
- * @return {object}
+ * @returns {object}
  */
 export const setupAttrSettings = (settings) =>
 {

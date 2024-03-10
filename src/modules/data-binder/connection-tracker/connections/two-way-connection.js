@@ -43,7 +43,7 @@ export class TwoWayConnection extends Connection
 	 * @param {object} element
 	 * @param {string} attr
 	 * @param {(string|function)} filter
-	 * @return {object}
+	 * @returns {object}
 	 */
 	addElement(element, attr, filter)
 	{
@@ -55,7 +55,7 @@ export class TwoWayConnection extends Connection
 	 *
 	 * @param {object} data
 	 * @param {string} prop
-	 * @return {object}
+	 * @returns {object}
 	 */
 	addData(data, prop)
 	{
@@ -66,7 +66,7 @@ export class TwoWayConnection extends Connection
 	 * This will unsubscribe from a source.
 	 *
 	 * @param {object} source
-	 * @return {object}
+	 * @returns {object}
 	 */
 	unsubscribeSource(source)
 	{
@@ -81,7 +81,7 @@ export class TwoWayConnection extends Connection
 	 * This will be used to unsubscribe.
 	 *
 	 * @override
-	 * @return {object}
+	 * @returns {object}
 	 */
 	unsubscribe()
 	{

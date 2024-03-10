@@ -49,7 +49,7 @@ export class Unit
 	 *
 	 * @constructor
 	 * @param {array} args
-	 * @return {Unit}
+	 * @returns {Unit}
 	 */
 	constructor(...args)
 	{
@@ -89,7 +89,7 @@ export class Unit
 	 * This will setup the component props.
 	 *
 	 * @param {object} [props]
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupProps(props)
 	{
@@ -195,7 +195,7 @@ export class Unit
 	 * This will add context to the parent context.
 	 *
 	 * @param {object|null} context
-	 * @return {array|null}
+	 * @returns {array|null}
 	 */
 	addContext(context)
 	{
@@ -259,7 +259,7 @@ export class Unit
 	/**
 	 * This will render the component.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	render()
 	{
@@ -271,7 +271,7 @@ export class Unit
 	/**
 	 * This will cache the layout panel and set the main id.
 	 * @param {object} layout
-	 * @return {object}
+	 * @returns {object}
 	 */
 	_cacheRoot(layout)
 	{
@@ -293,7 +293,7 @@ export class Unit
 	 * This will create the component layout.
 	 *
 	 * @protected
-	 * @return {object}
+	 * @returns {object}
 	 */
 	_createLayout()
 	{
@@ -309,7 +309,7 @@ export class Unit
 	 * This will prepare the layout.
 	 *
 	 * @protected
-	 * @return {object}
+	 * @returns {object}
 	 */
 	prepareLayout()
 	{
@@ -321,7 +321,7 @@ export class Unit
 	 * This will build the layout.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	afterBuild()
 	{
@@ -338,7 +338,7 @@ export class Unit
 	 * This will activate the post build actions.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	afterLayout()
 	{
@@ -388,7 +388,7 @@ export class Unit
 	 * @protected
 	 * @param {object} layout
 	 * @param {object} container
-	 * @return {object}
+	 * @returns {object}
 	 */
 	removeAll(ele)
 	{
@@ -401,7 +401,7 @@ export class Unit
 	 * requested id.
 	 *
 	 * @param {string} [id]
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getId(id)
 	{

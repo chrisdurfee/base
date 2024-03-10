@@ -11,7 +11,7 @@ import { Builder } from "../../builder.js";
  * @param {string} prop
  * @param {(function|object)} callBack
  * @param {string} parent
- * @return {void}
+ * @returns {void}
  */
 export const onUpdate = (ele, data, settings, parent) =>
 {

@@ -36,7 +36,7 @@ export class DataTracker
      * @param {string} type The new type.
      * @param {function} callBack The callBack to help clean
      * up data when removed.
-     * @return {void}
+     * @returns {void}
      */
     static addType(type, callBack)
     {
@@ -47,7 +47,7 @@ export class DataTracker
      * This will remove a type from the data tracker.
      *
      * @param {string} type
-     * @return {void}
+     * @returns {void}
      */
     static removeType(type)
     {
@@ -59,7 +59,7 @@ export class DataTracker
      * not set.
      *
      * @param {object} obj
-     * @return {string}
+     * @returns {string}
      */
     static getTrackingId(obj)
     {
@@ -72,7 +72,7 @@ export class DataTracker
      * @param {object} obj
      * @param {string} type The type name.
      * @param {*} data The data to track.
-     * @return {void}
+     * @returns {void}
      */
     static add(obj, type, data)
     {
@@ -87,7 +87,7 @@ export class DataTracker
      *
      * @param {object} obj
      * @param {string} [type]
-     * @return {*}
+     * @returns {*}
      */
     static get(obj, type)
     {
@@ -106,7 +106,7 @@ export class DataTracker
      * if no tracker is set.
      *
      * @param {string} id
-     * @return {object} The tracker.
+     * @returns {object} The tracker.
      */
     static find(id)
     {
@@ -121,7 +121,7 @@ export class DataTracker
 	 * This will check if an object is empty.
 	 *
 	 * @param {object} obj
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	static isEmpty(obj)
 	{
@@ -139,7 +139,7 @@ export class DataTracker
      *
      * @param {object} obj
      * @param {string} [type]
-     * @return {void}
+     * @returns {void}
      */
     static remove(obj, type)
     {

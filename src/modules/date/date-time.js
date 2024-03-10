@@ -19,7 +19,7 @@ export const DateTime =
 	 *
 	 * @param {number} [day]
 	 * @param {boolean} [shortenName=false]
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getDayName(day = new Date().getDay(), shortenName = false)
 	{
@@ -38,7 +38,7 @@ export const DateTime =
 	 * This will convert month to js.
 	 *
 	 * @param {number} month
-	 * @return {number}
+	 * @returns {number}
 	 */
 	convertJsMonth(month)
 	{
@@ -65,7 +65,7 @@ export const DateTime =
 	 * This will add leading zero to number less than 10.
 	 *
 	 * @param {number} number
-	 * @return {string}
+	 * @returns {string}
 	 */
 	padNumber(number)
 	{
@@ -98,7 +98,7 @@ export const DateTime =
 	 *
 	 * @param {string} type
 	 * @param {string} dateString
-	 * @return {string}
+	 * @returns {string}
 	 */
 	format(type, dateString)
 	{
@@ -150,7 +150,7 @@ export const DateTime =
 	 * This will check for leap year.
 	 *
 	 * @param {number} year
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	leapYear(year)
 	{
@@ -162,7 +162,7 @@ export const DateTime =
 	 *
 	 * @param {number} [month]
 	 * @param {boolean} [shortenName]
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getMonthName(month = new Date().getMonth(), shortenName = false)
 	{
@@ -185,7 +185,7 @@ export const DateTime =
 	 *
 	 * @param {number} [month]
 	 * @param {number} [year]
-	 * @return {number}
+	 * @returns {number}
 	 */
 	getMonthLength(month, year)
 	{
@@ -208,7 +208,7 @@ export const DateTime =
 	 * This will get the length of all the months.
 	 *
 	 * @param {number} year
-	 * @return {array}
+	 * @returns {array}
 	 */
 	getMonthsLength(year = new Date().getFullYear())
 	{
@@ -430,7 +430,7 @@ export const DateTime =
 	 * This will convert to years.
 	 *
 	 * @param {number} milliseconds
-	 * @return {number}
+	 * @returns {number}
 	 */
 	toYears(milliseconds)
 	{
@@ -461,7 +461,7 @@ export const DateTime =
 	 * This will convert to days.
 	 *
 	 * @param {number} milliseconds
-	 * @return {number}
+	 * @returns {number}
 	 */
 	toDays(milliseconds)
 	{
@@ -477,7 +477,7 @@ export const DateTime =
 	 * This will convert to hours.
 	 *
 	 * @param {number} milliseconds
-	 * @return {number}
+	 * @returns {number}
 	 */
 	toHours(milliseconds)
 	{
@@ -493,7 +493,7 @@ export const DateTime =
 	 * This will convert to minutes.
 	 *
 	 * @param {number} milliseconds
-	 * @return {number}
+	 * @returns {number}
 	 */
 	toMinutes(milliseconds)
 	{
@@ -509,7 +509,7 @@ export const DateTime =
 	 * This will convert to seconds.
 	 *
 	 * @param {number} milliseconds
-	 * @return {number}
+	 * @returns {number}
 	 */
 	toSeconds(milliseconds)
 	{
@@ -526,7 +526,7 @@ export const DateTime =
 	 *
 	 * @param {string} startDate
 	 * @param {string} endDate
-	 * @return {object}
+	 * @returns {object}
 	 */
 	getDifference(startDate, endDate)
 	{

@@ -17,7 +17,7 @@ export class NavLink extends Component
      * This will configure the link active class.
      *
      * @protected
-     * @return {void}
+     * @returns {void}
      */
     beforeSetup()
     {
@@ -27,7 +27,7 @@ export class NavLink extends Component
     /**
      * This will render the component.
      *
-     * @return {object}
+     * @returns {object}
      */
     render()
     {
@@ -52,7 +52,7 @@ export class NavLink extends Component
      * This will get string.
      *
      * @param {string} string
-     * @return {(string|null)}
+     * @returns {(string|null)}
      */
     getString(string)
     {
@@ -66,7 +66,7 @@ export class NavLink extends Component
      * @protected
      * @param {string} href
      * @param {string} text
-     * @return {array}
+     * @returns {array}
      */
     setupWatchers(href, text)
     {
@@ -110,7 +110,7 @@ export class NavLink extends Component
      * This will setup the states.
      *
      * @protected
-     * @return {object}
+     * @returns {object}
      */
     setupStates()
     {
@@ -123,7 +123,7 @@ export class NavLink extends Component
      * This will update the class on the element.
      *
      * @param {boolean} selected
-     * @return {void}
+     * @returns {void}
      */
     update(selected)
     {

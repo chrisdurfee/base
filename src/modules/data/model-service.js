@@ -45,7 +45,7 @@ export class ModelService
 	 * This will initialize the model service.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	init()
 	{
@@ -59,7 +59,7 @@ export class ModelService
 	/**
 	 * This will check if the model is valid.
 	 *
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	isValid()
 	{
@@ -79,7 +79,7 @@ export class ModelService
 	 * This should be overriden to validate the model
 	 * before submitting.
 	 *
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	validate()
 	{
@@ -91,7 +91,7 @@ export class ModelService
 	 * with each request.
 	 *
 	 * @protected
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getDefaultParams()
 	{
@@ -103,7 +103,7 @@ export class ModelService
 	 *
 	 * @protected
 	 * @param {(string|object)} params
-	 * @return {(string|object)}
+	 * @returns {(string|object)}
 	 */
 	setupParams(params)
 	{
@@ -117,7 +117,7 @@ export class ModelService
 	 *
 	 * @protected
 	 * @param {object} object
-	 * @return {string}
+	 * @returns {string}
 	 */
 	objectToString(object)
 	{
@@ -138,7 +138,7 @@ export class ModelService
 	 * @protected
 	 * @param {*} params
 	 * @param {*} addingParams
-	 * @return {(string|object)}
+	 * @returns {(string|object)}
 	 */
 	addParams(params, addingParams)
 	{
@@ -182,7 +182,7 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	get(instanceParams, callBack)
 	{
@@ -211,7 +211,7 @@ export class ModelService
 	 *
 	 * @protected
 	 * @param {object} response
-	 * @return {object}
+	 * @returns {object}
 	 */
 	getObject(response)
 	{
@@ -225,7 +225,7 @@ export class ModelService
 	 * This will return a string with the model data json encoded.
 	 *
 	 * @protected
-	 * @return {string}
+	 * @returns {string}
 	 */
 	setupObjectData()
 	{
@@ -238,7 +238,7 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	setup(instanceParams, callBack)
 	{
@@ -258,7 +258,7 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	add(instanceParams, callBack)
 	{
@@ -278,7 +278,7 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	update(instanceParams, callBack)
 	{
@@ -298,7 +298,7 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	delete(instanceParams, callBack)
 	{
@@ -317,7 +317,7 @@ export class ModelService
 	 * @param {number} start
 	 * @param {number} count
 	 * @param {string} filter
-	 * @return {object}
+	 * @returns {object}
 	 */
 	all(instanceParams, callBack, start, count, filter)
 	{
@@ -338,7 +338,7 @@ export class ModelService
 	 *
 	 * @protected
 	 * @param {string} url
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getUrl(url)
 	{
@@ -366,7 +366,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
-	 * @return {object}
+	 * @returns {object}
 	 */
 	setupRequest(url, method, params, callBack, requestCallBack)
 	{
@@ -399,7 +399,7 @@ export class ModelService
 	 *
 	 * @protected
 	 * @param {*} data
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	_isFormData(data)
 	{
@@ -415,7 +415,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
-	 * @return {object}
+	 * @returns {object}
 	 */
 	request(params, instanceParams, callBack, requestCallBack)
 	{
@@ -432,7 +432,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
-	 * @return {object}
+	 * @returns {object}
 	 */
 	_get(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -459,7 +459,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
-	 * @return {object}
+	 * @returns {object}
 	 */
 	_post(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -476,7 +476,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
-	 * @return {object}
+	 * @returns {object}
 	 */
 	_put(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -493,7 +493,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
-	 * @return {object}
+	 * @returns {object}
 	 */
 	_patch(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -510,7 +510,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
-	 * @return {object}
+	 * @returns {object}
 	 */
 	_delete(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -528,7 +528,7 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
-	 * @return {object}
+	 * @returns {object}
 	 */
 	_request(url, method, params, instanceParams, callBack, requestCallBack)
 	{
@@ -545,7 +545,7 @@ export class ModelService
 	 * @param {object} response
 	 * @param {function} callBack
 	 * @param {object} xhr
-	 * @return {void}
+	 * @returns {void}
 	 */
 	getResponse(response, callBack, xhr)
 	{
@@ -561,7 +561,7 @@ export class ModelService
 	 * This will extend the model service.
 	 *
 	 * @param {object} child
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static extend(child)
 	{

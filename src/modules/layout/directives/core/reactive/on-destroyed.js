@@ -22,7 +22,7 @@ DataTracker.addType('destroyed', (data) =>
  * @param {object} ele
  * @param {(object|array)} route
  * @param {object} parent
- * @return {void}
+ * @returns {void}
  */
 export const onDestroyed = (ele, callBack, parent) =>
 {

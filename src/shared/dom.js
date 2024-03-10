@@ -16,7 +16,7 @@ export class Dom
 	 * This will select an element by id.
 	 *
 	 * @param {string} id
-	 * @return {object|boolean} The element object or false.
+	 * @returns {object|boolean} The element object or false.
 	 */
 	static getById(id)
 	{
@@ -33,7 +33,7 @@ export class Dom
 	 * This will select elements by name.
 	 *
 	 * @param {string} name
-	 * @return {object|boolean} The elements array or false.
+	 * @returns {object|boolean} The elements array or false.
 	 */
 	static getByName(name)
 	{
@@ -51,7 +51,7 @@ export class Dom
 	 *
 	 * @param {string} selector
 	 * @param {boolean} single Set to true if you only want one result.
-	 * @return {*}
+	 * @returns {*}
 	 */
 	static getBySelector(selector, single)
 	{
@@ -87,7 +87,7 @@ export class Dom
 	 * @param {string} [html] If the html is not set, the html of the
 	 * element will be returned.
 	 *
-	 * @return {*}
+	 * @returns {*}
 	 */
 	static html(obj, html)
 	{
@@ -113,7 +113,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} value
-	 * @return {object} an instance of base.
+	 * @returns {object} an instance of base.
 	 */
 	static setCss(obj, property, value)
 	{
@@ -132,7 +132,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} property
-	 * @return {*}
+	 * @returns {*}
 	 */
 	static getCss(obj, property)
 	{
@@ -172,7 +172,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {*}
+	 * @returns {*}
 	 */
 	static css(obj, property, value)
 	{
@@ -193,7 +193,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} property
-	 * @return {object} an instance of base.
+	 * @returns {object} an instance of base.
 	 */
 	static removeAttr(obj, property)
 	{
@@ -211,7 +211,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} value
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static setAttr(obj, property, value)
 	{
@@ -223,7 +223,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} property
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static getAttr(obj, property)
 	{
@@ -236,7 +236,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {*}
+	 * @returns {*}
 	 */
 	static attr(obj, property, value)
 	{
@@ -263,7 +263,7 @@ export class Dom
 	 *
 	 * @protected
 	 * @param {string} prop
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static _checkDataPrefix(prop)
 	{
@@ -287,7 +287,7 @@ export class Dom
 	 *
 	 * @protected
 	 * @param {string} prop
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static removeDataPrefix(prop)
 	{
@@ -320,7 +320,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} value
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static getData(obj, property)
 	{
@@ -334,7 +334,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {*}
+	 * @returns {*}
 	 */
 	static data(obj, property, value)
 	{
@@ -357,7 +357,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} queryString
-	 * @return {array}
+	 * @returns {array}
 	 */
 	static find(obj, queryString)
 	{
@@ -373,7 +373,7 @@ export class Dom
 	 * This will display an element.
 	 *
 	 * @param {object} obj
-	 * @return {object} An instance of base.
+	 * @returns {object} An instance of base.
 	 */
 	static show(obj)
 	{
@@ -395,7 +395,7 @@ export class Dom
 	 * This will hide an element.
 	 *
 	 * @param {object} obj
-	 * @return {object} An instance of base.
+	 * @returns {object} An instance of base.
 	 */
 	static hide(obj)
 	{
@@ -420,7 +420,7 @@ export class Dom
 	 * This will toggle the display an element.
 	 *
 	 * @param {object} obj
-	 * @return {object} An instance of base.
+	 * @returns {object} An instance of base.
 	 */
 	static toggle(obj)
 	{
@@ -445,7 +445,7 @@ export class Dom
 	 * This will get the size of an element.
 	 *
 	 * @param {object} obj
-	 * @return {object|boolean} A size object or false.
+	 * @returns {object|boolean} A size object or false.
 	 */
 	static getSize(obj)
 	{
@@ -464,7 +464,7 @@ export class Dom
 	 * This will get the width of an element.
 	 *
 	 * @param {object} obj
-	 * @return {(int|boolean)} A width or false.
+	 * @returns {(int|boolean)} A width or false.
 	 */
 	static getWidth(obj)
 	{
@@ -476,7 +476,7 @@ export class Dom
 	 * This will get the height of an element.
 	 *
 	 * @param {object} obj
-	 * @return {(int|boolean)} A height or false.
+	 * @returns {(int|boolean)} A height or false.
 	 */
 	static getHeight(obj)
 	{
@@ -488,7 +488,7 @@ export class Dom
 	* This will get the scroll position.
 	*
 	* @param {object} [obj] The element or document element if not set.
-	* @return {object}
+	* @returns {object}
 	*/
 	static getScrollPosition(obj)
 	{
@@ -521,7 +521,7 @@ export class Dom
 	 * This will get the scroll top position.
 	 *
 	 * @param {object} [obj] The element or document element if not set.
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static getScrollTop(obj)
 	{
@@ -533,7 +533,7 @@ export class Dom
 	 * This will get the scroll left position.
 	 *
 	 * @param {object} [obj] The element or document element if not set.
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static getScrollLeft(obj)
 	{
@@ -544,7 +544,7 @@ export class Dom
 	/**
 	 * This will get the window size.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static getWindowSize()
 	{
@@ -564,7 +564,7 @@ export class Dom
 	/**
 	 * This will get the document size.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static getDocumentSize()
 	{
@@ -597,7 +597,7 @@ export class Dom
 	/**
 	 * This will get the document height.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static getDocumentHeight()
 	{
@@ -609,7 +609,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {boolean} [depth] The number of levels, default is 1, 0 is to the root.
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static position(obj, depth = 1)
 	{
@@ -690,7 +690,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} tmpClassName
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	static hasClass(obj, tmpClassName)
 	{
@@ -707,7 +707,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} tmpClassName
-	 * @return {object} An instance of base.
+	 * @returns {object} An instance of base.
 	 */
 	static toggleClass(obj, tmpClassName)
 	{

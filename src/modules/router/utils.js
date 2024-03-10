@@ -9,7 +9,7 @@ export const Utils =
 	 * This will remove the begining and ending slashes from a url.
 	 *
 	 * @param {string} uri
-	 * @return {string}
+	 * @returns {string}
 	 */
 	removeSlashes(uri)
 	{

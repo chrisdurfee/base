@@ -5,7 +5,7 @@ import { Atom } from './atom.js';
  *
  * @param {object} props - Properties for the HTML element.
  * @param {array} children - Children elements of the HTML element.
- * @return {object} - Returns an object representing the HTML element.
+ * @returns {object} - Returns an object representing the HTML element.
  */
 const Tag = (props, children) => {
     return { ...props, children };
@@ -16,7 +16,7 @@ const Tag = (props, children) => {
  *
  * @param {object} props - Properties for the div element.
  * @param {array} children - Children elements of the div.
- * @return {object} - Returns an object representing the div element.
+ * @returns {object} - Returns an object representing the div element.
  */
 export const Div = Atom((props, children) => Tag(props, children));
 
@@ -25,7 +25,7 @@ export const Div = Atom((props, children) => Tag(props, children));
  *
  * @param {object} props - Properties for the span element.
  * @param {array} children - Children elements of the span.
- * @return {object} - Returns an object representing the span element.
+ * @returns {object} - Returns an object representing the span element.
  */
 export const Span = Atom((props, children) => Tag({ ...props, tag: 'span' }, children));
 
@@ -34,7 +34,7 @@ export const Span = Atom((props, children) => Tag({ ...props, tag: 'span' }, chi
  *
  * @param {object} props - Properties for the paragraph element.
  * @param {array} children - Children elements of the paragraph.
- * @return {object} - Returns an object representing the paragraph element.
+ * @returns {object} - Returns an object representing the paragraph element.
  */
 export const P = Atom((props, children) => Tag({ ...props, tag: 'p' }, children));
 
@@ -43,7 +43,7 @@ export const P = Atom((props, children) => Tag({ ...props, tag: 'p' }, children)
  *
  * @param {object} props - Properties for the anchor element.
  * @param {array} children - Children elements of the anchor.
- * @return {object} - Returns an object representing the anchor element.
+ * @returns {object} - Returns an object representing the anchor element.
  */
 export const A = Atom((props, children) => Tag({ ...props, tag: 'a' }, children));
 
@@ -71,7 +71,7 @@ export const Img = Atom((props) => Tag({ ...props, tag: 'img' }, null));
  * Create a br element.
  *
  * @param {object} props - Properties for the br element.
- * @return {object} - Returns an object representing the br element.
+ * @returns {object} - Returns an object representing the br element.
  */
 export const Br = Atom((props) => Tag({ ...props, tag: 'br' }, null));
 

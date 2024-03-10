@@ -34,7 +34,7 @@ export class DataPubSub
 	 * This will get a subscriber array.
 	 *
 	 * @param {string} msg
-	 * @return {array}
+	 * @returns {array}
 	 */
 	get(msg)
 	{
@@ -48,7 +48,7 @@ export class DataPubSub
 	/**
 	 * This will reset pub sub.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	reset()
 	{
@@ -62,7 +62,7 @@ export class DataPubSub
 	 *
 	 * @param {string} msg
 	 * @param {function} callBack
-	 * @return {string} The subscriber token.
+	 * @returns {string} The subscriber token.
 	 */
 	on(msg, callBack)
 	{
@@ -82,7 +82,7 @@ export class DataPubSub
 	 *
 	 * @param {string} msg
 	 * @param {string} token
-	 * @return {void}
+	 * @returns {void}
 	 */
 	off(msg, token)
 	{
@@ -103,7 +103,7 @@ export class DataPubSub
 	 * This will delete a message.
 	 *
 	 * @param {string} msg
-	 * @return {void}
+	 * @returns {void}
 	 */
 	remove(msg)
 	{
@@ -116,7 +116,7 @@ export class DataPubSub
 	 * @param {string} msg
 	 * @param {string} value
 	 * @param {object} committer
-	 * @return {void}
+	 * @returns {void}
 	 */
 	publish(msg, ...args)
 	{

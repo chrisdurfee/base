@@ -4,7 +4,7 @@ import { Objects } from '../shared/objects.js';
  * This will count the properties of an object.
  *
  * @param {object} obj
- * @return {number}
+ * @returns {number}
  */
 const countProperty = (obj) =>
 {
@@ -30,7 +30,7 @@ const countProperty = (obj) =>
  *
  * @param {object} obj1
  * @param {object} obj2
- * @return {boolean}
+ * @returns {boolean}
  */
 const matchProperties = (obj1, obj2) =>
 {
@@ -98,7 +98,7 @@ const matchProperties = (obj1, obj2) =>
  *
  * @param {object} obj1
  * @param {object} obj2
- * @return {boolean}
+ * @returns {boolean}
  */
 const compareObjects = (obj1, obj2) =>
 {
@@ -119,7 +119,7 @@ const compareObjects = (obj1, obj2) =>
  *
  * @param {*} option1
  * @param {*} option2
- * @return {boolean}
+ * @returns {boolean}
  */
 export const equals = (option1, option2) =>
 {

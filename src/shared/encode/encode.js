@@ -18,7 +18,7 @@ export class Encode
 	 *
 	 * @param {object} obj
 	 * @param {boolean} [removeNewLines]
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static prepareJsonUrl(obj, removeNewLines = false)
 	{
@@ -43,7 +43,7 @@ export class Encode
 	 * This will parse xml data.
 	 *
 	 * @param {string} data
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static xmlParse(data)
 	{

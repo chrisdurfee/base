@@ -22,7 +22,7 @@ export const Directives =
      *
      * @param {string} name
      * @param {function} callBack
-     * @return {object}
+     * @returns {object}
      */
     add(name, callBack)
     {
@@ -36,7 +36,7 @@ export const Directives =
      * This will get a directive.
      *
      * @param {string} name
-     * @return {object|null}
+     * @returns {object|null}
      */
     get(name)
     {
@@ -46,7 +46,7 @@ export const Directives =
     /**
      * This will get all directive names.
      *
-     * @return {array}
+     * @returns {array}
      */
     all()
     {

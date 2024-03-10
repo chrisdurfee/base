@@ -8,7 +8,7 @@ import { onSet } from "../reactive/on-set.js";
  * @param {object} ele
  * @param {array} role
  * @param {object} parent
- * @return {void}
+ * @returns {void}
  */
 export const addRole = (ele, role, parent) =>
 {
@@ -27,7 +27,7 @@ export const addRole = (ele, role, parent) =>
  * This will setup the onSet callBack.
  *
  * @param {string} attr
- * @return {function}
+ * @returns {function}
  */
 const onSetCallBack = (attr) =>
 {
@@ -45,7 +45,7 @@ const onSetCallBack = (attr) =>
  * @param {object} ele
  * @param {array} attributes
  * @param {object} parent
- * @return {void}
+ * @returns {void}
  */
 export const addAria = (ele, attributes, parent) =>
 {

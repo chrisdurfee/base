@@ -23,7 +23,7 @@ const JOT_SHORTHAND_METHODS =
  * object, it will be nested in a function.
  *
  * @param {object|function} value
- * @return {function}
+ * @returns {function}
  */
 const getJotShorthandMethod = (value) =>
 {
@@ -35,7 +35,7 @@ const getJotShorthandMethod = (value) =>
  * to create the jot component.
  *
  * @param {object} settings
- * @return {object}
+ * @returns {object}
  */
 const JotComponent = (settings) =>
 {
@@ -59,7 +59,7 @@ const JotComponent = (settings) =>
  *
  * @param {class} Base
  * @param {object} settings
- * @return {class}
+ * @returns {class}
  */
 const createClass = (Base, settings) =>
 {
@@ -72,7 +72,7 @@ const createClass = (Base, settings) =>
  * This will create a shorthand component.
  *
  * @param {object|function} layout
- * @return {function}
+ * @returns {function}
  */
 export const Jot = (layout) =>
 {

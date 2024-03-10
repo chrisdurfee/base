@@ -52,7 +52,7 @@ export class Mouse
 	 * This will update the position.
 	 *
 	 * @param {object} e
-	 * @return {object}
+	 * @returns {object}
 	 */
 	updatePosition(e)
 	{

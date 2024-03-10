@@ -8,7 +8,7 @@ import { router } from "../../../router/router.js";
  * @param {object} ele
  * @param {(object|array)} route
  * @param {object} parent
- * @return {void}
+ * @returns {void}
  */
 export const addRoute = (ele, route, parent) =>
 {
@@ -37,7 +37,7 @@ export const addRoute = (ele, route, parent) =>
  * @param {object} ele
  * @param {object} route
  * @param {object} parent
- * @return {void}
+ * @returns {void}
  */
 const setupRoute = (ele, route, parent) =>
 {

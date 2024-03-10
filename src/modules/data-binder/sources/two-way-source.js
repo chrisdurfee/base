@@ -31,7 +31,7 @@ export class TwoWaySource extends Source
 	 * This will subscribe to a message.
 	 *
 	 * @param {string} msg
-	 * @return {void}
+	 * @returns {void}
 	 */
 	subscribe(msg)
 	{
@@ -44,7 +44,7 @@ export class TwoWaySource extends Source
 	/**
 	 * This will unsubscribe from a message.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	unsubscribe()
 	{
@@ -54,7 +54,7 @@ export class TwoWaySource extends Source
 	/**
 	 * Override this to setup cource callBack.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	callBack()
 	{

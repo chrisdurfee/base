@@ -12,7 +12,7 @@ export class Arrays
 	 * This will convert an object or collection into an array.
 	 *
 	 * @param {object} list
-	 * @return {array}
+	 * @returns {array}
 	 */
 	static toArray(list)
 	{
@@ -25,7 +25,7 @@ export class Arrays
 	 * @param {array} array
 	 * @param {string} element
 	 * @param {number} [fromIndex]
-	 * @return {number} This will return -1 if not found.
+	 * @returns {number} This will return -1 if not found.
 	 */
 	static inArray(array, element, fromIndex)
 	{

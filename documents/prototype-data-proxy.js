@@ -3,7 +3,7 @@
  *
  * @param {string} path
  * @param {string} prop
- * @return {string}
+ * @returns {string}
  */
 function getNewPath(path, prop)
 {
@@ -17,7 +17,7 @@ function getNewPath(path, prop)
  * @param {object} data
  * @param {string} path
  * @param {string} root
- * @return {object}
+ * @returns {object}
  */
 function createHandler(data, path = '', dataRoot = '')
 {
@@ -29,7 +29,7 @@ function createHandler(data, path = '', dataRoot = '')
          * @param {object} target
          * @param {string} prop
          * @param {object} receiver
-         * @return {*}
+         * @returns {*}
          */
         get(target, prop, receiver)
         {
@@ -68,7 +68,7 @@ function createHandler(data, path = '', dataRoot = '')
          * @param {string} prop
          * @param {*} value
          * @param {object} receiver
-         * @return {*}
+         * @returns {*}
          */
         set(target, prop, value, receiver)
         {
@@ -94,7 +94,7 @@ function createHandler(data, path = '', dataRoot = '')
  * This will create a data proxy.
  *
  * @param {object} data
- * @return {Proxy}
+ * @returns {Proxy}
  */
 const DataProxy = (data, root = 'stage') => new Proxy(data, createHandler(data, '', root));
 

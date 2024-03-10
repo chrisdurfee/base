@@ -30,7 +30,7 @@ export class OneWayConnection extends Connection
 	 * This will setup the connection source.
 	 *
 	 * @param {object} data
-	 * @return {object}
+	 * @returns {object}
 	 */
 	addSource(data)
 	{
@@ -41,7 +41,7 @@ export class OneWayConnection extends Connection
 	 * This will be used to unsubscribe.
 	 *
 	 * @override
-	 * @return {void}
+	 * @returns {void}
 	 */
 	unsubscribe()
 	{

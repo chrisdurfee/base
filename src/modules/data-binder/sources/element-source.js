@@ -7,7 +7,7 @@ import { TwoWaySource } from './two-way-source.js';
  * @param {object} element
  * @param {string} attr
  * @param {*} value
- * @return {void}
+ * @returns {void}
  */
 const SetAttr = (element, attr, value) =>
 {
@@ -20,7 +20,7 @@ const SetAttr = (element, attr, value) =>
  * @param {object} element
  * @param {string} attr
  * @param {*} value
- * @return {void}
+ * @returns {void}
  */
 const UpdateRadioAttr = (element, attr, value) =>
 {
@@ -33,7 +33,7 @@ const UpdateRadioAttr = (element, attr, value) =>
  * @param {object} element
  * @param {string} attr
  * @param {*} value
- * @return {void}
+ * @returns {void}
  */
 const UpdateCheckboxAttr = (element, attr, value) =>
 {
@@ -47,7 +47,7 @@ const UpdateCheckboxAttr = (element, attr, value) =>
  * @param {object} element
  * @param {string} attr
  * @param {nixed} value
- * @return {void}
+ * @returns {void}
  */
 const UpdateAttr = (element, attr, value) =>
 {
@@ -59,7 +59,7 @@ const UpdateAttr = (element, attr, value) =>
  *
  * @param {object} element
  * @param {string} attr
- * @return {*}
+ * @returns {*}
  */
 const GetAttr = (element, attr) =>
 {
@@ -71,7 +71,7 @@ const GetAttr = (element, attr) =>
  *
  * @param {object} element
  * @param {string} attr
- * @return {*}
+ * @returns {*}
  */
 const GetAttribute = (element, attr) =>
 {
@@ -126,7 +126,7 @@ export class ElementSource extends TwoWaySource
 	 * @private
 	 * @param {object} element
 	 * @param {string} attr
-	 * @return {object}
+	 * @returns {object}
 	 */
 	addSetMethod(element, attr)
 	{
@@ -162,7 +162,7 @@ export class ElementSource extends TwoWaySource
 	 *
 	 * @private
 	 * @param {string} [customAttr]
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getAttrBind(customAttr)
 	{
@@ -219,7 +219,7 @@ export class ElementSource extends TwoWaySource
 	 *
 	 * @private
 	 * @param {string} filter
-	 * @return {function}
+	 * @returns {function}
 	 */
 	setupFilter(filter)
 	{
@@ -234,7 +234,7 @@ export class ElementSource extends TwoWaySource
 	 * This will set a value on an element.
 	 *
 	 * @param {*} value
-	 * @return {object}
+	 * @returns {object}
 	 */
 	set(value)
 	{
@@ -258,7 +258,7 @@ export class ElementSource extends TwoWaySource
 	/**
 	 * This will get the value from an element.
 	 *
-	 * @return {*}
+	 * @returns {*}
 	 */
 	get()
 	{
@@ -276,7 +276,7 @@ export class ElementSource extends TwoWaySource
 	 *
 	 * @param {*} value
 	 * @param {object} committer
-	 * @return {object}
+	 * @returns {object}
 	 */
 	callBack(value, committer)
 	{

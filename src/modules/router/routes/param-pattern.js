@@ -2,7 +2,7 @@
  * This will get the default route params.
  *
  * @param {array} params
- * @return {(object|null)}
+ * @returns {(object|null)}
  */
 export const getParamDefaults = (params) =>
 {
@@ -24,7 +24,7 @@ export const getParamDefaults = (params) =>
  * This will get the param keys from the uri.
  *
  * @param {string} uri
- * @return {array}
+ * @returns {array}
  */
 export const paramPattern = (uri) =>
 {

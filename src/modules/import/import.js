@@ -13,7 +13,7 @@ const loaded = [];
  * This will check if a script or style has been loaded.
  *
  * @param {string} src
- * @return {boolean}
+ * @returns {boolean}
  */
 const isLoaded = (src) => loaded.indexOf(src) !== -1;
 
@@ -21,7 +21,7 @@ const isLoaded = (src) => loaded.indexOf(src) !== -1;
  * This will create a script atom.
  *
  * @param {object} props
- * @return {object}
+ * @returns {object}
  */
 const Script = (props) => ({
     tag: 'script',
@@ -43,7 +43,7 @@ const Script = (props) => ({
  * This will create a style atom.
  *
  * @param {object} props
- * @return {object}
+ * @returns {object}
  */
 const Style = (props) => ({
     tag: 'link',
@@ -104,7 +104,7 @@ class Group
      * This will add the resource to the document.
      *
      * @param {string} src
-     * @return {void}
+     * @returns {void}
      */
     add(src)
     {
@@ -134,7 +134,7 @@ class Group
      * This will add the dependencies to the document.
      *
      * @param {array} files
-     * @return {void}
+     * @returns {void}
      */
     addFiles(files)
     {
@@ -155,7 +155,7 @@ class Group
     /**
      * This will update the progress.
      *
-     * @return {void}
+     * @returns {void}
      */
     update()
     {
@@ -189,7 +189,7 @@ class Group
  *
  * @param {string} src
  * @param {function} callBack
- * @return {object}
+ * @returns {object}
  */
 const loadModule = (src, callBack) =>
 {
@@ -225,7 +225,7 @@ const isConstructor = (object) =>
  * @param {object} ele
  * @param {object} parent
  * @param {function} callBack
- * @return {object}
+ * @returns {object}
  */
 const render = (layout, ele, parent) =>
 {

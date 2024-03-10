@@ -51,7 +51,7 @@ export class Builder
 	 * @param {object} obj The JSON layout.
 	 * @param {object} [container] The parent receiving the layout.
 	 * @param {object} [parent] The component adding the layout.
-	 * @return {object} The doc Frag element.
+	 * @returns {object} The doc Frag element.
 	 */
 	static build(obj, container, parent)
 	{
@@ -72,7 +72,7 @@ export class Builder
 	 * @param {object} layout
 	 * @param {object} ele
 	 * @param {object} parent
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static rebuild(layout, ele, parent)
 	{
@@ -87,7 +87,7 @@ export class Builder
 	 * @param {object} obj
 	 * @param {object} container
 	 * @param {object} [parent] The component adding the layout.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static buildElement(obj, container, parent)
 	{
@@ -112,7 +112,7 @@ export class Builder
 	 * @param {object} obj
 	 * @param {object} container
 	 * @param {object} [parent] The component adding the layout.
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static createElement(obj, container, parent)
 	{
@@ -145,7 +145,7 @@ export class Builder
 	 * @param {object} ele
 	 * @param {array} directives
 	 * @param {object} parent
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static setDirectives(ele, directives, parent)
 	{
@@ -162,7 +162,7 @@ export class Builder
 	 * @param {object} ele
 	 * @param {object} attrDirective
 	 * @param {object} parent
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static handleDirective(ele, attrDirective, parent)
 	{
@@ -191,7 +191,7 @@ export class Builder
 	 * @param {object} obj
 	 * @param {object} container
 	 * @param {object} parent
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static createComponent(obj, container, parent)
 	{
@@ -231,7 +231,7 @@ export class Builder
 	 * @param {object} settings
 	 * @param {object} container
 	 * @param {object} parent
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static createNode(settings, container, parent)
 	{
@@ -247,7 +247,7 @@ base.augment(
 	 * @param {object} obj
 	 * @param {object} [container]
 	 * @param {object} [parent]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	buildLayout(obj, container, parent)
 	{

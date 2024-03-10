@@ -49,7 +49,7 @@ export class BasicData
 	 * This will setup the data object.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setup()
 	{
@@ -60,7 +60,7 @@ export class BasicData
 	 * This will setup the number and unique id of the data object.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_init()
 	{
@@ -74,7 +74,7 @@ export class BasicData
 	/**
 	 * This will get the data id.
 	 *
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getDataId()
 	{
@@ -84,7 +84,7 @@ export class BasicData
 	/**
 	 * This is a placeholder.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	remove()
 	{
@@ -96,7 +96,7 @@ export class BasicData
 	 *
 	 * @param {string} attrName
 	 * @param {function} callBack
-	 * @return {string} The subscription token.
+	 * @returns {string} The subscription token.
 	 */
 	on(attrName, callBack)
 	{
@@ -110,7 +110,7 @@ export class BasicData
 	 *
 	 * @param {string} attrName
 	 * @param {string} token
-	 * @return {void}
+	 * @returns {void}
 	 */
 	off(attrName, token)
 	{
@@ -125,7 +125,7 @@ export class BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {object} committer
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_setAttr(attr, val, committer = this)
 	{
@@ -151,7 +151,7 @@ export class BasicData
 	 * or
 	 *
 	 * @param {object} data
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	set(...args)
 	{
@@ -179,7 +179,7 @@ export class BasicData
 	 * This will get the model data.
 	 *
 	 * @protected
-	 * @return {object}
+	 * @returns {object}
 	 */
 	getModelData()
 	{
@@ -192,7 +192,7 @@ export class BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_deleteAttr(obj, attr)
 	{
@@ -203,7 +203,7 @@ export class BasicData
 	 * This will toggle a bool attribute.
 	 *
 	 * @param {string} attr
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	toggle(attr)
 	{
@@ -220,7 +220,7 @@ export class BasicData
 	 * This will increment an attribute.
 	 *
 	 * @param {string} attr
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	increment(attr)
 	{
@@ -239,7 +239,7 @@ export class BasicData
 	 *
 	 * @param {string} attr
 	 * @param {string} value
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	decrement(attr)
 	{
@@ -257,7 +257,7 @@ export class BasicData
 	 * This will concat an attribute.
 	 *
 	 * @param {string} attr
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	concat(attr, value)
 	{
@@ -276,7 +276,7 @@ export class BasicData
 	 *
 	 * @param {string} key
 	 * @param {*} value
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	ifNull(key, value)
 	{
@@ -291,7 +291,7 @@ export class BasicData
 	 * This will set the data local storage key.
 	 *
 	 * @param {string} key
-	 * @return {object} this
+	 * @returns {object} this
 	 */
 	setKey(key)
 	{
@@ -365,7 +365,7 @@ export class BasicData
 	 * This will delete a property value or the model data.
 	 *
 	 * @param {string} [attrName]
-	 * @return {*}
+	 * @returns {*}
 	 */
 	delete(attrName)
 	{
@@ -384,7 +384,7 @@ export class BasicData
 	 *
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @return {*}
+	 * @returns {*}
 	 */
 	_getAttr(obj, attr)
 	{
@@ -395,7 +395,7 @@ export class BasicData
 	 * This will get a property value or the model data.
 	 *
 	 * @param {string} [attrName]
-	 * @return {*}
+	 * @returns {*}
 	 */
 	get(attrName)
 	{
@@ -413,7 +413,7 @@ export class BasicData
 	 * @param {object} data
 	 * @param {string|object} attr
 	 * @param {string} alias
-	 * @return {string|array}
+	 * @returns {string|array}
 	 */
 	link(data, attr, alias)
 	{
@@ -443,7 +443,7 @@ export class BasicData
 	 * @param {object} data
 	 * @param {string} attr
 	 * @param {string} alias
-	 * @return {string}
+	 * @returns {string}
 	 */
 	remoteLink(data, attr, alias)
 	{
@@ -485,7 +485,7 @@ export class BasicData
 	 *
 	 * @param {string} token
 	 * @param {object} data
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addLink(token, data)
 	{
@@ -496,7 +496,7 @@ export class BasicData
 	 * This will remove a link or all links if no token is provided.
 	 *
 	 * @param {string} [token]
-	 * @return {void}
+	 * @returns {void}
 	 */
 	unlink(token)
 	{
@@ -524,7 +524,7 @@ export class BasicData
 	 *
 	 * @param {string} token
 	 * @param {boolean} removeFromLinks
-	 * @return {void}
+	 * @returns {void}
 	 */
 	removeLink(token, removeFromLinks)
 	{

@@ -96,7 +96,7 @@ export class Router
 	 * This will setup our history object.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupHistory()
 	{
@@ -108,7 +108,7 @@ export class Router
 	 *
 	 * @protected
 	 * @param {object} settings
-	 * @return {object}
+	 * @returns {object}
 	 */
 	createRoute(settings)
 	{
@@ -122,7 +122,7 @@ export class Router
 	 * This will add a new route to the router.
 	 *
 	 * @param {object} settings
-	 * @return {object}
+	 * @returns {object}
 	 */
 	add(settings)
 	{
@@ -149,7 +149,7 @@ export class Router
 	 * This will add a route.
 	 *
 	 * @param {object} route
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addRoute(route)
 	{
@@ -162,7 +162,7 @@ export class Router
 	 *
 	 * @param {object} route
 	 * @param {object} container
-	 * @return {void}
+	 * @returns {void}
 	 */
 	resume(route, container)
 	{
@@ -174,7 +174,7 @@ export class Router
 	 * This will get the base path.
 	 *
 	 * @protected
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getBasePath()
 	{
@@ -195,7 +195,7 @@ export class Router
 	 *
 	 * @protected
 	 * @param {string} uri
-	 * @return {string}
+	 * @returns {string}
 	 */
 	createURI(uri)
 	{
@@ -207,7 +207,7 @@ export class Router
 	 * This will get a route by uri.
 	 *
 	 * @param {string} uri
-	 * @return {(object|boolean)}
+	 * @returns {(object|boolean)}
 	 */
 	getRoute(uri)
 	{
@@ -231,7 +231,7 @@ export class Router
 	 * This will get a route by id.
 	 *
 	 * @param {string} id
-	 * @return {(object|boolean)}
+	 * @returns {(object|boolean)}
 	 */
 	getRouteById(id)
 	{
@@ -270,7 +270,7 @@ export class Router
 	 * This will add a switch.
 	 *
 	 * @param {array} group
-	 * @return {string} the switch id.
+	 * @returns {string} the switch id.
 	 */
 	addSwitch(group)
 	{
@@ -292,7 +292,7 @@ export class Router
 	 *
 	 * @param {object} group
 	 * @param {object} container
-	 * @return {number} the switch id.
+	 * @returns {number} the switch id.
 	 */
 	resumeSwitch(group, container)
 	{
@@ -333,7 +333,7 @@ export class Router
 	 * This will remove a route by uri.
 	 *
 	 * @param {string} uri
-	 * @return {object} a reference to the router object.
+	 * @returns {object} a reference to the router object.
 	 */
 	remove(uri)
 	{
@@ -352,7 +352,7 @@ export class Router
 	 *
 	 * @param {string} [baseURI]
 	 * @param {string} [title]
-	 * @return {object} a reference to the router object.
+	 * @returns {object} a reference to the router object.
 	 */
 	setup(baseURI, title)
 	{
@@ -391,7 +391,7 @@ export class Router
 	 * This will get the parent element link.
 	 *
 	 * @param {object} ele
-	 * @return {(object|boolean)}
+	 * @returns {(object|boolean)}
 	 */
 	getParentLink(ele)
 	{
@@ -454,7 +454,7 @@ export class Router
 	/**
 	 * This will reset the router.
 	 *
-	 * @return {object} a reference to the router object.
+	 * @returns {object} a reference to the router object.
 	 */
 	reset()
 	{
@@ -468,7 +468,7 @@ export class Router
 	/**
 	 * This will check the active routes.
 	 *
-	 * @return {object} a reference to the router object.
+	 * @returns {object} a reference to the router object.
 	 */
 	activate()
 	{
@@ -482,7 +482,7 @@ export class Router
 	 * @param {string} uri
 	 * @param {object} [data]
 	 * @param {boolean} [replace]
-	 * @return {object} a reference to the router object.
+	 * @returns {object} a reference to the router object.
 	 */
 	navigate(uri, data, replace)
 	{
@@ -557,7 +557,7 @@ export class Router
 	 *
 	 * @protected
 	 * @param {string} [path]
-	 * @return {void}
+	 * @returns {void}
 	 */
 	checkSwitches(path)
 	{
@@ -580,7 +580,7 @@ export class Router
 	 * @protected
 	 * @param {object} group
 	 * @param {string} path
-	 * @return {void}
+	 * @returns {void}
 	 */
 	checkGroup(group, path)
 	{
@@ -659,7 +659,7 @@ export class Router
 	 *
 	 * @param {object} route
 	 * @param {string} path
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	checkRoute(route, path)
 	{
@@ -680,7 +680,7 @@ export class Router
 	 *
 	 * @param {object} route
 	 * @param {string} [path]
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	check(route, path)
 	{
@@ -703,7 +703,7 @@ export class Router
 	 * This will select the route.
 	 *
 	 * @param {object} route
-	 * @return {void}
+	 * @returns {void}
 	 */
 	select(route)
 	{
@@ -720,7 +720,7 @@ export class Router
 	/**
 	 * This will get the endpoint.
 	 *
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getEndPoint()
 	{
@@ -731,7 +731,7 @@ export class Router
 	/**
 	 * This will remove the router events.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	destroy()
 	{
@@ -741,7 +741,7 @@ export class Router
 	/**
 	 * This will get the location pathname.
 	 *
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getPath()
 	{

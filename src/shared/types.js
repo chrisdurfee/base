@@ -12,7 +12,7 @@ export class Types
 	 * This will get the type of a variable.
 	 *
 	 * @param {*} data
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static getType(data)
 	{
@@ -29,7 +29,7 @@ export class Types
 	 * This will check if a request is undefined.
 	 *
 	 * @param {*} data
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	static isUndefined(data)
 	{
@@ -40,7 +40,7 @@ export class Types
 	 * This will check if the request is an object.
      *
 	 * @param {object} obj
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	static isObject(obj)
 	{
@@ -51,7 +51,7 @@ export class Types
 	 * This will check if the request is an object.
 	 *
 	 * @param {object} obj
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	static isFunction(obj)
 	{
@@ -62,7 +62,7 @@ export class Types
 	 * This will check if the request is an object.
      *
 	 * @param {object} obj
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	static isString(obj)
 	{
@@ -73,7 +73,7 @@ export class Types
 	 * This will check if the data is an array.
      *
 	 * @param {*} data
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	static isArray(data)
 	{

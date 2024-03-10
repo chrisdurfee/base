@@ -21,7 +21,7 @@ export class SimpleData extends BasicData
 	 * @param {*} val
 	 * @param {*} committer
 	 * @param {*} prevValue
-	 * @return {void}
+	 * @returns {void}
 	 */
 	_publish(attr, val, committer, prevValue)
 	{

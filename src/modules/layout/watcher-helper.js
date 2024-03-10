@@ -17,7 +17,7 @@ export const WatcherHelper =
 	 * This will check if the value is a watcher.
 	 *
 	 * @param {*} value
-	 * @return {boolean}
+	 * @returns {boolean}
 	 * @static
 	 * @private
 	 */
@@ -46,7 +46,7 @@ export const WatcherHelper =
 	 *
 	 * @protected
 	 * @param {string} string
-	 * @return {(array|null)}
+	 * @returns {(array|null)}
 	 */
 	_getWatcherProps(string)
 	{
@@ -91,7 +91,7 @@ export const WatcherHelper =
 	 * @param {string} string
 	 * @param {string} attr
 	 * @param {boolean} isArray
-	 * @return {function}
+	 * @returns {function}
 	 */
 	_getWatcherCallBack(ele, data, string, attr, isArray)
 	{
@@ -116,7 +116,7 @@ export const WatcherHelper =
 	 * @private
 	 * @param {(string|object)} settings
 	 * @param {object} parent
-	 * @return {array}
+	 * @returns {array}
 	 */
 	getValue(settings, parent)
 	{
@@ -153,7 +153,7 @@ export const WatcherHelper =
 	 * @param {object} data
 	 * @param {string} string
 	 * @param {boolean} isArray
-	 * @return {array}
+	 * @returns {array}
 	 */
 	getPropValues(data, props, isArray)
 	{
@@ -178,7 +178,7 @@ export const WatcherHelper =
 	 * @param {object} data
 	 * @param {string} string
 	 * @param {boolean} isDataArray
-	 * @return {function}
+	 * @returns {function}
 	 */
 	getCallBack(settings, ele, data, string, isDataArray)
 	{

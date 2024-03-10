@@ -28,7 +28,7 @@ export class ConnectionTracker
 	 * @param {string} id
 	 * @param {string} attr
 	 * @param {object} connection
-	 * @return {object}
+	 * @returns {object}
 	 */
 	add(id, attr, connection)
 	{
@@ -42,7 +42,7 @@ export class ConnectionTracker
 	 *
 	 * @param {string} id
 	 * @param {string} attr
-	 * @return {(object|bool)}
+	 * @returns {(object|bool)}
 	 */
 	get(id, attr)
 	{
@@ -58,7 +58,7 @@ export class ConnectionTracker
 	 * This will find a connection.
 	 *
 	 * @param {string} id
-	 * @return {object}
+	 * @returns {object}
 	 */
 	find(id)
 	{
@@ -77,7 +77,7 @@ export class ConnectionTracker
 	 * This will remove a connection or all connections by id.
 	 * @param {string} id
 	 * @param {string} [attr]
-	 * @return {void}
+	 * @returns {void}
 	 */
 	remove(id, attr)
 	{

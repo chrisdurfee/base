@@ -7,7 +7,7 @@ import { getParentData } from './get-parent-data.js';
  * @param {object} ele
  * @param {array} onSet
  * @param {object} parent
- * @return {void}
+ * @returns {void}
  */
 export const onSet = (ele, onSet, parent) =>
 {

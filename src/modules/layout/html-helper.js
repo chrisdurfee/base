@@ -20,7 +20,7 @@ export class HtmlHelper extends Html
 	 * @param {array} attrs The node attributes.
 	 * @param {object} container The node container.
 	 * @param {object} parent
-	 * @return {object} The new element.
+	 * @returns {object} The new element.
 	 */
 	static create(nodeName, attrs, container, parent)
 	{
@@ -38,7 +38,7 @@ export class HtmlHelper extends Html
 	 * @param {object} ele
 	 * @param {array} attrs
 	 * @param {object} parent
-     * @return {void}
+     * @returns {void}
 	 */
 	static addAttributes(ele, attrs, parent)
 	{
@@ -60,7 +60,7 @@ export class HtmlHelper extends Html
 	 * @param {object} ele
 	 * @param {object} attr
 	 * @param {string} value
-     * @return {void}
+     * @returns {void}
 	 */
 	static addAttr(ele, attr, value, parent)
 	{
@@ -129,7 +129,7 @@ export class HtmlHelper extends Html
 	 * @override
 	 * @param {object} parent
 	 * @param {object} child
-     * @return {void}
+     * @returns {void}
 	 */
 	static append(parent, child)
 	{

@@ -27,7 +27,7 @@ export class Route extends SimpleData
 	 * @constructor
 	 * @param {object} settings
 	 * @param {function} titleCallBack
-	 * @return {DataProxy}
+	 * @returns {DataProxy}
 	 */
 	constructor(settings, titleCallBack)
 	{
@@ -50,7 +50,7 @@ export class Route extends SimpleData
 	 * This will setup the data object.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setup()
 	{
@@ -73,7 +73,7 @@ export class Route extends SimpleData
 	 *
 	 * @protected
 	 * @param {object} settings
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupRoute(settings)
 	{
@@ -158,7 +158,7 @@ export class Route extends SimpleData
 	 *
 	 * @protected
 	 * @param {object} settings
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupComponentHelper(settings)
 	{
@@ -270,7 +270,7 @@ export class Route extends SimpleData
 	 * This will check if a route matches the path.
 	 *
 	 * @param {string} path
-	 * @return {(object|boolean)}
+	 * @returns {(object|boolean)}
 	 */
 	match(path)
 	{
@@ -349,7 +349,7 @@ export class Route extends SimpleData
 	/**
 	 * This will get the params.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	getParams()
 	{

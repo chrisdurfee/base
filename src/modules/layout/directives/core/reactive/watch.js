@@ -7,7 +7,7 @@ import { WatcherHelper } from '../../../watcher-helper.js';
  * @param {object} ele
  * @param {(array|object)} watcher
  * @param {object} [parent]
- * @return {void}
+ * @returns {void}
  */
 export const watch = (ele, watcher, parent) =>
 {

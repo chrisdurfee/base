@@ -68,7 +68,7 @@ export class DataBinder
 	 * This will setup the events.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setup()
 	{
@@ -82,7 +82,7 @@ export class DataBinder
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {(string|function)} [filter]
-	 * @return {object} an instance of the databinder.
+	 * @returns {object} an instance of the databinder.
 	 */
 	bind(element, data, prop, filter)
 	{
@@ -142,7 +142,7 @@ export class DataBinder
 	 * @param {string} prop
 	 * @param {string} customAttr
 	 * @param {(string|function)} [filter]
-	 * @return {object} The new connection.
+	 * @returns {object} The new connection.
 	 */
 	setupConnection(element, data, prop, customAttr, filter)
 	{
@@ -184,7 +184,7 @@ export class DataBinder
 	 * @param {string} id
 	 * @param {string} attr
 	 * @param {object} connection
-	 * @return {object}
+	 * @returns {object}
 	 */
 	addConnection(id, attr, connection)
 	{
@@ -197,7 +197,7 @@ export class DataBinder
 	 *
 	 * @protected
 	 * @param {object} element
-	 * @return {string}
+	 * @returns {string}
 	 */
 	setBindId(element)
 	{
@@ -216,7 +216,7 @@ export class DataBinder
 	 *
 	 * @protected
 	 * @param {object} element
-	 * @return {string}
+	 * @returns {string}
 	 */
 	getBindId(element)
 	{
@@ -227,7 +227,7 @@ export class DataBinder
 	 * This will unbind the element.
 	 *
 	 * @param {object} element
-	 * @return {object} an instance of the data binder.
+	 * @returns {object} an instance of the data binder.
 	 */
 	unbind(element)
 	{
@@ -246,7 +246,7 @@ export class DataBinder
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {function} callBack
-	 * @return {object}
+	 * @returns {object}
 	 */
 	watch(element, data, prop, callBack)
 	{
@@ -283,7 +283,7 @@ export class DataBinder
 	 * @param {object} element
 	 * @param {object} data
 	 * @param {string} prop
-	 * @return {object}
+	 * @returns {object}
 	 */
 	unwatch(element, data, prop)
 	{
@@ -307,7 +307,7 @@ export class DataBinder
 	 * @param {string} msg
 	 * @param {*} value
 	 * @param {object} committer
-	 * @return {object} an instance of the data binder.
+	 * @returns {object} an instance of the data binder.
 	 */
 	publish(msg, value, committer)
 	{
@@ -320,7 +320,7 @@ export class DataBinder
 	 *
 	 * @protected
 	 * @param {object} element
-	 * @return {number|boolean}
+	 * @returns {number|boolean}
 	 */
 	isDataBound(element)
 	{
@@ -338,7 +338,7 @@ export class DataBinder
 	 *
 	 * @protected
 	 * @param {object} evt
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	isBlocked(evt)
 	{
@@ -384,7 +384,7 @@ export class DataBinder
 	 * This wil setup the events.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupEvents()
 	{
@@ -396,7 +396,7 @@ export class DataBinder
 	 * This will add the events.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addEvents()
 	{
@@ -407,7 +407,7 @@ export class DataBinder
 	 * This will remove the events.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	removeEvents()
 	{

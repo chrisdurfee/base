@@ -16,7 +16,7 @@ export class BrowserRender extends Render
 	 * @param {object} settings
 	 * @param {object} container
 	 * @param {object} parent
-	 * @return {object}
+	 * @returns {object}
 	 */
 	createNode(settings, container, parent)
 	{

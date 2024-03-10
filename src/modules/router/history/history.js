@@ -23,7 +23,7 @@ export class History
 	 * This will check if the history api is supported
 	 * and add events.
 	 *
-	 * @return {object} a reference to the object.
+	 * @returns {object} a reference to the object.
 	 */
 	setup()
 	{

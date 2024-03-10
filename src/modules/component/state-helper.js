@@ -15,7 +15,7 @@ export class StateHelper
 	 * @constructor
 	 * @param {object} state
 	 * @param {object} states
-	 * @return {StateHelper}
+	 * @returns {StateHelper}
 	 */
 	constructor(state, states)
 	{
@@ -33,7 +33,7 @@ export class StateHelper
 	 *
 	 * @param {object} state
 	 * @param {object} states
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addStates(state, states)
 	{
@@ -48,7 +48,7 @@ export class StateHelper
 	 * @param {*} state
 	 * @param {function} callBack
 	 * @param {string} [targetId]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	createState(action, state, callBack, targetId)
 	{
@@ -66,7 +66,7 @@ export class StateHelper
 	 *
 	 * @protected
 	 * @param {object} action
-	 * @return {array}
+	 * @returns {array}
 	 */
 	convertStates(action)
 	{
@@ -110,7 +110,7 @@ export class StateHelper
 	 * @protected
 	 * @param {array} remotes
 	 * @param {array} actions
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupRemoteStates(remotes, actions)
 	{
@@ -152,7 +152,7 @@ export class StateHelper
 	/**
 	 * This will remove remote states.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	removeRemoteStates()
 	{
@@ -167,7 +167,7 @@ export class StateHelper
 	 * This will remove the actions.
 	 *
 	 * @param {array} actions
-	 * @return {void}
+	 * @returns {void}
 	 */
 	removeActions(actions)
 	{
@@ -187,7 +187,7 @@ export class StateHelper
 	 * This will restore a state.
 	 *
 	 * @param {object} state
-	 * @return {void}
+	 * @returns {void}
 	 */
 	restore(state)
 	{
@@ -212,7 +212,7 @@ export class StateHelper
 	 * @param {object} target
 	 * @param {string} actionEvent
 	 * @param {string} remoteTargetId
-	 * @return {string}
+	 * @returns {string}
 	 */
 	bindRemoteState(target, actionEvent, remoteTargetId)
 	{
@@ -226,7 +226,7 @@ export class StateHelper
 	 * @protected
 	 * @param {object} state
 	 * @param {array} actions
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addStatesToTarget(state, actions)
 	{
@@ -255,7 +255,7 @@ export class StateHelper
 	 *
 	 * @param {object} target
 	 * @param {object} action
-	 * @return {string}
+	 * @returns {string}
 	 */
 	addAction(target, action)
 	{

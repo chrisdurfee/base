@@ -14,7 +14,7 @@ export const Objects =
 	 * This will create a new object.
 	 *
 	 * @param {object} [object] An object to extend.
-	 * @return {object}
+	 * @returns {object}
 	 */
 	create(object)
 	{
@@ -26,7 +26,7 @@ export const Objects =
 	 *
 	 * @param {(function|object)} sourceObj
 	 * @param {(function|object)} targetObj
-	 * @return {object}
+	 * @returns {object}
 	 */
 	extendObject(sourceObj, targetObj)
 	{
@@ -50,7 +50,7 @@ export const Objects =
 	 * This will clone an object.
 	 *
 	 * @param {object} obj
-	 * @return {object}
+	 * @returns {object}
 	 */
 	clone(obj)
 	{
@@ -67,7 +67,7 @@ export const Objects =
 	 *
 	 * @protected
 	 * @param {function|object} object
-	 * @return {object}
+	 * @returns {object}
 	 */
 	getClassObject(object)
 	{
@@ -79,7 +79,7 @@ export const Objects =
 	 *
 	 * @param {function|object} sourceClass
 	 * @param {function|object} targetClass
-	 * @return {object}
+	 * @returns {object}
 	 */
 	extendClass(sourceClass, targetClass)
 	{
@@ -112,7 +112,7 @@ export const Objects =
 	 *
 	 * @param {object} obj
 	 * @param {string} prop
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	hasOwnProp(obj, prop)
 	{
@@ -123,7 +123,7 @@ export const Objects =
 	 * This will check if an object is a plain object.
 	 *
 	 * @param {object} obj
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	isPlainObject(obj)
 	{
@@ -134,7 +134,7 @@ export const Objects =
 	 * This will check if an object is empty.
 	 *
 	 * @param {object} obj
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	isEmpty(obj)
 	{

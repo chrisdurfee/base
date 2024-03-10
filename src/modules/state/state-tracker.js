@@ -22,7 +22,7 @@ export class StateTracker
 	 *
 	 * @param {string} id
 	 * @param {object} target
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static restore(id, target)
 	{
@@ -33,7 +33,7 @@ export class StateTracker
 	 * This will get the state target.
 	 *
 	 * @param {string} id
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static getTarget(id)
 	{
@@ -50,7 +50,7 @@ export class StateTracker
 	 * @protected
 	 * @param {string} targetId
 	 * @param {string} action
-	 * @return {*}
+	 * @returns {*}
 	 */
 	static getActionState(targetId, action)
 	{
@@ -64,7 +64,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} [action]
 	 * @param {*} [state] the primary action state
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static add(targetId, action, state)
 	{
@@ -82,7 +82,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {string} [state]
-	 * @return {object}
+	 * @returns {object}
 	 */
 	static addAction(targetId, action, state)
 	{
@@ -95,7 +95,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {string} [token]
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static removeAction(targetId, action, token)
 	{
@@ -108,7 +108,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {function} callBack
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static on(targetId, action, callBack)
 	{
@@ -126,7 +126,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {string} token
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static off(targetId, action, token)
 	{
@@ -139,7 +139,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} [action]
 	 * @param {string} [token]
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static remove(targetId, action, token)
 	{
@@ -165,7 +165,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {*} state
-	 * @return {void}
+	 * @returns {void}
 	 */
 	static set(targetId, action, state)
 	{

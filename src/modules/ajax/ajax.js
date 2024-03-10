@@ -152,7 +152,7 @@ base.augment(
  * 	}
  * }
  *
- * @return {object} xhr object.
+ * @returns {object} xhr object.
  */
 export const Ajax = (...args) =>
 {
@@ -189,7 +189,7 @@ export class XhrRequest
 	 *
 	 * @protected
 	 * @param {*} args
-	 * @return {(object|boolean)}
+	 * @returns {(object|boolean)}
 	 */
 	setup(args)
 	{
@@ -244,7 +244,7 @@ export class XhrRequest
 	 *
 	 * @protected
 	 * @param {object} object
-	 * @return {string}
+	 * @returns {string}
 	 */
 	objectToString(object)
 	{
@@ -265,7 +265,7 @@ export class XhrRequest
 	 * @protected
 	 * @param {*} params
 	 * @param {*} addingParams
-	 * @return {*}
+	 * @returns {*}
 	 */
 	setupParams(params, addingParams)
 	{
@@ -327,7 +327,7 @@ export class XhrRequest
 	 * This will get the params.
 	 *
 	 * @protected
-	 * @return {*}
+	 * @returns {*}
 	 */
 	getParams()
 	{
@@ -351,7 +351,7 @@ export class XhrRequest
 	 *
 	 * @protected
 	 * @param {array} args
-	 * @return {void}
+	 * @returns {void}
 	 */
 	getXhrSettings(args)
 	{
@@ -418,7 +418,7 @@ export class XhrRequest
 	 * This will create the xhr object.
 	 *
 	 * @protected
-	 * @return {(object|boolean)}
+	 * @returns {(object|boolean)}
 	 */
 	createXHR()
 	{
@@ -438,7 +438,7 @@ export class XhrRequest
 	 * This will setup the request headers.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	setupHeaders()
 	{
@@ -523,7 +523,7 @@ export class XhrRequest
 	 * This will get the response data.
 	 *
 	 * @protected
-	 * @return {*}
+	 * @returns {*}
 	 */
 	getResponseData()
 	{
@@ -541,7 +541,7 @@ export class XhrRequest
 	 * This will add the xhr events.
 	 *
 	 * @protected
-	 * @return {void}
+	 * @returns {void}
 	 */
 	addXhrEvents()
 	{
