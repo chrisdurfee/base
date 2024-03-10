@@ -23,7 +23,8 @@
 		"url": "https://github.com/chrisdurfee/base/issues"
 	},
 	"devDependencies": {
-		"esbuild": "^0.15.7"
+		"esbuild": "^0.15.7",
+		"vite-plugin-dts": "^3.7.3"
 	},
 	"files": [
 		"pacakge.json",
