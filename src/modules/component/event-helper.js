@@ -14,7 +14,6 @@ export class EventHelper
 	 * This will create an event helper.
 	 *
 	 * @constructor
-	 * @returns {EventHelper}
 	 */
 	constructor()
 	{
@@ -35,7 +34,7 @@ export class EventHelper
 		const length = events.length;
 		if (length < 1)
 		{
-			return false;
+			return;
 		}
 
 		events.forEach((event) =>

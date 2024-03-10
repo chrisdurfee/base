@@ -12,6 +12,9 @@ export class CssMovement extends Movement
 
 	getStartValue(value, end)
 	{
+		/**
+		 * @type {*} start
+		 */
 		let start = 0;
 		if(typeof value === 'undefined')
 		{
@@ -77,7 +80,7 @@ export class CssMovement extends Movement
 				text.replace(cssPattern, (fullMatch, method, params) =>
 				{
 					value = (typeof params === 'string')? params.split(',') : null;
-					self.setMethod(method);
+					this.setMethod(method);
 				});
 
 				if(value === undefined)
@@ -96,6 +99,12 @@ export class CssMovement extends Movement
 		return 0;
 	}
 
+	/**
+	 * This will create a value.
+	 *
+	 * @param {object} settings
+	 * @returns {object}
+	 */
 	createValue(settings)
 	{
 		let valueArray = [],

@@ -57,9 +57,9 @@ const JotComponent = (settings) =>
 /**
  * This will create a class.
  *
- * @param {class} Base
+ * @param {object} Base
  * @param {object} settings
- * @returns {class}
+ * @returns {object}
  */
 const createClass = (Base, settings) =>
 {

@@ -15,7 +15,6 @@ export class StateHelper
 	 * @constructor
 	 * @param {object} state
 	 * @param {object} states
-	 * @returns {StateHelper}
 	 */
 	constructor(state, states)
 	{

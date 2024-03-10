@@ -84,10 +84,6 @@ export const animate =
 			}
 
 			const animations = this.checkAnimating(object);
-			if (animations === false)
-			{
-				return;
-			}
 
 			let animation, indexNumber,
 			objects = this.objects;
@@ -129,7 +125,7 @@ export const animate =
 		/**
 		 * This will check if the element is animating.
 		 * @param {object} obj
-		 * @returns {array|boolean}
+		 * @returns {array}
 		 */
 		checkAnimating(obj)
 		{
@@ -147,7 +143,7 @@ export const animate =
 				}
 			}
 
-			return (animationArray.length > 0)? animationArray : false;
+			return animationArray;
 		},
 
 		/**
@@ -175,7 +171,8 @@ export const animate =
 	 * @param {string} animationClass
 	 * @param {number} duration
 	 * @param {function} callBack
-	 * @param {funtion} endCallBack
+	 * @param {function} endCallBack
+	 * @returns {void}
 	 */
 	create(obj, animationClass, duration, callBack, endCallBack)
 	{
@@ -192,6 +189,7 @@ export const animate =
 	 * @param {string} animationClass
 	 * @param {number} duration
 	 * @param {function} endCallBack
+	 * @returns {void}
 	 */
 	hide(object, animationClass, duration, endCallBack)
 	{

@@ -15,6 +15,7 @@ export class AnimationController
 		this.element = this.getElement(settings.element);
 		this.status = 'stopped';
 		this.animation = null;
+		this.ease = settings.ease || 'easeInOut';
 
 		/* this will be the call back function to return
 		when the animation is complete or errors */
@@ -50,14 +51,24 @@ export class AnimationController
 		return this;
 	}
 
+	/**
+	 * This will setup the animation.
+	 *
+	 * @param {object} element
+	 * @param {object} settings
+	 * @returns {void}
+	 */
 	setupAnimation(element, settings)
 	{
 		this.animation = new Animation(element, settings);
-		this.start(settings);
+		this.start();
 	}
 
-	/* this will start the animation by getting the start time
-	and starting the animation timer */
+	/**
+	 * This will start the animation.
+	 *
+	 * @returns {object}
+	 */
 	start()
 	{
 		/* this will track the time passed and the progress
@@ -71,22 +82,34 @@ export class AnimationController
 		return this;
 	}
 
+	/**
+	 * This will stop the animation.
+	 *
+	 * @returns {object}
+	 */
 	stop()
 	{
 		this.stopTimer();
 		return this;
 	}
 
-	/* this will get the element that is being used.
-	@param (mixed) element = the element selector or object
-	@returns (object) the element */
+	/**
+	 * This will get the element.
+	 *
+	 * @param {object} element
+	 * @returns {object}
+	 */
 	getElement(element)
 	{
 		return (typeof element === 'string')? document.querySelector(element) : element;
 	}
 
-	/* this will get the delta to be used with the animation.
-	@returns (number) the current delta */
+	/**
+	 * This will get the delta.
+	 *
+	 * @param {number} t
+	 * @returns {number}
+	 */
 	delta(t)
 	{
 		let delta = 0;
@@ -129,12 +152,12 @@ export class AnimationController
 		return delta;
 	}
 
-	/* this will perform the animation on the element by
-	incrementally updating the element object property
-	by the timed progress. */
+	/**
+	 * This will animate the element.
+	 */
 	animate()
 	{
-		this.timePassed = new Date() - this.startTime;
+		this.timePassed = (new Date() - this.startTime);
 
 		let percent = this.timePassed / this.duration,
 		progress = this.progress = (percent > 1)? 1 : percent;

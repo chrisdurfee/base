@@ -11,6 +11,9 @@ export class AttrMovement extends Movement
 
 	getStartValue(value, end)
 	{
+		/**
+		 * @type {*} start
+		 */
 		let start = 0;
 		if (typeof value === 'undefined')
 		{

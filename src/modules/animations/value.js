@@ -146,6 +146,6 @@ export class Value
 	applyStep(value, step)
 	{
 		const applyStep = (value.increasing === true)? this.increaseValue : this.decreaseValue;
-		return (this.applyStep = applyStep).apply(this, Array.toArray(arguments));
+		return (this.applyStep = applyStep).apply(this, arguments);
 	}
 }

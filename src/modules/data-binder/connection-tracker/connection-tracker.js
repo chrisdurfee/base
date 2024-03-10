@@ -42,7 +42,7 @@ export class ConnectionTracker
 	 *
 	 * @param {string} id
 	 * @param {string} attr
-	 * @returns {(object|bool)}
+	 * @returns {object|boolean}
 	 */
 	get(id, attr)
 	{

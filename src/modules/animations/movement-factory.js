@@ -16,7 +16,7 @@ export class MovementFactory
 	 *
 	 * @param {object} element
 	 * @param {object} settings
-	 * @returns {Movement|null}
+	 * @returns {object|null}
 	 */
 	static setupMovementType(element, settings)
 	{

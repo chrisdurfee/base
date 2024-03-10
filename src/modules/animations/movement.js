@@ -16,6 +16,12 @@ export class Movement
 		this.setupProperty(settings);
 	}
 
+	/**
+	 * This will create a value.
+	 *
+	 * @param {object} settings
+	 * @returns {object}
+	 */
 	createValue(settings)
 	{
 		const values = this.getValue(settings);

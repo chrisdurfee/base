@@ -49,7 +49,6 @@ export class Unit
 	 *
 	 * @constructor
 	 * @param {array} args
-	 * @returns {Unit}
 	 */
 	constructor(...args)
 	{
@@ -57,6 +56,16 @@ export class Unit
 		 * @member {boolean} isUnit
 		 */
 		this.isUnit = true;
+
+		/**
+		 * @member {?object} data
+		 */
+		this.data = null;
+
+		/**
+		 * @member {boolean} persist
+		 */
+		this.persist = false;
 
 		this.init();
 

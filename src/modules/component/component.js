@@ -31,7 +31,6 @@ export class Component extends Unit
 	 *
 	 * @constructor
 	 * @param {array} args
-	 * @returns {Component}
 	 */
 	constructor(...args)
 	{
@@ -159,11 +158,11 @@ export class Component extends Unit
 		const state = this.state;
 		if (!state)
 		{
-			return false;
+			return;
 		}
 
 		this.stateHelper.removeRemoteStates();
-		StateTracker.remove();
+		state.remove();
 	}
 
 	/**
@@ -204,7 +203,7 @@ export class Component extends Unit
 		const events = this.setupEvents();
 		if (events.length < 1)
 		{
-			return false;
+			return;
 		}
 
 		this.setupEventHelper();
