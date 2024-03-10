@@ -39,6 +39,9 @@ export class EventHelper
 
 		events.forEach((event) =>
 		{
+			/**
+			 * @type {array} event
+			 */
 			this.on(...event);
 		});
 	}

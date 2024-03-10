@@ -125,14 +125,15 @@ export class BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {object} committer
+	 * @param {boolean} stopMerge
 	 * @returns {void}
 	 */
-	_setAttr(attr, val, committer = this)
+	_setAttr(attr, val, committer = this, stopMerge = false)
 	{
 		const prevValue = this.stage[attr];
 		if (val === prevValue)
 		{
-			return false;
+			return;
 		}
 
 		this.stage[attr] = val;
@@ -145,11 +146,12 @@ export class BasicData
 	/**
 	 * This will set the data value of an attribute or attributes.
 	 *
+	 * @overload
 	 * @param {string} key
 	 * @param {*} value
+	 * @param {object} [committer]
 	 *
-	 * or
-	 *
+	 * @overload
 	 * @param {object} data
 	 * @returns {object} this
 	 */
@@ -238,7 +240,6 @@ export class BasicData
 	 * This will decrement an attribute.
 	 *
 	 * @param {string} attr
-	 * @param {string} value
 	 * @returns {object} this
 	 */
 	decrement(attr)
@@ -442,7 +443,7 @@ export class BasicData
 	 *
 	 * @param {object} data
 	 * @param {string} attr
-	 * @param {string} alias
+	 * @param {string} [alias]
 	 * @returns {string}
 	 */
 	remoteLink(data, attr, alias)
@@ -523,10 +524,10 @@ export class BasicData
 	 * This will remove the linked subscription.
 	 *
 	 * @param {string} token
-	 * @param {boolean} removeFromLinks
+	 * @param {boolean} [removeFromLinks]
 	 * @returns {void}
 	 */
-	removeLink(token, removeFromLinks)
+	removeLink(token, removeFromLinks = true)
 	{
 		const data = this.links[token];
 		if (data)

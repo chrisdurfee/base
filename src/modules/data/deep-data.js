@@ -74,6 +74,7 @@ export class Data extends BasicData
 	/**
 	 * This will set the attribute value.
 	 *
+	 * @override
 	 * @protected
 	 * @param {string} attr
 	 * @param {*} val

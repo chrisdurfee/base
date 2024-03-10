@@ -74,7 +74,7 @@ export class DataPubSub
 				callBack
 			});
 
-		return token;
+		return String(token);
 	}
 
 	/**
@@ -114,6 +114,7 @@ export class DataPubSub
 	 * This will publish a message.
 	 *
 	 * @param {string} msg
+	 * @overload
 	 * @param {string} value
 	 * @param {object} committer
 	 * @returns {void}
