@@ -48,7 +48,7 @@ export class Parser
 	 * This will setup the element content.
 	 *
 	 * @param {string} key
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @param {array} attr
 	 * @param {array} children
 	 * @return {bool}

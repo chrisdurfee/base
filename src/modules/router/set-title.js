@@ -41,7 +41,7 @@ const replaceParams = (str, route) =>
  * This will set the title.
  *
  * @param {object} route
- * @param {mixed} title
+ * @param {*} title
  * @param {string} rootTitle
  * @return {string}
  */

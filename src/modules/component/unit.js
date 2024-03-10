@@ -171,7 +171,7 @@ export class Unit
 	 *
 	 * @protected
 	 * @param {string} branchName
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @returns {void}
 	 */
 	addContextBranch(branchName, value)
@@ -349,8 +349,8 @@ export class Unit
 	 * This will render the content on condition of a property.
 	 *
 	 * @protected
-	 * @param {mixed} prop
-	 * @param {mixed} content
+	 * @param {*} prop
+	 * @param {*} content
 	 * @returns {object}
 	 */
 	if(prop, content)

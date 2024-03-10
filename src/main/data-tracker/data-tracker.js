@@ -71,7 +71,7 @@ export class DataTracker
      *
      * @param {object} obj
      * @param {string} type The type name.
-     * @param {mixed} data The data to track.
+     * @param {*} data The data to track.
      * @return {void}
      */
     static add(obj, type, data)
@@ -87,7 +87,7 @@ export class DataTracker
      *
      * @param {object} obj
      * @param {string} [type]
-     * @return {mixed}
+     * @return {*}
      */
     static get(obj, type)
     {

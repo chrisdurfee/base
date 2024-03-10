@@ -37,7 +37,7 @@ export class DataSource extends TwoWaySource
 	/**
 	 * This will set the data value.
 	 *
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @return {void}
 	 */
 	set(value)
@@ -48,7 +48,7 @@ export class DataSource extends TwoWaySource
 	/**
 	 * This will get the data value.
 	 *
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	get()
 	{
@@ -58,7 +58,7 @@ export class DataSource extends TwoWaySource
 	/**
 	 * The callBack when updated.
 	 *
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @param {object} committer
 	 * @return {void}
 	 */

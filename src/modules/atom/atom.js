@@ -3,8 +3,8 @@ import { WatcherHelper } from "../layout/watcher-helper.js";
 /**
  * This will prepare the children.
  *
- * @param {mixed} value
- * @returns {mixed}
+ * @param {*} value
+ * @returns {*}
  */
 const prepareChildren = (value) =>
 {

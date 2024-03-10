@@ -40,7 +40,7 @@ export class StateTarget extends SimpleData
 	 * This will add an action to the target.
 	 *
 	 * @param {string} action
-	 * @param {mixed} state
+	 * @param {*} state
 	 * @return {void}
 	 */
 	addAction(action, state)
@@ -55,7 +55,7 @@ export class StateTarget extends SimpleData
 	 * This will get the state of an action.
 	 *
 	 * @param {string} action
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	getState(action)
 	{

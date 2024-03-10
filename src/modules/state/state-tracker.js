@@ -50,7 +50,7 @@ export class StateTracker
 	 * @protected
 	 * @param {string} targetId
 	 * @param {string} action
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	static getActionState(targetId, action)
 	{
@@ -63,7 +63,7 @@ export class StateTracker
 	 *
 	 * @param {string} targetId
 	 * @param {string} [action]
-	 * @param {mixed} [state] the primary action state
+	 * @param {*} [state] the primary action state
 	 * @return {object}
 	 */
 	static add(targetId, action, state)
@@ -164,7 +164,7 @@ export class StateTracker
 	 *
 	 * @param {string} targetId
 	 * @param {string} action
-	 * @param {mixed} state
+	 * @param {*} state
 	 * @return {void}
 	 */
 	static set(targetId, action, state)

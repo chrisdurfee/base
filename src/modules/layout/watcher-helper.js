@@ -16,7 +16,7 @@ export const WatcherHelper =
 	/**
 	 * This will check if the value is a watcher.
 	 *
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @return {boolean}
 	 * @static
 	 * @private

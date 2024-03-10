@@ -32,7 +32,7 @@ export class Data extends BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @param {mixed} val
+	 * @param {*} val
 	 * @return {void}
 	 */
 	_updateAttr(obj, attr, val)
@@ -76,7 +76,7 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} attr
-	 * @param {mixed} val
+	 * @param {*} val
 	 * @param {object} committer
 	 * @param {boolean} stopMerge
 	 * @return {void}
@@ -181,7 +181,7 @@ export class Data extends BasicData
 	 * This will add a value to an array and set the result.
 	 *
 	 * @param {string} attr
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @return {object} this
 	 */
 	push(attr, value)
@@ -201,7 +201,7 @@ export class Data extends BasicData
 	 * This will add a value to an array and set the result.
 	 *
 	 * @param {string} attr
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @return {object} this
 	 */
 	unshift(attr, value)
@@ -221,7 +221,7 @@ export class Data extends BasicData
 	 * This will add a value to an array and set the result.
 	 *
 	 * @param {string} attr
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	shift(attr)
 	{
@@ -240,7 +240,7 @@ export class Data extends BasicData
 	 * This will pop the last value from an array and set the result.
 	 *
 	 * @param {string} attr
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	pop(attr)
 	{
@@ -273,8 +273,8 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} attr
-	 * @param {mixed} val
-	 * @param {mixed} committer
+	 * @param {*} val
+	 * @param {*} committer
 	 * @return {void}
 	 */
 	_publish(attr, val, committer)
@@ -287,7 +287,7 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} attr
-	 * @param {mixed} val
+	 * @param {*} val
 	 * @param {object} committer
 	 * @return {void}
 	 */
@@ -363,8 +363,8 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} pathString
-	 * @param {mixed} obj
-	 * @param {mixed} committer
+	 * @param {*} obj
+	 * @param {*} committer
 	 * @return {void}
 	 */
 	publish(pathString, obj, committer)
@@ -410,7 +410,7 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} subPath
-	 * @param {mixed} val
+	 * @param {*} val
 	 * @param {object} committer
 	 * @return {void}
 	 */
@@ -431,7 +431,7 @@ export class Data extends BasicData
 	 *
 	 * @protected
 	 * @param {string} subPath
-	 * @param {mixed} val
+	 * @param {*} val
 	 * @param {object} committer
 	 * @return {void}
 	 */
@@ -531,7 +531,7 @@ export class Data extends BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	_getAttr(obj, attr)
 	{

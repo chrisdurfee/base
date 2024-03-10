@@ -6,7 +6,7 @@ import { TwoWaySource } from './two-way-source.js';
  *
  * @param {object} element
  * @param {string} attr
- * @param {mixed} value
+ * @param {*} value
  * @return {void}
  */
 const SetAttr = (element, attr, value) =>
@@ -19,7 +19,7 @@ const SetAttr = (element, attr, value) =>
  *
  * @param {object} element
  * @param {string} attr
- * @param {mixed} value
+ * @param {*} value
  * @return {void}
  */
 const UpdateRadioAttr = (element, attr, value) =>
@@ -32,7 +32,7 @@ const UpdateRadioAttr = (element, attr, value) =>
  *
  * @param {object} element
  * @param {string} attr
- * @param {mixed} value
+ * @param {*} value
  * @return {void}
  */
 const UpdateCheckboxAttr = (element, attr, value) =>
@@ -59,7 +59,7 @@ const UpdateAttr = (element, attr, value) =>
  *
  * @param {object} element
  * @param {string} attr
- * @return {mixed}
+ * @return {*}
  */
 const GetAttr = (element, attr) =>
 {
@@ -71,7 +71,7 @@ const GetAttr = (element, attr) =>
  *
  * @param {object} element
  * @param {string} attr
- * @return {mixed}
+ * @return {*}
  */
 const GetAttribute = (element, attr) =>
 {
@@ -233,7 +233,7 @@ export class ElementSource extends TwoWaySource
 	/**
 	 * This will set a value on an element.
 	 *
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @return {object}
 	 */
 	set(value)
@@ -258,7 +258,7 @@ export class ElementSource extends TwoWaySource
 	/**
 	 * This will get the value from an element.
 	 *
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	get()
 	{
@@ -274,7 +274,7 @@ export class ElementSource extends TwoWaySource
 	/**
 	 * The callBack when updated.
 	 *
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @param {object} committer
 	 * @return {object}
 	 */

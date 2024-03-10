@@ -51,7 +51,7 @@ export class Dom
 	 *
 	 * @param {string} selector
 	 * @param {boolean} single Set to true if you only want one result.
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	static getBySelector(selector, single)
 	{
@@ -87,7 +87,7 @@ export class Dom
 	 * @param {string} [html] If the html is not set, the html of the
 	 * element will be returned.
 	 *
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	static html(obj, html)
 	{
@@ -132,7 +132,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} property
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	static getCss(obj, property)
 	{
@@ -172,7 +172,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	static css(obj, property, value)
 	{
@@ -236,7 +236,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	static attr(obj, property, value)
 	{
@@ -334,7 +334,7 @@ export class Dom
 	 * @param {object} obj
 	 * @param {string} property
 	 * @param {string} [value]
-	 * @return {mixed}
+	 * @return {*}
 	 */
 	static data(obj, property, value)
 	{

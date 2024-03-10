@@ -123,7 +123,7 @@ export class BasicData
 	 *
 	 * @protected
 	 * @param {string} attr
-	 * @param {mixed} val
+	 * @param {*} val
 	 * @param {object} committer
 	 * @return {void}
 	 */
@@ -146,7 +146,7 @@ export class BasicData
 	 * This will set the data value of an attribute or attributes.
 	 *
 	 * @param {string} key
-	 * @param {mixed} value
+	 * @param {*} value
 	 *
 	 * or
 	 *
@@ -275,7 +275,7 @@ export class BasicData
 	 * This will set the key value if it is null.
 	 *
 	 * @param {string} key
-	 * @param {mixed} value
+	 * @param {*} value
 	 * @return {object} this
 	 */
 	ifNull(key, value)
@@ -302,7 +302,7 @@ export class BasicData
 	/**
 	 * This will restore the data from local storage.
 	 *
-	 * @param {mixed} defaultValue
+	 * @param {*} defaultValue
 	 * @returns {object} this
 	 */
 	resume(defaultValue)

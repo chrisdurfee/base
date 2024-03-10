@@ -57,7 +57,7 @@ export class BrowserHistory extends History
 	 * This will create a state object.
 	 *
 	 * @param {string} uri
-	 * @param {mixed} data
+	 * @param {*} data
 	 * @return {object}
 	 */
 	createState(uri, data = {})

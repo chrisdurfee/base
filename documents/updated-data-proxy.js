@@ -32,7 +32,7 @@ function createHandler(data, path = '', dataRoot = '')
          * @param {object} target
          * @param {string} prop
          * @param {object} receiver
-         * @return {mixed}
+         * @return {*}
          */
         get(target, prop, receiver)
         {
@@ -68,9 +68,9 @@ function createHandler(data, path = '', dataRoot = '')
          *
          * @param {object} target
          * @param {string} prop
-         * @param {mixed} value
+         * @param {*} value
          * @param {object} receiver
-         * @return {mixed}
+         * @return {*}
          */
         set(target, prop, value, receiver)
         {

@@ -121,7 +121,7 @@ const rebuild = (layout, ele, parent) =>
  *
  * @param {object} ele
  * @param {object} stateStyles
- * @param {mixed} newValue
+ * @param {*} newValue
  * @returns {void}
  */
 const addClass = (ele, stateStyles, newValue) =>

@@ -2,7 +2,7 @@
  * This will create an attribute object.
  *
  * @param {string} key
- * @param {mixed} value
+ * @param {*} value
  * @returns {object}
  */
 export const Attribute = (key, value) =>

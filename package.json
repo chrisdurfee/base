@@ -4,7 +4,7 @@
 	"description": "This is a javascript framework.",
 	"main": "/dist/base.js",
 	"scripts": {
-		"build": "node ./esbuild.js",
+		"build": "node ./esbuild.js && tsc",
 		"prepublishOnly": "node ./esbuild.js"
 	},
 	"keywords": [
@@ -24,8 +24,7 @@
 	},
 	"devDependencies": {
 		"esbuild": "^0.15.7",
-		"typescript": "^5.4.2",
-		"vite-plugin-dts": "^3.7.3"
+		"typescript": "^5.4.2"
 	},
 	"files": [
 		"pacakge.json",

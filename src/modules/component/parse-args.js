@@ -1,8 +1,8 @@
 /**
  * This will prepare the children.
  *
- * @param {mixed} value
- * @return {mixed}
+ * @param {*} value
+ * @return {*}
  */
 const prepareChildren = (value) =>
 {

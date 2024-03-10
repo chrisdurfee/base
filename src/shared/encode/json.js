@@ -50,7 +50,7 @@ const sanitize = (text, removeNewLines) =>
 /**
  * This will prepare the url.
  *
- * @param {mixed} data
+ * @param {*} data
  * @param {boolean} [removeNewLines]
  * @returns {string}
  */
@@ -94,7 +94,7 @@ export function decode(data)
 /**
  * This will encode JSON data.
  *
- * @param {mixed} data
+ * @param {*} data
  * @return {string}
  */
 export function encode(data)

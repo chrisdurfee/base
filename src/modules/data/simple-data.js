@@ -18,9 +18,9 @@ export class SimpleData extends BasicData
 	 * @override
 	 * @protected
 	 * @param {string} attr
-	 * @param {mixed} val
-	 * @param {mixed} committer
-	 * @param {mixed} prevValue
+	 * @param {*} val
+	 * @param {*} committer
+	 * @param {*} prevValue
 	 * @return {void}
 	 */
 	_publish(attr, val, committer, prevValue)

@@ -72,7 +72,7 @@ class Base
 	 * @param {string} methodName the method name being overriden.
 	 * @param {function} overrideMethod The new function to call.
 	 * @param {array} args The args to pass to the first function call.
-	 * @return {mixed} The results of the function being called.
+	 * @return {*} The results of the function being called.
 	 */
 	override(obj, methodName, overrideMethod, args)
 	{
@@ -106,7 +106,7 @@ class Base
 	 *
 	 * @param {object} obj
 	 * @param {string} property
-	 * @param {mixed} [defaultText] A value if no value is set.
+	 * @param {*} [defaultText] A value if no value is set.
 	 * @return {string}
 	 */
 	getProperty(obj, property, defaultText)

@@ -29,7 +29,7 @@ export class Tracker
      *
      * @public
      * @param {string} addingType The type of data.
-     * @param {mixed} data The data to store
+     * @param {*} data The data to store
      * @return {void}
      */
     add(addingType, data)
@@ -44,7 +44,7 @@ export class Tracker
     /**
      * This will get all the data stored to a data type.
      * @param {string} type
-     * @return {mixed} the data or false.
+     * @return {*} the data or false.
      */
     get(type)
     {
@@ -56,7 +56,7 @@ export class Tracker
      *
      * @private
      * @param {function} callBack
-     * @param {mixed} data
+     * @param {*} data
      * @return {void}
      */
     removeByCallBack(callBack, data)

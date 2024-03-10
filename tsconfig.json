@@ -4,7 +4,7 @@
         "checkJs": true, // Enables type checking for JS files, based on your JSDoc comments
         "emitDeclarationOnly": true, // Instructs the compiler to only emit `.d.ts` declaration files
         "declaration": true, // Enables generation of declaration files
-        "outDir": "./types", // Specifies the output directory for the declaration files
+        "outDir": "./dist/types", // Specifies the output directory for the declaration files
         "noEmit": false, // Ensures that files are emitted
         "esModuleInterop": true,
         "module": "ESNext", // Specifies the module system, adjust according to your project's module system

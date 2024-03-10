@@ -117,8 +117,8 @@ const compareObjects = (obj1, obj2) =>
 /**
  * This will compare if two values match.
  *
- * @param {mixed} option1
- * @param {mixed} option2
+ * @param {*} option1
+ * @param {*} option2
  * @return {boolean}
  */
 export const equals = (option1, option2) =>
