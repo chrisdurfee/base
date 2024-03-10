@@ -1,14 +1,16 @@
 {
-  "compilerOptions": {
-    "allowJs": true, // Allows TypeScript to process JS files
-    "checkJs": true, // Enables type checking for JS files, based on your JSDoc comments
-    "emitDeclarationOnly": true, // Instructs the compiler to only emit `.d.ts` declaration files
-    "declaration": true, // Enables generation of declaration files
-    "outDir": "./types", // Specifies the output directory for the declaration files
-    "noEmit": false, // Ensures that files are emitted
-    "esModuleInterop": true,
-    "module": "ESNext", // Specifies the module system, adjust according to your project's module system
-    "target": "ESNext" // Set the target ECMAScript version according to your project's needs
-  },
-  "include": ["src/**/*"] // Adjust this to point to your source files
+    "compilerOptions": {
+        "allowJs": true, // Allows TypeScript to process JS files
+        "checkJs": true, // Enables type checking for JS files, based on your JSDoc comments
+        "emitDeclarationOnly": true, // Instructs the compiler to only emit `.d.ts` declaration files
+        "declaration": true, // Enables generation of declaration files
+        "outDir": "./types", // Specifies the output directory for the declaration files
+        "noEmit": false, // Ensures that files are emitted
+        "esModuleInterop": true,
+        "module": "ESNext", // Specifies the module system, adjust according to your project's module system
+        "target": "ESNext" // Set the target ECMAScript version according to your project's needs
+    },
+    "include": [
+        "src/**/*"
+    ] // Adjust this to point to your source files
 }
