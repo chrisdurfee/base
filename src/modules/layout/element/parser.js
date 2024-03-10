@@ -51,7 +51,7 @@ export class Parser
 	 * @param {*} value
 	 * @param {array} attr
 	 * @param {array} children
-	 * @return {bool}
+	 * @return {boolean}
 	 */
 	static setElementContent(key, value, attr, children)
 	{

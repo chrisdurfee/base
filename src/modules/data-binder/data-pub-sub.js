@@ -24,7 +24,7 @@ export class DataPubSub
 		this.callBacks = new Map();
 
 		/**
-		 * @member {int} lastToken
+		 * @member {number} lastToken
 		 * @protected
 		 */
 		this.lastToken = -1;

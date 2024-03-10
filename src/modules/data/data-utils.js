@@ -12,7 +12,7 @@ export const DataUtils =
 	 * This will check if a string has deep data.
 	 *
 	 * @param {string} str
-	 * @return {bool}
+	 * @return {boolean}
 	 */
 	hasDeepData(str)
 	{

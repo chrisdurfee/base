@@ -122,7 +122,7 @@ export class NavLink extends Component
     /**
      * This will update the class on the element.
      *
-     * @param {bool} selected
+     * @param {boolean} selected
      * @return {void}
      */
     update(selected)

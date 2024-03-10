@@ -13,7 +13,7 @@ const loaded = [];
  * This will check if a script or style has been loaded.
  *
  * @param {string} src
- * @return {bool}
+ * @return {boolean}
  */
 const isLoaded = (src) => loaded.indexOf(src) !== -1;
 
@@ -206,7 +206,7 @@ const loadModule = (src, callBack) =>
  * This will check if an object is a contructor.
  *
  * @param {object|function} object
- * @returns {bool}
+ * @returns {boolean}
  */
 const isConstructor = (object) =>
 {
@@ -371,7 +371,7 @@ const ImportWrapper = Jot(
      * This will check if the layout should be updated.
      *
      * @param {object} layout
-     * @returns {bool}
+     * @returns {boolean}
      */
     shouldUpdate(layout)
     {

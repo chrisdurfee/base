@@ -57,7 +57,7 @@ export const addSwitch = (ele, group, parent) =>
  * This will track a switch.
  *
  * @param {object} ele
- * @param {int} id
+ * @param {number} id
  * @returns {void}
  */
 const trackSwitch = (ele, id) =>

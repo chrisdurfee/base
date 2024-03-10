@@ -292,7 +292,7 @@ export class Router
 	 *
 	 * @param {object} group
 	 * @param {object} container
-	 * @return {int} the switch id.
+	 * @return {number} the switch id.
 	 */
 	resumeSwitch(group, container)
 	{

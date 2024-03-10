@@ -17,7 +17,7 @@ export class Encode
 	 * by encoding them to not break the param string.
 	 *
 	 * @param {object} obj
-	 * @param {bool} [removeNewLines]
+	 * @param {boolean} [removeNewLines]
 	 * @return {string}
 	 */
 	static prepareJsonUrl(obj, removeNewLines = false)

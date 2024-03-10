@@ -13,7 +13,7 @@ export class Strings
 	 *
 	 * @param {string} [str] The string to parse or the global
 	 * location will be parsed.
-	 * @param {bool} [decode]
+	 * @param {boolean} [decode]
 	 * @return {object}
 	 */
 	static parseQueryString(str, decode)

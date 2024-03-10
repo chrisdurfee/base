@@ -38,7 +38,7 @@ export class Component extends Unit
 		super(...args);
 
 		/**
-		 * @param {bool} isComponent
+		 * @param {boolean} isComponent
 		 */
 		this.isComponent = true;
 

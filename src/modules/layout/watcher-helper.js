@@ -34,7 +34,7 @@ export const WatcherHelper =
 	 * This will check if a string has params.
 	 *
 	 * @param {string} string
-	 * @returns {bool}
+	 * @returns {boolean}
 	 */
 	hasParams(string)
 	{
@@ -152,7 +152,7 @@ export const WatcherHelper =
 	 *
 	 * @param {object} data
 	 * @param {string} string
-	 * @param {bool} isArray
+	 * @param {boolean} isArray
 	 * @return {array}
 	 */
 	getPropValues(data, props, isArray)
@@ -177,7 +177,7 @@ export const WatcherHelper =
 	 * @param {object} ele
 	 * @param {object} data
 	 * @param {string} string
-	 * @param {bool} isDataArray
+	 * @param {boolean} isDataArray
 	 * @return {function}
 	 */
 	getCallBack(settings, ele, data, string, isDataArray)

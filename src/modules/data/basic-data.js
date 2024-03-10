@@ -340,7 +340,7 @@ export class BasicData
 	 * This will store the data to the local stoage under
 	 * the storage key.
 	 *
-	 * @returns {bool}
+	 * @returns {boolean}
 	 */
 	store()
 	{
@@ -523,7 +523,7 @@ export class BasicData
 	 * This will remove the linked subscription.
 	 *
 	 * @param {string} token
-	 * @param {bool} removeFromLinks
+	 * @param {boolean} removeFromLinks
 	 * @return {void}
 	 */
 	removeLink(token, removeFromLinks)

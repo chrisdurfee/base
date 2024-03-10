@@ -54,7 +54,7 @@ export class Unit
 	constructor(...args)
 	{
 		/**
-		 * @member {bool} isUnit
+		 * @member {boolean} isUnit
 		 */
 		this.isUnit = true;
 

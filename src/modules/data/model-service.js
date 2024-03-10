@@ -314,8 +314,8 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @param {int} start
-	 * @param {int} count
+	 * @param {number} start
+	 * @param {number} count
 	 * @param {string} filter
 	 * @return {object}
 	 */
