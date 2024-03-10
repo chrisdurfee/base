@@ -129,7 +129,7 @@ export const animate =
 		/**
 		 * This will check if the element is animating.
 		 * @param {object} obj
-		 * @return {(array|boolean)}
+		 * @return {array|boolean}
 		 */
 		checkAnimating(obj)
 		{
