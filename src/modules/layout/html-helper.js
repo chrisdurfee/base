@@ -10,6 +10,7 @@ import { Html, normalizeAttr, removeEventPrefix } from '../html/html.js';
  * @class
  * @extends Html
  */
+// @ts-ignore
 export class HtmlHelper extends Html
 {
 	/**

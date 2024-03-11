@@ -25,6 +25,7 @@ export class Strings
 
 		const objURL = {},
 		regExp = /([^?=&]+)(=([^&]*))?/g;
+		// @ts-ignore
 		str.replace(regExp, function(a, b, c, d)
 		{
 			/* we want to save the key and the

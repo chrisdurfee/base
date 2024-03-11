@@ -26,6 +26,7 @@
 		"esbuild": "^0.15.7",
 		"typescript": "^5.4.2"
 	},
+	"types": "dist/tyeps/base.d.ts",
 	"files": [
 		"pacakge.json",
 		"readme.md",

@@ -43,6 +43,7 @@ export class BasicData
 		const attributes = setupAttrSettings(settings);
 		this.set(attributes);
 
+		// @ts-ignore
 		return DataProxy(this);
 	}
 
@@ -180,6 +181,7 @@ export class BasicData
 	{
 		if (typeof args[0] !== 'object')
 		{
+			// @ts-ignore
 			this._setAttr(...args);
 			return this;
 		}
@@ -404,6 +406,7 @@ export class BasicData
 	/**
 	 * This will get the value of an attribute.
 	 *
+	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
 	 * @returns {*}

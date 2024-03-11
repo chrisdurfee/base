@@ -39,6 +39,7 @@ function createHandler(data, path = '', dataRoot = '')
          * @param {object} receiver
          * @returns {*}
          */
+        // @ts-ignore
         get(target, prop, receiver)
         {
             let value = target[prop];
@@ -62,6 +63,7 @@ function createHandler(data, path = '', dataRoot = '')
             {
                 // Create a new handler for nested properties
                 const newPath = getNewPath(path, prop);
+                // @ts-ignore
                 return new Proxy(value, createHandler(data, newPath, dataRoot));
             }
 
@@ -100,4 +102,5 @@ function createHandler(data, path = '', dataRoot = '')
  * @param {object} data
  * @returns {Proxy}
  */
+// @ts-ignore
 export const DataProxy = (data, root = 'stage') => new Proxy(data, createHandler(data, '', root));

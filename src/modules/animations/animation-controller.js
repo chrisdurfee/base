@@ -157,12 +157,15 @@ export class AnimationController
 	 */
 	animate()
 	{
+		// @ts-ignore
 		this.timePassed = (new Date() - this.startTime);
 
 		let percent = this.timePassed / this.duration,
 		progress = this.progress = (percent > 1)? 1 : percent;
 
 		let delta = this.delta(progress);
+
+		// @ts-ignore
 		this.animation.step(delta);
 
 		/* if the progress is 1 the animation is complete */

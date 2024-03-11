@@ -46,7 +46,7 @@ const UpdateCheckboxAttr = (element, attr, value) =>
  *
  * @param {object} element
  * @param {string} attr
- * @param {nixed} value
+ * @param {*} value
  * @returns {void}
  */
 const UpdateAttr = (element, attr, value) =>
@@ -95,7 +95,7 @@ export class ElementSource extends TwoWaySource
 	 * @constructor
 	 * @param {object} element
 	 * @param {string} attr
-	 * @param {(string|function)} [filter]
+	 * @param {string|function} filter
 	 * @param {object} pubSub
 	 */
 	constructor(element, attr, filter, pubSub)
@@ -274,10 +274,12 @@ export class ElementSource extends TwoWaySource
 	/**
 	 * The callBack when updated.
 	 *
+	 * @overload
 	 * @param {*} value
 	 * @param {object} committer
 	 * @returns {object}
 	 */
+	// @ts-ignore
 	callBack(value, committer)
 	{
 		if (committer !== this.element)

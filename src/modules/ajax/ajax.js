@@ -116,7 +116,8 @@ base.augment(
 	{
 		if (typeof settingsObj === 'object')
 		{
-			this.xhrSettings = Objects.extendClass(XhrDefaultSettings, settingsObj);
+			// @ts-ignore
+			this.xhrSettings = Objects.extendClass(base.xhrSettings, settingsObj);
 		}
 	},
 
@@ -221,6 +222,7 @@ export class XhrRequest
 	 */
 	beforeSend()
 	{
+		// @ts-ignore
 		const items = base.xhrSettings.beforeSend;
 		if (items.length < 1)
 		{
@@ -357,6 +359,7 @@ export class XhrRequest
 	{
 		/* we want to create a clone of the default
 		settings before adding the new settings */
+		// @ts-ignore
 		let settings = this.settings = Object.create(base.xhrSettings);
 
 		/* we want to check if we are adding the ajax settings by

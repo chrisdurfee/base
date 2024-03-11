@@ -42,6 +42,7 @@ export class EventHelper
 			/**
 			 * @type {array} event
 			 */
+			// @ts-ignore
 			this.on(...event);
 		});
 	}

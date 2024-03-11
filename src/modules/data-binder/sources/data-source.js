@@ -58,10 +58,12 @@ export class DataSource extends TwoWaySource
 	/**
 	 * The callBack when updated.
 	 *
+	 * @overload
 	 * @param {*} value
 	 * @param {object} committer
 	 * @returns {void}
 	 */
+	// @ts-ignore
 	callBack(value, committer)
 	{
 		if (this.data !== committer)

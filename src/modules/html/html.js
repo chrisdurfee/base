@@ -91,7 +91,6 @@ export class Html
 	/**
 	 * This will add the element attributes.
 	 *
-	 * @protected
 	 * @param {object} obj
 	 * @param {object} attrs
 	 * @returns {void}

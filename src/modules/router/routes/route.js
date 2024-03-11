@@ -42,6 +42,8 @@ export class Route extends SimpleData
 
 		this.setupRoute(settings);
 		this.set('active', false);
+
+		// @ts-ignore
 		return proxy;
 	}
 
@@ -269,10 +271,13 @@ export class Route extends SimpleData
 	 * This will check if a route matches the path.
 	 *
 	 * @param {string} path
-	 * @returns {(object|boolean)}
+	 * @returns {object|boolean}
 	 */
 	match(path)
 	{
+		/**
+		 * @type {boolean|array}
+		 */
 		let matched = false;
 
 		/**

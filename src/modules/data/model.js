@@ -73,6 +73,8 @@ export class Model extends Data
 	{
 		const proxy = super(settings);
 		this.initialize();
+
+		// @ts-ignore
 		return proxy;
 	}
 

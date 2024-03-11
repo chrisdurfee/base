@@ -125,7 +125,7 @@ export class ComponentHelper
 	{
 		if (!this.hasTemplate)
 		{
-			return false;
+			return;
 		}
 
 		this.setup = true;
@@ -148,7 +148,7 @@ export class ComponentHelper
 	{
 		if (this.setup !== true)
 		{
-			return false;
+			return;
 		}
 
 		this.setup = false;
@@ -156,7 +156,7 @@ export class ComponentHelper
 		const component = this.component;
 		if (!component)
 		{
-			return false;
+			return;
 		}
 
 		if (typeof component.destroy === 'function')
@@ -183,7 +183,7 @@ export class ComponentHelper
 		const component = this.component;
 		if (!component)
 		{
-			return false;
+			return;
 		}
 
 		if (typeof component.update === 'function')
