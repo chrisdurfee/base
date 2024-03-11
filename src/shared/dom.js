@@ -318,7 +318,6 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} property
-	 * @param {string} value
 	 * @returns {string}
 	 */
 	static getData(obj, property)
@@ -362,7 +361,7 @@ export class Dom
 	{
 		if (!obj || typeof queryString !== 'string')
 		{
-			return false;
+			return [];
 		}
 
 		return obj.querySelectorAll(queryString);
@@ -463,7 +462,7 @@ export class Dom
 	 * This will get the width of an element.
 	 *
 	 * @param {object} obj
-	 * @returns {(int|boolean)} A width or false.
+	 * @returns {number|boolean} A width or false.
 	 */
 	static getWidth(obj)
 	{
@@ -475,7 +474,7 @@ export class Dom
 	 * This will get the height of an element.
 	 *
 	 * @param {object} obj
-	 * @returns {(int|boolean)} A height or false.
+	 * @returns {number|boolean} A height or false.
 	 */
 	static getHeight(obj)
 	{
@@ -607,7 +606,7 @@ export class Dom
 	 * This will get the position of an element.
 	 *
 	 * @param {object} obj
-	 * @param {boolean} [depth] The number of levels, default is 1, 0 is to the root.
+	 * @param {number} [depth] The number of levels, default is 1, 0 is to the root.
 	 * @returns {object}
 	 */
 	static position(obj, depth = 1)
@@ -638,6 +637,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} tmpClassName
+	 * @returns {object}
 	 */
 	static addClass(obj, tmpClassName)
 	{
@@ -664,6 +664,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} [tmpClassName]
+	 * @returns {object}
 	 */
 	static removeClass(obj, tmpClassName)
 	{
@@ -706,7 +707,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} tmpClassName
-	 * @returns {object} An instance of base.
+	 * @returns {object}
 	 */
 	static toggleClass(obj, tmpClassName)
 	{
