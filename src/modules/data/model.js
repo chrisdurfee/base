@@ -109,7 +109,7 @@ export class Model extends Data
 	 * This will extend the model to a child model.
 	 *
 	 * @param {object} [settings]
-	 * @returns {class}
+	 * @returns {object}
 	 */
 	static extend(settings = {})
 	{

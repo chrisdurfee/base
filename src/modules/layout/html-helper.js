@@ -34,7 +34,7 @@ export class HtmlHelper extends Html
 	/**
 	 * This will add the element attributes.
 	 *
-	 * @protected
+	 * @overload
 	 * @param {object} ele
 	 * @param {array} attrs
 	 * @param {object} parent

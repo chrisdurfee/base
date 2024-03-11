@@ -141,7 +141,6 @@ export class Builder
 	/**
 	 * This will add the element directives.
 	 *
-	 * @protected
 	 * @param {object} ele
 	 * @param {array} directives
 	 * @param {object} parent

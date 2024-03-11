@@ -73,7 +73,7 @@ export const onUpdate = (ele, data, settings, parent) =>
  * @param {object} ele
  * @param {function} callBack
  * @param {string} value
- * @param {string} parent
+ * @param {object} parent
  */
 const updateElement = (ele, callBack, prop, value, parent) =>
 {

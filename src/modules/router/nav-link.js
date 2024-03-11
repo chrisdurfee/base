@@ -21,6 +21,7 @@ export class NavLink extends Component
      */
     beforeSetup()
     {
+        // @ts-ignore
         this.selectedClass = this.activeClass || 'active';
     }
 
@@ -31,12 +32,16 @@ export class NavLink extends Component
      */
     render()
     {
+        // @ts-ignore
         const href = this.href,
+
+        // @ts-ignore
         text = this.text,
         watchers = this.setupWatchers(href, text);
 
         return {
             tag: 'a',
+            // @ts-ignore
             class: this.class || this.className || null,
             onState: ['selected', {
                 [this.selectedClass]: true
@@ -70,6 +75,7 @@ export class NavLink extends Component
      */
     setupWatchers(href, text)
     {
+        // @ts-ignore
         const exact = (this.exact !== false),
         data = router.data;
 

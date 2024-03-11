@@ -73,6 +73,16 @@ export class Unit
 		this.children = null;
 
 		/**
+		 * @member {?array} nest
+		 */
+		this.nest = null;
+
+		/**
+		 * @member {?object} state
+		 */
+		this.state = null;
+
+		/**
 		 * @member {?object} panel
 		 */
 		this.panel = null;

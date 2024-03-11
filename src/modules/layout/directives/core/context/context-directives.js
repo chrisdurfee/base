@@ -79,7 +79,7 @@ export const useContext = (ele, callBack, parent) =>
  * This will add context the parent context.
  *
  * @param {object} ele
- * @param {array} callBack
+ * @param {array|function} callBack
  * @param {object} [parent]
  * @returns {void}
  */
