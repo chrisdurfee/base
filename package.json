@@ -1,6 +1,6 @@
 {
 	"name": "@base-framework/base",
-	"version": "3.0.79",
+	"version": "3.0.82",
 	"description": "This is a javascript framework.",
 	"main": "/dist/base.js",
 	"scripts": {
@@ -26,7 +26,7 @@
 		"esbuild": "^0.15.7",
 		"typescript": "^5.4.2"
 	},
-	"types": "dist/tyeps/base.d.ts",
+	"types": "dist/types/base.d.ts",
 	"files": [
 		"pacakge.json",
 		"readme.md",

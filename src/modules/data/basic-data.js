@@ -1,3 +1,4 @@
+import { Objects } from '../../base.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 import { DataPubSub } from '../data-binder/data-pub-sub.js';
 import { setupAttrSettings } from './attrs.js';
@@ -532,16 +533,16 @@ export class BasicData
 		}
 
 		const links = this.links;
-		if (links.length < 1)
+		if (Objects.isEmpty(links))
 		{
 			return;
 		}
 
-		links.forEach(token =>
+		Object.entries(links).forEach(([key, token]) =>
 		{
 			this.removeLink(token, false);
 		});
-		this.links = [];
+		this.links = {};
 	}
 
 	/**

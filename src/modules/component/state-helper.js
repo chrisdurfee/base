@@ -190,7 +190,7 @@ export class StateHelper
 	 */
 	restore(state)
 	{
-		state.restore();
+		StateTracker.restore(state.id);
 
 		const remotes = this.remoteStates;
 		if (!remotes)
