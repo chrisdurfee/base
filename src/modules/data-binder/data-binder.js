@@ -320,17 +320,17 @@ export class DataBinder
 	 *
 	 * @protected
 	 * @param {object} element
-	 * @returns {string|boolean}
+	 * @returns {?string}
 	 */
 	isDataBound(element)
 	{
 		if (!element)
 		{
-			return false;
+			return null;
 		}
 
 		const id = element[this.attr];
-		return (id) ? id : false;
+		return (id) ? id : null;
 	}
 
 	/**
@@ -366,7 +366,7 @@ export class DataBinder
 
 		const target = evt.target || evt.srcElement,
 		id = this.isDataBound(target);
-		if (id)
+		if (id !== null)
 		{
 			const connection = this.connections.get(id, 'bind');
 			if (connection)

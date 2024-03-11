@@ -1,3 +1,4 @@
+import { dataBinder } from '../data-binder/data-binder.js';
 import { DataPubSub } from '../data-binder/data-pub-sub.js';
 import { setupAttrSettings } from './attrs.js';
 import { DataProxy } from './data-proxy.js';
@@ -141,6 +142,26 @@ export class BasicData
 		/* this will publish the data to the data binder
 		to update any ui elements that are subscribed */
 		this._publish(attr, val, committer, prevValue);
+	}
+
+	/**
+	 * This will publish an update to the data binder.
+	 *
+	 * @protected
+	 * @param {string} attr
+	 * @param {*} val
+	 * @param {*} committer
+	 * @param {*} prevValue
+	 * @returns {void}
+	 */
+	_publish(attr, val, committer, prevValue)
+	{
+		const message = attr + ':change';
+		this.eventSub.publish(message, val, committer);
+
+		committer = committer || this;
+
+		dataBinder.publish(this._dataId + attr, val, committer);
 	}
 
 	/**

@@ -113,10 +113,10 @@ export class DataPubSub
 	/**
 	 * This will publish a message.
 	 *
-	 * @param {string} msg
 	 * @overload
+	 * @param {string} msg
 	 * @param {string} value
-	 * @param {object} committer
+	 * @param {object} [committer]
 	 * @returns {void}
 	 */
 	publish(msg, ...args)
