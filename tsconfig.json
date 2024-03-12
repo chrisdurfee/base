@@ -13,5 +13,5 @@
     },
     "include": [
         "src/**/*"
-    ] // Adjust this to point to your source files
+    ]
 }
