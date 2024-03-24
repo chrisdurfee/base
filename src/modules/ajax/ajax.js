@@ -139,7 +139,7 @@ base.augment(
  * @param {function} callBackFn
  * @param {string} responseType
  * @param {string} [method=POST]
- * @param {boolean} async
+ * @param {boolean} [async]
  *
  * @overload
  * @param {object} settings

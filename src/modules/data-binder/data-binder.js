@@ -4,7 +4,6 @@ import { ConnectionTracker } from './connection-tracker/connection-tracker.js';
 import { OneWayConnection } from './connection-tracker/connections/one-way-connection.js';
 import { TwoWayConnection } from './connection-tracker/connections/two-way-connection.js';
 import { DataPubSub } from './data-pub-sub.js';
-export { DataPubSub } from './data-pub-sub.js';
 
 /**
  * DataBinder
