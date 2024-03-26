@@ -8,23 +8,40 @@ import { Component } from './component.js';
  * @author Chris Durfee
  * @author Cayon Christiansen
  */
-
-/**
- * This will store the pod shorthand method alaises.
- *
- * @constant
- * @type {object}
- */
-const SHORTHAND_METHODS =
+const getDefaultMethods = () => (
 {
-    created: 'onCreated',
-    setStates: 'setupStates',
-    events: 'setupEvents',
-    before: 'beforeSetup',
-    render: 'render',
-    after: 'afterSetup',
-    destroy: 'beforeDestroy'
-};
+    created() {},
+    onCreated() {
+        this.created();
+    },
+
+    setStates() {},
+    setupStates () {
+        return this.setStates();
+    },
+
+    events() {
+        return [];
+    },
+    setupEvents() {
+        return this.events();
+    },
+
+    before() {},
+    beforeSetup() {
+        this.before();
+    },
+
+    after() {},
+    afterSetup() {
+        this.after();
+    },
+
+    destroy() {},
+    beforeDestroy() {
+        this.destroy();
+    }
+});
 
 /**
  * This will modify the methods to convert the shorthand
@@ -35,14 +52,8 @@ const SHORTHAND_METHODS =
  */
 const modifyMethods = (component) =>
 {
-    Object.entries(SHORTHAND_METHODS).forEach(([prop, value]) =>
-    {
-        if (component[prop])
-        {
-            component[value] = component[prop];
-            delete component[prop];
-        }
-    });
+    const methods = Object.assign(getDefaultMethods(), component);
+    Object.assign(component.prototype, methods);
 
     return component;
 };
@@ -51,14 +62,11 @@ const modifyMethods = (component) =>
  * This will create a class.
  *
  * @param {object} Base
- * @param {object} settings
  * @returns {object}
  */
-const createClass = (Base, settings) =>
+const createClass = (Base) =>
 {
-    class Child extends Base {}
-    Object.assign(Child.prototype, settings);
-    return Child;
+    return class extends Base {}
 };
 
 /**
@@ -74,7 +82,7 @@ export const Pod = (callBack) =>
         return null;
     }
 
-    const component = createClass(Component, {});
+    const component = createClass(Component);
 
     /**
      * This will call the callback function and pass the component
