@@ -11,8 +11,22 @@ import { Component } from './component.js';
 const getDefaultMethods = () => (
 {
     created() {},
+    setData() {
+        return null;
+    },
     onCreated() {
         this.created();
+
+        if (this.data)
+        {
+            return;
+        }
+
+        const data = this.setData();
+        if (data)
+        {
+            this.data = data;
+        }
     },
 
     setStates() {},
