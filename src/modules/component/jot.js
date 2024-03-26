@@ -7,7 +7,7 @@ import { Unit } from './unit.js';
  * @constant
  * @type {object}
  */
-const JOT_SHORTHAND_METHODS =
+const SHORTHAND_METHODS =
 {
     created: 'onCreated',
     state: 'setupStates',
@@ -47,7 +47,7 @@ const JotComponent = (settings) =>
 
     Object.entries(settings).forEach(([prop, value]) =>
     {
-        const alias = JOT_SHORTHAND_METHODS[prop] || prop;
+        const alias = SHORTHAND_METHODS[prop] || prop;
         component[alias] = getJotShorthandMethod(value);
     });
 

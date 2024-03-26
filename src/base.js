@@ -4,6 +4,7 @@ import { Ajax } from './modules/ajax/ajax.js';
 import { Atom } from './modules/atom/atom.js';
 import { Component } from './modules/component/component.js';
 import { Jot } from './modules/component/jot.js';
+import { Pod } from './modules/component/pod.js';
 import { Unit } from './modules/component/unit.js';
 import { dataBinder } from './modules/data-binder/data-binder.js';
 import { Data, Model, SimpleData } from './modules/data/data.js';
@@ -43,5 +44,5 @@ base.augment(
 /**
  * This will export base and all the modules.
  */
-export { Ajax, Arrays, Atom, Builder, Component, Data, DataTracker, DateTime, Directives, Dom, Html, Import, Jot, Model, NavLink, Objects, SimpleData, State, Strings, Types, Unit, base, dataBinder, router };
+export { Ajax, Arrays, Atom, base, Builder, Component, Data, dataBinder, DataTracker, DateTime, Directives, Dom, Html, Import, Jot, Model, NavLink, Objects, Pod, router, SimpleData, State, Strings, Types, Unit };
 
