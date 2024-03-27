@@ -8,62 +8,39 @@ import { Component } from './component.js';
  * @author Chris Durfee
  * @author Cayon Christiansen
  */
-const getDefaultMethods = () => (
+
+/**
+ * This will store the pod shorthand method alaises.
+ *
+ * @constant
+ * @type {object}
+ */
+const SHORTHAND_METHODS =
 {
-    created() {},
-    setData() {
-        return null;
-    },
-    onCreated() {
-        this.created();
-    },
-
-    setContext(context) {
-		return null;
-	},
-	addContext(context) {
-		return null;
-	},
-
-    setStates() {},
-    setupStates () {
-        return this.setStates();
-    },
-
-    events() {
-        return [];
-    },
-    setupEvents() {
-        return this.events();
-    },
-
-    before() {},
-    beforeSetup() {
-        this.before();
-    },
-
-    after() {},
-    afterSetup() {
-        this.after();
-    },
-
-    destroy() {},
-    beforeDestroy() {
-        this.destroy();
-    }
-});
+    created: 'onCreated',
+    setStates: 'setupStates',
+    events: 'setupEvents',
+    before: 'beforeSetup',
+    render: 'render',
+    after: 'afterSetup',
+    destroy: 'beforeDestroy'
+};
 
 /**
  * This will modify the methods to convert the shorthand
  * methods to the full methods.
  *
+ * @param {object} proxy
  * @param {object} component
  * @returns {object}
  */
-const modifyMethods = (component) =>
+const modifyMethods = (proxy, component) =>
 {
-    const methods = { ...getDefaultMethods(), ...component };
-    Object.assign(component.prototype, methods);
+    Object.entries(proxy).forEach(([prop, value]) =>
+    {
+        const alias = SHORTHAND_METHODS[prop] || prop;
+        component.prototype[alias] = value;
+    });
 
     return component;
 };
@@ -100,13 +77,14 @@ export const Pod = (callBack) =>
      *
      * The result is the render method.
      */
-    const render = callBack(component);
+    const proxy = {};
+    const render = callBack(proxy);
 
     /**
      * This will modify the methods to convert the shorthand
      * methods to the full methods.
      */
-    modifyMethods(component);
+    modifyMethods(proxy, component);
 
     component.prototype.render = render;
     return component;
