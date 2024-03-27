@@ -47,7 +47,37 @@ export class Component extends Unit
 		 * @member {string} [stateTargetId] // optional override of state id
 		 */
 		this.stateTargetId = null;
+		this._setupData();
 	}
+
+	/**
+	 * This will set the data.
+	 *
+	 * @returns {object|null}
+	 */
+	setData()
+	{
+        return null;
+    }
+
+	/**
+	 * This will setup the component data.
+	 *
+	 * @returns {void}
+	 */
+    _setupData()
+	{
+        if (this.data)
+        {
+            return;
+        }
+
+        const data = this.setData();
+        if (data)
+        {
+            this.data = data;
+        }
+    }
 
 	/**
 	 * This will initialize the component.

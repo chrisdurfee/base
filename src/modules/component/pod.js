@@ -16,18 +16,14 @@ const getDefaultMethods = () => (
     },
     onCreated() {
         this.created();
-
-        if (this.data)
-        {
-            return;
-        }
-
-        const data = this.setData();
-        if (data)
-        {
-            this.data = data;
-        }
     },
+
+    setContext(context) {
+		return null;
+	},
+	addContext(context) {
+		return null;
+	},
 
     setStates() {},
     setupStates () {
@@ -66,7 +62,7 @@ const getDefaultMethods = () => (
  */
 const modifyMethods = (component) =>
 {
-    const methods = Object.assign(getDefaultMethods(), component);
+    const methods = { ...getDefaultMethods(), ...component };
     Object.assign(component.prototype, methods);
 
     return component;
@@ -78,7 +74,7 @@ const modifyMethods = (component) =>
  * @param {object} Base
  * @returns {object}
  */
-const createClass = (Base) =>
+const extendBaseClass = (Base) =>
 {
     return class extends Base {}
 };
@@ -96,7 +92,7 @@ export const Pod = (callBack) =>
         return null;
     }
 
-    const component = createClass(Component);
+    const component = extendBaseClass(Component);
 
     /**
      * This will call the callback function and pass the component
