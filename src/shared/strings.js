@@ -1,4 +1,22 @@
 /**
+ * This will limit the length of a string.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+const LimitString = (str) =>
+{
+	if (typeof str !== 'string')
+	{
+		return '';
+	}
+
+	// We will limit the length of the string.
+	const MAX_LENGTH = 1000;
+	return str.substring(0, MAX_LENGTH);
+};
+
+/**
  * Strings
  *
  * This will contain methods for working with strings.
@@ -23,6 +41,8 @@ export class Strings
 			str = window.location.search;
 		}
 
+		str = LimitString(str);
+
 		const objURL = {},
 		regExp = /([^?=&]+)(=([^&]*))?/g;
 		// @ts-ignore
@@ -44,10 +64,7 @@ export class Strings
 	 */
 	static camelCase(str)
 	{
-		if (typeof str !== 'string')
-		{
-			return '';
-		}
+		str = LimitString(str);
 
 		const regExp = /(-|\s|_)+\w{1}/g;
 		return str.replace(regExp, (match) =>  match[1].toUpperCase());
@@ -62,10 +79,7 @@ export class Strings
 	 */
 	static uncamelCase(str, delimiter = '-')
 	{
-		if (typeof str !== 'string')
-		{
-			return '';
-		}
+		str = LimitString(str);
 
 		const regExp = /([A-Z]{1,})/g;
 		return str.replace(regExp, (match) => delimiter + match.toLowerCase()).toLowerCase();
