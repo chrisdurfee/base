@@ -144,13 +144,6 @@ export class Route extends SimpleData
 			return null;
 		}
 
-		if (typeof imported === 'string')
-		{
-			imported = {
-				src: imported
-			};
-		}
-
 		return Import(imported);
 	}
 

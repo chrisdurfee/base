@@ -187,13 +187,23 @@ class Group
 /**
  * This will load the module.
  *
- * @param {string} src
+ * @param {*} src
  * @param {function} callBack
  * @returns {object}
  */
 const loadModule = (src, callBack) =>
 {
-    import(src).then(module =>
+    let promise = src;
+
+    /**
+     * This will check if the src is a string and import the module.
+     */
+    if (typeof src === 'string')
+    {
+        promise = import(src);
+    }
+
+    promise.then(module =>
     {
         if (callBack)
         {
@@ -432,10 +442,17 @@ const ImportWrapper = Jot(
 /**
  * This will import a module.
  *
- * @param {object} props
+ * @param {object|string} props
  * @returns {object}
  */
 export const Import = (props) =>
 {
+    if (typeof props === 'string')
+    {
+        props = {
+            src: props
+        };
+    }
+
     return new ImportWrapper(props);
 };
