@@ -60,7 +60,7 @@ const setWatcher = (ele, data, settings, parent) =>
         return;
     }
 
-    const update = getUpdateMethod(ele, prop, callBack);
+    const update = getUpdateMethod(ele, prop, callBack, parent);
     dataBinder.watch(ele, data, prop, update);
 };
 
@@ -70,9 +70,10 @@ const setWatcher = (ele, data, settings, parent) =>
  * @param {object} ele
  * @param {object} prop
  * @param {*} callBack
+ * @param {object} parent
  * @returns {function}
  */
-const getUpdateMethod = (ele, prop, callBack) =>
+const getUpdateMethod = (ele, prop, callBack, parent) =>
 {
     if (typeof callBack === 'object')
     {
