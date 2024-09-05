@@ -15,8 +15,7 @@ import { Builder } from "../../builder.js";
 export const onUpdate = (ele, data, settings, parent) =>
 {
     let prop,
-    callBack,
-    update;
+    callBack;
 
     if (Array.isArray(settings[0]))
     {
@@ -47,23 +46,32 @@ export const onUpdate = (ele, data, settings, parent) =>
         return;
     }
 
-    switch (typeof callBack)
+    const update = getUpdateMethod(ele, prop, callBack);
+    dataBinder.watch(ele, data, prop, update);
+};
+
+/**
+ * This will get the update method.
+ *
+ * @param {object} ele
+ * @param {object} prop
+ * @param {*} callBack
+ * @returns {function}
+ */
+const getUpdateMethod = (ele, prop, callBack) =>
+{
+    if (typeof callBack === 'object')
     {
-        case 'object':
-            update = (value) =>
-            {
-                addClass(ele, callBack, value);
-            };
-            break;
-        case 'function':
-            update = (value) =>
-            {
-                updateElement(ele, callBack, prop, value, parent);
-            };
-            break;
+        return (value) =>
+        {
+            addClass(ele, callBack, value);
+        };
     }
 
-    dataBinder.watch(ele, data, prop, update);
+    return (value) =>
+    {
+        updateElement(ele, callBack, prop, value, parent);
+    };
 };
 
 /**
