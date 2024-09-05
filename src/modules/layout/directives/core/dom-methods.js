@@ -14,9 +14,6 @@ import { Builder } from "../../builder.js";
  */
 export const onUpdate = (ele, data, settings, parent) =>
 {
-    let prop,
-    callBack;
-
     if (Array.isArray(settings[0]))
     {
         settings.forEach((itemSettings) =>
@@ -31,6 +28,23 @@ export const onUpdate = (ele, data, settings, parent) =>
 
         return;
     }
+
+    setWatcher(ele, data, settings, parent);
+};
+
+/**
+ * This will setup a data watcher.
+ *
+ * @param {object} ele
+ * @param {object} data
+ * @param {array} settings
+ * @param {string} parent
+ * @returns {void}
+ */
+const setWatcher = (ele, data, settings, parent) =>
+{
+    let prop,
+    callBack;
 
     if (settings.length < 3)
     {
