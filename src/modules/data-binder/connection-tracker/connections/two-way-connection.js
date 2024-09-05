@@ -15,6 +15,7 @@ export class TwoWayConnection extends Connection
 	/**
 	 * This will create a two way connection.
 	 *
+	 * @param {object} pubSub
 	 * @constructor
 	 */
 	constructor(pubSub)
