@@ -23,12 +23,12 @@ export class TwoWayConnection extends Connection
 		super();
 
 		/**
-		 * @member {object} element
+		 * @member {object|null} element
 		 */
 		this.element = null;
 
 		/**
-		 * @member {object} data
+		 * @member {object|null} data
 		 */
 		this.data = null;
 

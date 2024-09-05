@@ -21,7 +21,7 @@ export class OneWayConnection extends Connection
 		super();
 
 		/**
-		 * @member {object} source
+		 * @member {object|null} source
 		 */
 		this.source = null;
 	}
