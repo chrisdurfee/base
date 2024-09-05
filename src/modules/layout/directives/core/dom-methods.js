@@ -104,24 +104,64 @@ const updateElement = (ele, callBack, prop, value, parent) =>
     switch (typeof result)
     {
         case 'object':
-            if (parent && result && result.isUnit === true && parent.persist === true && parent.state)
-            {
-                let key = prop + ':' + value,
-                state = parent.state,
-                previousResult = state.get(key);
-                if (typeof previousResult !== 'undefined')
-                {
-                    result = previousResult;
-                }
-
-                state.set(key, result);
-            }
+            /**
+             * This will set the previous result if needed.
+             */
+            result = checkPreviousResult(parent, prop, value, result);
             rebuild(result, ele, parent);
             break;
         case 'string':
             Html.addHtml(ele, result);
             break;
     }
+};
+
+/**
+ * This will set a previous result.
+ *
+ * @private
+ * @param {object} parent
+ * @param {string} prop
+ * @param {string} value
+ * @param {object} result
+ * @returns {*}
+ */
+const checkPreviousResult = (parent, prop, value, result) =>
+{
+    if (!parent || !result)
+    {
+        return result;
+    }
+
+    if (result.isUnit !== true || parent.persist !== true || !parent.state)
+    {
+        return result;
+    }
+
+    return setPreviousResult(parent, prop, value, result);
+};
+
+/**
+ * This will set the previous result.
+ *
+ * @param {object} parent
+ * @param {string} prop
+ * @param {string} value
+ * @param {object} result
+ * @returns {*}
+ */
+const setPreviousResult = (parent, prop, value, result) =>
+{
+    let key = prop + ':' + value,
+    state = parent.state,
+    previousResult = state.get(key);
+    if (typeof previousResult !== 'undefined')
+    {
+        result = previousResult;
+    }
+
+    state.set(key, result);
+    return result;
 };
 
 /**
