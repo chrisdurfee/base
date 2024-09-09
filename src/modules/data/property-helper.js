@@ -58,7 +58,7 @@ export class PropertyHelper
 	 * This will delete an attribute.
 	 *
 	 * @static
-	 * @param {object|string} obj
+	 * @param {object} obj
 	 * @param {string} attr
 	 * @returns {void}
 	 */
@@ -67,35 +67,34 @@ export class PropertyHelper
 		if (!utils.hasDeepData(attr))
 		{
 			delete obj[attr];
+			return;
 		}
-		else
+
+		const props = utils.getSegments(attr),
+		length = props.length,
+		end = length - 1;
+
+		for (var i = 0; i < length; i++)
 		{
-			const props = utils.getSegments(attr),
-			length = props.length,
-			end = length - 1;
-
-			for (var i = 0; i < length; i++)
+			var prop = props[i];
+			var propValue = obj[prop];
+			if (propValue === undefined)
 			{
-				var prop = props[i];
-				var propValue = obj[prop];
-				if (propValue === undefined)
-				{
-					break;
-				}
-
-				if (i === end)
-				{
-					if (Array.isArray(obj))
-					{
-						obj.splice(prop, 1);
-						break;
-					}
-
-					delete obj[prop];
-					break;
-				}
-				obj = propValue;
+				break;
 			}
+
+			if (i === end)
+			{
+				if (Array.isArray(obj))
+				{
+					obj.splice(prop, 1);
+					break;
+				}
+
+				delete obj[prop];
+				break;
+			}
+			obj = propValue;
 		}
 	}
 
