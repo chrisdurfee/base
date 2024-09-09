@@ -1,7 +1,7 @@
 import { Objects } from '../../shared/objects.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 import { BasicData, EVENT } from './basic-data.js';
-import { DataUtils as utils } from './data-utils.js';
+import { PropertyHelper } from './property-helper.js';
 import { Publisher } from './publisher.js';
 
 /**
@@ -25,51 +25,6 @@ export class Data extends BasicData
 	{
 		this.attributes = {};
 		this.stage = {};
-	}
-
-	/**
-	 * This will update an attribute value.
-	 *
-	 * @protected
-	 * @param {object} obj
-	 * @param {string} attr
-	 * @param {*} val
-	 * @returns {void}
-	 */
-	_updateAttr(obj, attr, val)
-	{
-		/* this will check if we need to update
-		deep nested data */
-		if (!utils.hasDeepData(attr))
-		{
-			obj[attr] = val;
-			return;
-		}
-
-		let prop,
-		props = utils.getSegments(attr),
-		length = props.length,
-		end = length - 1;
-
-		for (var i = 0; i < length; i++)
-		{
-			prop = props[i];
-
-			/* this will add the value to the last prop */
-			if (i === end)
-			{
-				obj[prop] = val;
-				break;
-			}
-
-			if (obj[prop] === undefined)
-			{
-				/* this will check to setup a new object
-				or an array if the prop is a number */
-				obj[prop] = isNaN(prop)? {} : [];
-			}
-			obj = obj[prop];
-		}
 	}
 
 	/**
@@ -97,7 +52,7 @@ export class Data extends BasicData
 		{
 			/* this will update the attribute data because
 			it was updated outside the data binder */
-			this._updateAttr(this.attributes, attr, val);
+			PropertyHelper.set(this.attributes, attr, val);
 		}
 		else
 		{
@@ -107,7 +62,7 @@ export class Data extends BasicData
 			}
 		}
 
-		this._updateAttr(this.stage, attr, val);
+		PropertyHelper.set(this.stage, attr, val);
 
 		/* this will publish the data to the data binder
 		to update any ui elements that are subscribed */
@@ -360,43 +315,14 @@ export class Data extends BasicData
 	 */
 	_deleteAttr(obj, attr, committer = this)
 	{
-		if (!utils.hasDeepData(attr))
-		{
-			delete obj[attr];
-		}
-		else
-		{
-			const props = utils.getSegments(attr),
-			length = props.length,
-			end = length - 1;
+		PropertyHelper.delete(obj, attr);
 
-			for (var i = 0; i < length; i++)
-			{
-				var prop = props[i];
-				var propValue = obj[prop];
-				if (propValue === undefined)
-				{
-					break;
-				}
-
-				if (i === end)
-				{
-					if (Array.isArray(obj))
-					{
-						obj.splice(prop, 1);
-						break;
-					}
-
-					delete obj[prop];
-					break;
-				}
-				obj = propValue;
-			}
-		}
-
-		/* this will publish the data to the data binder
-		to update any ui elements that are subscribed */
-		this._publish(attr, null, committer, EVENT.DELETE);
+		/**
+		 * This will only publish the delete event to the
+		 * local subscribers.
+		 */
+		const callBack = (path, obj) => this.publishLocalEvent(path, obj, committer, EVENT.DELETE);
+		Publisher.publish(attr, attr, callBack);
 	}
 
 	/**
@@ -409,32 +335,6 @@ export class Data extends BasicData
 	 */
 	_getAttr(obj, attr)
 	{
-		if (!utils.hasDeepData(attr))
-		{
-			return obj[attr];
-		}
-
-		const props = utils.getSegments(attr),
-		length = props.length,
-		end = length - 1;
-
-		for (var i = 0; i < length; i++)
-		{
-			var prop = props[i];
-			var propValue = obj[prop];
-			if (propValue === undefined)
-			{
-				break;
-			}
-
-			obj = propValue;
-
-			if (i === end)
-			{
-				return obj;
-			}
-		}
-
-		return undefined;
+		return PropertyHelper.get(obj, attr);
 	}
 }
