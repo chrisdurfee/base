@@ -1,4 +1,4 @@
-import { dataBinder } from '../data-binder/data-binder.js';
+import { dataBinder } from '../../data-binder/data-binder.js';
 import { BasicData, createEventMessage } from './basic-data.js';
 
 /**

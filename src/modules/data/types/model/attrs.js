@@ -1,5 +1,5 @@
-import { Objects } from "../../shared/objects.js";
-import { Types } from "../../shared/types.js";
+import { Objects } from "../../../../shared/objects.js";
+import { Types } from "../../../../shared/types.js";
 
 /**
  * This will get the data attribute settings.

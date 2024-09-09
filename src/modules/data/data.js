@@ -1,3 +1,3 @@
-export { Data } from './deep-data.js';
-export { Model } from './model.js';
-export { SimpleData } from './simple-data.js';
+export { Data } from './types/deep-data/deep-data.js';
+export { Model } from './types/model/model.js';
+export { SimpleData } from './types/simple-data.js';

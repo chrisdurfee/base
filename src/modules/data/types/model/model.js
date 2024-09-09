@@ -1,6 +1,6 @@
-import { Types } from '../../shared/types.js';
+import { Types } from '../../../../shared/types.js';
+import { Data } from '../deep-data/deep-data.js';
 import { setupAttrSettings } from './attrs.js';
-import { Data } from './deep-data.js';
 import { ModelService } from './model-service.js';
 
 /**

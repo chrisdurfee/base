@@ -1,6 +1,6 @@
-import { Objects } from '../../shared/objects.js';
-import { dataBinder } from '../data-binder/data-binder.js';
-import { BasicData, EVENT } from './basic-data.js';
+import { Objects } from '../../../../shared/objects.js';
+import { dataBinder } from '../../../data-binder/data-binder.js';
+import { BasicData, EVENT } from '../basic-data.js';
 import { PropertyHelper } from './property-helper.js';
 import { Publisher } from './publisher.js';
 

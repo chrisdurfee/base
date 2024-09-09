@@ -1,9 +1,9 @@
-import { Objects } from '../../base.js';
-import { dataBinder } from '../data-binder/data-binder.js';
-import { DataPubSub } from '../data-binder/data-pub-sub.js';
-import { setupAttrSettings } from './attrs.js';
-import { DataProxy } from './data-proxy.js';
-import { LocalData } from './local-data.js';
+import { Objects } from '../../../base.js';
+import { dataBinder } from '../../data-binder/data-binder.js';
+import { DataPubSub } from '../../data-binder/data-pub-sub.js';
+import { DataProxy } from '../data-proxy.js';
+import { LocalData } from '../local-data.js';
+import { setupAttrSettings } from './model/attrs.js';
 
 let dataNumber = 0;
 
