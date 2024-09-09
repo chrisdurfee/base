@@ -1,7 +1,8 @@
 import { Objects } from '../../shared/objects.js';
 import { dataBinder } from '../data-binder/data-binder.js';
-import { BasicData } from './basic-data.js';
+import { BasicData, EVENT } from './basic-data.js';
 import { DataUtils as utils } from './data-utils.js';
+import { Publisher } from './publisher.js';
 
 /**
  * Data
@@ -111,7 +112,7 @@ export class Data extends BasicData
 		/* this will publish the data to the data binder
 		to update any ui elements that are subscribed */
 		committer = committer || this;
-		this._publish(attr, val, committer);
+		this._publish(attr, val, committer, EVENT.CHANGE);
 	}
 
 	/**
@@ -276,155 +277,13 @@ export class Data extends BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {*} committer
+	 * @param {string} event
 	 * @returns {void}
 	 */
-	_publish(attr, val, committer)
+	_publish(attr, val, committer, event)
 	{
-		this.publish(attr, val, committer);
-	}
-
-	/**
-	 * This will publish deep and simple data to the data binder.
-	 *
-	 * @protected
-	 * @param {string} attr
-	 * @param {*} val
-	 * @param {object} committer
-	 * @returns {void}
-	 */
-	publishDeep(attr, val, committer)
-	{
-		if (!utils.hasDeepData(attr))
-		{
-			this.publish(attr, val, committer);
-			return;
-		}
-
-		let prop,
-		props = utils.getSegments(attr),
-		length = props.length,
-		end = length - 1;
-
-		/* the path is a string equivalent of the javascript dot notation path
-		of the object being published. */
-		let path = '',
-		obj = this.stage;
-		for (var i = 0; i < length; i++)
-		{
-			prop = props[i];
-
-			/* we need to setup the object to go to the next level
-			of the data object before calling the next property. */
-			obj = obj[prop];
-
-			if (i > 0)
-			{
-				/* this will add the property to the path based on if its an
-				object property or an array. */
-				if(isNaN(prop))
-				{
-					path += '.' + prop;
-				}
-			}
-			else
-			{
-				path = prop;
-			}
-
-			var publish;
-			if (i === end)
-			{
-				/* if the loop is on the last pass it only needs to publish
-				the val. */
-				publish = val;
-			}
-			else
-			{
-				/* we only want to publish the modified branches. we need to
-				get the next property in the props array and create a publish
-				object or array with the next property value. */
-				var nextProp = props[i + 1];
-				if (isNaN(nextProp) === false)
-				{
-					path += '[' + nextProp + ']';
-					continue;
-				}
-
-				var nextAttr = {};
-				nextAttr[nextProp] = obj[nextProp];
-				publish = nextAttr;
-			}
-
-			this.publish(path, publish, committer);
-		}
-	}
-
-	/**
-	 * This will publish an update to the data binder.
-	 *
-	 * @protected
-	 * @param {string} pathString
-	 * @param {*} obj
-	 * @param {*} committer
-	 * @returns {void}
-	 */
-	publish(pathString, obj, committer)
-	{
-		pathString = pathString || "";
-		this._publishAttr(pathString, obj, committer);
-
-		if (!obj || typeof obj !== 'object')
-		{
-			return;
-		}
-
-		let subPath, value;
-		if (Array.isArray(obj))
-		{
-			const length = obj.length;
-			for (var i = 0; i < length; i++)
-			{
-				value = obj[i];
-				subPath = pathString + '[' + i + ']';
-				this._checkPublish(subPath, value, committer);
-			}
-		}
-		else
-		{
-			for (var prop in obj)
-			{
-				if (!Object.prototype.hasOwnProperty.call(obj, prop))
-				{
-					continue;
-				}
-
-				value = obj[prop];
-				subPath = pathString + '.' + prop;
-				this._checkPublish(subPath, value, committer);
-			}
-		}
-	}
-
-	/**
-	 * This will check if the value is an object and publish
-	 * the value or the object.
-	 *
-	 * @protected
-	 * @param {string} subPath
-	 * @param {*} val
-	 * @param {object} committer
-	 * @returns {void}
-	 */
-	_checkPublish(subPath, val, committer)
-	{
-		if (!val || typeof val !== 'object')
-		{
-			this._publishAttr(subPath, val, committer);
-		}
-		else
-		{
-			this.publish(subPath, val, committer);
-		}
+		const callBack = (path, obj) => this._publishAttr(path, obj, committer, event);
+		Publisher.publish(attr, val, callBack);
 	}
 
 	/**
@@ -434,15 +293,22 @@ export class Data extends BasicData
 	 * @param {string} subPath
 	 * @param {*} val
 	 * @param {object} committer
+	 * @param {string} event
 	 * @returns {void}
 	 */
-	_publishAttr(subPath, val, committer)
+	_publishAttr(subPath, val, committer, event)
 	{
-		/* save path and value */
-		dataBinder.publish(this._dataId + subPath, val, committer);
+		/**
+		 * This will publish the data to the data binder
+		 * to update any subscribers.
+		 */
+		const path = this._dataId + subPath;
+		dataBinder.publish(path, val, committer);
 
-		const message = subPath + ':change';
-		this.eventSub.publish(message, val, committer);
+		/**
+		 * This will publish to the local subscribers.
+		 */
+		this.publishLocalEvent(subPath, val, committer, event);
 	}
 
 	/**
@@ -487,43 +353,50 @@ export class Data extends BasicData
 	 * This will delete an attribute.
 	 *
 	 * @protected
-	 * @param {object} obj
+	 * @param {object|string} obj
 	 * @param {string} attr
+	 * @param {object} committer
 	 * @returns {void}
 	 */
-	_deleteAttr(obj, attr)
+	_deleteAttr(obj, attr, committer = this)
 	{
 		if (!utils.hasDeepData(attr))
 		{
 			delete obj[attr];
 		}
-
-		const props = utils.getSegments(attr),
-		length = props.length,
-		end = length - 1;
-
-		for (var i = 0; i < length; i++)
+		else
 		{
-			var prop = props[i];
-			var propValue = obj[prop];
-			if (propValue === undefined)
-			{
-				break;
-			}
+			const props = utils.getSegments(attr),
+			length = props.length,
+			end = length - 1;
 
-			if (i === end)
+			for (var i = 0; i < length; i++)
 			{
-				if (Array.isArray(obj))
+				var prop = props[i];
+				var propValue = obj[prop];
+				if (propValue === undefined)
 				{
-					obj.splice(prop, 1);
 					break;
 				}
 
-				delete obj[prop];
-				break;
+				if (i === end)
+				{
+					if (Array.isArray(obj))
+					{
+						obj.splice(prop, 1);
+						break;
+					}
+
+					delete obj[prop];
+					break;
+				}
+				obj = propValue;
 			}
-			obj = propValue;
 		}
+
+		/* this will publish the data to the data binder
+		to update any ui elements that are subscribed */
+		this._publish(attr, null, committer, EVENT.DELETE);
 	}
 
 	/**

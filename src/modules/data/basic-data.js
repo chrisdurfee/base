@@ -3,8 +3,41 @@ import { dataBinder } from '../data-binder/data-binder.js';
 import { DataPubSub } from '../data-binder/data-pub-sub.js';
 import { setupAttrSettings } from './attrs.js';
 import { DataProxy } from './data-proxy.js';
+import { LocalData } from './local-data.js';
 
 let dataNumber = 0;
+
+/**
+ * EVENT
+ *
+ * This will hold the event strings for the data object.
+ *
+ * @type {object} EVENT
+ * @property {string} CHANGE
+ * @property {string} DELETE
+ * @readonly
+ * @enum {string} EVENT - The event strings for the data object.
+ * @const
+ */
+export const EVENT =
+{
+	CHANGE: 'change',
+	DELETE: 'delete'
+};
+
+/**
+ * createEventMessage
+ *
+ * This will create an event message.
+ *
+ * @param {string} attr
+ * @param {string} event
+ * @returns {string} The event message.
+ */
+export const createEventMessage = (attr, event) =>
+{
+	return `${attr}:${event}`;
+};
 
 /**
  * BasicData
@@ -70,8 +103,8 @@ export class BasicData
 		const id = (++dataNumber);
 		this._dataNumber = id;
 
-		this._id = 'dt-' + id;
-		this._dataId = this._id + ':';
+		this._id = `dt-${id}`;
+		this._dataId = `${this._id}:`;
 	}
 
 	/**
@@ -103,7 +136,7 @@ export class BasicData
 	 */
 	on(attrName, callBack)
 	{
-		const message = attrName + ':change';
+		const message = createEventMessage(attrName, EVENT.CHANGE);
 		const token = this.eventSub.on(message, callBack);
 		return token;
 	}
@@ -117,7 +150,7 @@ export class BasicData
 	 */
 	off(attrName, token)
 	{
-		const message = attrName + ':change';
+		const message = attrName + EVENT.CHANGE;
 		this.eventSub.off(message, token);
 	}
 
@@ -143,7 +176,26 @@ export class BasicData
 
 		/* this will publish the data to the data binder
 		to update any ui elements that are subscribed */
-		this._publish(attr, val, committer, prevValue);
+		this._publish(attr, val, committer, EVENT.CHANGE);
+	}
+
+	/**
+	 * This will publish a local event.
+	 *
+	 * @protected
+	 * @param {string} attr
+	 * @param {*} val
+	 * @param {object|null} committer
+	 * @param {string} event
+	 * @returns {void}
+	 */
+	publishLocalEvent(attr, val, committer, event)
+	{
+		/**
+		 * This will publish the event to the event sub.
+		 */
+		const message = createEventMessage(attr, event);
+		this.eventSub.publish(message, val, committer);
 	}
 
 	/**
@@ -153,16 +205,23 @@ export class BasicData
 	 * @param {string} attr
 	 * @param {*} val
 	 * @param {*} committer
-	 * @param {*} prevValue
+	 * @param {string} event
 	 * @returns {void}
 	 */
-	_publish(attr, val, committer, prevValue)
+	_publish(attr, val, committer, event)
 	{
-		const message = attr + ':change';
-		this.eventSub.publish(message, val, committer);
+		/**
+		 * This will publish the event to the event sub.
+		 */
+		this.publishLocalEvent(attr, val, committer, event);
 
+		/**
+		 * This will set the committer to the current object if it is not set.
+		 * This is deferred until the local event is published.
+		 *
+		 * This will publish the event to the data binder.
+		 */
 		committer = committer || this;
-
 		dataBinder.publish(this._dataId + attr, val, committer);
 	}
 
@@ -188,7 +247,6 @@ export class BasicData
 		}
 
 		const [items, committer, stopMerge] = args;
-
 		Object.entries(items).forEach(([attr, value]) =>
 		{
 			if (typeof value === 'function')
@@ -218,11 +276,18 @@ export class BasicData
 	 * @protected
 	 * @param {object} obj
 	 * @param {string} attr
+	 * @param {object} [committer]
 	 * @returns {void}
 	 */
-	_deleteAttr(obj, attr)
+	_deleteAttr(obj, attr, committer = this)
 	{
 		delete obj[attr];
+
+		/**
+		 * This will pulish the delete event to the event sub only. This will
+		 * not publish the delete event to the data binder.
+		 */
+		this.publishLocalEvent(attr, null, committer, EVENT.DELETE);
 	}
 
 	/**
@@ -291,7 +356,7 @@ export class BasicData
 			return;
 		}
 
-		let currentValue = this.get(attr);
+		const currentValue = this.get(attr);
 		this.set(attr, currentValue + value);
 		return this;
 	}
@@ -332,26 +397,7 @@ export class BasicData
 	 */
 	resume(defaultValue)
 	{
-		const key = this.key;
-		if (!key)
-		{
-			return this;
-		}
-
-		let data;
-		const value = localStorage.getItem(key);
-		if (value === null)
-		{
-			if (defaultValue)
-			{
-				data = defaultValue;
-			}
-		}
-		else
-		{
-			data = JSON.parse(value);
-		}
-
+		const data = LocalData.resume(this.key, defaultValue);
 		if (!data)
 		{
 			return this;
@@ -369,32 +415,19 @@ export class BasicData
 	 */
 	store()
 	{
-		const key = this.key;
-		if (!key)
-		{
-			return false;
-		}
-
 		const data = this.get();
-		if (!data)
-		{
-			return false;
-		}
-
-		const value = JSON.stringify(data);
-		localStorage.setItem(key, value);
-		return true;
+		return LocalData.store(this.key, data);
 	}
 
 	/**
 	 * This will delete a property value or the model data.
 	 *
-	 * @param {string} [attrName]
-	 * @returns {*}
+	 * @param {object|string|null} [attrName]
+	 * @returns {void}
 	 */
 	delete(attrName)
 	{
-		if (typeof attrName !== 'undefined')
+		if (typeof attrName === 'string')
 		{
 			this._deleteAttr(this.stage, attrName);
 			return;
