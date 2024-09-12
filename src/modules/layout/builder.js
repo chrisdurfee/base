@@ -55,7 +55,7 @@ export class Builder
 	 */
 	static build(obj, container, parent)
 	{
-		const fragment = HtmlHelper.createDocFragment();
+		const fragment = render.createFrag();
 		const elements = Array.isArray(obj) ? obj : [obj];
         elements.forEach(element => this.buildElement(element, fragment, parent));
 

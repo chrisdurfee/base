@@ -71,6 +71,16 @@ export class DataBinder
 	 */
 	setup()
 	{
+		/**
+		 * This will only add the events if the document
+		 * is available to prevent adding the events
+		 * on the server side.
+		 */
+		if (!document)
+		{
+			return;
+		}
+
 		this.setupEvents();
 	}
 

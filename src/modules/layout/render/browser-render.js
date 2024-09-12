@@ -11,6 +11,16 @@ import { Render } from './render.js';
 export class BrowserRender extends Render
 {
 	/**
+	 * This will create a fragment.
+	 *
+	 * @returns {*}
+	 */
+	createFrag()
+	{
+		return HtmlHelper.createDocFragment();
+	}
+
+	/**
 	 * This will create a node.
 	 *
 	 * @param {object} settings

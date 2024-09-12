@@ -10,6 +10,16 @@ import { Render } from './render.js';
 export class ServerRender extends Render
 {
 	/**
+	 * This will create a fragment.
+	 *
+	 * @returns {*}
+	 */
+	createFrag()
+	{
+		return '';
+	}
+
+	/**
 	 * This will create a node.
 	 *
 	 * @param {object} settings

@@ -9,6 +9,16 @@
 export class Render
 {
 	/**
+	 * This will create a fragment.
+	 *
+	 * @returns {*}
+	 */
+	createFrag()
+	{
+		return null;
+	}
+
+	/**
 	 * This will create a node.
 	 *
 	 * @param {object} settings
