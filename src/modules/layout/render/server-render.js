@@ -10,13 +10,16 @@ import { Render } from './render.js';
 export class ServerRender extends Render
 {
 	/**
-	 * This will create a fragment.
+	 * This will render the layout
 	 *
-	 * @returns {*}
+	 * @param {object} obj The JSON layout.
+	 * @param {object} [container] The parent receiving the layout.
+	 * @param {object} [parent] The component adding the layout.
+	 * @returns {*} The layout result
 	 */
-	createFrag()
+	build(obj, container, parent)
 	{
-		return '';
+
 	}
 
 	/**
@@ -40,5 +43,16 @@ export class ServerRender extends Render
 			const child = settings.attr[0];
 			const text = (child)? child.value : '';
 		}
+	}
+
+	/**
+	 * This will remove all the children from an element.
+	 *
+	 * @param {object} ele
+	 * @returns {void}
+	 */
+	removeAll(ele)
+	{
+
 	}
 }

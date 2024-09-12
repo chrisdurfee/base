@@ -9,24 +9,65 @@
 export class Render
 {
 	/**
-	 * This will create a fragment.
+	 * This will render the layout
 	 *
-	 * @returns {*}
+	 * @param {object} obj The JSON layout.
+	 * @param {object} [container] The parent receiving the layout.
+	 * @param {object} [parent] The component adding the layout.
+	 * @returns {*} The layout result
 	 */
-	createFrag()
+	build(obj, container, parent)
 	{
-		return null;
+
 	}
 
 	/**
-	 * This will create a node.
+	 * This will create a component.
 	 *
-	 * @param {object} settings
+	 * @param {object} obj
 	 * @param {object} container
 	 * @param {object} parent
-	 * @returns {object}
+	 * @returns {void}
 	 */
-	createNode(settings, container, parent)
+	createComponent(obj, container, parent)
+	{
+		const component = obj;
+		component.parent = parent;
+
+		if (parent && parent.persist === true && component.persist !== false)
+		{
+			component.persist = true;
+		}
+
+		if (component.cache && parent)
+		{
+			parent[component.cache] = component;
+		}
+
+		/**
+		 * This will set up the component, build the layout, and
+		 * call the afterBuild method.
+		 */
+		component.setup(container);
+
+		const layout = component.prepareLayout();
+		this.build(layout, component.container, component);
+
+		component.afterBuild();
+
+		if (obj.component && typeof obj.onCreated === 'function')
+		{
+			obj.onCreated(component);
+		}
+	}
+
+	/**
+	 * This will remove all the children from an element.
+	 *
+	 * @param {object} ele
+	 * @returns {void}
+	 */
+	removeAll(ele)
 	{
 
 	}

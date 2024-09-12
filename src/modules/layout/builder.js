@@ -1,13 +1,32 @@
 import { base } from '../../main/base.js';
 import { Jot } from "../component/jot.js";
 import { Parser } from './element/parser.js';
-import { HtmlHelper } from './html-helper.js';
 import { RenderController } from './render/render-controller.js';
 
 /**
  * This will set up the render engine.
  */
 const render = RenderController.setup();
+
+/**
+ * This will check if the layout is a component.
+ *
+ * @param {object} layout
+ * @returns {boolean}
+ */
+const isComponent = (layout) => (typeof layout === 'object' && layout.isUnit === true);
+
+/**
+ * This will create a Jot component.
+ *
+ * @param {object} layout
+ * @returns {object}
+ */
+const createJotComponent = (layout) =>
+{
+	const Component = Jot(layout);
+    return new Component();
+};
 
 /**
  * Builder
@@ -33,16 +52,13 @@ export class Builder
 			return null;
 		}
 
-		if (typeof layout === 'object' && layout.isUnit === true)
+		if (!isComponent(layout))
 		{
-            this.createComponent(layout, container, parent);
-            return layout;
+            layout = createJotComponent(layout);
         }
 
-		const Component = Jot(layout);
-        const componentInstance = new Component();
-        this.createComponent(componentInstance, container, parent);
-        return componentInstance;
+        render.createComponent(layout, container, parent);
+        return layout;
 	}
 
 	/**
@@ -55,15 +71,7 @@ export class Builder
 	 */
 	static build(obj, container, parent)
 	{
-		const fragment = render.createFrag();
-		const elements = Array.isArray(obj) ? obj : [obj];
-        elements.forEach(element => this.buildElement(element, fragment, parent));
-
-		if (container && typeof container === 'object')
-		{
-			container.appendChild(fragment);
-		}
-		return fragment;
+		return render.build(obj, container, parent);
 	}
 
 	/**
@@ -76,7 +84,7 @@ export class Builder
 	 */
 	static rebuild(layout, ele, parent)
 	{
-		HtmlHelper.removeAll(ele);
+		render.removeAll(ele);
 		return this.build(layout, ele, parent);
 	}
 
