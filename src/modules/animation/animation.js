@@ -33,7 +33,7 @@ const removeAnimationClass = (obj, animationClass, callBack) =>
 
 const getElement = (element) =>
 {
-	return (typeof element === 'string')? document.getElementById(element) : element;
+	return (typeof element === 'string' && typeof document !== 'undefined')? document.getElementById(element) : element;
 };
 
 /* this will add and remove css animations */

@@ -17,7 +17,7 @@ export class RenderController
      */
     static browserIsSupported()
     {
-        return (window && typeof window.document === 'object');
+        return (typeof window !== 'undefined' && typeof document === 'object');
     }
 
     /**

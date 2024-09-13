@@ -3,7 +3,7 @@ import { Events } from "../../main/events/events.js";
 
 const updateTitle =  (title) =>
 {
-	if(typeof title === 'string')
+	if(typeof title === 'string' && typeof document !== 'undefined')
 	{
 		document.title = title;
 	}

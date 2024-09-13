@@ -101,7 +101,7 @@ export class AnimationController
 	 */
 	getElement(element)
 	{
-		return (typeof element === 'string')? document.querySelector(element) : element;
+		return (typeof element === 'string' && typeof document !== 'undefined')? document.querySelector(element) : element;
 	}
 
 	/**

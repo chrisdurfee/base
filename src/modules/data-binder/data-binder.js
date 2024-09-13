@@ -71,16 +71,6 @@ export class DataBinder
 	 */
 	setup()
 	{
-		/**
-		 * This will only add the events if the document
-		 * is available to prevent adding the events
-		 * on the server side.
-		 */
-		if (!document)
-		{
-			return;
-		}
-
 		this.setupEvents();
 	}
 
@@ -409,7 +399,10 @@ export class DataBinder
 	 */
 	addEvents()
 	{
-		Events.on(["change", "paste", "input"], document, this.changeHandler, false);
+		if (typeof document !== 'undefined')
+		{
+			Events.on(["change", "paste", "input"], document, this.changeHandler, false);
+		}
 	}
 
 	/**
@@ -420,7 +413,10 @@ export class DataBinder
 	 */
 	removeEvents()
 	{
-		Events.off(["change", "paste", "input"], document, this.changeHandler, false);
+		if (typeof document !== 'undefined')
+		{
+			Events.off(["change", "paste", "input"], document, this.changeHandler, false);
+		}
 	}
 }
 

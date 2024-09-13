@@ -44,6 +44,13 @@ DataTracker.addType('switch', (data) =>
 });
 
 /**
+ * This will get the location.
+ *
+ * @returns {object}
+ */
+const getLocation = () => (typeof window !== 'undefined')? window.location : {};
+
+/**
  * Router
  *
  * This will create a browser router.
@@ -74,7 +81,7 @@ export class Router
 		 */
 		this.history = null;
 		this.callBackLink = null;
-		this.location = window.location;
+		this.location = getLocation();
 
 		/**
 		 * This will store each route added to the router.

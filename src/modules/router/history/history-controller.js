@@ -16,7 +16,7 @@ export class HistoryController
      */
     static browserIsSupported()
     {
-        return ('history' in window && 'pushState' in window.history);
+        return (typeof window === 'object' && 'history' in window && 'pushState' in window.history);
     }
 
     /**

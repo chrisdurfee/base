@@ -1,8 +1,9 @@
 {
 	"name": "@base-framework/base",
-	"version": "3.0.93",
+	"version": "3.0.102",
 	"description": "This is a javascript framework.",
-	"main": "/dist/base.js",
+	"main": "./dist/base.js",
+	"type": "module",
 	"scripts": {
 		"build": "node ./esbuild.js && tsc",
 		"prepublishOnly": "node ./esbuild.js"
