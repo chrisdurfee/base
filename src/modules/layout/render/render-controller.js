@@ -13,11 +13,11 @@ export class RenderController
     /**
      * This will check if we are in the browser.
      *
-     * @returns boolean
+     * @returns {boolean}
      */
     static browserIsSupported()
     {
-        return (window);
+        return (window && typeof window.document === 'object');
     }
 
     /**
