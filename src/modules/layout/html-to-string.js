@@ -1,3 +1,5 @@
+import { removeEventPrefix } from '../html/html.js';
+
 const selfClosingTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source'];
 
 /**
@@ -45,7 +47,12 @@ export class HtmlToString
 
         return attrs
             .map(attr => {
-                const { key, value } = attr;
+                let { key, value } = attr;
+
+                if (typeof value === 'function')
+                {
+                    key = 'on' + removeEventPrefix(key);
+                }
                 return `${key}="${value}"`;
             })
             .join(' ');
