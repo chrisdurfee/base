@@ -1,3 +1,5 @@
+const selfClosingTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source'];
+
 /**
  * HtmlToString
  *
@@ -12,15 +14,41 @@ export class HtmlToString
      * This will create a node string.
      *
      * @param {string} tag
+     * @param {object} attrs
+     * @param {string} children
      * @returns {string}
      */
-	static create(tag, attributes = {})
+	static create(tag, attrs = {}, children = '')
     {
-        const attrString = Object.keys(attributes)
-            .map(key => `${key}="${attributes[key]}"`)
-            .join(' ');
+        const attrString = this.createAttributes(attrs);
 
-        return `<${tag} ${attrString}>`;
+        if (selfClosingTags.includes(tag))
+        {
+            return `<${tag} ${attrString} />`;
+        }
+
+        return `<${tag} ${attrString}>` + children + `</${tag}>`;
+    }
+
+    /**
+     * This will create a text node.
+     *
+     * @param {array} attrs
+     * @returns {string}
+     */
+    static createAttributes(attrs = [])
+    {
+        if (!attrs || attrs.length < 1)
+        {
+            return '';
+        }
+
+        return attrs
+            .map(attr => {
+                const { key, value } = attr;
+                return `${key}="${value}"`;
+            })
+            .join(' ');
     }
 
     /**
