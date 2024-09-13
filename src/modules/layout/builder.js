@@ -43,7 +43,7 @@ export class Builder
 	 * @param {object|function} layout
 	 * @param {object} container
 	 * @param {object} [parent]
-	 * @returns {object|null} The layout Unit, Component, or null.
+	 * @returns {*} The render result.
 	 */
 	static render(layout, container, parent)
 	{
@@ -57,8 +57,7 @@ export class Builder
             layout = createJotComponent(layout);
         }
 
-        render.createComponent(layout, container, parent);
-        return layout;
+        return render.createComponent(layout, container, parent);
 	}
 
 	/**
@@ -67,7 +66,7 @@ export class Builder
 	 * @param {object} obj The JSON layout.
 	 * @param {object} [container] The parent receiving the layout.
 	 * @param {object} [parent] The component adding the layout.
-	 * @returns {object} The doc Frag element.
+	 * @returns {*} The render result.
 	 */
 	static build(obj, container, parent)
 	{

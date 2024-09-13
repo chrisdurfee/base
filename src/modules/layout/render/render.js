@@ -14,7 +14,7 @@ export class Render
 	 * @param {object} obj The JSON layout.
 	 * @param {object} [container] The parent receiving the layout.
 	 * @param {object} [parent] The component adding the layout.
-	 * @returns {*} The layout result
+	 * @returns {*} The layout result.
 	 */
 	build(obj, container, parent)
 	{
@@ -27,7 +27,7 @@ export class Render
 	 * @param {object} obj
 	 * @param {object} container
 	 * @param {object} parent
-	 * @returns {void}
+	 * @returns {*} the build result.
 	 */
 	createComponent(obj, container, parent)
 	{
@@ -51,7 +51,7 @@ export class Render
 		component.setup(container);
 
 		const layout = component.prepareLayout();
-		this.build(layout, component.container, component);
+		const result = this.build(layout, component.container, component);
 
 		component.afterBuild();
 
@@ -59,6 +59,8 @@ export class Render
 		{
 			obj.onCreated(component);
 		}
+
+		return result;
 	}
 
 	/**

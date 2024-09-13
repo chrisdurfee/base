@@ -63,6 +63,11 @@ export class DataTracker
      */
     static getTrackingId(obj)
     {
+        if (!obj)
+        {
+            return '';
+        }
+
         return obj.trackingId || (obj.trackingId = `dt${this.trackingCount++}`);
     }
 
