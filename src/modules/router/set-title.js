@@ -38,6 +38,45 @@ const replaceParams = (str, route) =>
 };
 
 /**
+ * This will create a title.
+ *
+ * @param {object} route
+ * @param {*} title
+ * @returns {string}
+ */
+const createTitle = (route, title) =>
+{
+    if (!title)
+    {
+        return title;
+    }
+
+    if (typeof title === 'function')
+    {
+        title = title(route.stage);
+    }
+
+    title = replaceParams(title, route);
+    return toTitleCase(title);
+};
+
+/**
+ * This will add the root title to the title.
+ *
+ * @param {string} title
+ * @param {string} rootTitle
+ * @returns {string}
+ */
+const addRootTitle = (title, rootTitle) =>
+{
+    if (rootTitle !== '')
+    {
+        title += " - " + rootTitle;
+    }
+    return title;
+};
+
+/**
  * This will set the title.
  *
  * @param {object} route
@@ -52,21 +91,6 @@ export const setTitle = (route, title, rootTitle) =>
         return title;
     }
 
-    if (typeof title === 'function')
-    {
-        title = title(route.stage);
-    }
-
-    /* we want to replace any params in the title
-    and uppercase the title */
-    title = replaceParams(title, route);
-    title = toTitleCase(title);
-
-    /* we want to check to add the base title to the
-    to the end of the title */
-    if (rootTitle !== '')
-    {
-        title += " - " + rootTitle;
-    }
-    return title;
+    title = createTitle(route, title);
+    return addRootTitle(title, rootTitle);
 };
