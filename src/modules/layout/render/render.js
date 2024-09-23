@@ -64,6 +64,19 @@ export class Render
 	}
 
 	/**
+	 * This will add the element directives.
+	 *
+	 * @param {object} ele
+	 * @param {array} directives
+	 * @param {object} parent
+	 * @returns {void}
+	 */
+	setDirectives(ele, directives, parent)
+	{
+
+	}
+
+	/**
 	 * This will remove all the children from an element.
 	 *
 	 * @param {object} ele

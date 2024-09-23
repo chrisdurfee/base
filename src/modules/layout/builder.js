@@ -87,6 +87,19 @@ export class Builder
 	}
 
 	/**
+	 * This will add the element directives.
+	 *
+	 * @param {object} ele
+	 * @param {array} directives
+	 * @param {object} parent
+	 * @returns {void}
+	 */
+	static setDirectives(ele, directives, parent)
+	{
+		render.setDirectives(ele, directives, parent);
+	}
+
+	/**
 	 * This will create a node.
 	 *
 	 * @param {object} settings
