@@ -154,7 +154,13 @@ Builder.render(page, container);
 
 ## Example Project Using Base Framework
 
-[Base Framework Example](https://github.com/chrisdurfee/next-app-shell)
+[Base Platform Example](https://github.com/chrisdurfee/next-app-shell)
+
+[Base App Example](https://github.com/chrisdurfee/base-update)
+
+[Base Website Example](https://github.com/chrisdurfee/life)
+
+[Base Game Example](https://github.com/chrisdurfee/multisplode)
 
 ## Contributing
 
