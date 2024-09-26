@@ -39,34 +39,34 @@ export class Types
 	/**
 	 * This will check if the request is an object.
      *
-	 * @param {object} obj
+	 * @param {*} data
 	 * @returns {boolean}
 	 */
-	static isObject(obj)
+	static isObject(data)
 	{
-		return (obj && typeof obj === 'object' && this.isArray(obj) === false);
+		return (data && typeof data === 'object' && this.isArray(data) === false);
 	}
 
 	/**
-	 * This will check if the request is an object.
+	 * This will check if the request is a function.
 	 *
-	 * @param {object} obj
+	 * @param {*} data
 	 * @returns {boolean}
 	 */
-	static isFunction(obj)
+	static isFunction(data)
 	{
-		return (typeof obj === 'function');
+		return (typeof data === 'function');
 	}
 
 	/**
-	 * This will check if the request is an object.
+	 * This will check if the request is a string.
      *
-	 * @param {object} obj
+	 * @param {*} data
 	 * @returns {boolean}
 	 */
-	static isString(obj)
+	static isString(data)
 	{
-		return (typeof obj === 'string');
+		return (typeof data === 'string');
 	}
 
     /**

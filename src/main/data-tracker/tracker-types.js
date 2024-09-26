@@ -3,17 +3,20 @@
  *
  * This will add and remove tracker types to the data tracker.
  *
+ * @type {object} TrackerTypes
+ *
  */
 export const TrackerTypes =
 {
     /**
-     * @member {object} The Type and callBack that is called
+     * @member {object} types The Type and callBack that is called
      * when the type is removed from the object.
      */
     types: {},
 
     /**
      * This will add a type.
+     *
      * @param {string} type
      * @param {function} callBack The function to call when an object
      * is having the type removed.
@@ -26,6 +29,7 @@ export const TrackerTypes =
 
     /**
      * This will get a type or return false.
+     *
      * @param {string} type
      * @returns {(Function|false)} The callBack or false.
      */
@@ -36,6 +40,7 @@ export const TrackerTypes =
 
     /**
      * This will remove a type.
+     *
      * @param {string} type
      * @returns {void}
      */

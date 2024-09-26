@@ -74,7 +74,7 @@ export class Strings
 	 * This will uncamel-case a string.
 	 *
 	 * @param {string} str
-	 * @param {string} delimiter
+	 * @param {string} [delimiter]
 	 * @returns {string} The string.
 	 */
 	static uncamelCase(str, delimiter = '-')
