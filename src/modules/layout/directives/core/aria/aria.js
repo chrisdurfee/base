@@ -31,7 +31,7 @@ export const addRole = (ele, role, parent) =>
  */
 const onSetCallBack = (attr) =>
 {
-    return (ele, val) =>
+    return (val, ele) =>
     {
         const text = (val)? "true" : "false";
         Dom.setAttr(ele, attr, text);
