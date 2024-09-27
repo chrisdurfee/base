@@ -92,18 +92,18 @@ Types of bindables include:
 ```javascript
 import { Atom } from '@base-framework/base';
 
-// If the parent component has a Data object with a "count" property.
+/**
+ * If a parent component has a Data object with a "count" property.
+ *
+ * This will create an input with the value bound of the "count"
+ * property. This bind is Bi-directional binding to the
+ * "count" property of the parent component's Data object.
+ */
+Input({ bind: 'count' })
 
-// Binding to "data" property of a component
-const FormInput = Atom((props, children) => (Div([
-    Input({
-        ...props,
-        bind: 'count' // Bi-directional binding to the "count" property of the parent component's Data object.
-    }),
-    children
-])));
-
-// Watching the "data" property of a component on the className attribute.
+/**
+ * Elements can watch for changes in data and re-render when the data changes.
+ */
 Div({class: '[[className]]'})
 
 // Multi-attribute watching
@@ -111,6 +111,50 @@ A({href: '/account/user/[[userId]]'}, '[[userName]] - [[age]]')
 
 // Multi-data watcher
 Div({class: ['[[propName]] [[otherPropName]]', [data, otherData]]})
+```
+
+Here is an example of how to use data binding in a component:
+
+```javascript
+import { Div } from '@base-framework/atoms';
+import { Component } from '@base-framework/base';
+
+/**
+ * Timer
+ *
+ * This will create a timer component that uses state watching.
+ *
+ * @class
+ */
+export class Timer extends Component
+{
+	/**
+	 * This will render the timer.
+	 *
+	 * @returns {object}
+	 */
+	render()
+	{
+        // This will rerender the div text content when the count state changes.
+		return Div('[[count]]');
+	}
+
+	/**
+	 * This will setup the states.
+	 *
+	 * @returns {object}
+	 */
+	setupStates()
+	{
+		return { count: 0 };
+	}
+
+	afterSetup()
+	{
+		const ONE_SECOND = 1000;
+		window.setInterval(() => this.state.increment('count'), ONE_SECOND);
+	}
+}
 ```
 
 Learn more about Data Binding: [Base Data Binding](https://github.com/chrisdurfee/base/wiki/Directives#binding-to-data)
