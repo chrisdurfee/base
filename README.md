@@ -30,7 +30,7 @@ Layouts are reuable and can be used in multiple components and pages. Layouts ca
 
 ```
 
-We use atoms and components to create reusable layouts.
+Base use atoms and components to create reusable layouts.
 
 Learn more: [Base Layouts](https://github.com/chrisdurfee/base/wiki/Layout)
 
