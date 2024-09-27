@@ -11,6 +11,7 @@ The framework is modular and has additional modules to help with ajax, HTML, lay
 You can learn more about how to use Base in the wiki documentation. [Base Wiki](https://github.com/chrisdurfee/base/wiki)
 
 
+
 ## Layouts
 
 Base framework uses components to render an application. Base creates and renders components using native JavaScript. Layouts are scaffolded using JavaScript object literals. Because the layouts are rendered client-side using native JavaScript, the framework does not require a compiling or build process.
