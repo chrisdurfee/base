@@ -39,8 +39,6 @@ Learn more: [Base Layouts](https://github.com/chrisdurfee/base/wiki/Layout)
 
 Components are encapsulated layouts that contain the presentation and functionality. They are reusable and extensible, helping to reduce redundant code through abstract types.
 
-learn more: [Base Components](https://github.com/chrisdurfee/base/wiki/Components)
-
 ```javascript
 import { Component } from '@base-framework/base';
 
@@ -65,6 +63,7 @@ export class Page extends Component
 
 Components have lifecycle methods for actions during creation, setup, and destruction.
 
+learn more: [Base Components](https://github.com/chrisdurfee/base/wiki/Components)
 
 ## Atoms
 Atoms are the building blocks for reusable layouts, allowing common design patterns and elements to be shared between multiple components and other atoms.
