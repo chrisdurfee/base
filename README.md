@@ -370,48 +370,48 @@ import { Builder, Data } from "@base-framework/base";
 
 export function ToDoApp()
 {
-	/**
-	 * This will set up the data store for the to-do app.
-	 */
-	const data = new Data({ items: [] });
+    /**
+     * This will set up the data store for the to-do app.
+     */
+    const data = new Data({ items: [] });
 
-	/**
-	 * This will handle the form submission for adding a new to-do item.
-	 *
-	 * @param {object} event
-	 */
-	const handleSubmit = (event) =>
-	{
-		event.preventDefault();
-		const form = event.target;
-		const input = form.querySelector('input');
+    /**
+     * This will handle the form submission for adding a new to-do item.
+     *
+     * @param {object} event
+     */
+    const handleSubmit = (event) =>
+    {
+        event.preventDefault();
+        const form = event.target;
+        const input = form.querySelector('input');
 
-		// add the new to-do item to the array of items
-		data.push('items', input.value);
-		input.value = '';
-	};
+        // add the new to-do item to the array of items
+        data.push('items', input.value);
+        input.value = '';
+    };
 
-	/**
-	 * This will handle removing a to-do item from the list.
-	 *
-	 * @param {number} index
-	 * @returns {boolean}
-	 */
-	const handleRemove = (index) => data.splice('items', index);
+    /**
+     * This will handle removing a to-do item from the list.
+     *
+     * @param {number} index
+     * @returns {boolean}
+     */
+    const handleRemove = (index) => data.splice('items', index);
 
-	return Div([
-		H1('To-Do App'),
-		Form({ submit: handleSubmit }, [
-			Input({ placeholder: 'Add a new item' }),
-			Button({ type: 'submit' }, 'Add')
-		]),
-		Ul({
-			for: [data, 'items', (item, index) => Li([
-				Span(item),
-				Button({ click: () => handleRemove(index) }, 'Remove')
-			])]
-		})
-	])
+    return Div([
+        H1('To-Do App'),
+        Form({ submit: handleSubmit }, [
+            Input({ placeholder: 'Add a new item' }),
+            Button({ type: 'submit' }, 'Add')
+        ]),
+        Ul({
+            for: [data, 'items', (item, index) => Li([
+                Span(item),
+                Button({ click: () => handleRemove(index) }, 'Remove')
+            ])]
+        })
+    ])
 }
 
 /**
