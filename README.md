@@ -95,13 +95,13 @@ import { Atom } from '@base-framework/base';
 // If the parent component has a Data object with a "count" property.
 
 // Binding to "data" property of a component
-const FormInput = Atom((props, children) => (
+const FormInput = Atom((props, children) => (Div([
     Input({
         ...props,
         bind: 'count' // Bi-directional binding to the "count" property of the parent component's Data object.
     }),
     children
-));
+])));
 
 // Watching the "data" property of a component on the className attribute.
 Div({class: '[[className]]'})
