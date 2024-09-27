@@ -18,8 +18,6 @@ Base uses components to render an application. Base creates and renders componen
 Layouts are reuable and can be used in multiple components and pages. Layouts can be nested and composed to create complex layouts.
 
 ```javascript
-import { Component } from '@base-framework/base';
-import { Div } from '@base-framework/atoms';
 
 // Layouts use normal JavaScript object literals to create the layout.
 { class: 'name' } === <div class="name"></div>
