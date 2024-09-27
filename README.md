@@ -128,32 +128,32 @@ import { Component } from '@base-framework/base';
  */
 export class Timer extends Component
 {
-	/**
-	 * This will render the timer.
-	 *
-	 * @returns {object}
-	 */
-	render()
-	{
+    /**
+     * This will render the timer.
+     *
+     * @returns {object}
+     */
+    render()
+    {
         // This will rerender the div text content when the count state changes.
-		return Div('[[count]]');
-	}
+        return Div('[[count]]');
+    }
 
-	/**
-	 * This will setup the states.
-	 *
-	 * @returns {object}
-	 */
-	setupStates()
-	{
-		return { count: 0 };
-	}
+    /**
+     * This will setup the states.
+     *
+     * @returns {object}
+     */
+    setupStates()
+    {
+        return { count: 0 };
+    }
 
-	afterSetup()
-	{
-		const ONE_SECOND = 1000;
-		window.setInterval(() => this.state.increment('count'), ONE_SECOND);
-	}
+    afterSetup()
+    {
+        const ONE_SECOND = 1000;
+        window.setInterval(() => this.state.increment('count'), ONE_SECOND);
+    }
 }
 ```
 
