@@ -85,6 +85,8 @@ const Div = (props, children) => ({
 Atoms may be created using the Atom function, which accepts a callback function as its sole parameter. The callback function is passed a props object and children array and returns an object containing the atom's layout.
 
 ```typescript
+import { Atom } from '@base-framework/base';
+
 const Button = Atom((props, children) => ({
     tag: 'button',
     ...props,
@@ -96,6 +98,8 @@ const Button = Atom((props, children) => ({
 Atoms should use composition to nest other atoms. This is achieved by passing the children array to the atoms args.
 
 ```typescript
+import { Atom } from '@base-framework/base';
+
 const SecondaryButton = Atom((props, children) => (Button({
     ...props,
     class: 'secondary-btn',
@@ -107,9 +111,28 @@ const SecondaryButton = Atom((props, children) => (Button({
 Event listener callbacks within atoms accept two parameters: the originating event object and the "parent" component object in which the atom resides.
 
 ## Utilization of Atoms
-To leverage an atom, invoke its function and pass the requisite values via a props and children. The Atoms created with the Atom callback functions support passing optional props or children to the atom. The props object should always be first but if the atom does not require props, the children array or string can be passed as the first argument.
+To leverage an atom, invoke its function and pass the requisite values via a props and children.
 
 ```javascript
+const Div = (props, children) => ({
+    ...props,
+    children
+});
+
+Div({ class: 'text' }, 'text');
+```
+
+Atoms created with the Base Atom callback function support passing optional params including props or children to the atom. The props object should always be first but if the atom does not require props, the children array or string can be passed as the first argument.
+
+```javascript
+import { Atom } from '@base-framework/base';
+
+const Div = Atom((props, children) => ({
+    ...props,
+    tag: 'div',
+    children
+}));
+
 // props only
 Div({class: 'text'});
 
