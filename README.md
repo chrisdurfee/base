@@ -324,7 +324,7 @@ import { A, Div, H1, Header } from "@base-framework/atoms";
  * @returns {object}
  */
 const ImportButtons = () => (
-	Div([
+    Div([
         Header([
             H1('Aside')
         ]),
@@ -346,7 +346,7 @@ const ImportButtons = () => (
  * @returns {object}
  */
 const ImportButtons = () => (
-	Div([
+    Div([
         Header([
             H1('Aside')
         ]),
