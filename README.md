@@ -48,6 +48,8 @@ export class Page extends Component
 
 Components have lifecycle methods for actions during creation, setup, and destruction.
 
+
+## Atoms
 Atoms are the building blocks for reusable layouts, allowing common design patterns and elements to be shared between multiple components and other atoms.
 
 Learn more about Atoms: [Base Atoms](https://github.com/chrisdurfee/base/wiki/Atoms)
@@ -59,6 +61,16 @@ npm install @base-framework/atoms
 ```
 
 Here is the repository for the atoms package: [Base Atoms](https://github.com/chrisdurfee/atoms) Like the Base Framework, the atoms package is open-source and free to use.
+
+## Organisms
+
+Base has a package that has some special organisms that can make building complex layouts quicker. This package can be installed via npm.
+
+```bash
+npm install @base-framework/organisms
+```
+
+Here is the repository for the organisms package: [Base Atoms](https://github.com/chrisdurfee/organisms) Like the Base Framework, the organisms package is open-source and free to use.
 
 
 ## Element Directives
