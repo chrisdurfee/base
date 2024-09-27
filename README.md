@@ -293,7 +293,6 @@ import { base } from '@base-framework/base';
 ## Usage
 
 Basic Component Creation
-Create a new component:
 
 ```javascript
 import { base, Component } from '@base-framework/base';
