@@ -241,7 +241,7 @@ import { Component } from '@base-framework/base';
 import { Div } from '@base-framework/atoms';
 import { SecondaryButton } from './atoms/button.js';
 
-class Page extends Component
+export class Page extends Component
 {
     render()
     {
