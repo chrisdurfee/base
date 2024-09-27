@@ -382,13 +382,13 @@ const data = new Data({ items: [] });
  */
 const handleSubmit = (event) =>
 {
-	event.preventDefault();
-	const form = event.target;
-	const input = form.querySelector('input');
+    event.preventDefault();
+    const form = event.target;
+    const input = form.querySelector('input');
 
-	// add the new to-do item to the array of items
-	data.push('items', input.value);
-	input.value = '';
+    // add the new to-do item to the array of items
+    data.push('items', input.value);
+    input.value = '';
 };
 
 /**
@@ -405,19 +405,19 @@ const handleRemove = (index) => data.splice('items', index);
  * @returns {object}
  */
 export const ToDoApp = () => (
-	Div([
-		H1('To-Do App'),
-		Form({ submit: handleSubmit }, [
-			Input({ placeholder: 'Add a new item' }),
-			Button({ type: 'submit' }, 'Add')
-		]),
-		Ul({
-			for: [data, 'items', (item, index) => Li([
-				Span(item),
-				Button({ click: () => handleRemove(index) }, 'Remove')
-			])]
-		})
-	])
+    Div([
+        H1('To-Do App'),
+        Form({ submit: handleSubmit }, [
+            Input({ placeholder: 'Add a new item' }),
+            Button({ type: 'submit' }, 'Add')
+        ]),
+        Ul({
+            for: [data, 'items', (item, index) => Li([
+                Span(item),
+                Button({ click: () => handleRemove(index) }, 'Remove')
+            ])]
+        })
+    ])
 );
 
 /**
