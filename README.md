@@ -11,7 +11,6 @@ The framework is modular and has additional modules to help with ajax, HTML, lay
 You can learn more about how to use Base in the wiki documentation. [Base Wiki](https://github.com/chrisdurfee/base/wiki)
 
 
-
 ## Layouts
 
 Base framework uses components to render an application. Base creates and renders components using native JavaScript. Layouts are scaffolded using JavaScript object literals. Because the layouts are rendered client-side using native JavaScript, the framework does not require a compiling or build process.
@@ -361,6 +360,71 @@ const ImportButtons = () => (
         ])
     ])
 );
+```
+
+## Example Todo App
+
+Here is an example of a todo app using Base Framework:
+
+```javascript
+import { Button, Div, Form, H1, Input, Li, Ul } from "@base-framework/atoms";
+import { Builder, Data } from "@base-framework/base";
+
+/**
+ * This will set up the data store for the to-do app.
+ */
+const data = new Data({ items: [] });
+
+/**
+ * This will handle the form submission for adding a new to-do item.
+ *
+ * @param {object} event
+ */
+const handleSubmit = (event) =>
+{
+	event.preventDefault();
+	const form = event.target;
+	const input = form.querySelector('input');
+
+	// add the new to-do item to the array of items
+	data.push('items', input.value);
+	input.value = '';
+};
+
+/**
+ * This will handle removing a to-do item from the list.
+ *
+ * @param {number} index
+ * @returns {boolean}
+ */
+const handleRemove = (index) => data.splice('items', index);
+
+/**
+ * This will create a to-do app.
+ *
+ * @returns {object}
+ */
+export const ToDoApp = () => (
+	Div([
+		H1('To-Do App'),
+		Form({ submit: handleSubmit }, [
+			Input({ placeholder: 'Add a new item' }),
+			Button({ type: 'submit' }, 'Add')
+		]),
+		Ul({
+			for: [data, 'items', (item, index) => Li([
+				Span(item),
+				Button({ click: () => handleRemove(index) }, 'Remove')
+			])]
+		})
+	])
+);
+
+/**
+ * This will render the to-do app to the body of the document.
+ */
+Builder.render(ToDoApp(), document.body);
+```
 
 
 ## Example Projects Using Base Framework
