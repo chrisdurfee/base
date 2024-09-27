@@ -60,7 +60,7 @@ Base has a package that has already created most of the HTML Atoms needed for re
 npm install @base-framework/atoms
 ```
 
-Here is the repository for the atoms package: [Base Atoms](https://github.com/chrisdurfee/atoms) Like the Base Framework, the atoms package is open-source and free to use.
+Here is the repository for the atoms package: [Base Atoms](https://github.com/chrisdurfee/atoms). Like the Base Framework, the atoms package is open-source and free to use.
 
 ## Organisms
 
@@ -70,7 +70,7 @@ Base has a package that has some special organisms that can make building comple
 npm install @base-framework/organisms
 ```
 
-Here is the repository for the organisms package: [Base Atoms](https://github.com/chrisdurfee/organisms) Like the Base Framework, the organisms package is open-source and free to use.
+Here is the repository for the organisms package: [Base Atoms](https://github.com/chrisdurfee/organisms). The organisms package is open-source and free to use.
 
 
 ## Element Directives
@@ -88,6 +88,30 @@ Types of bindables include:
 - **Data**: A generic object with complex, deep nested data.
 - **SimpleData**: A shallow data object.
 - **Models**: Child of Data, with default attributes and server resource connectivity.
+
+```javascript
+import { Atom } from '@base-framework/base';
+
+// If the parent component has a Data object with a "count" property.
+
+// Binding to "data" property of a component
+const FormInput = Atom((props, children) => (
+    Input({
+        ...props,
+        bind: 'count' // Bi-directional binding to the "count" property of the parent component's Data object.
+    }),
+    children
+));
+
+// Watching the "data" property of a component on the className attribute.
+Div({class: '[[className]]'})
+
+// Multi-attribute watching
+A({href: '/account/user/[[userId]]'}, '[[userName]] - [[age]]')
+
+// Multi-data watcher
+Div({class: ['[[propName]] [[otherPropName]]', [data, otherData]]})
+```
 
 Learn more about Data Binding: [Base Data Binding](https://github.com/chrisdurfee/base/wiki/Directives#binding-to-data)
 
