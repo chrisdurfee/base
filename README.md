@@ -264,6 +264,65 @@ export class Page extends Component
 }
 ```
 
+## Code Splitting
+
+Base Framework supports code splitting, allowing you to load components and modules on demand. This can help reduce the initial load time of your application.
+
+```javascript
+import { Import } from "@base-framework/base";
+import { A, Div, H1, Header } from "@base-framework/atoms";
+
+// Without using Vite
+
+/**
+ * This will create an import buttons.
+ *
+ * @returns {object}
+ */
+const ImportButtons = () => (
+	new Panel([
+		Div([
+			Header([
+				H1('Aside')
+			]),
+			Div({ class: 'card' }, [
+
+                // Importing the buttons module on demand
+				Import('../../../../../../components/atoms/import-buttons.js')
+			]),
+			GridContainer()
+		])
+	])
+);
+
+// With Vite
+
+// Without using Vite
+
+/**
+ * This will create an import buttons.
+ *
+ * @returns {object}
+ */
+const ImportButtons = () => (
+	new Panel([
+		Div([
+			Header([
+				H1('Aside')
+			]),
+			Div({ class: 'card' }, [
+
+                /**
+                 * This will import the buttons module on demand. The import function
+                 * needs to be used to add the module to the vite build.
+                 */
+				Import({ src: import('../../../../../../components/atoms/import-buttons.js') })
+			]),
+			GridContainer()
+		])
+	])
+);
+
 
 ## Example Projects Using Base Framework
 
