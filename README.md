@@ -13,7 +13,7 @@ You can learn more about how to use Base in the wiki documentation. [Base Wiki](
 
 ## Layouts
 
-Base framework uses components to render an application. Base creates and renders components using native JavaScript. Layouts are scaffolded using JavaScript object literals. Because the layouts are rendered client-side using native JavaScript, the framework does not require a compiling or build process.
+Base uses components to render an application. Base creates and renders components using native JavaScript. Layouts are scaffolded using JavaScript object literals. Because the layouts are rendered client-side using native JavaScript, the framework does not require a compiling or build process.
 
 Learn more: [Base Layouts](https://github.com/chrisdurfee/base/wiki/Layout)
 
@@ -52,7 +52,7 @@ Components have lifecycle methods for actions during creation, setup, and destru
 ## Atoms
 Atoms are the building blocks for reusable layouts, allowing common design patterns and elements to be shared between multiple components and other atoms.
 
-Learn more about Atoms: [Base Atoms](https://github.com/chrisdurfee/base/wiki/Atoms)
+Learn more: [Base Atoms](https://github.com/chrisdurfee/base/wiki/Atoms)
 
 Base has a package that has already created most of the HTML Atoms needed for rendering layouts. This package can be installed via npm.
 
@@ -60,7 +60,7 @@ Base has a package that has already created most of the HTML Atoms needed for re
 npm install @base-framework/atoms
 ```
 
-Here is the repository for the atoms package: [Base Atoms](https://github.com/chrisdurfee/atoms). Like the Base Framework, the atoms package is open-source and free to use.
+Here is the repository for the atoms package: [Base Atoms](https://github.com/chrisdurfee/atoms). Like Base, the atoms package is open-source and free to use.
 
 ## Organisms
 
@@ -77,7 +77,7 @@ Here is the repository for the organisms package: [Base Organisms](https://githu
 
 Elements created by Base have access to custom directives, enabling more functionalities than standard HTML elements. These include caching, adding states, binding and watching data, re-rendering contents, declarative routing and switching, array mapping and binding, event listeners, and more.
 
-Learn more about Element Directives: [Base Element Directives](https://github.com/chrisdurfee/base/wiki/Directives)
+Learn more: [Base Element Directives](https://github.com/chrisdurfee/base/wiki/Directives)
 
 
 ## Data Binding, Watching, and Linking
@@ -157,7 +157,7 @@ export class Timer extends Component
 }
 ```
 
-Learn more about Data Binding: [Base Data Binding](https://github.com/chrisdurfee/base/wiki/Directives#binding-to-data)
+Learn more: [Base Data Binding](https://github.com/chrisdurfee/base/wiki/Directives#binding-to-data)
 
 
 ## Performance
@@ -167,7 +167,7 @@ Components are static by default, rendering only once per instance. They become 
 
 ## Getting Started
 
-To begin using the Base Framework in a client-side or server-side rendered project, follow these steps:
+To begin using Base framework in a client-side or server-side rendered project, follow these steps:
 
 1. **Clone the repository**:
 ```bash
@@ -258,7 +258,7 @@ const container = document.body;
 Builder.render(page, container);
 ```
 
-To allow more reusability, you create static elements as Atoms and Organisms. Atoms and Organisms should use composition. These can be used in multiple components and layouts.
+To allow more reusability, you create static elements as atoms and organisms. Atoms and organisms should use composition. These can be used in multiple components and layouts.
 
 ```javascript
 import { Atom } from '@base-framework/base';
@@ -310,7 +310,7 @@ export class Page extends Component
 
 ## Code Splitting
 
-Base Framework supports code splitting, allowing you to load components and modules on demand. This can help reduce the initial load time of your application. You can import atoms or components on demand using the Import module.
+Base supports code splitting, allowing you to load components and modules on demand. This can help reduce the initial load time of your application. You can import atoms or components on demand using the Import module.
 
 ```javascript
 import { Import } from "@base-framework/base";
@@ -362,7 +362,7 @@ const ImportButtons = () => (
 
 ## Example Todo App
 
-Here is an example of a todo app using Base Framework:
+Here is an example of a todo app using Base:
 
 ```javascript
 import { Button, Div, Form, H1, Input, Li, Ul } from "@base-framework/atoms";
@@ -426,7 +426,7 @@ Builder.render(ToDoApp(), document.body);
 ```
 
 
-## Example Projects Using Base Framework
+## Example Projects Using Base
 
 [Base Platform Example](https://github.com/chrisdurfee/next-app-shell)
 
@@ -438,7 +438,7 @@ Builder.render(ToDoApp(), document.body);
 
 ## Contributing
 
-Contributions to Base Framework are welcome. Follow these steps to contribute:
+Contributions to Base are welcome. Follow these steps to contribute:
 
 - Fork the repository.
 - Create a new branch for your feature or bug fix.
@@ -448,7 +448,7 @@ Contributions to Base Framework are welcome. Follow these steps to contribute:
 
 ## License
 
-Base Framework is licensed under the MIT License. See the LICENSE file for details.
+Base is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contact
 
