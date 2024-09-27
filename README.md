@@ -69,6 +69,69 @@ Components have lifecycle methods for actions during creation, setup, and destru
 ## Atoms
 Atoms are the building blocks for reusable layouts, allowing common design patterns and elements to be shared between multiple components and other atoms.
 
+## Atom Types
+Atoms can be instantiated using various methodologies:
+
+### Function Atoms
+These atoms are instantiated with either standard functions or arrow functions, equipped with a props object to transfer properties to the atoms.
+
+```typescript
+const Div = (props, children) => ({
+    ...props,
+    children
+});
+```
+
+### Atom Callbacks
+Atoms may be created using the Atom function, which accepts a callback function as its sole parameter. The callback function is passed a props object and children array and returns an object containing the atom's layout.
+
+```typescript
+const Button = Atom((props, children) => ({
+    tag: 'button',
+    ...props,
+    children
+}));
+```
+
+#### Atom Nesting
+Atoms should use composition to nest other atoms. This is achieved by passing the children array to the atoms args.
+
+```typescript
+const SecondaryButton = Atom((props, children) => (Button({
+    ...props,
+    class: 'secondary-btn',
+    children
+}));
+```
+
+## Adding Event Listeners
+Event listener callbacks within atoms accept two parameters: the originating event object and the "parent" component object in which the atom resides.
+
+## Utilization of Atoms
+To leverage an atom, invoke its function and pass the requisite values via a props and children. The Atoms created with the Atom callback functions support passing optional props or children to the atom. The props object should always be first but if the atom does not require props, the children array or string can be passed as the first argument.
+
+```javascript
+// props only
+Div({class: 'text'});
+
+// text child only
+Div('test');
+
+// array child only
+Div([
+    Div('test')
+]);
+
+// props and text child
+Div({class: 'text'}, 'test');
+
+// props and array children
+Div({class: 'text'}, [
+    Div('test'),
+    Div('test')
+]);
+```
+
 Learn more: [Base Atoms](https://github.com/chrisdurfee/base/wiki/Atoms)
 
 Base has a package that has already created most of the HTML Atoms needed for rendering layouts. This package can be installed via npm.
