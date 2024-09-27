@@ -265,7 +265,7 @@ export class Page extends Component
 ```
 
 
-## Example Project Using Base Framework
+## Example Projects Using Base Framework
 
 [Base Platform Example](https://github.com/chrisdurfee/next-app-shell)
 
