@@ -338,8 +338,6 @@ const ImportButtons = () => (
 
 // With Vite
 
-// Without using Vite
-
 /**
  * This will create an import buttons.
  *
@@ -370,55 +368,51 @@ Here is an example of a todo app using Base Framework:
 import { Button, Div, Form, H1, Input, Li, Ul } from "@base-framework/atoms";
 import { Builder, Data } from "@base-framework/base";
 
-/**
- * This will set up the data store for the to-do app.
- */
-const data = new Data({ items: [] });
-
-/**
- * This will handle the form submission for adding a new to-do item.
- *
- * @param {object} event
- */
-const handleSubmit = (event) =>
+export function ToDoApp()
 {
-    event.preventDefault();
-    const form = event.target;
-    const input = form.querySelector('input');
+	/**
+	 * This will set up the data store for the to-do app.
+	 */
+	const data = new Data({ items: [] });
 
-    // add the new to-do item to the array of items
-    data.push('items', input.value);
-    input.value = '';
-};
+	/**
+	 * This will handle the form submission for adding a new to-do item.
+	 *
+	 * @param {object} event
+	 */
+	const handleSubmit = (event) =>
+	{
+		event.preventDefault();
+		const form = event.target;
+		const input = form.querySelector('input');
 
-/**
- * This will handle removing a to-do item from the list.
- *
- * @param {number} index
- * @returns {boolean}
- */
-const handleRemove = (index) => data.splice('items', index);
+		// add the new to-do item to the array of items
+		data.push('items', input.value);
+		input.value = '';
+	};
 
-/**
- * This will create a to-do app.
- *
- * @returns {object}
- */
-export const ToDoApp = () => (
-    Div([
-        H1('To-Do App'),
-        Form({ submit: handleSubmit }, [
-            Input({ placeholder: 'Add a new item' }),
-            Button({ type: 'submit' }, 'Add')
-        ]),
-        Ul({
-            for: [data, 'items', (item, index) => Li([
-                Span(item),
-                Button({ click: () => handleRemove(index) }, 'Remove')
-            ])]
-        })
-    ])
-);
+	/**
+	 * This will handle removing a to-do item from the list.
+	 *
+	 * @param {number} index
+	 * @returns {boolean}
+	 */
+	const handleRemove = (index) => data.splice('items', index);
+
+	return Div([
+		H1('To-Do App'),
+		Form({ submit: handleSubmit }, [
+			Input({ placeholder: 'Add a new item' }),
+			Button({ type: 'submit' }, 'Add')
+		]),
+		Ul({
+			for: [data, 'items', (item, index) => Li([
+				Span(item),
+				Button({ click: () => handleRemove(index) }, 'Remove')
+			])]
+		})
+	])
+}
 
 /**
  * This will render the to-do app to the body of the document.
