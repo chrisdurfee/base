@@ -13,7 +13,26 @@ You can learn more about how to use Base in the wiki documentation. [Base Wiki](
 
 ## Layouts
 
-Base uses components to render an application. Base creates and renders components using native JavaScript. Layouts are scaffolded using JavaScript object literals. Because the layouts are rendered client-side using native JavaScript, the framework does not require a compiling or build process.
+Base uses components to render an application. Base creates and renders components using native JavaScript. Layouts are scaffolded using JavaScript object literals. Because the layouts are rendered client-side or server-side using native JavaScript, the framework does not require a compiling or build process.
+
+Layouts are reuable and can be used in multiple components and pages. Layouts can be nested and composed to create complex layouts.
+
+```javascript
+import { Component } from '@base-framework/base';
+import { Div } from '@base-framework/atoms';
+
+// Layouts use normal JavaScript object literals to create the layout.
+{ class: 'name' } === <div class="name"></div>
+
+// Input example
+{ tag: 'input', type: 'text', value: 'name' } === <input type="text" value="name" />
+
+// Nested layout example
+{ class: 'name', nest: [ { class: 'child' } ] } === <div class="name"><div class="child"></div></div>
+
+```
+
+We use atoms and components to create reusable layouts.
 
 Learn more: [Base Layouts](https://github.com/chrisdurfee/base/wiki/Layout)
 
