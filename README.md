@@ -70,7 +70,7 @@ Base has a package that has some special organisms that can make building comple
 npm install @base-framework/organisms
 ```
 
-Here is the repository for the organisms package: [Base Atoms](https://github.com/chrisdurfee/organisms). The organisms package is open-source and free to use.
+Here is the repository for the organisms package: [Base Organisms](https://github.com/chrisdurfee/organisms). The organisms package is open-source and free to use.
 
 
 ## Element Directives
