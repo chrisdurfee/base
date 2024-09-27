@@ -368,6 +368,11 @@ Here is an example of a todo app using Base Framework:
 import { Button, Div, Form, H1, Input, Li, Ul } from "@base-framework/atoms";
 import { Builder, Data } from "@base-framework/base";
 
+/**
+ * This will create a to-do app.
+ *
+ * @returns {object}
+ */
 export function ToDoApp()
 {
     /**
