@@ -517,7 +517,7 @@ export function ToDoApp()
                 Button({ click: () => handleRemove(index) }, 'Remove')
             ])]
         })
-    ])
+    ]);
 }
 
 /**
