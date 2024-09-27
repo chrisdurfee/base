@@ -2,19 +2,27 @@
 
 ## Framework Overview
 
-Our goal with Base is to solve many client-side rendering issues. Base focuses on reusability, scalability, and performance.
+Our goal with Base is to solve many client-side and Server-side rendering issues. Base focuses on reusability, scalability, and performance.
 
 Base has a core that supports adding and removing events, custom events, data-tracking, element class and attribute modifying, object and type utils, etc.
 
 The framework is modular and has additional modules to help with ajax, HTML, layouts, data, data-binding, states, dates, routing, components, atoms, etc.
 
+You can learn more about how to use Base in the wiki documentation. [Base Wiki](https://github.com/chrisdurfee/base/wiki)
+
+
 ## Layouts
 
 Base framework uses components to render an application. Base creates and renders components using native JavaScript. Layouts are scaffolded using JavaScript object literals. Because the layouts are rendered client-side using native JavaScript, the framework does not require a compiling or build process.
 
+Learn more: [Base Layouts](https://github.com/chrisdurfee/base/wiki/Layout)
+
+
 ## Components and Atoms
 
 Components are encapsulated layouts that contain the presentation and functionality. They are reusable and extensible, helping to reduce redundant code through abstract types.
+
+learn more: [Base Components](https://github.com/chrisdurfee/base/wiki/Components)
 
 ```javascript
 import { Component } from '@base-framework/base';
@@ -42,9 +50,23 @@ Components have lifecycle methods for actions during creation, setup, and destru
 
 Atoms are the building blocks for reusable layouts, allowing common design patterns and elements to be shared between multiple components and other atoms.
 
+Learn more about Atoms: [Base Atoms](https://github.com/chrisdurfee/base/wiki/Atoms)
+
+Base has a package that has already created most of the HTML Atoms needed for rendering layouts. This package can be installed via npm.
+
+```bash
+npm install @base-framework/atoms
+```
+
+Here is the repository for the atoms package: [Base Atoms](https://github.com/chrisdurfee/atoms) Like the Base Framework, the atoms package is open-source and free to use.
+
+
 ## Element Directives
 
 Elements created by Base have access to custom directives, enabling more functionalities than standard HTML elements. These include caching, adding states, binding and watching data, re-rendering contents, declarative routing and switching, array mapping and binding, event listeners, and more.
+
+Learn more about Element Directives: [Base Element Directives](https://github.com/chrisdurfee/base/wiki/Directives)
+
 
 ## Data Binding, Watching, and Linking
 
@@ -55,13 +77,17 @@ Types of bindables include:
 - **SimpleData**: A shallow data object.
 - **Models**: Child of Data, with default attributes and server resource connectivity.
 
+Learn more about Data Binding: [Base Data Binding](https://github.com/chrisdurfee/base/wiki/Directives#binding-to-data)
+
+
 ## Performance
 
 Components are static by default, rendering only once per instance. They become dynamic when bound to bindable data sources, allowing for content re-rendering, value changes, function calls, and class additions on data change.
 
+
 ## Getting Started
 
-To begin using the Base Framework, follow these steps:
+To begin using the Base Framework in a client-side or server-side rendered project, follow these steps:
 
 1. **Clone the repository**:
 ```bash
@@ -151,6 +177,57 @@ const page = new Page();
 const container = document.body;
 Builder.render(page, container);
 ```
+
+To allow more reusability, you create static elements as Atoms and Organisms. Atoms and Organisms should use composition. These can be used in multiple components and layouts.
+
+```javascript
+import { Atom } from '@base-framework/base';
+
+const Button = Atom((props, children) => ({
+    tag: 'button',
+    ...props,
+    children
+}));
+
+const SecondaryButton = Atom((props, children) => (Button({
+    ...props,
+    class: 'secondary-btn',
+    children
+}));
+
+```
+
+Atoms can be added to components and other atoms:
+
+```javascript
+
+import { Component } from '@base-framework/base';
+import { Div } from '@base-framework/atoms';
+import { SecondaryButton } from './atoms/button.js';
+
+class Page extends Component
+{
+    render()
+    {
+        return Div([
+            SecondaryButton({
+                /**
+                 * This will add a click event listener to the button.
+                 *
+                 * @param {Event} event The event object
+                 * @param {Component} parent The parent component object
+                 * @returns {void}
+                 */
+                click(event, parent) =>
+                {
+                    // Code to access the parent component
+                }
+            })
+        ]);
+    }
+}
+```
+
 
 ## Example Project Using Base Framework
 
