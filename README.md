@@ -235,6 +235,7 @@ const data = new Data({
         city: 'Gotham',
         state: 'NY'
     },
+    phones: ['555-555-5555', '555-555-5556'],
     age: 21
 });
 
@@ -259,14 +260,20 @@ const APIModel = Model.extend({
  */
 
 // Retrieval
-let prop = data.name;
+let prop = data.name.first;
 // or
-let name = data.get('name');
+let name = data.get('name.first');
 
 // Assignment
-data.name = 'batman';
+simpleData.name = 'batman';
 // or
 data.set('name', 'batman');
+
+// Pushing to an array
+data.push('phones', '555-555-5557');
+
+// changing an item in an array
+data.set('phones[0]', '555-555-5558');
 
 // Batch updates using an object
 data.set({
