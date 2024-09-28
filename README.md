@@ -253,7 +253,15 @@ const simpleData = new SimpleData({ name: 'batman' });
  */
 const APIModel = Model.extend({
     defaults: {
-        name: 'batman',
+            name: {
+            first: 'Bruce',
+            last: 'Wayne'
+        },
+        address: {
+            street: '123 Gotham St',
+            city: 'Gotham',
+            state: 'NY'
+        },
         age: 21
     },
     url: '/api/user'
