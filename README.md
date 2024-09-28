@@ -215,6 +215,95 @@ A({href: '/account/user/[[userId]]'}, '[[userName]] - [[age]]')
 Div({class: ['[[propName]] [[otherPropName]]', [data, otherData]]})
 ```
 
+Base Data objects are bindable. There are a few types of data objects:
+
+```javascript
+import { Data, SimpleData, Model } from '@base-framework/base';
+
+/**
+ * Data object
+ *
+ * This can store deep nested data including arrays and objects.
+ */
+const data = new Data({
+    name: {
+        first: 'Bruce',
+        last: 'Wayne'
+    },
+    address: {
+        street: '123 Gotham St',
+        city: 'Gotham',
+        state: 'NY'
+    },
+    age: 21
+});
+
+/**
+ * SimpleData object
+ *
+ * This can store shallow data.
+ */
+const simpleData = new SimpleData({ name: 'batman' });
+
+/**
+ * Model object
+ *
+ * This can store default attributes and server resource connectivity.
+ */
+const APIModel = Model.extend({
+    url: '/api/user'
+});
+
+/**
+ * The data objects have are proxies and can be used like objects.
+ */
+
+// Retrieval
+let prop = data.name;
+// or
+let name = data.get('name');
+
+// Assignment
+data.name = 'batman';
+// or
+data.set('name', 'batman');
+
+// Batch updates using an object
+data.set({
+    name: 'batman',
+    age: 21
+});
+
+// Deletion
+data.delete('name');
+
+```
+The component also supports the state property. This is another bindable type extended from the SimpleData object so it only supports shallow data.
+
+```javascript
+
+/**
+ * This will return the state propreties and values that will be
+ * use to create the "state" object.
+ *
+ * @returns {object}
+ */
+setupStates()
+{
+    return {
+        count: 0,
+        loading: false
+    };
+}
+
+```
+
+Each component can have one "data" proeprty that can be set using the "setData" method.
+
+If a component has been created using the "route" or "switch" directive, it will receive a "route" property that will contain the route data which is also bindable.
+
+The data objects push changes to the elements that are bound to the data. This allows for re-rendering of the elements when the data changes.
+
 Here is an example of how to use data binding in a component:
 
 ```javascript
