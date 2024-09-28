@@ -252,6 +252,10 @@ const simpleData = new SimpleData({ name: 'batman' });
  * This can store default attributes and server resource connectivity.
  */
 const APIModel = Model.extend({
+    defaults: {
+        name: 'batman',
+        age: 21
+    },
     url: '/api/user'
 });
 
