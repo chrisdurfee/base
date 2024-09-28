@@ -293,7 +293,30 @@ const APIModel = Model.extend({
         },
         age: 21
     },
-    url: '/api/user'
+    url: '/api/user',
+
+    xhr: {
+
+        /**
+         * Custom methods can be added to the model service.
+         *
+         * @param {object} instanceParams
+         * @param {function} callback
+         * @returns {object} The xhr object
+         */
+        customMethod(instanceParams, callback)
+        {
+            if (!this.isValid())
+            {
+                return false;
+            }
+
+            let params = 'op=customParam' +
+                '&' + this.setupObjectData();
+
+            return this._post('', params, instanceParams, callBack);
+        }
+    }
 });
 
 const model = new APIModel();
