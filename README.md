@@ -278,8 +278,9 @@ data.delete('name');
 /**
  * Model object
  *
- * This can store default attributes and server resource connectivity. The model's service
- * already has methods for adding, updating, deleting, and fetching data from the server.
+ * This can store default attributes and server resource connectivity.
+ * The model's service already has methods for adding, updating,
+ * deleting, and fetching data from the server.
  */
 const UserModel = Model.extend({
     defaults: {
