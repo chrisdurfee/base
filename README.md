@@ -247,27 +247,6 @@ const data = new Data({
 const simpleData = new SimpleData({ name: 'batman' });
 
 /**
- * Model object
- *
- * This can store default attributes and server resource connectivity.
- */
-const APIModel = Model.extend({
-    defaults: {
-            name: {
-            first: 'Bruce',
-            last: 'Wayne'
-        },
-        address: {
-            street: '123 Gotham St',
-            city: 'Gotham',
-            state: 'NY'
-        },
-        age: 21
-    },
-    url: '/api/user'
-});
-
-/**
  * The data objects have are proxies and can be used like objects.
  */
 
@@ -295,6 +274,53 @@ data.set({
 
 // Deletion
 data.delete('name');
+
+/**
+ * Model object
+ *
+ * This can store default attributes and server resource connectivity.
+ */
+const APIModel = Model.extend({
+    defaults: {
+            name: {
+            first: 'Bruce',
+            last: 'Wayne'
+        },
+        address: {
+            street: '123 Gotham St',
+            city: 'Gotham',
+            state: 'NY'
+        },
+        age: 21
+    },
+    url: '/api/user'
+});
+
+const model = new APIModel();
+
+/**
+ * The model can be used to fetch data from the server.
+ *
+ * The response will be set to the model.
+ */
+model.xhr.get({}, (response) => {
+
+});
+
+// post
+model.xhr.add({}, (response) => {
+
+});
+
+// put
+model.xhr.update({}, (response) => {
+
+});
+
+// delete
+model.xhr.delete({}, (response) => {
+
+});
 
 ```
 The component also supports the state property. This is another bindable type extended from the SimpleData object so it only supports shallow data.
