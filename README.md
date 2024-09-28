@@ -287,7 +287,7 @@ data.delete('name');
  */
 const UserModel = Model.extend({
     defaults: {
-            name: {
+        name: {
             first: 'Bruce',
             last: 'Wayne'
         },
