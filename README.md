@@ -278,9 +278,10 @@ data.delete('name');
 /**
  * Model object
  *
- * This can store default attributes and server resource connectivity.
+ * This can store default attributes and server resource connectivity. The model's service
+ * already has methods for adding, updating, deleting, and fetching data from the server.
  */
-const APIModel = Model.extend({
+const UserModel = Model.extend({
     defaults: {
             name: {
             first: 'Bruce',
@@ -319,7 +320,7 @@ const APIModel = Model.extend({
     }
 });
 
-const model = new APIModel();
+const model = new UserModel();
 
 /**
  * The model can be used to fetch data from the server.
