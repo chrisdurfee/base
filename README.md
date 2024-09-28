@@ -319,7 +319,9 @@ const UserModel = Model.extend({
             let params = 'op=customParam' +
                 '&' + this.setupObjectData();
 
-            return this._post('', params, instanceParams, callBack);
+            // this will be added to the base url of the model
+            const URL = "/custom/url";
+            return this._post(URL, params, instanceParams, callBack);
         }
     }
 });
