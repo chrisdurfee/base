@@ -302,7 +302,7 @@ const APIModel = Model.extend({
          *
          * @param {object} instanceParams
          * @param {function} callback
-         * @returns {object} The xhr object
+         * @returns {object|bool} The xhr object
          */
         customMethod(instanceParams, callback)
         {
