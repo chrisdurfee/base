@@ -12,7 +12,7 @@ You can learn more about how to use Base in the wiki documentation. [Base Wiki](
 
 ## Base Converter
 
-There is a GPT created with ChatGPT that can convert code from other frameworks to base. This can help you convert any code to Base. The GPT is new so it still has some issues but it is a good start. [Base Converter](https://chatgpt.com/g/g-uNL6KKeCo-base-converter/)
+There is a GPT created with ChatGPT that can convert code from other frameworks to Base. The GPT is new so it still has some issues but it is a good start. [Base Converter](https://chatgpt.com/g/g-uNL6KKeCo-base-converter/)
 
 
 ## Layouts
