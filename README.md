@@ -705,6 +705,8 @@ Builder.render(ToDoApp(), document.body);
 
 [Base Game Example](https://github.com/chrisdurfee/multisplode)
 
+[Base Server Example](https://github.com/chrisdurfee/base-server)
+
 ## Contributing
 
 Contributions to Base are welcome. Follow these steps to contribute:
