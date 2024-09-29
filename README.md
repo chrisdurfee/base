@@ -703,9 +703,10 @@ Builder.render(ToDoApp(), document.body);
 
 [Base Website Example](https://github.com/chrisdurfee/life)
 
+[Base Server Example](https://github.com/chrisdurfee/base-server)
+
 [Base Game Example](https://github.com/chrisdurfee/multisplode)
 
-[Base Server Example](https://github.com/chrisdurfee/base-server)
 
 ## Contributing
 
