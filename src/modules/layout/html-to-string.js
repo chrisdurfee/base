@@ -16,20 +16,69 @@ export class HtmlToString
      * This will create a node string.
      *
      * @param {string} tag
-     * @param {object} attrs
+     * @param {array} attrs
      * @param {string} children
      * @returns {string}
      */
-	static create(tag, attrs = {}, children = '')
+	static create(tag, attrs = [], children = '')
     {
         const attrString = this.createAttributes(attrs);
+
+        let innerContent = this.getInnerContent(attrs);
+        innerContent += this.getInnerHtml(attrs);
 
         if (selfClosingTags.includes(tag))
         {
             return `<${tag} ${attrString} />`;
         }
 
-        return `<${tag} ${attrString}>` + children + `</${tag}>`;
+        return `<${tag} ${attrString}>` + innerContent + children + `</${tag}>`;
+    }
+
+    /**
+     * This will get the inner content.
+     *
+     * @param {object} attrs
+     * @returns {string}
+     */
+    static getInnerContent(attrs)
+    {
+        let content = '';
+        attrs.forEach(({ key, value }, index) =>
+        {
+            if (key !== 'text' || key !== 'textContent')
+            {
+                return '';
+            }
+
+            attrs.splice(index, 1);
+            content += value;
+        });
+
+        return content;
+    }
+
+    /**
+     * This will get the inner html.
+     *
+     * @param {object} attrs
+     * @returns {string}
+     */
+    static getInnerHtml(attrs)
+    {
+        let content = '';
+        attrs.forEach(({ key, value }, index) =>
+        {
+            if (key !== 'html' || key !== 'innerHTML')
+            {
+                return '';
+            }
+
+            attrs.splice(index, 1);
+            content += value;
+        });
+
+        return content;
     }
 
     /**
