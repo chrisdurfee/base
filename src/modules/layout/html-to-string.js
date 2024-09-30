@@ -46,7 +46,7 @@ export class HtmlToString
         let content = '';
         attrs.forEach(({ key, value }, index) =>
         {
-            if (key !== 'text' || key !== 'textContent')
+            if (key !== 'text' && key !== 'textContent')
             {
                 return '';
             }
@@ -69,7 +69,7 @@ export class HtmlToString
         let content = '';
         attrs.forEach(({ key, value }, index) =>
         {
-            if (key !== 'html' || key !== 'innerHTML')
+            if (key !== 'html' && key !== 'innerHTML')
             {
                 return '';
             }
