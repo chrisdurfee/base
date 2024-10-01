@@ -22,10 +22,10 @@ export class HtmlToString
      */
 	static create(tag, attrs = [], children = '')
     {
-        const attrString = this.createAttributes(attrs);
-
         let innerContent = this.getInnerContent(attrs);
         innerContent += this.getInnerHtml(attrs);
+
+        const attrString = this.createAttributes(attrs);
 
         if (selfClosingTags.includes(tag))
         {
