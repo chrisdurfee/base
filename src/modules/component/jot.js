@@ -1,22 +1,6 @@
 import { Component } from './component.js';
+import { SHORTHAND_METHODS } from './shorthand-methods.js';
 import { Unit } from './unit.js';
-
-/**
- * This will store the jot shorthand method alaises.
- *
- * @constant
- * @type {object}
- */
-const SHORTHAND_METHODS =
-{
-    created: 'onCreated',
-    state: 'setupStates',
-    events: 'setupEvents',
-    before: 'beforeSetup',
-    render: 'render',
-    after: 'afterSetup',
-    destroy: 'beforeDestroy'
-};
 
 /**
  * This will get the jot method by value. If the method is an
@@ -83,12 +67,21 @@ export const Jot = (layout) =>
 
     let settings;
     const layoutType = typeof layout;
+
+    /**
+     * This will handle the layout components that are objects.
+     */
     if (layoutType === 'object' && layout.render)
     {
         settings = JotComponent(layout);
         return createClass(Component, settings);
     }
 
+    /**
+     * This will handle non component layouts. If the layout is not
+     * a function, it will be wrapped in a function to be used as
+     * the render method.
+     */
     const render = (layoutType === 'function')? layout : () => layout;
     settings = { render };
     return createClass(Unit, settings);

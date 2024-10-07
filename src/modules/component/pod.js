@@ -1,4 +1,5 @@
 import { Component } from './component.js';
+import { SHORTHAND_METHODS } from './shorthand-methods.js';
 
 /**
  * Pods
@@ -8,23 +9,6 @@ import { Component } from './component.js';
  * @author Chris Durfee
  * @author Cayon Christiansen
  */
-
-/**
- * This will store the pod shorthand method alaises.
- *
- * @constant
- * @type {object} SHORTHAND_METHODS
- */
-const SHORTHAND_METHODS =
-{
-    created: 'onCreated',
-    setStates: 'setupStates',
-    events: 'setupEvents',
-    before: 'beforeSetup',
-    render: 'render',
-    after: 'afterSetup',
-    destroy: 'beforeDestroy'
-};
 
 /**
  * This will modify the methods to convert the shorthand
