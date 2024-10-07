@@ -43,6 +43,30 @@ export class History
 	}
 
 	/**
+	 * This will get the current scroll position.
+	 *
+	 * @returns {object}
+	 */
+	getScrollPosition()
+	{
+		return {
+			x: window.scrollX,
+			y: window.scrollY
+		};
+	}
+
+	/**
+	 * This will scroll to a position.
+	 *
+	 * @param {object} scrollPosition
+	 * @returns {void}
+	 */
+	scrollTo(scrollPosition)
+	{
+		window.scrollTo(scrollPosition.x, scrollPosition.y);
+	}
+
+	/**
 	 * This will add the events.
 	 *
 	 * @returns {object} a reference to the object.

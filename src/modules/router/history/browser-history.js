@@ -51,6 +51,12 @@ export class BrowserHistory extends History
 		evt.stopPropagation();
 
 		this.router.checkActiveRoutes(state.uri);
+
+		const scrollPosition = state.scrollPosition;
+		if (scrollPosition)
+		{
+			this.scrollTo(scrollPosition);
+		}
 	}
 
 	/**
@@ -62,9 +68,12 @@ export class BrowserHistory extends History
 	 */
 	createState(uri, data = {})
 	{
+		const scrollPosition = this.getScrollPosition();
+
 		return {
 			location: this.locationId,
 			...data,
+			scrollPosition,
 			uri
 		};
 	}

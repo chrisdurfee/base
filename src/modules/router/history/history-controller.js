@@ -12,7 +12,7 @@ export class HistoryController
     /**
      * This will check if browser based navigation is supported
      *
-     * @returns boolean
+     * @returns {boolean}
      */
     static browserIsSupported()
     {
@@ -23,7 +23,7 @@ export class HistoryController
      * This will create a History Object based on navigation support
      *
      * @param {object} router
-     * @returns History
+     * @returns {History}
      */
     static setup(router)
     {
