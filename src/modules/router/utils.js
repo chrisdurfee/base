@@ -3,6 +3,7 @@
  *
  * These are some helper functions for the router.
  *
+ * @constant
  * @type {object} Utils
  */
 export const Utils =

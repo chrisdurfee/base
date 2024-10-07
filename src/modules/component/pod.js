@@ -13,7 +13,7 @@ import { Component } from './component.js';
  * This will store the pod shorthand method alaises.
  *
  * @constant
- * @type {object}
+ * @type {object} SHORTHAND_METHODS
  */
 const SHORTHAND_METHODS =
 {
