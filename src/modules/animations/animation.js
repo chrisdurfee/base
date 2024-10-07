@@ -1,12 +1,17 @@
 import { MovementFactory } from './movement-factory.js';
 
 /**
- * Class representing an animation.
+ * Animation
+ *
+ * This will setup the animation.
+ *
+ * @class
  */
 export class Animation
 {
     /**
      * Create an animation.
+     *
      * @param {HTMLElement} element - The element to animate.
      * @param {Object} settings - The settings for the animation.
      */
@@ -22,7 +27,9 @@ export class Animation
 
     /**
      * Setup the animation with the given settings.
+     *
      * @param {Object} settings - The settings for the animation.
+     * @returns {void}
      */
     setup(settings)
     {
@@ -31,7 +38,9 @@ export class Animation
 
     /**
      * Add a movement to the animation.
+     *
      * @param {Object} property - The property to animate.
+     * @returns {void}
      */
     addMovement(property)
     {
@@ -40,7 +49,9 @@ export class Animation
 
     /**
      * Setup the movements for the animation.
+     *
      * @param {Object} settings - The settings for the animation.
+     * @returns {void}
      */
     setupMovements(settings)
     {
@@ -49,7 +60,9 @@ export class Animation
 
         /**
          * Add a movement to the animation with the given settings.
+         *
          * @param {Object} movementSettings - The settings for the movement.
+         * @returns {void}
          */
         const addMovement = (movementSettings) =>
         {
@@ -60,9 +73,9 @@ export class Animation
         /* this will check if we have multiple properties to
         add or only one property */
         let property = settings.property;
-        if(Array.isArray(property))
+        if (Array.isArray(property))
         {
-            for(var i = 0, length = property.length; i < length; i++)
+            for (var i = 0, length = property.length; i < length; i++)
             {
                 addMovement(property[i]);
             }

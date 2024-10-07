@@ -5,6 +5,7 @@ import { HashHistory } from './hash-history.js';
  * HistoryController
  *
  * This will setup the history controller.
+ *
  * @class
  */
 export class HistoryController
