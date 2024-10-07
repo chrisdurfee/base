@@ -2,6 +2,8 @@
  * Utils
  *
  * These are some helper functions for the router.
+ *
+ * @type {object} Utils
  */
 export const Utils =
 {

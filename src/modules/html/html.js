@@ -7,7 +7,7 @@ import { dataBinder } from '../data-binder/data-binder.js';
 /**
  * This is a look up object to normalize the attribute names.
  *
- * @type {object}
+ * @type {object} NORMALIZED_NAMES
  */
 const NORMALIZED_NAMES =
 {
