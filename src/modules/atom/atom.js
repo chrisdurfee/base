@@ -2,12 +2,12 @@ import { ArrayProp, DefaultProps, ObjectProp, StringProp } from "../component/pr
 import { WatcherHelper } from "../layout/watcher-helper.js";
 
 /**
- * This will create a wacther prop.
+ * This will create a watcher prop.
  *
  * @param {array} watch
  * @returns {object}
  */
-const WactherProp = (watch) => ({
+const WatcherProp = (watch) => ({
 	props: {
 		watch
 	},
@@ -54,7 +54,7 @@ const parseArgs = (args) =>
 		/**
 		 * This will handle the watcher array.
 		 */
-		return WactherProp(first);
+		return WatcherProp(first);
 	}
 
 	/**
