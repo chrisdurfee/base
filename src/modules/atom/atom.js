@@ -1,82 +1,66 @@
+import { ArrayProp, DefaultProps, ObjectProp, StringProp } from "../component/prop-utils.js";
 import { WatcherHelper } from "../layout/watcher-helper.js";
 
 /**
- * This will prepare the children.
+ * This will create a wacther prop.
  *
- * @param {*} value
- * @returns {*}
+ * @param {array} watch
+ * @returns {object}
  */
-const prepareChildren = (value) =>
-{
-	if (typeof value !== 'string')
-	{
-		return value;
-	}
-
-	return setChildString(value);
-};
-
-/**
- * This will set the child string.
- *
- * @param {string} value
- * @returns {array}
- */
-const setChildString = (value) =>
-{
-	return [{
-		tag: 'text',
-		textContent: value
-	}];
-};
+const WactherProp = (watch) => ({
+	props: {
+		watch
+	},
+	children: []
+});
 
 /**
  * This will parse the arguments passed to the atom.
  *
- * @param {Array} args
- * @returns {Object}
+ * @param {array} args
+ * @returns {object}
  */
 const parseArgs = (args) =>
 {
 	if (!args)
     {
-		return {
-			props: {},
-			children: []
-		};
+		return DefaultProps();
     }
 
+	/**
+	 * This will handle string children and allow them
+	 * to have watcher props.
+	 */
     const first = args[0];
     if (typeof first === 'string')
     {
-		return {
-			props: {},
-            children: setChildString(first)
-        };
+		return StringProp(first);
     }
 
+	/**
+	 * This will check if we have a child array or
+	 * a watcher array.
+	 */
 	if (Array.isArray(first))
 	{
+		/**
+		 * This will handle the child array.
+		 */
 		if (WatcherHelper.isWatching(first) === false)
 		{
-			return {
-				props: {},
-				children: first
-			};
+			return ArrayProp(first);
 		}
 
-		return {
-			props: {
-				watch: first
-			},
-			children: []
-		};
+		/**
+		 * This will handle the watcher array.
+		 */
+		return WactherProp(first);
 	}
 
-    return {
-		props: first || {},
-        children: prepareChildren(args[1])
-    };
+	/**
+	 * This will handle default props and children.
+	 */
+    return ObjectProp(args);
 };
 
 /**
