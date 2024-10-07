@@ -60,16 +60,17 @@ const extendBaseClass = (Base) =>
  * This will create a pod component.
  *
  * @param {function} callBack
+ * @param {object} extend - The class to extend.
  * @returns {object}
  */
-export const Pod = (callBack) =>
+export const Pod = (callBack, extend = Component) =>
 {
     if (!callBack)
     {
         return null;
     }
 
-    const component = extendBaseClass(Component);
+    const component = extendBaseClass(extend);
 
     /**
      * This will call the callback function and pass the component
