@@ -59,7 +59,7 @@ export class HtmlHelper extends Html
 	 * This will add an element attribute.
 	 *
 	 * @param {object} ele
-	 * @param {object} attr
+	 * @param {string} attr
 	 * @param {*} value
      * @returns {void}
 	 */

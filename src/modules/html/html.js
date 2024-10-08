@@ -167,7 +167,7 @@ export class Html
 	 * This will add an element attribute.
 	 *
 	 * @param {object} obj
-	 * @param {object} attr
+	 * @param {string} attr
 	 * @param {*} value
 	 * @returns {void}
 	 */
