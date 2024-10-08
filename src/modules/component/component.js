@@ -230,6 +230,12 @@ export class Component extends Unit
 	 *
 	 * @protected
 	 * @returns {array}
+	 *
+	 * @example
+	 * return [
+	 * 	// event, element, function, capture
+	 * 	['click', this.element, function(e){}, false]
+	 * ];
 	 */
 	setupEvents()
 	{
