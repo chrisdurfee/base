@@ -1,22 +1,4 @@
 /**
- * This will limit the length of a string.
- *
- * @param {string} str
- * @returns {string}
- */
-const LimitString = (str) =>
-{
-	if (typeof str !== 'string')
-	{
-		return '';
-	}
-
-	// We will limit the length of the string.
-	const MAX_LENGTH = 1000;
-	return str.substring(0, MAX_LENGTH);
-};
-
-/**
  * Strings
  *
  * This will contain methods for working with strings.
@@ -26,6 +8,23 @@ const LimitString = (str) =>
  */
 export class Strings
 {
+	/**
+	 * This will limit the length of a string.
+	 *
+	 * @param {string} str
+	 * @param {number} [maxLength]
+	 * @returns {string}
+	 */
+	static limit(str, maxLength = 1000)
+	{
+		if (typeof str !== 'string')
+		{
+			return '';
+		}
+
+		return str.substring(0, maxLength);
+	}
+
     /**
 	 * This will parse a query string.
 	 *
@@ -41,7 +40,7 @@ export class Strings
 			str = window.location.search;
 		}
 
-		str = LimitString(str);
+		str = this.limit(str);
 
 		const objURL = {},
 		regExp = /([^?=&]+)(=([^&]*))?/g;
@@ -64,7 +63,7 @@ export class Strings
 	 */
 	static camelCase(str)
 	{
-		str = LimitString(str);
+		str = this.limit(str);
 
 		const regExp = /(-|\s|_)+\w{1}/g;
 		return str.replace(regExp, (match) =>  match[1].toUpperCase());
@@ -79,9 +78,31 @@ export class Strings
 	 */
 	static uncamelCase(str, delimiter = '-')
 	{
-		str = LimitString(str);
+		str = this.limit(str);
 
 		const regExp = /([A-Z]{1,})/g;
 		return str.replace(regExp, (match) => delimiter + match.toLowerCase()).toLowerCase();
+	}
+
+	/**
+	 * This will title case a string.
+	 *
+	 * @param {string} str
+	 * @returns {string} The string.
+	 */
+	static titleCase(str)
+	{
+		if (!str)
+		{
+			return '';
+		}
+
+		str = this.limit(str);
+
+		const pattern = /\w\S*/;
+		return str.replace(pattern, (txt) =>
+		{
+			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+		});
 	}
 }
