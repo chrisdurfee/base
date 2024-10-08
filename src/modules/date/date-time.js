@@ -1,3 +1,4 @@
+
 /**
  * This will add date functions to the base framework.
  *
@@ -49,10 +50,10 @@ export const DateTime =
 	 * This will convert a date.
 	 *
 	 * @param {string} dateString
-	 * @param {boolean} addYear
+	 * @param {boolean} [addYear]
 	 * @returns {string}
 	 */
-	convertDate(dateString, addYear)
+	convertDate(dateString, addYear = false)
 	{
 		dateString = (dateString)? dateString.replace(/\s/, 'T'): ''; //For safari
 
@@ -96,24 +97,14 @@ export const DateTime =
 	/**
 	 * This will format a date.
 	 *
-	 * @param {string} type
+	 * @param {string} formatType
 	 * @param {string} dateString
 	 * @returns {string}
 	 */
-	format(type, dateString)
+	format(formatType, dateString)
 	{
 		const date = this.createDate(dateString);
-		switch(type)
-		{
-			case 'sql':
-				dateString = date.getFullYear() + '-' + this.convertJsMonth(date.getMonth()) + '-' + this.padNumber(date.getDate());
-				break;
-			default:
-				dateString = this.convertJsMonth(date.getMonth()) + '/' + this.padNumber(date.getDate()) + '/' + date.getFullYear();
-				break;
-
-		}
-		return dateString;
+		return this.renderDate(date.getFullYear(), date.getMonth() + 1, date.getDate(), formatType);
 	},
 
 	/**
@@ -126,24 +117,98 @@ export const DateTime =
 	formatTime(dateString, format)
 	{
 		const date = this.createDate(dateString);
-		if (format === 24)
-		{
-			return this.padNumber(date.getHours()) + ':' + this.padNumber(date.getMinutes()) + ':' + this.padNumber(date.getSeconds());
-		}
+		const formatType = (format === 24)? 'sql' : 'standard';
 
-		let hours = date.getHours(),
-		meridian = 'AM';
+		return this.renderTime(date.getHours(), date.getMinutes(), date.getSeconds(), formatType);
+	},
 
-		if (hours >= 12)
-		{
-			meridian = 'PM';
-		}
+	/**
+	 * This will get the meridian.
+	 *
+	 * @param {number|string} hours
+	 * @returns {string}
+	 */
+	getMeridian(hours)
+	{
+		hours = Number(hours);
+		return (hours >= 12)? 'PM' : 'AM';
+	},
 
+	/**
+	 * This will convert 24 hour time to 12 hour time.
+	 *
+	 * @param {number|string} hours
+	 * @returns {number}
+	 */
+	convert24To12(hours)
+	{
+		hours = Number(hours);
 		if (hours > 12)
 		{
 			hours = hours - 12;
 		}
-		return (hours + ':' + this.padNumber(date.getMinutes()) + ' ' + meridian);
+		return hours;
+	},
+
+	/**
+	 * This will convert 12 hour time to 24 hour time.
+	 *
+	 * @param {number|string} hours
+	 * @param {string} meridian
+	 * @returns {number}
+	 */
+	convert12To24(hours, meridian)
+	{
+		hours = Number(hours);
+		if (meridian.toLowerCase() === 'pm')
+		{
+			hours = hours + 12;
+		}
+		return hours;
+	},
+
+	/**
+	 * This will render a date.
+	 *
+	 * @param {number} year
+	 * @param {number|string} month
+	 * @param {number|string} day
+	 * @param {string} [format='sql']
+	 * @returns {string}
+	 */
+	renderDate(year, month, day, format = 'sql')
+	{
+		month = Number(month);
+		day = Number(day);
+
+		if (format === 'sql')
+		{
+			return `${year}-${this.padNumber(month)}-${this.padNumber(day)}`;
+		}
+
+		return `${this.padNumber(month)}/${this.padNumber(day)}/${year}`;
+	},
+
+	/**
+	 * This will render time.
+	 *
+	 * @param {number} hours
+	 * @param {number} minutes
+	 * @param {number} [seconds=0]
+	 * @param {string} [format='sql']
+	 * @returns {string}
+	 */
+	renderTime(hours, minutes, seconds = 0, format = 'sql')
+	{
+		if (format === 'sql')
+		{
+			return `${this.padNumber(hours)}:${this.padNumber(minutes)}:${this.padNumber(seconds)}`;
+		}
+
+		const meridian = this.getMeridian(hours);
+		hours = this.convert24To12(hours);
+
+		return `${hours}:${this.padNumber(minutes)} ${meridian}`;
 	},
 
 	/**
@@ -219,6 +284,63 @@ export const DateTime =
 			[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 		return days;
+	},
+
+	/**
+	 * This will get the local date.
+	 *
+	 * @param {string} remoteData
+	 * @param {string} [remoteTimeZone]
+	 * @returns {Date}
+	 */
+	getLocalDate(remoteData, remoteTimeZone = 'America/Denver')
+	{
+		let date = new Date(remoteData);
+
+		if (Number.isNaN(date.getMonth()) === true)
+		{
+			const pattern = /[- :]/,
+			values = remoteData.split(pattern);
+
+			// @ts-ignore
+			date = new Date(values[0], values[1] - 1, values[2], values[3], values[4], values[5]);
+		}
+
+		const invdate = new Date(Date.parse(date.toLocaleString('en-US', {
+			timeZone: remoteTimeZone
+		})));
+
+		const diff = date.getTime() - invdate.getTime();
+		return new Date(date.getTime() + diff);
+	},
+
+	/**
+	 * This will convert a remote date to local time.
+	 *
+	 * @param {string} remoteData
+	 * @param {boolean} sqlformat
+	 * @param {boolean} timeOnly
+	 * @param {string} [remoteTimeZone]
+	 * @returns {string}
+	 */
+	getLocalTime(remoteData, sqlformat = false, timeOnly = false, remoteTimeZone = 'America/Denver')
+	{
+		if (!remoteData)
+		{
+			return '';
+		}
+
+		const date = this.getLocalDate(remoteData, remoteTimeZone);
+		const month = date.getMonth() + 1;
+
+		const format = (sqlformat) === true? 'sql' : 'standard';
+
+		let formated = '';
+		if (timeOnly === false)
+		{
+			formated += this.renderDate(date.getFullYear(), month, date.getDate(), format) + ' ';
+		}
+		return (formated + this.renderTime(date.getHours(), date.getMinutes(), date.getSeconds(), format));
 	},
 
 	/**
