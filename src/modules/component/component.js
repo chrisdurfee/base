@@ -122,6 +122,22 @@ export class Component extends Unit
 	 *
 	 * @protected
 	 * @returns {object}
+	 *
+	 * @example
+	 * return {
+	 *
+	 * 	// simple state
+	 * 	action: 'state', // any primitive value
+	 *
+	 * 	// a more complex state
+	 * 	complexAction: {
+	 * 		state: 'state', // any primitive value
+	 * 		callBack(state, prevState)
+	 * 		{
+	 * 			// do something
+	 * 		}
+	 * 	}
+	 * };
 	 */
 	setupStates()
 	{
