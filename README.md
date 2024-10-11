@@ -251,7 +251,7 @@ const data = new Data({
 const simpleData = new SimpleData({ name: 'batman' });
 
 /**
- * The data objects have are proxies and can be used like objects.
+ * The data objects are proxies and can be used like objects.
  */
 
 // Retrieval
@@ -377,7 +377,7 @@ setupStates()
 
 ```
 
-Each component can have one "data" proeprty that can be set using the "setData" method.
+Each component can have one "data" property that can be set using the "setData" method.
 
 If a component has been created using the "route" or "switch" directive, it will receive a "route" property that will contain the route data which is also bindable.
 
