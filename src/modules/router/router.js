@@ -773,7 +773,21 @@ export class Router
         const prevSegments = lastPath.split('/');
         const currentSegments = path.split('/');
 
-        return (prevSegments[1] !== currentSegments[1]);
+		/**
+		 * If the path has changed, we want to scroll to the top.
+		 */
+		if (prevSegments.length !== currentSegments.length)
+		{
+			return true
+		}
+
+		/**
+		 * We want to check if the last segment of the path has changed.
+		 * If it has, we want to scroll to the top.
+		 */
+		const lastSegment = prevSegments[prevSegments.length - 1];
+		const currentSegment = currentSegments[currentSegments.length - 1];
+        return (lastSegment !== currentSegment);
 	}
 
 	/**
