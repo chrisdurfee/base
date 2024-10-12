@@ -724,6 +724,56 @@ export class Router
 		route.setPath(this.path, this.lastPath);
 		route.select();
 		this.updateTitle(route);
+
+		/**
+		 * This will check to scroll to the top of the page.
+		 */
+		this.checkToScroll();
+	}
+
+	/**
+	 * This will check to scroll to the top of the page.
+	 *
+	 * @returns {void}
+	 */
+	checkToScroll()
+	{
+		const shouldScrollToTop = this.shouldScrollToTop();
+		if (shouldScrollToTop)
+		{
+            window.scrollTo(0, 0);
+        }
+	}
+
+	/**
+	 * This will clean the path.
+	 *
+	 * @param {string|null} path
+	 * @returns {string}
+	 */
+	cleanPath(path)
+	{
+		if (!path)
+		{
+			return '/';
+		}
+
+		return path.split('?')[0].split('#')[0];
+	}
+
+	/**
+	 * This will scroll to the top of the page if the route has changed.
+	 *
+	 * @returns {boolean}
+	 */
+	shouldScrollToTop()
+	{
+		const path = this.cleanPath(this.getPath());
+		const lastPath = this.cleanPath(this.lastPath);
+        const prevSegments = lastPath.split('/');
+        const currentSegments = path.split('/');
+
+        return (prevSegments[1] !== currentSegments[1]);
 	}
 
 	/**
