@@ -189,6 +189,26 @@ export class Component extends Unit
 			return;
 		}
 
+		this.setStateHelper(states);
+	}
+
+	/**
+	 * This will set the state helper.
+	 *
+	 * @param {object} [states]
+	 * @returns {void}
+	 */
+	setStateHelper(states = {})
+	{
+		/**
+		 * This will prevent the state helper from being
+		 * reset.
+		 */
+		if (this.state)
+		{
+			return;
+		}
+
 		this.setupStateTarget();
 		this.stateHelper = new StateHelper(this.state, states);
 	}
@@ -212,6 +232,25 @@ export class Component extends Unit
 	}
 
 	/**
+	 * This will set the event helper.
+	 *
+	 * @returns {void}
+	 */
+	setEventHelper()
+	{
+		/**
+		 * This will prevent the event helper from being
+		 * reset.
+		 */
+		if (this.events)
+		{
+			return;
+		}
+
+		this.events = new EventHelper();
+	}
+
+	/**
 	 * This will setup the event helper.
 	 *
 	 * @protected
@@ -221,7 +260,7 @@ export class Component extends Unit
 	{
 		if (!this.events)
 		{
-			this.events = new EventHelper();
+			this.setEventHelper();
 		}
 	}
 

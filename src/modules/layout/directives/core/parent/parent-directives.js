@@ -85,10 +85,12 @@ export const addState = (ele, callBack, parent) =>
         return;
     }
 
-    if (parent.stateHelper)
+    if (!parent.stateHelper)
     {
-        const state = parent.state;
-        const states = callBack(state);
-        parent.stateHelper.addStates(states);
+        parent.setStateHelper();
     }
+
+    const state = parent.state;
+    const states = callBack(state);
+    parent.stateHelper.addStates(states);
 };
