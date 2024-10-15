@@ -99,7 +99,7 @@ export const addState = (ele, callBack, parent) =>
  * This will add an event to the parent events.
  *
  * @param {object} ele
- * @param {array} event - event, element, fucntion, capture
+ * @param {array} event - event, element, function, capture
  * @param {object} parent
  * @returns {void}
  */
@@ -113,6 +113,19 @@ export const addEvent = (ele, event, parent) =>
     if (!parent.events)
     {
         parent.setEventHelper();
+    }
+
+    /**
+     * This will replace the callback funciton to pass
+     * the parent and event.
+     */
+    if (event[2])
+    {
+        const callBack = event[2];
+        event[2] = (e) =>
+        {
+            callBack(e, parent);
+        };
     }
 
     parent.events.on(...event);
