@@ -251,20 +251,6 @@ export class Component extends Unit
 	}
 
 	/**
-	 * This will setup the event helper.
-	 *
-	 * @protected
-	 * @returns {void}
-	 */
-	setupEventHelper()
-	{
-		if (!this.events)
-		{
-			this.setEventHelper();
-		}
-	}
-
-	/**
 	 * This will setup the events.
 	 *
 	 * @protected
@@ -297,7 +283,7 @@ export class Component extends Unit
 			return;
 		}
 
-		this.setupEventHelper();
+		this.setEventHelper();
 		this.events.addEvents(events);
 	}
 

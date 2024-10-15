@@ -245,7 +245,7 @@ export class StateHelper
 
 		if (remotes.length < 1)
 		{
-			this.remoteStates = null;
+			this.remoteStates = [];
 		}
 	}
 
