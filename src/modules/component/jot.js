@@ -1,6 +1,5 @@
 import { Component } from './component.js';
 import { SHORTHAND_METHODS } from './shorthand-methods.js';
-import { Unit } from './unit.js';
 
 /**
  * This will get the jot method by value. If the method is an
@@ -84,5 +83,5 @@ export const Jot = (layout) =>
      */
     const render = (layoutType === 'function')? layout : () => layout;
     settings = { render };
-    return createClass(Unit, settings);
+    return createClass(Component, settings);
 };

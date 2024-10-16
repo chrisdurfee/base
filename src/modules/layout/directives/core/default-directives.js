@@ -3,6 +3,7 @@ import { addAria, addRole } from './aria/aria.js';
 import { addContext, context, useContext } from './context/context-directives.js';
 import { addEvent, addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
 import { bind } from './reactive/bind.js';
+import { addDataSet } from './reactive/data-set.js';
 import { forEach } from './reactive/for-each.js';
 import { map } from './reactive/map.js';
 import { onCreated } from './reactive/on-created.js';
@@ -35,4 +36,5 @@ Directives
 	.add('role', addRole)
 	.add('aria', addAria)
 	.add('route', addRoute)
+	.add('dataSet', addDataSet)
 	.add('switch', addSwitch);
