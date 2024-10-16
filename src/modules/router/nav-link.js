@@ -2,11 +2,41 @@ import { Component } from '../component/component.js';
 import { router } from './router.js';
 
 /**
+ * Watcher
+ *
+ * This will create a watcher object.
+ *
+ * @param {string} attr
+ * @param {string} value
+ * @returns {object}
+ */
+const Watcher = (attr, value) => ({
+    attr,
+    value
+});
+
+/**
+ * This will check if the path is active.
+ *
+ * @param {string} path
+ * @param {string} url
+ * @returns {boolean}
+ */
+const iSActive = (path, url) => new RegExp('^' + path + '($|#|/|\\.).*').test(url);
+
+/**
  * NavLink
  *
  * This will create a nav link that will add an active
  * class when the browser route path matches the link
  * href.
+ *
+ * @property {string} activeClass - The active class to add.
+ * @property {string} class - The class
+ * @property {string} exact - The exact match
+ * @property {string|object} href - The href or watcher object
+ * @property {string|object} text - The text or watcher object
+ * @property {array|string} nest - The nested elements
  *
  * @class
  * @extends Component
@@ -34,13 +64,13 @@ export class NavLink extends Component
     {
         // @ts-ignore
         const href = this.href,
-
         // @ts-ignore
         text = this.text,
         watchers = this.setupWatchers(href, text);
 
         return {
             tag: 'a',
+            cache: 'link',
             // @ts-ignore
             class: this.class || this.className || null,
             onState: ['selected', {
@@ -51,6 +81,17 @@ export class NavLink extends Component
             nest: this.nest || this.children,
             watch: watchers
         };
+    }
+
+    /**
+     * This will get the link path.
+     *
+     * @returns {string|null}
+     */
+    getLinkPath()
+    {
+        // @ts-ignore
+        return this?.link?.pathname || null;
     }
 
     /**
@@ -83,20 +124,12 @@ export class NavLink extends Component
 
         if (href && typeof href === 'object')
         {
-            watchers.push(
-            {
-                attr: 'href',
-                value: href
-            });
+            watchers.push(Watcher('href', href));
         }
 
         if (text && typeof text === 'object')
         {
-            watchers.push(
-            {
-                attr: 'text',
-                value: text
-            });
+            watchers.push(Watcher('text', text));
         }
 
         watchers.push({
@@ -104,7 +137,7 @@ export class NavLink extends Component
             callBack: (value, ele) =>
             {
                 const path = ele.pathname + ele.hash;
-				const selected = exact? (value === path) : (new RegExp('^' + ele.pathname + '($|#|/|\\.).*').test(value));
+				const selected = exact? (value === path) : (iSActive(ele.pathname, value));
                 this.update(selected);
             }
         });

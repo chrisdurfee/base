@@ -16,5 +16,10 @@ export const getParentData = (parent) =>
         return parent.context.data;
     }
 
+    if (parent.state)
+    {
+        return parent.state;
+    }
+
     return null;
 };
