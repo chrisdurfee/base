@@ -70,7 +70,6 @@ export class NavLink extends Component
 
         return {
             tag: 'a',
-            cache: 'link',
             // @ts-ignore
             class: this.class || this.className || null,
             onState: ['selected', {
@@ -93,7 +92,7 @@ export class NavLink extends Component
     getLinkPath()
     {
         // @ts-ignore
-        return this?.link?.pathname || null;
+        return this?.panel?.pathname || null;
     }
 
     /**

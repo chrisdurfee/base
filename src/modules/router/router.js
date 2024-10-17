@@ -594,21 +594,15 @@ export class Router
 	checkGroup(group, path)
 	{
 		let check = false,
-		route, firstRoute, lastSelected, selected, hasController = false;
+		route, lastSelected, selected, hasController = false;
 
+		const firstRoute = group[0];
 		for (var i = 0, length = group.length; i < length; i++)
 		{
 			route = group[i];
 			if (typeof route === 'undefined')
 			{
 				continue;
-			}
-
-			/* we want to save the first route in the switch
-			so it can be selected if no route is active */
-			if (i === 0)
-			{
-				firstRoute = route;
 			}
 
 			if (!lastSelected && route.get('active'))
