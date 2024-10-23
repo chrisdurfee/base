@@ -11,7 +11,7 @@ DataTracker.addType('destroyed', (data) =>
 		return false;
 	}
 
-	data.callBack(data.ele);
+	data.callBack(data.ele, data.parent);
 });
 
 /**
@@ -25,7 +25,7 @@ DataTracker.addType('destroyed', (data) =>
  */
 export const onDestroyed = (ele, callBack, parent) =>
 {
-    track(ele, callBack);
+    track(ele, callBack, parent);
 };
 
 /**
@@ -33,13 +33,15 @@ export const onDestroyed = (ele, callBack, parent) =>
  *
  * @param {object} ele
  * @param {function} callBack
+ * @param {object} parent
  * @returns {void}
  */
-const track = (ele, callBack) =>
+const track = (ele, callBack, parent) =>
 {
     DataTracker.add(ele, 'destroyed',
     {
         ele,
-        callBack
+        callBack,
+        parent
     });
 };
