@@ -111,6 +111,17 @@ export class Builder
 	{
 		return render.createNode(settings, container, parent);
 	}
+
+	/**
+	 * This will remove all children from an element.
+	 *
+	 * @param {object} ele
+	 * @returns {void}
+	 */
+	static removeAll(ele)
+	{
+		render.removeAll(ele);
+	}
 }
 
 base.augment(

@@ -1,5 +1,4 @@
 import { dataBinder } from "../../../../data-binder/data-binder.js";
-import { Html } from "../../../../html/html.js";
 import { Builder } from "../../../builder.js";
 import { getParentData } from './get-parent-data.js';
 
@@ -35,7 +34,7 @@ export const forEach = (ele, settings, parent) =>
     const scopeData = (scope !== false);
     dataBinder.watch(ele, data, prop, (items) =>
     {
-        Html.removeAll(ele);
+        Builder.removeAll(ele);
         if (!items || items.length < 1)
         {
             return;
