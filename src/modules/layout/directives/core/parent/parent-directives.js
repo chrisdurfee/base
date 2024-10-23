@@ -1,6 +1,4 @@
-import { Builder } from "../../../builder.js";
-import { Parser } from "../../../element/parser.js";
-import { HtmlHelper } from "../../../html-helper.js";
+import { addAttributes } from "../attribute-helpers.js";
 
 /**
  * This will cache the element in the parent.
@@ -36,14 +34,7 @@ export const useParent = (ele, callBack, parent) =>
     }
 
     const attributes = callBack(parent, ele);
-    if (!attributes)
-    {
-        return;
-    }
-
-    const parsed = Parser.parse(attributes, parent);
-    HtmlHelper.addAttributes(ele, parsed.attr, parent);
-    Builder.setDirectives(ele, parsed.directives, parent);
+    addAttributes(ele, attributes, parent);
 };
 
 /**
