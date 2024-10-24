@@ -8,6 +8,7 @@ export const SHORTHAND_METHODS =
 {
     created: 'onCreated',
     setStates: 'setupStates',
+    state: 'setupStates',
     events: 'setupEvents',
     before: 'beforeSetup',
     render: 'render',
