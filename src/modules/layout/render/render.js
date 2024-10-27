@@ -51,7 +51,7 @@ export class Render
 		component.setup(container);
 
 		const layout = component.prepareLayout();
-		const result = this.build(layout, component.container, component);
+		this.build(layout, component.container, component);
 
 		component.afterBuild();
 
@@ -60,7 +60,7 @@ export class Render
 			obj.onCreated(component);
 		}
 
-		return result;
+		return component;
 	}
 
 	/**
