@@ -269,6 +269,7 @@ export class DataBinder
 		this.addConnection(id, attr, connection);
 
 		const value = data.get(prop);
+		console.log(prop, value, data, typeof value);
 		if (typeof value !== 'undefined')
 		{
 			callBack(value);
