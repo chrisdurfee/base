@@ -268,8 +268,11 @@ export class DataBinder
 		attr = data.getDataId() + ':' + prop;
 		this.addConnection(id, attr, connection);
 
+		/**
+		 * This will get the starting value of the data and
+		 * call the callback if the value is defined.
+		 */
 		const value = data.get(prop);
-		console.log(prop, value, data, typeof value);
 		if (typeof value !== 'undefined')
 		{
 			callBack(value);

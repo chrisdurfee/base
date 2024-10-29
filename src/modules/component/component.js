@@ -214,6 +214,22 @@ export class Component extends Unit
 	}
 
 	/**
+	 * This will add a state.
+	 *
+	 * @param {object} state
+	 * @returns {void}
+	 */
+	addState(state)
+	{
+		if (!this.stateHelper)
+		{
+			return;
+		}
+
+		this.stateHelper.addStates(this.state, state);
+	}
+
+	/**
 	 * This will remove the states.
 	 *
 	 * @protected
