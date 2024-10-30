@@ -89,12 +89,22 @@ export class ComponentHelper
 	 */
 	initializeComponent()
 	{
-        this.component = new this.template({
-            route: this.route,
-            persist: this.persist,
-            parent: this.parent
-        });
+		const comp = this.template();
+        this.transferSettings(comp);
     }
+
+	/**
+	 * This will transfer the settings to the component.
+	 *
+	 * @param {object} comp
+	 * @returns {void}
+	 */
+	transferSettings(comp)
+	{
+		this.persist = comp.persist !== false;
+        Object.assign(comp, { route: this.route, persist: this.persist, parent: this.parent });
+		this.component = comp;
+	}
 
 	/**
 	 * This will initialize the template object.
@@ -110,9 +120,7 @@ export class ComponentHelper
         }
 
         const comp = this.template;
-        this.persist = comp.persist !== false;
-        Object.assign(comp, { route: this.route, persist: this.persist, parent: this.parent });
-        this.component = comp;
+        this.transferSettings(comp);
     }
 
 	/**
