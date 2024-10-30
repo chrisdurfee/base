@@ -135,7 +135,17 @@ export class Route extends SimpleData
 	{
 		if (settings.component)
 		{
-			return settings.component;
+			/**
+			 * This will allow a function to be passed to prevent
+			 * rendering the components until needed.
+			 */
+			let component = settings.component;
+			if (typeof component === 'function')
+			{
+				return component();
+			}
+
+			return component;
 		}
 
 		let imported = settings.import;
