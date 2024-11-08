@@ -1,6 +1,7 @@
 import { Directives } from '../directives.js';
 import { addAria, addRole } from './aria/aria.js';
 import { addContext, context, useContext } from './context/context-directives.js';
+import { debug } from './debug.js';
 import { addEvent, addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
 import { bind } from './reactive/bind.js';
 import { addDataSet } from './reactive/data-set.js';
@@ -36,5 +37,6 @@ Directives
 	.add('role', addRole)
 	.add('aria', addAria)
 	.add('route', addRoute)
+	.add('debug', debug)
 	.add('dataSet', addDataSet)
 	.add('switch', addSwitch);
