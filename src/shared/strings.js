@@ -102,7 +102,7 @@ export class Strings
 		const pattern = /\w\S*/;
 		return str.replace(pattern, (txt) =>
 		{
-			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+			return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
 		});
 	}
 }

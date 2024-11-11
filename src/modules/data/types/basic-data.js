@@ -1,4 +1,4 @@
-import { Objects } from '../../../base.js';
+import { Objects } from '../../../shared/objects.js';
 import { dataBinder } from '../../data-binder/data-binder.js';
 import { DataPubSub } from '../../data-binder/data-pub-sub.js';
 import { DataProxy } from '../data-proxy.js';

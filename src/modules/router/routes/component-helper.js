@@ -15,12 +15,12 @@ export class ComponentHelper
 	 * This will create a component helper.
 	 *
 	 * @constructor
-	 * @param {object} route
+	 * @param {object} routeProxy
 	 * @param {object} settings
 	 */
-	constructor(route, settings)
+	constructor(routeProxy, settings)
 	{
-		this.route = route;
+		this.route = routeProxy;
 
 		this.template = settings.component;
 		this.component = null;

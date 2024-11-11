@@ -1,4 +1,5 @@
-import { SimpleData } from '../../data/data.js';
+import { DataProxy } from '../../data/data-proxy.js';
+import { BasicData } from '../../data/types/basic-data.js';
 import { Import } from '../../import/import.js';
 import { ComponentHelper } from './component-helper.js';
 import { getParamDefaults, paramPattern } from './param-pattern.js';
@@ -17,9 +18,9 @@ let routeCount = 0;
  * This will create a route.
  *
  * @class
- * @augments SimpleData
+ * @augments BasicData
  */
-export class Route extends SimpleData
+export class Route extends BasicData
 {
 	/**
 	 * This will create a route.
@@ -170,7 +171,9 @@ export class Route extends SimpleData
 			persist,
 			parent
 		};
-		this.controller = new ComponentHelper(this, helperSettings);
+
+		const proxy = DataProxy(this);
+		this.controller = new ComponentHelper(proxy, helperSettings);
 	}
 
 	/**
