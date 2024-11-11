@@ -1,4 +1,4 @@
-import { addAttributes } from "../attribute-helpers.js";
+import { Builder } from "../../../builder.js";
 
 /**
  * This will cache the element in the parent.
@@ -33,8 +33,13 @@ export const useParent = (ele, callBack, parent) =>
         return;
     }
 
-    const attributes = callBack(parent, ele);
-    addAttributes(ele, attributes, parent);
+    const layout = callBack(parent, ele);
+    if (!layout)
+    {
+        return;
+    }
+
+    Builder.build(layout, ele, parent);
 };
 
 /**
