@@ -106,9 +106,9 @@ export class ConnectionTracker
 		}
 		else
 		{
-			for (let prop of connections)
+			const values = connections.values();
+			for (const connection of values)
 			{
-				connection = connections.get(prop);
 				if (connection)
 				{
 					connection.unsubscribe();
