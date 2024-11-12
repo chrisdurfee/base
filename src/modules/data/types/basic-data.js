@@ -150,7 +150,7 @@ export class BasicData
 	 */
 	off(attrName, token)
 	{
-		const message = attrName + EVENT.CHANGE;
+		const message = createEventMessage(attrName, EVENT.CHANGE);
 		this.eventSub.off(message, token);
 	}
 
