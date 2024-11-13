@@ -81,7 +81,13 @@ export const useState = (ele, callBack, parent) =>
         return;
     }
 
-    callBack(parent.state, ele);
+    const layout = callBack(parent.state, ele);
+    if (!layout)
+    {
+        return;
+    }
+
+    Builder.build(layout, ele, parent);
 };
 
 /**
