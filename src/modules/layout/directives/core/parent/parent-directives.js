@@ -57,7 +57,13 @@ export const useData = (ele, callBack, parent) =>
         return;
     }
 
-    callBack(parent.data, ele);
+    const layout = callBack(parent.data, ele);
+    if (!layout)
+    {
+        return;
+    }
+
+    Builder.build(layout, ele, parent);
 };
 
 /**
