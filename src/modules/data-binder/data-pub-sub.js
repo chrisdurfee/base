@@ -22,25 +22,19 @@ export class DataPubSub
 		 * @protected
 		 */
 		this.callBacks = new Map();
-
-		/**
-		 * @member {number} lastToken
-		 * @protected
-		 */
-		this.lastToken = -1;
 	}
 
 	/**
 	 * This will get a subscriber array.
 	 *
 	 * @param {string} msg
-	 * @returns {array}
+	 * @returns {Map}
 	 */
 	get(msg)
 	{
 		if (!this.callBacks.has(msg))
 		{
-            this.callBacks.set(msg, []);
+            this.callBacks.set(msg, new Map());
         }
         return this.callBacks.get(msg);
 	}
@@ -53,7 +47,6 @@ export class DataPubSub
 	reset()
 	{
 		this.callBacks.clear();
-		this.lastToken = -1;
 		lastToken = -1;
 	}
 
@@ -66,15 +59,10 @@ export class DataPubSub
 	 */
 	on(msg, callBack)
 	{
-		const token = (++lastToken);
+		const token = (++lastToken).toString();
+		this.get(msg).set(token, callBack);
 
-		this.get(msg)
-			.push({
-				token,
-				callBack
-			});
-
-		return String(token);
+		return token;
 	}
 
 	/**
@@ -86,17 +74,16 @@ export class DataPubSub
 	 */
 	off(msg, token)
 	{
-		const list = this.callBacks.get(msg);
-		if (!list)
+		const subscribers = this.callBacks.get(msg);
+        if (subscribers)
 		{
-			return;
-		}
-
-		const index = list.findIndex(item => item.token === token);
-		if (index !== -1)
-		{
-			list.splice(index, 1);
-		}
+			token = String(token);
+            subscribers.delete(token);
+            if (subscribers.size === 0)
+			{
+                this.callBacks.delete(msg);
+            }
+        }
 	}
 
 	/**
@@ -121,19 +108,19 @@ export class DataPubSub
 	 */
 	publish(msg, ...args)
 	{
-		const list = this.callBacks.get(msg);
-		if (!list)
+		const subscribers = this.callBacks.get(msg);
+        if (!subscribers)
 		{
 			return;
 		}
 
-		for (const { callBack } of list)
+        for (const callBack of subscribers.values())
 		{
-			if (!callBack)
+            if (callBack)
 			{
-				continue;
-			}
-			callBack.apply(this, args);
-		}
+                callBack.apply(this, args);
+            }
+        }
+
 	}
 }
