@@ -46,6 +46,25 @@ export const useParent = (ele, callBack, parent) =>
  * This will pass the parent state to the callBack.
  *
  * @param {object} ele
+ * @param {string} name
+ * @param {object} parent
+ * @returns {void}
+ */
+export const getId = (ele, name, parent) =>
+{
+    if (!name || !parent)
+    {
+        return;
+    }
+
+    const id = parent.getId(name);
+    ele.id = id;
+};
+
+/**
+ * This will pass the parent state to the callBack.
+ *
+ * @param {object} ele
  * @param {function} callBack
  * @param {object} parent
  * @returns {void}

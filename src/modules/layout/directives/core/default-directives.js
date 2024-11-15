@@ -2,7 +2,7 @@ import { Directives } from '../directives.js';
 import { addAria, addRole } from './aria/aria.js';
 import { addContext, context, useContext } from './context/context-directives.js';
 import { debug } from './debug.js';
-import { addEvent, addState, cache, useData, useParent, useState } from './parent/parent-directives.js';
+import { addEvent, addState, cache, getId, useData, useParent, useState } from './parent/parent-directives.js';
 import { bind } from './reactive/bind.js';
 import { addDataSet } from './reactive/data-set.js';
 import { forEach } from './reactive/for-each.js';
@@ -26,6 +26,7 @@ Directives
 	.add('useParent', useParent)
 	.add('useData', useData)
 	.add('useState', useState)
+	.add('getId', getId)
 	.add('addState', addState)
 	.add('addEvent', addEvent)
 	.add('map', map)
