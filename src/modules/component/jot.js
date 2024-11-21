@@ -55,9 +55,10 @@ const createClass = (Base, settings) =>
  * This will create a shorthand component.
  *
  * @param {object|function} layout
+ * @param {object} [extend=Component]
  * @returns {function|object}
  */
-export const Jot = (layout) =>
+export const Jot = (layout, extend = Component) =>
 {
     if (!layout)
     {
@@ -73,7 +74,7 @@ export const Jot = (layout) =>
     if (layoutType === 'object' && layout.render)
     {
         settings = JotComponent(layout);
-        return createClass(Component, settings);
+        return createClass(extend, settings);
     }
 
     /**
@@ -83,5 +84,5 @@ export const Jot = (layout) =>
      */
     const render = (layoutType === 'function')? layout : () => layout;
     settings = { render };
-    return createClass(Component, settings);
+    return createClass(extend, settings);
 };
