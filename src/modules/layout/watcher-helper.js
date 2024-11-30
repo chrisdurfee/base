@@ -199,24 +199,32 @@ export const WatcherHelper =
 	 */
 	getCallBack(settings, ele, data, string, isDataArray)
 	{
-		let callBack,
-		overrideCallBack = settings.callBack;
+		/**
+		 * This will check if we have an override callBack that
+		 * will be used instead of the default callBack.
+		 */
+		const overrideCallBack = settings.callBack;
 		if (typeof overrideCallBack === 'function')
 		{
 			const props = string.match(WATCHER_PATTERN) || [];
 			const isMultiProp = (props && props.length > 1);
-			callBack = (value, committer) =>
+
+			return (value, committer) =>
 			{
+				/**
+				 * This will get the watcher values to pass to the callBack.
+				 */
 				value = (isMultiProp !== true)? value : this.getPropValues(data, props, isDataArray);
 				overrideCallBack(value, ele, committer);
 			};
 		}
-		else
-		{
-			const attr = settings.attr || 'textContent';
-			callBack = this._getWatcherCallBack(ele, data, string, attr, isDataArray);
-		}
-		return callBack;
+
+		/**
+		 * This will get the attribute to update.
+		 * If no attribute is set, we will default to textContent.
+		 */
+		const attr = settings.attr || 'textContent';
+		return this._getWatcherCallBack(ele, data, string, attr, isDataArray);
 	},
 
 	/**
@@ -231,19 +239,47 @@ export const WatcherHelper =
 	addDataWatcher(ele, settings, parent)
 	{
 		const value = this.getValue(settings, parent),
-		data = value[1];
+
+		/**
+		 * This will check if the data is set in the watcher value array.
+		 * If not, we will use the parent data.
+		 */
+		data = value[1] ?? parent?.data ?? parent?.context?.data ?? parent?.state ?? null;
 		if (!data)
 		{
 			return;
 		}
 
 		const string = value[0],
+
+		/**
+		 * This will check if we are watching multiple data objects.
+		 */
 		isDataArray = Array.isArray(data);
 
+		/**
+		 * Thi swill set up the watcher callBack.
+		 *
+		 * @type {function} callBack
+		 */
 		const callBack = this.getCallBack(settings, ele, data, string, isDataArray),
+
+		/**
+		 * This will get the props to watch.
+		 *
+		 * @type {array} props
+		 */
 		props = this._getWatcherProps(string);
+
+		/**
+		 * This will add the watcher for each prop.
+		 */
 		for (var i = 0, length = props.length; i < length; i++)
 		{
+			/**
+			 * This will set the coreect data object for the watcher
+			 * based on the isDataArray flag.
+			 */
 			var watcherData = (isDataArray)? data[i] : data;
 			this.addWatcher(ele, watcherData, props[i], callBack);
 		}
