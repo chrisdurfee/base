@@ -324,7 +324,7 @@ export const WatcherHelper =
 			{
 				settings = {
 					value,
-					callBack: lastItem,
+					callBack: lastItem
 				};
 			}
 			else
