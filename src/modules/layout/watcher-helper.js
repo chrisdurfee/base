@@ -314,8 +314,8 @@ export const WatcherHelper =
 			 * optional data and callback parameters.
 			 */
 			const value = (settings.length === 3)
-						? [settings[0], settings[1]] // `['[[id]]', data]`
-						: [settings[0]]; // `['[[id]]'`
+				? [settings[0], settings[1]] // `['[[id]]', data]`
+				: [settings[0]]; // `['[[id]]'`
 
 			/**
 			 * Check if the last item is a callback function.
@@ -324,7 +324,7 @@ export const WatcherHelper =
 			{
 				settings = {
 					value,
-					callback: lastItem,
+					callBack: lastItem,
 				};
 			}
 			else
