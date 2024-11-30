@@ -137,14 +137,6 @@ export const WatcherHelper =
 	 */
 	getValue(settings, parent)
 	{
-		if (typeof settings === 'string')
-		{
-			settings =
-			{
-				value: settings
-			};
-		}
-
 		const value = settings.value;
 		if (Array.isArray(value) === false)
 		{
@@ -300,33 +292,46 @@ export const WatcherHelper =
 			return;
 		}
 
+		/**
+		 * Handle case where `watch` is a string (multi-property string updating).
+		 */
+		if (typeof settings === "string")
+		{
+			settings = {
+				value: settings,
+			};
+		}
+
+		/**
+		 * Handle shorthand syntax (array).
+		 */
 		if (Array.isArray(settings))
 		{
-			const value = [settings[0], settings[1]];
+			const lastItem = settings[settings.length - 1];
 
 			/**
-			 * This will check if we are supporting the new watcher format
-			 * with callback function or the old format with attr.
+			 * This will set up the value based on length to suppport
+			 * optional data and callback parameters.
 			 */
-			const lastItem = settings[2];
-			if (typeof lastItem === 'function')
+			const value = (settings.length === 3)
+						? [settings[0], settings[1]] // `['[[id]]', data]`
+						: [settings[0]]; // `['[[id]]'`
+
+			/**
+			 * Check if the last item is a callback function.
+			 */
+			if (typeof lastItem === "function")
 			{
-				/**
-				 * This will setup a watcher with a callBack.
-				 */
 				settings = {
 					value,
-					callBack: lastItem
+					callback: lastItem,
 				};
 			}
 			else
 			{
-				/**
-				 * This will setup a watcher with an attr.
-				 */
 				settings = {
-					attr: lastItem,
-					value: [settings[0], settings[1]]
+					attr: lastItem || "textContent",
+					value
 				};
 			}
 		}
