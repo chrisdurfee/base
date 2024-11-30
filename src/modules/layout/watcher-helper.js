@@ -3,6 +3,13 @@ import { dataBinder } from '../data-binder/data-binder.js';
 import { getParentData } from './directives/core/reactive/get-parent-data.js';
 import { HtmlHelper } from './html-helper.js';
 
+/**
+ * WATCHER_PATTERN
+ *
+ * This is the pattern used to match watcher strings.
+ *
+ * @type {RegExp} WATCHER_PATTERN
+ */
 const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
 
 /**
@@ -10,6 +17,8 @@ const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
  *
  * This helper creates watcher callBacks, parses watcher strings
  * and sets up watchers.
+ *
+ * @type {object} WatcherHelper
  */
 export const WatcherHelper =
 {
@@ -23,10 +32,17 @@ export const WatcherHelper =
 	 */
 	isWatching(value)
 	{
+		/**
+		 * This will check if we are watching using an array.
+		 */
 		if (Array.isArray(value))
 		{
 			return typeof value[0] === 'string' && this.hasParams(value[0]);
 		}
+
+		/**
+		 * This will check if we are watching using a string.
+		 */
 		return this.hasParams(value);
 	},
 
@@ -68,6 +84,7 @@ export const WatcherHelper =
 	 * @param {object} ele
 	 * @param {string} attr
 	 * @param {string} value
+	 * @returns {void}
 	 */
 	updateAttr(ele, attr, value)
 	{
@@ -209,6 +226,7 @@ export const WatcherHelper =
 	 * @param {object} ele
 	 * @param {(string|object)} settings
 	 * @param {object} parent
+	 * @returns {void}
 	 */
 	addDataWatcher(ele, settings, parent)
 	{
@@ -237,6 +255,7 @@ export const WatcherHelper =
 	 * @param {object} ele
 	 * @param {(string|object)} settings
 	 * @param {object} parent
+	 * @returns {void}
 	 */
 	setup(ele, settings, parent)
 	{
@@ -287,6 +306,7 @@ export const WatcherHelper =
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {function} callBack
+	 * @returns {void}
 	 */
 	addWatcher(ele, data, prop, callBack)
 	{

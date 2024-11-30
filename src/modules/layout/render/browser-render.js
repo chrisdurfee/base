@@ -164,6 +164,17 @@ export class BrowserRender extends Render
 	}
 
 	/**
+	 * This will remove a node.
+	 *
+	 * @param {object} node
+	 * @returns {void}
+	 */
+	removeNode(node)
+	{
+		HtmlHelper.removeElement(node);
+	}
+
+	/**
 	 * This will remove all the children from an element.
 	 *
 	 * @override

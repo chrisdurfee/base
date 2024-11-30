@@ -113,6 +113,17 @@ export class Builder
 	}
 
 	/**
+	 * This will remove a node.
+	 *
+	 * @param {object} node
+	 * @returns {void}
+	 */
+	static removeNode(node)
+	{
+		render.removeNode(node);
+	}
+
+	/**
 	 * This will remove all children from an element.
 	 *
 	 * @param {object} ele

@@ -77,6 +77,17 @@ export class Render
 	}
 
 	/**
+	 * This will remove a node.
+	 *
+	 * @param {object} node
+	 * @returns {void}
+	 */
+	removeNode(node)
+	{
+
+	}
+
+	/**
 	 * This will remove all the children from an element.
 	 *
 	 * @param {object} ele
