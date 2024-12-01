@@ -1,79 +1,79 @@
 /**
  * Types
  *
- * This will contain methods for working with types.
+ * Utility class for working with variable types.
  *
  * @module
  * @name Types
  */
 export class Types
 {
-    /**
-	 * This will get the type of a variable.
+	/**
+	 * Gets the type of a variable.
 	 *
-	 * @param {*} data
-	 * @returns {string}
+	 * @param {*} data - The data whose type is to be determined.
+	 * @returns {string} The type of the variable ('undefined', 'object', 'function', 'array', etc.).
 	 */
 	static getType(data)
 	{
 		const type = typeof data;
-		if (type !== 'object')
+		if (type !== "object")
 		{
 			return type;
 		}
 
-		return (this.isArray(data))? 'array' : type;
+		return Array.isArray(data) ? "array" : "object"; // Directly check for array type.
 	}
 
 	/**
-	 * This will check if a request is undefined.
+	 * Checks if a value is undefined.
 	 *
-	 * @param {*} data
-	 * @returns {boolean}
+	 * @param {*} data - The data to check.
+	 * @returns {boolean} True if the data is undefined.
 	 */
 	static isUndefined(data)
 	{
-		return (typeof data === 'undefined');
+		return typeof data === "undefined";
 	}
 
 	/**
-	 * This will check if the request is an object.
-     *
-	 * @param {*} data
-	 * @returns {boolean}
+	 * Checks if a value is an object (excluding arrays).
+	 *
+	 * @param {*} data - The data to check.
+	 * @returns {boolean} True if the data is a plain object.
 	 */
 	static isObject(data)
 	{
-		return (data && typeof data === 'object' && this.isArray(data) === false);
+		return data !== null && typeof data === "object" && !Array.isArray(data);
 	}
 
 	/**
-	 * This will check if the request is a function.
+	 * Checks if a value is a function.
 	 *
-	 * @param {*} data
-	 * @returns {boolean}
+	 * @param {*} data - The data to check.
+	 * @returns {boolean} True if the data is a function.
 	 */
 	static isFunction(data)
 	{
-		return (typeof data === 'function');
+		return typeof data === "function";
 	}
 
 	/**
-	 * This will check if the request is a string.
-     *
-	 * @param {*} data
-	 * @returns {boolean}
+	 * Checks if a value is a string.
+	 *
+	 * @param {*} data - The data to check.
+	 * @returns {boolean} True if the data is a string.
 	 */
 	static isString(data)
 	{
-		return (typeof data === 'string');
+		return typeof data === "string";
 	}
 
-    /**
-	 * This will check if the data is an array.
-     *
-	 * @param {*} data
-	 * @returns {boolean}
+	/**
+	 * Checks if a value is an array.
+	 *
+	 * @param {*} data - The data to check.
+	 * @returns {boolean} True if the data is an array.
 	 */
 	static isArray(data)
 	{
