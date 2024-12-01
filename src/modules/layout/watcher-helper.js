@@ -66,15 +66,13 @@ export const WatcherHelper =
 	 */
 	_getWatcherProps(string)
 	{
-		let pattern = /\[\[(.*?)(\[\d+\])?\]\]/g;
-		const matches = string.match(pattern);
-		if (matches === null)
+		const matches = string.match(WATCHER_PATTERN);
+		if (!matches)
 		{
 			return null
 		}
 
-		pattern = /(\[\[|\]\])/g;
-		return matches.map(match => match.replace(pattern, ''));
+		return matches.map(match => match.slice(2, -2)); // Trim `[[` and `]]`
 	},
 
 	/**
