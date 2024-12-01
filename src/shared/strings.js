@@ -1,9 +1,7 @@
-import { Types } from "./types";
-
 /**
  * Strings
  *
- * Contains utility methods for working with strings.
+ * This will contain methods for working with strings.
  *
  * @module
  * @name Strings
@@ -11,31 +9,37 @@ import { Types } from "./types";
 export class Strings
 {
 	/**
-	 * Limits the length of a string.
+	 * This will limit the length of a string.
 	 *
-	 * @param {string} str - The string to limit.
-	 * @param {number} [maxLength=1000] - The maximum length of the string.
-	 * @returns {string} The truncated string.
+	 * @param {string} str
+	 * @param {number} [maxLength]
+	 * @returns {string}
 	 */
 	static limit(str, maxLength = 1000)
 	{
-		if (!Types.isString(str))
+		if (typeof str !== 'string')
 		{
-			return "";
+			return '';
 		}
 
-		return str.slice(0, maxLength); // `slice` is more performant and concise.
+		return str.substring(0, maxLength);
 	}
 
-	/**
-	 * Parses a query string into an object.
+    /**
+	 * This will parse a query string.
 	 *
-	 * @param {string} [str=window.location.search] - The string to parse.
-	 * @param {boolean} [decode=true] - Whether to decode the query values.
-	 * @returns {object} An object representing the query string parameters.
+	 * @param {string} [str] The string to parse or the global
+	 * location will be parsed.
+	 * @param {boolean} [decode]
+	 * @returns {object}
 	 */
-	static parseQueryString(str = window.location.search, decode = true)
+	static parseQueryString(str, decode)
 	{
+		if (typeof str !== 'string')
+		{
+			str = window.location.search;
+		}
+
 		str = this.limit(str);
 
 		const objURL = {},
@@ -52,50 +56,53 @@ export class Strings
 	}
 
 	/**
-	 * Converts a string to camelCase.
+	 * This will camelCase a string.
 	 *
-	 * @param {string} str - The string to convert.
-	 * @returns {string} The camelCased string.
+	 * @param {string} str
+	 * @returns {string} The string or false.
 	 */
 	static camelCase(str)
 	{
 		str = this.limit(str);
 
-		const regExp = /(?:^|-|\s|_)(\w)/g; // Simplified regex for better performance.
-		return str.toLowerCase().replace(regExp, (_, char) => char.toUpperCase());
+		const regExp = /(-|\s|_)+\w{1}/g;
+		return str.replace(regExp, (match) =>  match[1].toUpperCase());
 	}
 
 	/**
-	 * Converts a camelCase string to a delimited format.
+	 * This will uncamel-case a string.
 	 *
-	 * @param {string} str - The camelCase string.
-	 * @param {string} [delimiter="-"] - The delimiter to use.
-	 * @returns {string} The uncamelCased string.
+	 * @param {string} str
+	 * @param {string} [delimiter]
+	 * @returns {string} The string.
 	 */
-	static uncamelCase(str, delimiter = "-")
+	static uncamelCase(str, delimiter = '-')
 	{
 		str = this.limit(str);
 
-		const regExp = /([a-z])([A-Z])/g;
-		return str.replace(regExp, (_, lower, upper) => lower + delimiter + upper.toLowerCase()).toLowerCase();
+		const regExp = /([A-Z]{1,})/g;
+		return str.replace(regExp, (match) => delimiter + match.toLowerCase()).toLowerCase();
 	}
 
 	/**
-	 * Converts a string to Title Case.
+	 * This will title case a string.
 	 *
-	 * @param {string} str - The string to convert.
-	 * @returns {string} The title-cased string.
+	 * @param {string} str
+	 * @returns {string} The string.
 	 */
 	static titleCase(str)
 	{
-		if (!Types.isString(str))
+		if (!str)
 		{
-			return "";
+			return '';
 		}
 
 		str = this.limit(str);
 
-		const regExp = /\b\w/g; // Simplified regex for first character of each word.
-		return str.toLowerCase().replace(regExp, (char) => char.toUpperCase());
+		const pattern = /\w\S*/;
+		return str.replace(pattern, (txt) =>
+		{
+			return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+		});
 	}
 }
