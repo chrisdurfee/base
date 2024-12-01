@@ -3,7 +3,7 @@ import { Types } from "./types.js";
 /**
  * Objects
  *
- * Contains methods for working with objects in a performant, readable, and maintainable manner.
+ * Contains methods for working with objects.
  *
  * @module
  * @name Objects
