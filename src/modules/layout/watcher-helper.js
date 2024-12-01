@@ -69,8 +69,8 @@ export const WatcherHelper =
 		const matches = string.match(WATCHER_PATTERN);
 		if (!matches)
 		{
-			return null
-		}
+			return null;
+		};
 
 		return matches.map(match => match.slice(2, -2)); // Trim `[[` and `]]`
 	},
@@ -299,19 +299,20 @@ export const WatcherHelper =
     		return;
 		}
 
-		/**
-		 * Handle shorthand syntax (array).
-		 */
 		if (Array.isArray(settings))
 		{
-			const [first, second, lastItem] = settings;
+			/**
+			 * Handle shorthand syntax (array).
+			 */
+			const lastItem = settings[settings.length - 1];
 
 			/**
-			 * Determine if the last item is a callback or an attribute to watch.
+			 * This will set up the value based on length to suppport
+			 * optional data and callback parameters.
 			 */
-			const value = second
-				? [first, second] // ['[[id]]', data]
-				: [first]; // ['[[id]]']
+			const value = (settings[1] && typeof settings[1] === 'object')
+				? [settings[0], settings[1]] // `['[[id]]', data]`
+				: [settings[0]]; // `['[[id]]'`
 
 			this.addDataWatcher(
 				ele,
