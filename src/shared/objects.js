@@ -3,58 +3,59 @@ import { Types } from "./types.js";
 /**
  * Objects
  *
- * This will contain methods for working with objects.
+ * Contains methods for working with objects in a performant, readable, and maintainable manner.
  *
  * @module
  * @name Objects
  */
 export const Objects =
 {
-    /**
-	 * This will create a new object.
+	/**
+	 * Creates a new object, optionally extending from another object.
 	 *
-	 * @param {object} [object] An object to extend.
-	 * @returns {object}
+	 * @param {object} [prototype] - The prototype object to extend from.
+	 * @returns {object} The newly created object.
 	 */
-	create(object)
+	create(prototype)
 	{
-		return Object.create(object);
+		return Object.create(prototype || null);
 	},
 
 	/**
-	 * This will extend an object to another object.
+	 * Extends properties from the source object to the target object.
+	 * Only copies properties that are not already defined on the target object.
 	 *
-	 * @param {(function|object)} sourceObj
-	 * @param {(function|object)} targetObj
-	 * @returns {object}
+	 * @param {object} sourceObj - The source object.
+	 * @param {object} targetObj - The target object to extend.
+	 * @returns {object|false} The extended target object or false if invalid.
 	 */
 	extendObject(sourceObj, targetObj)
 	{
-		if (typeof sourceObj === 'undefined' || typeof targetObj === 'undefined')
+		if (!Types.isObject(sourceObj) || !Types.isObject(targetObj))
 		{
 			return false;
 		}
 
-		for (var property in sourceObj)
+		Object.keys(sourceObj).forEach((key) =>
 		{
-			if (this.hasOwnProp(sourceObj, property) && typeof targetObj[property] === 'undefined')
+			if (!this.hasOwnProp(targetObj, key))
 			{
-				targetObj[property] = sourceObj[property];
+				targetObj[key] = sourceObj[key];
 			}
-		}
+		});
 
 		return targetObj;
 	},
 
 	/**
-	 * This will clone an object.
+	 * Deep clones an object in a safe and scalable manner.
 	 *
-	 * @param {object} obj
-	 * @returns {object}
+	 * @param {object} obj - The object to clone.
+	 * @returns {object} A deep clone of the object.
 	 */
 	clone(obj)
 	{
-		if (!obj)
+		if (!obj || !Types.isObject(obj))
 		{
 			return {};
 		}
@@ -63,56 +64,42 @@ export const Objects =
 	},
 
 	/**
-	 * This will get the class prototype.
+	 * Retrieves the prototype of a class or object.
 	 *
-	 * @protected
-	 * @param {function|object} object
-	 * @returns {object}
+	 * @param {function|object} entity - The class or object.
+	 * @returns {object} The prototype of the entity.
 	 */
-	getClassObject(object)
+	getClassObject(entity)
 	{
-		return (typeof object === 'function')? object.prototype : object;
+		return typeof entity === "function" ? entity.prototype : entity;
 	},
 
 	/**
-	 * This will extend an object to another object.
+	 * Extends a class or object with the properties of another class or object.
 	 *
-	 * @param {function|object} sourceClass
-	 * @param {function|object} targetClass
-	 * @returns {object}
+	 * @param {function|object} sourceClass - The source class or object.
+	 * @param {function|object} targetClass - The target class or object.
+	 * @returns {object|false} The resulting extended object or false if invalid.
 	 */
 	extendClass(sourceClass, targetClass)
 	{
-		/* if we are using a class constructor function
-		we want to get the class prototype object */
-		const source = this.getClassObject(sourceClass),
-		target = this.getClassObject(targetClass);
+		const source = this.getClassObject(sourceClass);
+		const target = this.getClassObject(targetClass);
 
-		if (typeof source !== 'object' || typeof target !== 'object')
+		if (!Types.isObject(source) || !Types.isObject(target))
 		{
 			return false;
 		}
 
-		/* we want to create a new object and add the source
-		prototype to the new object */
-		const obj = Object.create(source);
-
-		/* we want to add any additional properties from the
-		target class to the new object */
-		for (var prop in target)
-		{
-			obj[prop] = target[prop];
-		}
-
-		return obj;
+		return { ...Object.create(source), ...target };
 	},
 
 	/**
-	 * This will check if an object has a property.
+	 * Checks if an object has a specific property.
 	 *
-	 * @param {object} obj
-	 * @param {string} prop
-	 * @returns {boolean}
+	 * @param {object} obj - The object to check.
+	 * @param {string} prop - The property to check for.
+	 * @returns {boolean} True if the object has the property.
 	 */
 	hasOwnProp(obj, prop)
 	{
@@ -120,38 +107,29 @@ export const Objects =
 	},
 
 	/**
-	 * This will check if an object is a plain object.
+	 * Determines if a value is a plain object.
 	 *
-	 * @param {object} obj
-	 * @returns {boolean}
+	 * @param {object} obj - The value to check.
+	 * @returns {boolean} True if the value is a plain object.
 	 */
 	isPlainObject(obj)
 	{
-		return (obj && Object.prototype.toString.call(obj) === '[object Object]');
+		return !!obj && Object.prototype.toString.call(obj) === "[object Object]";
 	},
 
 	/**
-	 * This will check if an object is empty.
+	 * Checks if an object is empty.
 	 *
-	 * @param {object} obj
-	 * @returns {boolean}
+	 * @param {object} obj - The object to check.
+	 * @returns {boolean} True if the object has no own properties.
 	 */
 	isEmpty(obj)
 	{
-		if (Types.isObject(obj) === false)
+		if (!Types.isObject(obj))
 		{
 			return true;
 		}
 
-		/* we want to loop through each property and
-		check if it belongs to the object directly */
-		for (var key in obj)
-		{
-			if (this.hasOwnProp(obj, key))
-			{
-				return false;
-			}
-		}
-		return true;
+		return Object.keys(obj).length === 0;
 	}
 };
