@@ -190,6 +190,12 @@ export const WatcherHelper =
 	getCallBack(settings, ele, data, string, isDataArray)
 	{
 		/**
+		 * This will get the attribute to update.
+		 * If no attribute is set, we will default to textContent.
+		 */
+		const attr = settings.attr || 'textContent';
+
+		/**
 		 * This will check if we have an override callBack that
 		 * will be used instead of the default callBack.
 		 */
@@ -205,15 +211,14 @@ export const WatcherHelper =
 				 * This will get the watcher values to pass to the callBack.
 				 */
 				value = (isMultiProp !== true)? value : this.getPropValues(data, props, isDataArray);
-				overrideCallBack(value, ele, committer);
+				const result = overrideCallBack(value, ele, committer);
+				if (typeof result !== 'undefined')
+				{
+					this.updateAttr(ele, attr, result);
+				}
 			};
 		}
 
-		/**
-		 * This will get the attribute to update.
-		 * If no attribute is set, we will default to textContent.
-		 */
-		const attr = settings.attr || 'textContent';
 		return this._getWatcherCallBack(ele, data, string, attr, isDataArray);
 	},
 
