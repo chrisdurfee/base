@@ -16,7 +16,7 @@ export class Arrays
 	 */
 	static toArray(list)
 	{
-		return Array.prototype.slice.call(list);
+		return Array.from(list);
 	}
 
 	/**
@@ -29,9 +29,9 @@ export class Arrays
 	 */
 	static inArray(array, element, fromIndex)
 	{
-		if (!array || typeof array !== 'object')
+		if (!Array.isArray(array))
 		{
-			return -1;
+	        return -1;
 		}
 
 		return array.indexOf(element, fromIndex);
