@@ -297,9 +297,8 @@ export const WatcherHelper =
 		 */
 		if (typeof settings === "string")
 		{
-			settings = {
-				value: settings,
-			};
+			this.addDataWatcher(ele, { value: settings }, parent);
+    		return;
 		}
 
 		/**
@@ -307,33 +306,23 @@ export const WatcherHelper =
 		 */
 		if (Array.isArray(settings))
 		{
-			const lastItem = settings[settings.length - 1];
+			const [first, second, lastItem] = settings;
 
 			/**
-			 * This will set up the value based on length to suppport
-			 * optional data and callback parameters.
+			 * Determine if the last item is a callback or an attribute to watch.
 			 */
-			const value = (settings.length === 3)
-				? [settings[0], settings[1]] // `['[[id]]', data]`
-				: [settings[0]]; // `['[[id]]'`
+			const value = second
+				? [first, second] // ['[[id]]', data]
+				: [first]; // ['[[id]]']
 
-			/**
-			 * Check if the last item is a callback function.
-			 */
-			if (typeof lastItem === "function")
-			{
-				settings = {
-					value,
-					callBack: lastItem
-				};
-			}
-			else
-			{
-				settings = {
-					attr: lastItem || "textContent",
-					value
-				};
-			}
+			this.addDataWatcher(
+				ele,
+				(typeof lastItem === "function")
+					? { value, callBack: lastItem } // Callback format
+					: { attr: lastItem || "textContent", value }, // Attribute format
+				parent
+			);
+			return;
 		}
 
 		this.addDataWatcher(ele, settings, parent);
