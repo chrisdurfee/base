@@ -41,6 +41,11 @@ export class Component extends Unit
 		 */
 		this.isComponent = true;
 
+		/**
+		 * @param {boolean} stateResumed
+		 */
+		this.stateResumed = false;
+
 		/* this will allow the component to override the
 		state target id to add a custom id */
 		/**
@@ -177,6 +182,7 @@ export class Component extends Unit
 		const state = this.state;
 		if (state)
 		{
+			this.stateResumed = true;
 			this.stateHelper.restore(state);
 			return;
 		}
@@ -221,7 +227,12 @@ export class Component extends Unit
 	 */
 	addState(state)
 	{
-		if (!this.stateHelper)
+		/**
+		 * This will prevet new states from being added if the
+		 * component has been resumed or the state helper is
+		 * missing.
+		 */
+		if (!this.stateHelper || this.stateResumed == true)
 		{
 			return;
 		}
@@ -245,6 +256,7 @@ export class Component extends Unit
 
 		this.stateHelper.removeRemoteStates();
 		state.remove();
+		this.stateResumed = false;
 	}
 
 	/**

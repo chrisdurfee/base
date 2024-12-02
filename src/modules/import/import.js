@@ -324,7 +324,7 @@ const ImportWrapper = Jot(
         }
 
         /**
-         * This will check if the import is useing a custom
+         * This will check if the import is using a custom
          * callback to set up the module.
          */
         const callBack = this.callBack;
@@ -341,19 +341,23 @@ const ImportWrapper = Jot(
                  * the import props like persist and route.
                  */
                 layout = new layout();
-                layout.route = this.route;
-
-                if (this.persist)
-                {
-                    layout.persist = true;
-                }
             }
             else
             {
                 /**
-                 * This will set up the layout as a n atom.
+                 * This will set up the layout as an atom.
                  */
                 layout = layout();
+            }
+        }
+
+        if (layout.isUnit === true)
+        {
+            layout.route = this.route;
+
+            if (this.persist)
+            {
+                layout.persist = true;
             }
         }
 
