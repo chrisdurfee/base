@@ -505,11 +505,6 @@ export class Unit
 		this.removeContext();
 
 		const panel = this.panel || this.id;
-		if (!panel)
-		{
-			return;
-		}
-
 		Html.removeElement(panel);
 	}
 
