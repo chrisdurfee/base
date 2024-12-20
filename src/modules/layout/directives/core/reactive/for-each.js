@@ -48,7 +48,7 @@ export const forEach = (ele, settings, parent) =>
                 items[index],
                 index,
                 scoped,
-                ele
+                children
             );
             if (layout === null)
             {
