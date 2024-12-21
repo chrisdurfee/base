@@ -596,7 +596,6 @@ export class Router
 		 * subsequent routes and select the first route with a controller.
 		 */
 		let selected;
-		let hasController = false;
 		for (const route of group)
 		{
 			if (typeof route === 'undefined')
@@ -606,7 +605,7 @@ export class Router
 
 			// If we have already found a matching route, and it has a controller,
 			// we deactivate subsequent routes.
-			if (selected && hasController)
+			if (selected)
 			{
 				route.deactivate();
 				continue;
@@ -615,11 +614,10 @@ export class Router
 			const matched = route.match(path);
 			if (matched !== false && selected === undefined)
 			{
-				selected = route;
 				if (route.controller)
 				{
+					selected = route;
 					this.select(route);
-					hasController = true;
 				}
 			}
 		}
@@ -632,12 +630,6 @@ export class Router
 		{
 			this.select(firstRoute);
 			return;
-		}
-
-		if (!hasController && firstRoute !== selected)
-		{
-			// If no controller route matched, select first route as a fallback
-			this.select(firstRoute);
 		}
 	}
 
