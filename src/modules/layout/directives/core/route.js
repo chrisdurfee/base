@@ -2,6 +2,25 @@ import { DataTracker } from "../../../../main/data-tracker/data-tracker.js";
 import { router } from "../../../router/router.js";
 
 /**
+ * This will register the route system to the data
+ * tracker to remove routes that have been nested
+ * in layouts.
+ */
+DataTracker.addType('routes', (data) =>
+{
+    if (!data)
+    {
+        return false;
+    }
+
+    const route = data.route;
+    if (route)
+    {
+        router.removeRoute(route);
+    }
+});
+
+/**
  * This will add a route.
  *
  * @protected

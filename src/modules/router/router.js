@@ -1,4 +1,3 @@
-import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Events } from '../../main/events/events.js';
 import { Dom } from '../../shared/dom.js';
 import { Data } from '../data/data.js';
@@ -7,41 +6,6 @@ import { Route } from './routes/route.js';
 import { setTitle } from './set-title.js';
 import { Utils } from './utils.js';
 export { NavLink } from './nav-link.js';
-
-/**
- * This will register the route system to the data
- * tracker to remove routes that have been nested
- * in layouts.
- */
-DataTracker.addType('routes', (data) =>
-{
-	if (!data)
-	{
-		return false;
-	}
-
-	const route = data.route;
-	if (route)
-	{
-		router.removeRoute(route);
-	}
-});
-
-/**
- * This will register the switch system to the data
- * tracker to remove switches that have been nested
- * in layouts.
- */
-DataTracker.addType('switch', (data) =>
-{
-	if (!data)
-	{
-		return false;
-	}
-
-	const id = data.id;
-	router.removeSwitch(id);
-});
 
 /**
  * This will get the location.
@@ -87,7 +51,7 @@ export class Router
 		 * This will store each route added to the router.
 		 */
 		this.routes = [];
-		this.switches = {};
+		this.switches = new Map();
 		this.switchCount = 0;
 
 		/**
@@ -317,23 +281,34 @@ export class Router
 		return id;
 	}
 
+	/**
+	 * This will get a switch group by id.
+	 *
+	 * @param {number} id
+	 * @returns {array}
+	 */
 	getSwitchGroup(id)
 	{
-		return (this.switches[id] = []);
+		const switches = this.switches.get(id);
+		if (switches)
+		{
+			return switches;
+		}
+
+		const group = [];
+		this.switches.set(id, group);
+		return group;
 	}
 
 	/**
 	 * This will remove a switch by id.
 	 *
 	 * @param {string} id
+	 * @returns {void}
 	 */
 	removeSwitch(id)
 	{
-		const switches = this.switches;
-		if (switches[id])
-		{
-			delete switches[id];
-		}
+		this.switches.delete(id);
 	}
 
 	/**
@@ -451,7 +426,9 @@ export class Router
 		{
 			const baseUri = this.baseURI,
 			path = (baseUri !== '/')? href.replace(baseUri, '') : href;
-			this.navigate(path);
+
+			const preventScroll = Dom.data(target, 'prevent-scroll') || false;
+			this.navigate(path, { preventScroll});
 
 			evt.preventDefault();
 			evt.stopPropagation();
@@ -467,7 +444,7 @@ export class Router
 	reset()
 	{
 		this.routes = [];
-		this.switches = [];
+		this.switches = new Map();
 		this.switchCount = 0;
 
 		return this;
@@ -562,7 +539,8 @@ export class Router
 	}
 
 	/**
-	 * This will check the switches to match the path.
+	 * Checks all switch groups against the given path.
+	 * Activates the first matching route or falls back to the first route in the group if none match.
 	 *
 	 * @protected
 	 * @param {string} [path]
@@ -571,60 +549,73 @@ export class Router
 	checkSwitches(path)
 	{
 		const switches = this.switches;
-		for (var id in switches)
+		switches.forEach((group) =>
 		{
-			if (!Object.prototype.hasOwnProperty.call(switches, id))
-			{
-				continue;
-			}
-
-			var group = switches[id];
 			this.checkGroup(group, path);
-		}
+		});
 	}
 
 	/**
-	 * This will check a group to match a path.
+	 * Checks a single group of routes against the path.
+	 * Selects the first matching route if any; otherwise selects the first route.
+	 * Deactivates previously active routes if changed.
 	 *
 	 * @protected
-	 * @param {object} group
+	 * @param {object[]} group
 	 * @param {string} path
 	 * @returns {void}
 	 */
 	checkGroup(group, path)
 	{
-		let check = false,
-		route, lastSelected, selected, hasController = false;
-
-		const firstRoute = group[0];
-		for (var i = 0, length = group.length; i < length; i++)
+		if (!group.length)
 		{
-			route = group[i];
+			return;
+		}
+
+		/**
+		 * The last selected route should be checked first to
+		 * deactive it if it doesn't match the path.
+		 */
+		const lastSelected = group.find((route) => route.get('active'));
+		if (lastSelected)
+		{
+			/**
+			 * If the last selected route matches the path, we select it.
+			 * Otherwise, we deactivate it.
+			 */
+			const matched = lastSelected.match(path);
+			if (matched === false)
+			{
+				lastSelected.deactivate();
+			}
+		}
+
+		/**
+		 * We will check each route in the group to see if it matches the path. If a route
+		 * matches the path, we select it. If a route has a controller, we deactivate all
+		 * subsequent routes and select the first route with a controller.
+		 */
+		let selected;
+		let hasController = false;
+		for (const route of group)
+		{
 			if (typeof route === 'undefined')
 			{
 				continue;
 			}
 
-			if (!lastSelected && route.get('active'))
+			// If we have already found a matching route, and it has a controller,
+			// we deactivate subsequent routes.
+			if (selected && hasController)
 			{
-				lastSelected = route;
-			}
-
-			if (check !== false)
-			{
-				if (hasController)
-				{
-					route.deactivate();
-				}
+				route.deactivate();
 				continue;
 			}
 
-			/* we will break the loop on the first match */
-			check = route.match(path);
-			if (check !== false)
+			const matched = route.match(path);
+			if (matched !== false && selected === undefined)
 			{
 				selected = route;
-
 				if (route.controller)
 				{
 					this.select(route);
@@ -633,26 +624,19 @@ export class Router
 			}
 		}
 
-		if (selected === undefined)
+		/**
+		 * If no route matched the path, we select the first route in the group.
+		 */
+		const firstRoute = group[0];
+		if (!selected)
 		{
 			this.select(firstRoute);
-
-			if (lastSelected && firstRoute !== lastSelected)
-			{
-				lastSelected.deactivate();
-			}
 			return;
 		}
 
-		if (lastSelected)
+		if (!hasController && firstRoute !== selected)
 		{
-			if (hasController && selected !== lastSelected)
-			{
-				lastSelected.deactivate();
-			}
-		}
-		else if (firstRoute && hasController === false)
-		{
+			// If no controller route matched, select first route as a fallback
 			this.select(firstRoute);
 		}
 	}

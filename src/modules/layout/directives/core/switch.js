@@ -2,6 +2,22 @@ import { DataTracker } from "../../../../main/data-tracker/data-tracker.js";
 import { router } from "../../../router/router.js";
 
 /**
+ * This will register the switch system to the data
+ * tracker to remove switches that have been nested
+ * in layouts.
+ */
+DataTracker.addType('switch', (data) =>
+{
+	if (!data)
+	{
+		return false;
+	}
+
+	const id = data.id;
+	router.removeSwitch(id);
+});
+
+/**
  * This will add a switch.
  *
  * @protected
