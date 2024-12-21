@@ -143,6 +143,16 @@ export class Unit
 	}
 
 	/**
+	 * This will get the child scope instance of the component.
+	 *
+	 * @returns {object}
+	 */
+	getChildScope()
+	{
+		return this;
+	}
+
+	/**
 	 * This will get the parent context.
 	 *
 	 * @returns {object|null}

@@ -32,8 +32,17 @@ export class Render
 	createComponent(obj, container, parent)
 	{
 		const component = obj;
+
+		/**
+		 * We want to set the parent to the component before setting
+		 * up the component.
+		 */
 		component.parent = parent;
 
+		/**
+		 * We only set the persist if both the parent allows
+		 * and the child does not explicitly deny it.
+		 */
 		if (parent && parent.persist === true && component.persist !== false)
 		{
 			component.persist = true;
@@ -51,7 +60,7 @@ export class Render
 		component.setup(container);
 
 		const layout = component.prepareLayout();
-		this.build(layout, component.container, component);
+		this.build(layout, component.container, component.getChildScope());
 
 		component.afterBuild();
 
