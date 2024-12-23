@@ -68,6 +68,7 @@ export class Route extends BasicData
 		this.params = null;
 		this.callBack = null;
 		this.title = null;
+		this.preventScroll = false;
 	}
 
 	/**
@@ -97,6 +98,7 @@ export class Route extends BasicData
 
 		this.callBack = settings.callBack;
 		this.title = settings.title;
+		this.preventScroll = settings.preventScroll || false;
 	}
 
 	/**

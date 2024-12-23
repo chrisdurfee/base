@@ -427,8 +427,7 @@ export class Router
 			const baseUri = this.baseURI,
 			path = (baseUri !== '/')? href.replace(baseUri, '') : href;
 
-			const preventScroll = Dom.data(target, 'prevent-scroll') || false;
-			this.navigate(path, { preventScroll});
+			this.navigate(path);
 
 			evt.preventDefault();
 			evt.stopPropagation();
@@ -695,10 +694,10 @@ export class Router
 		route.select();
 		this.updateTitle(route);
 
-		/**
-		 * This will check to scroll to the top of the page.
-		 */
-		this.checkToScroll();
+		if (route.preventScroll !== true)
+		{
+			this.checkToScroll();
+		}
 	}
 
 	/**

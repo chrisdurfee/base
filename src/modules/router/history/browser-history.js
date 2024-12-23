@@ -53,7 +53,7 @@ export class BrowserHistory extends History
 		this.router.checkActiveRoutes(state.uri);
 
 		const scrollPosition = state.scrollPosition;
-		if (scrollPosition && state.preventScroll !== true)
+		if (scrollPosition)
 		{
 			this.scrollTo(scrollPosition);
 		}
