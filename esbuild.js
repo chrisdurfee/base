@@ -7,7 +7,8 @@ build({
     sourcemap: true,
     minify: true,
     splitting: true,
+    treeShaking: true,
     format: 'esm',
-    target: ['esnext']
+    target: ['esnext'],
 })
 .catch(() => process.exit(1));

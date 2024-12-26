@@ -1,6 +1,6 @@
 {
 	"name": "@base-framework/base",
-	"version": "3.0.219",
+	"version": "3.0.220",
 	"description": "This is a javascript framework.",
 	"main": "./dist/base.js",
 	"type": "module",
@@ -29,9 +29,16 @@
 	},
 	"types": "dist/types/base.d.ts",
 	"files": [
-		"pacakge.json",
+		"package.json",
 		"readme.md",
 		"dist"
 	],
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"import": "./dist/base.js",
+			"require": "./dist/base.js"
+		}
+	},
 	"homepage": "https://github.com/chrisdurfee/base#readme"
 }
