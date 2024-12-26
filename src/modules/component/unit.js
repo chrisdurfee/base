@@ -499,8 +499,19 @@ export class Unit
 	 */
 	setup(container)
 	{
-		this.container = container;
+		this.setContainer(container);
 		this.initialize();
+	}
+
+	/**
+	 * This will set the container.
+	 *
+	 * @param {object} container
+	 * @returns {void}
+	 */
+	setContainer(container)
+	{
+		this.container = container;
 	}
 
 	/**
