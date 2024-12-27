@@ -38,8 +38,8 @@ const JotComponent = (settings) =>
 };
 
 /**
- * @typedef {new (...args: any[]) => any} Constructor
- * A type that represents a class constructor (callable via `new`)
+ * @typedef {new (...args: any[]) => Component} ComponentConstructor
+ * A class constructor that, when instantiated, yields a Component (or subclass).
  */
 
 /**
@@ -47,7 +47,7 @@ const JotComponent = (settings) =>
  *
  * @param {object} Base
  * @param {object} settings
- * @returns {Constructor} Child - The child class that extends the base class.
+ * @returns {ComponentConstructor} Child - The child class that extends the base class.
  */
 const createClass = (Base, settings) =>
 {
@@ -61,7 +61,7 @@ const createClass = (Base, settings) =>
  *
  * @param {object|function} layout
  * @param {function} [extend=Component]
- * @returns {Constructor|null} A class (constructor) or `null` if no layout is given.
+ * @returns {ComponentConstructor|null} A class (constructor) or `null` if no layout is given.
  */
 export const Jot = (layout, extend = Component) =>
 {
