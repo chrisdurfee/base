@@ -58,7 +58,7 @@ export class Unit
 		this.isUnit = true;
 
 		/**
-		 * @member {?object} data
+		 * @member {Data} data
 		 */
 		this.data = null;
 
@@ -78,7 +78,7 @@ export class Unit
 		this.nest = null;
 
 		/**
-		 * @member {?object} state
+		 * @member {StateTarget|null} state
 		 */
 		this.state = null;
 
@@ -88,7 +88,7 @@ export class Unit
 		this.panel = null;
 
 		/**
-		 * @member {?object} parent
+		 * @member {?Unit} parent
 		 */
 		this.parent = null;
 
