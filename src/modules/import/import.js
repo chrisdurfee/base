@@ -264,7 +264,7 @@ const Comment = (props) => ({
  * imported layout.
  *
  * @param {object} props
- * @returns {object}
+ * @returns {Constructor}
  */
 const ImportWrapper = Jot(
 {
