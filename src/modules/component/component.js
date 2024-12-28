@@ -30,7 +30,20 @@ export class Component extends Unit
 	 * This will create a component.
 	 *
 	 * @constructor
-	 * @param {array} args
+	 *
+	 * @overload
+	 * @param {object} props
+	 * @param {Array<object>} [children=[]] - An array of children
+	 *
+	 * @overload
+	 * @param {Array<object>} [children=[]] - An array of children
+	 *
+	 * @overload
+	 * @param {string} [children] - A child string
+	 *
+	 * @overload
+	 * @param {object} props
+	 * @param {string} [children] - A child string
 	 */
 	constructor(...args)
 	{
