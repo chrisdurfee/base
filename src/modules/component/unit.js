@@ -121,6 +121,16 @@ export class Unit
 	}
 
 	/**
+	 * This will declare the component props.
+	 *
+	 * @returns {void}
+	 */
+	declareProps()
+	{
+
+	}
+
+	/**
 	 * This will setup the component props.
 	 *
 	 * @param {object} [props]
@@ -128,12 +138,19 @@ export class Unit
 	 */
 	setupProps(props)
 	{
+		this.declareProps();
 		if (!props || typeof props !== 'object')
 		{
 			return;
 		}
 
-		Object.assign(this, props);
+		for (var prop in props)
+		{
+			if (Object.prototype.hasOwnProperty.call(props, prop))
+			{
+				this[prop] = props[prop];
+			}
+		}
 	}
 
 	/**
