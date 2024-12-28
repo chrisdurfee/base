@@ -133,13 +133,7 @@ export class Unit
 			return;
 		}
 
-		for (var prop in props)
-		{
-			if (Object.prototype.hasOwnProperty.call(props, prop))
-			{
-				this[prop] = props[prop];
-			}
-		}
+		Object.assign(this, props);
 	}
 
 	/**
