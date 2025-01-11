@@ -255,8 +255,10 @@ export const ImportWrapper = Jot(
      *
      * @returns {void}
      */
-    beforeDestroy()
+    destroy()
     {
+        console.log('before destroy');
+        console.log(this.layoutRoot);
         if (!this.layoutRoot)
         {
             return;
