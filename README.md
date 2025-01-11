@@ -623,7 +623,7 @@ const ImportButtons = () => (
              * This will import the buttons module on demand. The import function
              * needs to be used to add the module to the vite build.
              */
-            Import({ src: import('../../../../../../components/atoms/import-buttons.js') })
+            Import({ src: () => import('../../../../../../components/atoms/import-buttons.js') })
         ])
     ])
 );
