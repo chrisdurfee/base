@@ -16,9 +16,14 @@ const loadModule = (src, callBack) =>
     /**
      * This will check if the src is a string and import the module.
      */
-    if (typeof src === 'string')
+    const type = typeof promise;
+    if (type === 'string')
     {
         promise = import(src);
+    }
+    else if (type === 'function')
+    {
+        promise = promise();
     }
 
     promise.then(module =>

@@ -30,8 +30,6 @@ export class ComponentHelper
 		this.container = settings.container;
 		this.persist = settings.persist;
 		this.parent = settings.parent;
-
-		this.setupTemplate();
 	}
 
 	/**
@@ -58,16 +56,16 @@ export class ComponentHelper
 	 */
 	setupTemplate()
 	{
-		let template = this.template;
-		if (typeof template === 'string')
+		/**
+		 * If the component is already set, then
+		 * we do not need to setup the template.
+		 */
+		if (this.component && this.persist)
 		{
-			template = this.template = window[template];
-			if (!template)
-			{
-				return;
-			}
+			return;
 		}
 
+		const template = this.template;
 		const type = typeof template;
 		if (type === 'function')
 		{
@@ -82,7 +80,8 @@ export class ComponentHelper
 	}
 
 	/**
-	 * This will initialize the component.
+	 * This will initialize the component by calling the function
+	 * that should return a new instance of a component.
 	 *
 	 * @protected
 	 * @returns {void}
@@ -131,19 +130,15 @@ export class ComponentHelper
 	 */
 	create()
 	{
+		this.setupTemplate();
+
 		if (!this.hasTemplate)
 		{
 			return;
 		}
 
 		this.setup = true;
-
-		let comp = this.component;
-		if (!this.persist || !comp)
-		{
-			comp = this.component = this.template;
-		}
-
+		const comp = this.component;
 		Builder.render(comp, this.container, this.parent);
 	}
 

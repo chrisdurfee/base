@@ -319,9 +319,7 @@ export class Html
 	 */
 	static removeElement(obj)
 	{
-		let container;
-
-		if (!obj || !(container = obj.parentNode))
+		if (!obj)
 		{
 			return this;
 		}
@@ -329,7 +327,7 @@ export class Html
 		/* this will remove all element data and binding
 		and remove from the parent container */
 		this.removeElementData(obj);
-		container.removeChild(obj);
+		obj.remove();
 
 		return this;
 	}
@@ -417,7 +415,7 @@ export class Html
 	 * This will clone an element.
 	 *
 	 * @param {object} node
-	 * @param {boolean} deepCopy
+	 * @param {boolean} [deepCopy=false]
 	 * @returns {object}
 	 */
 	static clone(node, deepCopy = false)
