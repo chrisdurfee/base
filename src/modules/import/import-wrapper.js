@@ -62,7 +62,12 @@ const isConstructor = (object) =>
 const render = (layout, ele, parent) =>
 {
     const frag = Builder.build(layout, null, parent);
-    const firstChild = frag.firstChild;
+
+    /**
+     * If the component has overriden the container, the component
+     * panel will be the first child.
+     */
+    const firstChild = frag.firstChild || layout?.panel;
     ele.after(frag);
     return firstChild;
 };
@@ -198,8 +203,16 @@ export const ImportWrapper = Jot(
         loadModule(this.src, (module) =>
         {
             this.loaded = true;
+
             const layout = this.layout || this.getLayout(module);
-            this.layoutRoot = render(layout, ele, this.parent);
+            const layoutRoot = render(layout, ele, this.parent);
+            console.log('layoutRoot', layoutRoot);
+
+            /**
+             * This will cache the layout root to be removed
+             * before the module is destroyed.
+             */
+            this.layoutRoot = layoutRoot;
         });
     },
 
@@ -259,6 +272,7 @@ export const ImportWrapper = Jot(
     {
         console.log('before destroy');
         console.log(this.layoutRoot);
+        console.log(this)
         if (!this.layoutRoot)
         {
             return;
