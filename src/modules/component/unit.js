@@ -48,6 +48,7 @@ export class Unit
 	 * This will create a unit.
 	 *
 	 * @constructor
+	 *
 	 * @overload
 	 * @param {object} props
 	 * @param {Array<object>} [children=[]] - An array of children
