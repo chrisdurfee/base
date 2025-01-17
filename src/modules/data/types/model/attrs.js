@@ -4,10 +4,10 @@ import { Types } from "../../../../shared/types.js";
 /**
  * This will get the data attribute settings.
  *
- * @param {object} settings
+ * @param {object} [settings={}]
  * @returns {object}
  */
-export const setupAttrSettings = (settings) =>
+export const setupAttrSettings = (settings = {}) =>
 {
 	const attributes = {};
 	if (!Types.isObject(settings))

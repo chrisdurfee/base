@@ -56,7 +56,7 @@ export class BasicData
 	 * @constructor
 	 * @param {object} [settings]
 	 */
-	constructor(settings)
+	constructor(settings = {})
 	{
 		this.dirty = false;
 		this.links = {};
