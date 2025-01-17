@@ -8,13 +8,13 @@ import { ImportWrapper } from './import-wrapper.js';
  */
 export const Import = (props) =>
 {
-    const type = typeof props;
-    if (type === 'string' || type === 'function')
-    {
-        props = {
-            src: props
-        };
-    }
+	const type = typeof props;
+	if (type === 'string' || type === 'function')
+	{
+		props = {
+			src: props
+		};
+	}
 
-    return new ImportWrapper(props);
+	return new ImportWrapper(props);
 };

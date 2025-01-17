@@ -100,7 +100,7 @@ export class ComponentHelper
 	 */
 	transferSettings(comp)
 	{
-		this.persist = comp.persist !== false;
+		this.persist = (this.persist && comp.persist !== false);
         Object.assign(comp, { route: this.route, persist: this.persist, parent: this.parent });
 		this.component = comp;
 	}

@@ -75,9 +75,9 @@ export class Unit
 		this.data = null;
 
 		/**
-		 * @member {boolean} persist
+		 * @member {boolean|null} persist
 		 */
-		this.persist = false;
+		this.persist = null;
 
 		/**
 		 * @member {?array} children
