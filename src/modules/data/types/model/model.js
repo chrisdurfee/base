@@ -86,8 +86,21 @@ export class Model extends Data
 	 */
 	setup()
 	{
+		/**
+		 * @member {object} attributes
+		 */
 		this.attributes = {};
+
+		/**
+		 * @member {object} stage
+		 */
 		this.stage = {};
+
+		/**
+		 * @member {string|null} url
+		 * @default null
+		 */
+		this.url = null;
 
 		/**
 		 * @member {object|null} xhr

@@ -21,7 +21,7 @@ export class StateTracker
 	 * This will restore a state target.
 	 *
 	 * @param {string} id
-	 * @param {object} target
+	 * @param {StateTarget} target
 	 * @returns {void}
 	 */
 	static restore(id, target)
@@ -33,7 +33,7 @@ export class StateTracker
 	 * This will get the state target.
 	 *
 	 * @param {string} id
-	 * @returns {object}
+	 * @returns {StateTarget}
 	 */
 	static getTarget(id)
 	{
@@ -64,7 +64,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} [action]
 	 * @param {*} [state] the primary action state
-	 * @returns {object}
+	 * @returns {StateTarget}
 	 */
 	static add(targetId, action, state)
 	{
@@ -82,7 +82,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {string} [state]
-	 * @returns {object}
+	 * @returns {StateTarget}
 	 */
 	static addAction(targetId, action, state)
 	{

@@ -58,7 +58,17 @@ export class BasicData
 	 */
 	constructor(settings = {})
 	{
+		/**
+		 * @member {boolean} dirty
+		 * @default false
+		 */
 		this.dirty = false;
+
+		/**
+		 * @member {object} links
+		 * @default {}
+		 * @protected
+		 */
 		this.links = {};
 
 		this._init();
@@ -89,6 +99,9 @@ export class BasicData
 	 */
 	setup()
 	{
+		/**
+		 * @member {object} stage
+		 */
 		this.stage = {};
 	}
 

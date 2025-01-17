@@ -20,7 +20,7 @@ export class ModelService
 	constructor(model)
 	{
 		/**
-		 * @member {object} model
+		 * @member {Model} model
 		 */
 		this.model = model;
 
