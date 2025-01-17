@@ -13,6 +13,8 @@ import { Unit } from './unit.js';
  * @class
  * @augments Unit
  *
+ * @param {...any} args
+ *
  * @example
  * class QuickFlashPanel extends Component
  *	{
@@ -30,20 +32,7 @@ export class Component extends Unit
 	 * This will create a component.
 	 *
 	 * @constructor
-	 *
-	 * @overload
-	 * @param {object} props
-	 * @param {Array<object>} [children=[]] - An array of children
-	 *
-	 * @overload
-	 * @param {Array<object>} [children=[]] - An array of children
-	 *
-	 * @overload
-	 * @param {string} [children] - A child string
-	 *
-	 * @overload
-	 * @param {object} props
-	 * @param {string} [children] - A child string
+	 * @param {...any} args
 	 */
 	constructor(...args)
 	{
@@ -75,27 +64,27 @@ export class Component extends Unit
 	 */
 	setData()
 	{
-        return null;
-    }
+		return null;
+	}
 
 	/**
 	 * This will setup the component data.
 	 *
 	 * @returns {void}
 	 */
-    _setupData()
+	_setupData()
 	{
-        if (this.data)
-        {
-            return;
-        }
+		if (this.data)
+		{
+			return;
+		}
 
-        const data = this.setData();
-        if (data)
-        {
-            this.data = data;
-        }
-    }
+		const data = this.setData();
+		if (data)
+		{
+			this.data = data;
+		}
+	}
 
 	/**
 	 * This will initialize the component.

@@ -31,6 +31,8 @@ let unitNumber = 0;
  * This will allow units to be extended
  * from a single factory.
  *
+ * @param {...any} args
+ *
  * @example
  * class Alert extends Unit
  *	{
@@ -48,20 +50,7 @@ export class Unit
 	 * This will create a unit.
 	 *
 	 * @constructor
-	 *
-	 * @overload
-	 * @param {object} props
-	 * @param {Array<object>} [children=[]] - An array of children
-	 *
-	 * @overload
-	 * @param {Array<object>} [children=[]] - An array of children
-	 *
-	 * @overload
-	 * @param {string} [children] - A child string
-	 *
-	 * @overload
-	 * @param {object} props
-	 * @param {string} [children] - A child string
+	 * @param {...any} args
 	 */
 	constructor(...args)
 	{
