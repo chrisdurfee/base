@@ -10,7 +10,7 @@ import { SHORTHAND_METHODS } from './shorthand-methods.js';
  */
 const getJotShorthandMethod = (value) =>
 {
-    return (typeof value === 'function')? value : () => value;
+	return (typeof value === 'function')? value : () => value;
 };
 
 /**
@@ -22,19 +22,19 @@ const getJotShorthandMethod = (value) =>
  */
 const JotComponent = (settings) =>
 {
-    const component = {};
-    if (!settings)
-    {
-        return component;
-    }
+	const component = {};
+	if (!settings)
+	{
+		return component;
+	}
 
-    Object.entries(settings).forEach(([prop, value]) =>
-    {
-        const alias = SHORTHAND_METHODS[prop] || prop;
-        component[alias] = getJotShorthandMethod(value);
-    });
+	Object.entries(settings).forEach(([prop, value]) =>
+	{
+		const alias = SHORTHAND_METHODS[prop] || prop;
+		component[alias] = getJotShorthandMethod(value);
+	});
 
-    return component;
+	return component;
 };
 
 /**
@@ -51,9 +51,9 @@ const JotComponent = (settings) =>
  */
 const createClass = (Base, settings) =>
 {
-    class Child extends Base {}
-    Object.assign(Child.prototype, settings);
-    return Child;
+	class Child extends Base {}
+	Object.assign(Child.prototype, settings);
+	return Child;
 };
 
 /**
@@ -65,29 +65,29 @@ const createClass = (Base, settings) =>
  */
 export const Jot = (layout, extend = Component) =>
 {
-    if (!layout)
-    {
-        return null;
-    }
+	if (!layout)
+	{
+		return null;
+	}
 
-    let settings;
-    const layoutType = typeof layout;
+	let settings;
+	const layoutType = typeof layout;
 
-    /**
-     * This will handle the layout components that are objects.
-     */
-    if (layoutType === 'object' && layout.render)
-    {
-        settings = JotComponent(layout);
-        return createClass(extend, settings);
-    }
+	/**
+	 * This will handle the layout components that are objects.
+	 */
+	if (layoutType === 'object' && layout.render)
+	{
+		settings = JotComponent(layout);
+		return createClass(extend, settings);
+	}
 
-    /**
-     * This will handle non component layouts. If the layout is not
-     * a function, it will be wrapped in a function to be used as
-     * the render method.
-     */
-    const render = (layoutType === 'function')? layout : () => layout;
-    settings = { render };
-    return createClass(extend, settings);
+	/**
+	 * This will handle non component layouts. If the layout is not
+	 * a function, it will be wrapped in a function to be used as
+	 * the render method.
+	 */
+	const render = (layoutType === 'function')? layout : () => layout;
+	settings = { render };
+	return createClass(extend, settings);
 };
