@@ -110,7 +110,8 @@ export class Model extends Data
 	/**
 	 * This will extend the model to a child model.
 	 *
-	 * @param {object} [settings]
+	 * @static
+	 * @param {object} [settings={}]
 	 * @returns {object}
 	 */
 	static extend(settings = {})
@@ -123,8 +124,22 @@ export class Model extends Data
 		the model */
 		const defaultAttributes = setupDefaultAttr(settings);
 
+		/**
+		 * ExtendedModel
+		 *
+		 * This will extend the parent model to add new
+		 *
+		 * @class
+		 * @extends parent
+		 */
 		class ExtendedModel extends parent
 		{
+			/**
+			 * This will create a new model.
+			 *
+			 * @constructor
+			 * @param {object} [instanceSettings]
+			 */
 			constructor(instanceSettings)
 			{
 				/* this will get the instance attributes that
@@ -144,6 +159,7 @@ export class Model extends Data
 			dataTypeId = `bm${modelTypeNumber++}`;
 		}
 
+		/* this will add the settings to the extended model */
 		Object.assign(ExtendedModel.prototype, settings);
 		ExtendedModel.prototype.service = service;
 
