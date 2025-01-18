@@ -4,10 +4,12 @@ import { setupAttrSettings } from './attrs.js';
 import { ModelService } from './model-service.js';
 
 /**
- * This will get the defaults from the settings.
+ * Gets the default attributes from the given settings object.
  *
- * @param {object} settings
- * @returns {object}
+ * @function setupDefaultAttr
+ * @param {object} settings - An object which may contain a `defaults` property.
+ * @param {object} [settings.defaults] - A set of default attributes, where each property is a key-value pair for attributes.
+ * @returns {object} A shallow copy of the `defaults` object if it exists, otherwise an empty object.
  */
 const setupDefaultAttr = (settings) =>
 {
@@ -18,24 +20,26 @@ const setupDefaultAttr = (settings) =>
 	}
 
 	const { defaults } = settings;
-    Object.keys(defaults).forEach(prop =>
+	Object.keys(defaults).forEach(prop =>
 	{
-        const attr = defaults[prop];
-        if (typeof attr !== 'function')
+		const attr = defaults[prop];
+		if (typeof attr !== 'function')
 		{
-            attributes[prop] = attr;
-        }
-    });
+			attributes[prop] = attr;
+		}
+	});
 
-    delete settings.defaults;
+	delete settings.defaults;
 	return attributes;
 };
 
 /**
- * This will get the xhr settings.
+ * Extracts the `xhr` configuration from the given settings object.
  *
- * @param {object} settings
- * @returns {object}
+ * @function getXhr
+ * @param {object} settings - The settings object that may contain `xhr` config.
+ * @param {object} [settings.xhr] - An object containing properties to configure an XHR or remote request.
+ * @returns {object} A shallow copy of `settings.xhr` if it exists, otherwise an empty object.
  */
 const getXhr = (settings) =>
 {
@@ -45,134 +49,109 @@ const getXhr = (settings) =>
 	}
 
 	const xhr = { ...settings.xhr };
-    delete settings.xhr;
-    return xhr;
+	delete settings.xhr;
+	return xhr;
 };
 
-/* this will track the number of model types */
+/**
+ * Tracks the incremental number of model types created.
+ *
+ * @type {number}
+ * @default 0
+ */
 let modelTypeNumber = 0;
 
 /**
- * Model
+ * The Model class extends Data to provide structure
+ * for connecting to a remote service.
  *
- * This will extend Data to add a model that can specify
- * a service that connects to a remote source.
- *
- * @class
+ * @class Model
  * @extends Data
  */
 export class Model extends Data
 {
 	/**
-	 * This will create a new model.
+	 * Creates a new Model instance.
 	 *
 	 * @constructor
-	 * @param {object} [settings]
+	 * @param {object} [settings] - Optional configuration for the model.
 	 */
 	constructor(settings)
 	{
 		const proxy = super(settings);
 		this.initialize();
 
-		// @ts-ignore
+		// @ts-ignore (returning the proxy for Data's built-in behavior)
 		return proxy;
 	}
 
 	/**
-	 * This will setup the stage and attributes object.
+	 * Sets up initial properties for this model instance.
 	 *
 	 * @protected
 	 * @returns {void}
 	 */
 	setup()
 	{
-		/**
-		 * @member {object} attributes
-		 */
 		this.attributes = {};
-
-		/**
-		 * @member {object} stage
-		 */
 		this.stage = {};
-
-		/**
-		 * @member {string|null} url
-		 * @default null
-		 */
 		this.url = null;
-
-		/**
-		 * @member {object|null} xhr
-		 */
 		this.xhr = null;
 	}
 
 	/**
-	 * This adds a method to call if you want the model
-	 * to do something when its initialized.
+	 * Called after the model is constructed to allow
+	 * additional initialization logic.
 	 *
 	 * @protected
 	 * @returns {void}
 	 */
 	initialize()
 	{
-
+		// ...
 	}
 
 	/**
-	 * This will extend the model to a child model.
+	 * Creates a new subclass of the current Model and returns its constructor.
 	 *
 	 * @static
-	 * @param {object} [settings={}]
-	 * @returns {object}
+	 * @param {object} [settings={}] - Configuration for the extended model.
+	 * @returns {typeof Model} The extended model class (subclass of Model).
 	 */
 	static extend(settings = {})
 	{
-		const parent = this,
-		xhr = getXhr(settings),
-		service = this.prototype.service.extend(xhr);
-
-		/* this will setup the default attribute settings for
-		the model */
+		const parent = this;
+		const xhr = getXhr(settings);
+		const service = parent.prototype.service.extend(xhr);
 		const defaultAttributes = setupDefaultAttr(settings);
 
-		/**
-		 * ExtendedModel
-		 *
-		 * This will extend the parent model to add new
-		 *
-		 * @class
-		 * @extends parent
-		 */
 		class ExtendedModel extends parent
 		{
 			/**
-			 * This will create a new model.
+			 * Creates a new ExtendedModel instance.
 			 *
 			 * @constructor
-			 * @param {object} [instanceSettings]
+			 * @param {object} [instanceSettings] - Instance-specific attribute settings.
 			 */
 			constructor(instanceSettings)
 			{
-				/* this will get the instance attributes that
-				the model will set as attribute data */
 				const instanceAttr = {
-                    ...defaultAttributes,
-                    ...setupAttrSettings(instanceSettings)
-                };
-
+					...defaultAttributes,
+					...setupAttrSettings(instanceSettings)
+				};
 				super(instanceAttr);
 
-				/* this will setup the model service and
-				pass the new model instance to the service */
 				this.xhr = new service(this);
 			}
 
+			/**
+			 * A unique identifier for this model type.
+			 *
+			 * @type {string}
+			 */
 			dataTypeId = `bm${modelTypeNumber++}`;
 		}
 
-		/* this will add the settings to the extended model */
 		Object.assign(ExtendedModel.prototype, settings);
 		ExtendedModel.prototype.service = service;
 

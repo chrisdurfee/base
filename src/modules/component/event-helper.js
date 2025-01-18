@@ -50,7 +50,7 @@ export class EventHelper
 	/**
 	 * This will add an event.
 	 *
-	 * @param {string} event
+	 * @param {string|array} event
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
@@ -71,7 +71,7 @@ export class EventHelper
 	/**
 	 * This will remove an event.
 	 *
-	 * @param {string} event
+	 * @param {string|array} event
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
