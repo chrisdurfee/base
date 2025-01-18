@@ -31,7 +31,7 @@ export const Events =
      * @param {string} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @param {boolean} [swapped]
      * @param {function} [originalFn]
      * @returns {object}
@@ -57,7 +57,7 @@ export const Events =
      * @param {string|array} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object} The events object.
      */
     on(event, obj, fn, capture)
@@ -79,7 +79,7 @@ export const Events =
      * @param {string|array} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object} The events object.
      */
     off(event, obj, fn, capture)
@@ -105,6 +105,7 @@ export const Events =
      * @param {object|boolean} [capture]
      * @param {boolean} [swapped]
      * @param {function} [originalFn]
+     * @returns {object} The events object.
      */
     add(event, obj, fn, capture = false, swapped = false, originalFn = null)
     {
@@ -171,7 +172,7 @@ export const Events =
      * @param {string} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object|boolean}
      */
     getEvent(event, obj, fn, capture)

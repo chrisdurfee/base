@@ -18,7 +18,7 @@ export const EventMethods =
      * @param {string} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object}
      */
     addListener(event, obj, fn, capture)
@@ -31,10 +31,10 @@ export const EventMethods =
     /**
      * This will add an event to an object.
      *
-     * @param {string} event The event name.
+     * @param {string|array} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object}
      */
     on(event, obj, fn, capture)
@@ -57,10 +57,10 @@ export const EventMethods =
     /**
      * This will remove an event from an object.
      *
-     * @param {string} event The event name.
+     * @param {string|array} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object}
      */
     off(event, obj, fn, capture)
@@ -86,7 +86,7 @@ export const EventMethods =
      * @param {string} event The event name.
      * @param {object} obj
      * @param {function} fn
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object}
      */
     removeListener(event, obj, fn, capture)
@@ -258,7 +258,7 @@ export const EventMethods =
      * @param {function} callBackFn
      * @param {object} [obj]
      * @param {boolean} [cancelDefault]
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object} base object.
      */
     onMouseWheel(callBackFn, obj, cancelDefault, capture = false)
@@ -299,7 +299,7 @@ export const EventMethods =
      *
      * @param {function} callBackFn
      * @param {object} [obj]
-     * @param {boolean} [capture]
+     * @param {boolean|object} [capture]
      * @returns {object} base object.
      */
     offMouseWheel(callBackFn, obj, capture = false)
