@@ -36,12 +36,13 @@ export const addDataSet = (ele, attribute, parent) =>
      * This will remove the last value from the attribute array
      * to use as the data value.
      */
-    const dataValue = attribute.pop();
+    const settings = [...attribute];
+    const dataValue = settings.pop();
 
     /**
      * This will add a callBack to to be used when the
      * data is set.
      */
-    attribute.push(onSetCallBack(dataValue));
-    onSet(ele, attribute, parent);
+    settings.push(onSetCallBack(dataValue));
+    onSet(ele, settings, parent);
 }
