@@ -71,8 +71,9 @@ export const addAria = (ele, attributes, parent) =>
         const attr = `aria-${key}`;
         if (Array.isArray(value))
         {
-            value.push(onSetCallBack(attr));
-            onSet(ele, value, parent);
+            const settings = [...value];
+            settings.push(onSetCallBack(attr));
+            onSet(ele, settings, parent);
         }
         else
         {

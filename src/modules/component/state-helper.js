@@ -151,24 +151,26 @@ export class StateHelper
 	/**
 	 * This will remove remote states.
 	 *
+	 * @param {object} state
 	 * @returns {void}
 	 */
-	removeRemoteStates()
+	removeRemoteStates(state)
 	{
 		const remoteStates = this.remoteStates;
 		if (remoteStates)
 		{
-			this.removeActions(remoteStates);
+			this.removeActions(state, remoteStates);
 		}
 	}
 
 	/**
 	 * This will remove the actions.
 	 *
+	 * @param {object} state
 	 * @param {array} actions
 	 * @returns {void}
 	 */
-	removeActions(actions)
+	removeActions(state, actions)
 	{
 		if (actions.length < 1)
 		{
@@ -178,6 +180,10 @@ export class StateHelper
 		for (var i = 0, length = actions.length; i < length; i++)
 		{
 			var action = actions[i];
+			if (action.token)
+			{
+				this.unbindRemoteState(state, action.token);
+			}
 			StateTracker.remove(action.targetId, action.action, action.token);
 		}
 	}
@@ -217,6 +223,18 @@ export class StateHelper
 	{
 		const remoteTarget = StateTracker.getTarget(remoteTargetId);
 		return target.link(remoteTarget, actionEvent);
+	}
+
+	/**
+	 * This will unbind a remote state.
+	 *
+	 * @param {object} target
+	 * @param {string} token
+	 * @return {void}
+	 */
+	unbindRemoteState(target, token)
+	{
+		target.unlink(token);
 	}
 
 	/**

@@ -567,7 +567,7 @@ export class BasicData
 	/**
 	 * This will remove a link or all links if no token is provided.
 	 *
-	 * @param {string} [token]
+	 * @param {string|null} [token=null]
 	 * @returns {void}
 	 */
 	unlink(token)
@@ -595,7 +595,7 @@ export class BasicData
 	 * This will remove the linked subscription.
 	 *
 	 * @param {string} token
-	 * @param {boolean} [removeFromLinks]
+	 * @param {boolean} [removeFromLinks=true]
 	 * @returns {void}
 	 */
 	removeLink(token, removeFromLinks = true)

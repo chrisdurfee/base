@@ -256,7 +256,7 @@ export class Component extends Unit
 			return;
 		}
 
-		this.stateHelper.removeRemoteStates();
+		this.stateHelper.removeRemoteStates(state);
 		state.remove();
 		this.stateResumed = false;
 	}
