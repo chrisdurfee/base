@@ -10,30 +10,30 @@ import { Builder } from "../../../builder.js";
  */
 export const map = (ele, settings, parent) =>
 {
-    const items = settings[0];
-    if (!items || items.length < 1)
-    {
-        return;
-    }
+	const items = settings[0];
+	if (!items || items.length < 1)
+	{
+		return;
+	}
 
-    const item = settings[1];
-    const children = [];
+	const item = settings[1];
+	const children = [];
 
-    items.forEach((row, i) =>
-    {
-        if (!row)
-        {
-            return;
-        }
+	items.forEach((row, i) =>
+	{
+		if (!row)
+		{
+			return;
+		}
 
-        const layout = item(row, i);
-        if (layout === null)
-        {
-            return;
-        }
+		const layout = item(row, i);
+		if (layout === null)
+		{
+			return;
+		}
 
-        children.push(layout);
-    });
+		children.push(layout);
+	});
 
-    Builder.build(children, ele, parent);
+	Builder.build(children, ele, parent);
 };

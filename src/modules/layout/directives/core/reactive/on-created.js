@@ -8,5 +8,5 @@
  */
 export const onCreated = (ele, callBack, parent) =>
 {
-    callBack(ele, parent);
+	callBack(ele, parent);
 };

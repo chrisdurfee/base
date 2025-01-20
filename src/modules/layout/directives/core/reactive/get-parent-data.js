@@ -6,20 +6,20 @@
  */
 export const getParentData = (parent) =>
 {
-    if (parent.data)
-    {
-        return parent.data;
-    }
+	if (parent.data)
+	{
+		return parent.data;
+	}
 
-    if (parent.context && parent.context.data)
-    {
-        return parent.context.data;
-    }
+	if (parent.context && parent.context.data)
+	{
+		return parent.context.data;
+	}
 
-    if (parent.state)
-    {
-        return parent.state;
-    }
+	if (parent.state)
+	{
+		return parent.state;
+	}
 
-    return null;
+	return null;
 };
