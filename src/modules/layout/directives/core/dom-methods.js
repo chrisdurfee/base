@@ -14,22 +14,22 @@ import { Builder } from "../../builder.js";
  */
 export const onUpdate = (ele, data, settings, parent) =>
 {
-    if (Array.isArray(settings[0]))
-    {
-        settings.forEach((itemSettings) =>
-        {
-            if (!itemSettings)
-            {
-                return;
-            }
+	if (Array.isArray(settings[0]))
+	{
+		settings.forEach((itemSettings) =>
+		{
+			if (!itemSettings)
+			{
+				return;
+			}
 
-            onUpdate(ele, data, itemSettings, parent);
-        });
+			onUpdate(ele, data, itemSettings, parent);
+		});
 
-        return;
-    }
+		return;
+	}
 
-    setWatcher(ele, data, settings, parent);
+	setWatcher(ele, data, settings, parent);
 };
 
 /**
@@ -43,25 +43,25 @@ export const onUpdate = (ele, data, settings, parent) =>
  */
 const setWatcher = (ele, data, settings, parent) =>
 {
-    let prop,
-    callBack;
+	let prop,
+	callBack;
 
-    if (settings.length < 3)
-    {
-        [prop, callBack] = settings;
-    }
-    else
-    {
-        [data, prop, callBack] = settings;
-    }
+	if (settings.length < 3)
+	{
+		[prop, callBack] = settings;
+	}
+	else
+	{
+		[data, prop, callBack] = settings;
+	}
 
-    if (!data || !prop)
-    {
-        return;
-    }
+	if (!data || !prop)
+	{
+		return;
+	}
 
-    const update = getUpdateMethod(ele, prop, callBack, parent);
-    dataBinder.watch(ele, data, prop, update);
+	const update = getUpdateMethod(ele, prop, callBack, parent);
+	dataBinder.watch(ele, data, prop, update);
 };
 
 /**
@@ -75,18 +75,18 @@ const setWatcher = (ele, data, settings, parent) =>
  */
 const getUpdateMethod = (ele, prop, callBack, parent) =>
 {
-    if (typeof callBack === 'object')
-    {
-        return (value) =>
-        {
-            addClass(ele, callBack, value);
-        };
-    }
+	if (typeof callBack === 'object')
+	{
+		return (value) =>
+		{
+			addClass(ele, callBack, value);
+		};
+	}
 
-    return (value) =>
-    {
-        updateElement(ele, callBack, prop, value, parent);
-    };
+	return (value) =>
+	{
+		updateElement(ele, callBack, prop, value, parent);
+	};
 };
 
 /**
@@ -100,20 +100,20 @@ const getUpdateMethod = (ele, prop, callBack, parent) =>
  */
 const updateElement = (ele, callBack, prop, value, parent) =>
 {
-    let result = callBack(value, ele, parent);
-    switch (typeof result)
-    {
-        case 'object':
-            /**
-             * This will set the previous result if needed.
-             */
-            result = checkPreviousResult(parent, prop, value, result);
-            rebuild(result, ele, parent);
-            break;
-        case 'string':
-            Html.addHtml(ele, result);
-            break;
-    }
+	let result = callBack(value, ele, parent);
+	switch (typeof result)
+	{
+		case 'object':
+			/**
+			 * This will set the previous result if needed.
+			 */
+			result = checkPreviousResult(parent, prop, value, result);
+			rebuild(result, ele, parent);
+			break;
+		case 'string':
+			Html.addHtml(ele, result);
+			break;
+	}
 };
 
 /**
@@ -128,17 +128,17 @@ const updateElement = (ele, callBack, prop, value, parent) =>
  */
 const checkPreviousResult = (parent, prop, value, result) =>
 {
-    if (!parent || !result)
-    {
-        return result;
-    }
+	if (!parent || !result)
+	{
+		return result;
+	}
 
-    if (result.isUnit !== true || parent.persist !== true || !parent.state)
-    {
-        return result;
-    }
+	if (result.isUnit !== true || parent.persist !== true || !parent.state)
+	{
+		return result;
+	}
 
-    return setPreviousResult(parent, prop, value, result);
+	return setPreviousResult(parent, prop, value, result);
 };
 
 /**
@@ -152,16 +152,16 @@ const checkPreviousResult = (parent, prop, value, result) =>
  */
 const setPreviousResult = (parent, prop, value, result) =>
 {
-    let key = prop + ':' + value,
-    state = parent.state,
-    previousResult = state.get(key);
-    if (typeof previousResult !== 'undefined')
-    {
-        result = previousResult;
-    }
+	let key = prop + ':' + value,
+	state = parent.state,
+	previousResult = state.get(key);
+	if (typeof previousResult !== 'undefined')
+	{
+		result = previousResult;
+	}
 
-    state.set(key, result);
-    return result;
+	state.set(key, result);
+	return result;
 };
 
 /**
@@ -188,20 +188,20 @@ const rebuild = (layout, ele, parent) =>
  */
 const addClass = (ele, stateStyles, newValue) =>
 {
-    for (const [prop, value] of Object.entries(stateStyles))
-    {
-        if (!prop)
-        {
-            continue;
-        }
+	for (const [prop, value] of Object.entries(stateStyles))
+	{
+		if (!prop)
+		{
+			continue;
+		}
 
-        if (value === newValue)
-        {
-            Dom.addClass(ele, prop);
-        }
-        else
-        {
-            Dom.removeClass(ele, prop);
-        }
-    }
+		if (value === newValue)
+		{
+			Dom.addClass(ele, prop);
+		}
+		else
+		{
+			Dom.removeClass(ele, prop);
+		}
+	}
 };
