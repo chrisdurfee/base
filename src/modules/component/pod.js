@@ -33,7 +33,7 @@ const modifyMethods = (proxy, component) =>
  * This will create a class.
  *
  * @param {object} Base
- * @returns {object}
+ * @returns {typeof Component}
  */
 const extendBaseClass = (Base) =>
 {
