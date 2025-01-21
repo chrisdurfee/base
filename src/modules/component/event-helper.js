@@ -18,7 +18,7 @@ export class EventHelper
 	constructor()
 	{
 		/**
-		 * @member {array} events
+		 * @member {Array<object>} events
 		 */
 		this.events = [];
 	}
@@ -26,7 +26,7 @@ export class EventHelper
 	/**
 	 * This will add an array of events.
 	 *
-	 * @param {array} events
+	 * @param {Array<Array>} events
 	 * @returns {void}
 	 */
 	addEvents(events)
@@ -50,7 +50,7 @@ export class EventHelper
 	/**
 	 * This will add an event.
 	 *
-	 * @param {string|array} event
+	 * @param {string|Array<string>} event
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture
@@ -71,7 +71,7 @@ export class EventHelper
 	/**
 	 * This will remove an event.
 	 *
-	 * @param {string|array} event
+	 * @param {string|Array<string>} event
 	 * @param {object} obj
 	 * @param {function} callBack
 	 * @param {boolean} capture

@@ -70,6 +70,7 @@ export class Component extends Unit
 	/**
 	 * This will setup the component data.
 	 *
+	 * @protected
 	 * @returns {void}
 	 */
 	_setupData()

@@ -21,6 +21,9 @@ DataTracker.addType('components', (data) =>
 	}
 });
 
+/**
+ * @type {number} unitNumber
+ */
 let unitNumber = 0;
 
 /**
@@ -60,7 +63,7 @@ export class Unit
 		this.isUnit = true;
 
 		/**
-		 * @member {Data} data
+		 * @member {Data|null} data
 		 */
 		this.data = null;
 
@@ -68,11 +71,6 @@ export class Unit
 		 * @member {boolean|null} persist
 		 */
 		this.persist = null;
-
-		/**
-		 * @member {?array} children
-		 */
-		this.children = null;
 
 		/**
 		 * @member {?array} nest
@@ -102,11 +100,21 @@ export class Unit
 		const {props, children} = parseArgs(args);
 		this.setupProps(props);
 
-		this.children ??= children;
+		/**
+		 * @member {array} children
+		 */
+		this.children = children || [];
 
 		this.onCreated();
 
+		/**
+		 * @member {boolean} rendered
+		 */
 		this.rendered = false;
+
+		/**
+		 * @member {?object} container
+		 */
 		this.container = null;
 	}
 
@@ -135,6 +143,7 @@ export class Unit
 	/**
 	 * This will setup the component props.
 	 *
+	 * @protected
 	 * @param {object} [props]
 	 * @returns {void}
 	 */
@@ -168,6 +177,7 @@ export class Unit
 	/**
 	 * This will get the parent context.
 	 *
+	 * @protected
 	 * @returns {object|null}
 	 */
 	getParentContext()
@@ -183,6 +193,7 @@ export class Unit
 	/**
 	 * This will set up the context.
 	 *
+	 * @protected
 	 * @returns {void}
 	 */
 	setupContext()
@@ -202,6 +213,7 @@ export class Unit
 	/**
 	 * This will set up the adding context.
 	 *
+	 * @protected
 	 * @returns {void}
 	 */
 	setupAddingContext()
@@ -328,6 +340,8 @@ export class Unit
 
 	/**
 	 * This will cache the layout panel and set the main id.
+	 *
+	 * @protected
 	 * @param {object} layout
 	 * @returns {object}
 	 */
