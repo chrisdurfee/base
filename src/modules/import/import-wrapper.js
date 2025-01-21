@@ -1,3 +1,4 @@
+import { Component } from "../component/component.js";
 import { Jot } from "../component/jot.js";
 import { Builder } from '../layout/builder.js';
 import { Group } from "./group.js";
@@ -80,8 +81,7 @@ const Comment = (props) => ({
  * will wrap the comment atom to pass route to the
  * imported layout.
  *
- * @param {object} props
- * @returns {Constructor}
+ * @type {typeof Component}
  */
 export const ImportWrapper = Jot(
 {
@@ -92,6 +92,8 @@ export const ImportWrapper = Jot(
 	 */
 	render()
 	{
+		console.log(this, this.layout)
+
 		/**
 		 * This will create a comment atom to be replaced
 		 * by the module.

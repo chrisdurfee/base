@@ -131,7 +131,7 @@ export class Group
 	/**
 	 * This will add the dependencies to the document.
 	 *
-	 * @param {array} files
+	 * @param {Array<string>} files
 	 * @returns {void}
 	 */
 	addFiles(files)
