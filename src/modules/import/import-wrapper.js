@@ -2,65 +2,8 @@ import { Component } from "../component/component.js";
 import { Jot } from "../component/jot.js";
 import { Builder } from '../layout/builder.js';
 import { Group } from "./group.js";
-
-/**
- * This will load the module.
- *
- * @param {Promise} promise
- * @param {function} callBack
- * @returns {void}
- */
-const loadModule = (promise, callBack) =>
-{
-	promise.then(module =>
-	{
-		if (callBack)
-		{
-			callBack(module);
-		}
-	});
-};
-
-/**
- * This will check if an object is a contructor.
- *
- * @param {object|function} object
- * @returns {boolean}
- */
-const isConstructor = (object) =>
-{
-	if (!object)
-	{
-		return false;
-	}
-
-	return (typeof object?.prototype?.constructor === 'function');
-};
-
-/**
- * This will render the module.
- *
- * @param {object} layout
- * @param {object} ele
- * @param {object} parent
- * @returns {object}
- */
-const render = (layout, ele, parent) =>
-{
-	/**
-	 * This will build the layout and return the fragment
-	 * to be added to the parent.
-	 */
-	const frag = Builder.build(layout, null, parent);
-
-	/**
-	 * If the component has overriden the container, the component
-	 * panel will be the first child.
-	 */
-	const firstChild = frag.firstChild || layout?.panel;
-	ele.after(frag);
-	return firstChild;
-};
+import { LayoutManager } from "./layout-manager.js";
+import { ModuleLoader } from "./module-loader.js";
 
 /**
  * This will create a comment.
@@ -73,6 +16,26 @@ const Comment = (props) => ({
 	textContent: 'import placeholder',
 	onCreated: props.onCreated
 });
+
+/**
+ * This will get the promise from the src.
+ *
+ * @param {object|string} src
+ * @returns {Promise}
+ */
+const getPromise = (src) =>
+{
+	const type = typeof src
+	if (type === 'string')
+	{
+		return import(src);
+	}
+	else if (type === 'function')
+	{
+		return src();
+	}
+	return src;
+};
 
 /**
  * ImportWrapper
@@ -92,8 +55,6 @@ export const ImportWrapper = Jot(
 	 */
 	render()
 	{
-		console.log(this, this.layout)
-
 		/**
 		 * This will create a comment atom to be replaced
 		 * by the module.
@@ -114,7 +75,7 @@ export const ImportWrapper = Jot(
 					 * This will cache the layout root to be removed
 					 * before the module is destroyed.
 					 */
-					this.layoutRoot = render(this.layout, this.panel, this.parent);
+					this.layoutRoot = LayoutManager.render(this.layout, this.panel, this.parent);
 					return;
 				}
 
@@ -139,61 +100,6 @@ export const ImportWrapper = Jot(
 	},
 
 	/**
-	 * This will get the layout.
-	 *
-	 * @param {object} module
-	 * @returns {object|null}
-	 */
-	getLayout(module)
-	{
-		let layout = module.default;
-		if (!layout)
-		{
-			return null;
-		}
-
-		/**
-		 * This will check if the import is using a custom
-		 * callback to set up the module.
-		 */
-		const callBack = this.callBack;
-		if (callBack)
-		{
-			layout = callBack(layout);
-		}
-		else
-		{
-			if (isConstructor(layout))
-			{
-				/**
-				 * This will set up the layout as a component and pass
-				 * the import props like persist and route.
-				 */
-				layout = new layout();
-			}
-			else
-			{
-				/**
-				 * This will set up the layout as an atom.
-				 */
-				layout = layout();
-			}
-		}
-
-		if (layout.isUnit === true)
-		{
-			layout.route = this.route;
-
-			if (this.persist)
-			{
-				layout.persist = true;
-			}
-		}
-
-		return (this.layout = layout);
-	},
-
-	/**
 	 * This will load the module and render the layout.
 	 *
 	 * @param {object} ele
@@ -204,27 +110,25 @@ export const ImportWrapper = Jot(
 		/**
 		 * This will check if the src is a string and import the module.
 		 */
-		const type = typeof this.src;
-		if (type === 'string')
-		{
-			this.src = import(this.src);
-		}
-		else if (type === 'function')
-		{
-			this.src = this.src();
-		}
-
-		loadModule(this.src, (module) =>
+		this.src = getPromise(this.src);
+		ModuleLoader.load(this.src, (module) =>
 		{
 			this.loaded = true;
 
-			const layout = this.layout || this.getLayout(module);
+			const layout = this.layout || LayoutManager.process(module,
+			{
+				callback: this.callback,
+				route: this.route,
+				persist: this.persist
+			});
+
+			this.layout = layout;
 
 			/**
 			 * This will cache the layout root to be removed
 			 * before the module is destroyed.
 			 */
-			this.layoutRoot = render(layout, ele, this.parent);
+			this.layoutRoot = LayoutManager.render(layout, ele, this.parent);
 		});
 	},
 
