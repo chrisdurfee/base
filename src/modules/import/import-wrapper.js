@@ -107,9 +107,6 @@ export const ImportWrapper = Jot(
 	 */
 	loadAndRender(ele)
 	{
-		/**
-		 * This will check if the src is a string and import the module.
-		 */
 		this.src = getPromise(this.src);
 		ModuleLoader.load(this.src, (module) =>
 		{
