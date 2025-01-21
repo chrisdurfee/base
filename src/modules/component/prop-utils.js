@@ -18,7 +18,7 @@ const prepareChildren = (value) =>
  * This will set the child string.
  *
  * @param {string} value
- * @returns {array}
+ * @returns {Array<object>}
  */
 const setChildString = (value) =>
 {
