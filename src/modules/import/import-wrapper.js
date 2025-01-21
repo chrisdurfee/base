@@ -108,6 +108,16 @@ export const ImportWrapper = Jot(
 					return;
 				}
 
+				if (this.layout)
+				{
+					/**
+					 * This will cache the layout root to be removed
+					 * before the module is destroyed.
+					 */
+					this.layoutRoot = render(this.layout, this.panel, this.parent);
+					return;
+				}
+
 				/**
 				 * This will set up a resource group to load the
 				 * depends before the module.

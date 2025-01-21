@@ -9,7 +9,7 @@ import { ImportWrapper } from './import-wrapper.js';
 export const Import = (props) =>
 {
 	const type = typeof props;
-	if (type === 'string' || type === 'function')
+	if (type === 'string' || type === 'function' || props instanceof Promise)
 	{
 		props = {
 			src: props
