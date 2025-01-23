@@ -519,7 +519,7 @@ export class Dom
 	 * This will get the scroll top position.
 	 *
 	 * @param {object} [obj] The element or document element if not set.
-	 * @returns {object}
+	 * @returns {number|null}
 	 */
 	static getScrollTop(obj)
 	{
@@ -531,7 +531,7 @@ export class Dom
 	 * This will get the scroll left position.
 	 *
 	 * @param {object} [obj] The element or document element if not set.
-	 * @returns {object}
+	 * @returns {number|null}
 	 */
 	static getScrollLeft(obj)
 	{
