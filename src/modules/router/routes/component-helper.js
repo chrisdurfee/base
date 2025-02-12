@@ -115,7 +115,7 @@ export class ComponentHelper
 	{
         if (!this.template.isUnit)
 		{
-            this.template = Jot(this.template);
+            this.template = new (Jot(this.template));
         }
 
         const comp = this.template;
