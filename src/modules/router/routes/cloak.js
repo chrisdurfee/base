@@ -10,7 +10,7 @@ import { Jot } from "../../component/jot.js";
  *
  * @type {typeof Component}
  */
-export const Cloak = Jot(
+export const CloakComponent = Jot(
 {
 	/**
 	 * This will get the child scope instance of the component.
@@ -22,3 +22,11 @@ export const Cloak = Jot(
 		return this.parent;
 	}
 });
+
+/**
+ * This will create a Cloak component.
+ *
+ * @param  {*} props
+ * @returns {typeof CloakComponent}
+ */
+export const Cloak = (props) => Jot(props, CloakComponent);

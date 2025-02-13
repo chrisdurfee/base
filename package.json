@@ -1,6 +1,6 @@
 {
 	"name": "@base-framework/base",
-	"version": "3.0.284",
+	"version": "3.0.286",
 	"description": "This is a javascript framework.",
 	"main": "./dist/base.js",
 	"type": "module",

@@ -113,9 +113,11 @@ export class ComponentHelper
 	 */
 	initializeTemplateObject()
 	{
+		console.log(!this.template.isUnit, this.template);
         if (!this.template.isUnit)
 		{
-            this.template = new Cloak(this.template);
+            this.template = Cloak(this.template);
+			console.log('cloak', this.template);
         }
 
         const comp = this.template;
