@@ -19,8 +19,7 @@ export class CloakComponent extends Component
 	 */
 	getChildScope()
 	{
-		console.log(this.parent.parent)
-		return this.parent?.parent ?? this.parent;
+		return this.parent;
 	}
 }
 
