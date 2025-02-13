@@ -101,7 +101,7 @@ export class ComponentHelper
 	transferSettings(comp)
 	{
 		this.persist = (this.persist && comp.persist !== false);
-        Object.assign(comp, { route: this.route, persist: this.persist, parent: this.parent });
+        Object.assign(comp, { route: this.route, persist: this.persist });
 		this.component = comp;
 	}
 
@@ -115,6 +115,7 @@ export class ComponentHelper
 	{
         if (!this.template.isUnit)
 		{
+			console.log('cloak', this.template, this.parent)
             this.template = new (Cloak(this.template));
         }
 
