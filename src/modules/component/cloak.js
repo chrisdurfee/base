@@ -1,5 +1,5 @@
-import { Component } from "../../component/component.js";
-import { Jot } from "../../component/jot.js";
+import { Component } from "./component.js";
+import { Jot } from "./jot.js";
 
 /**
  * Cloak Component

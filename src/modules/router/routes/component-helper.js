@@ -1,5 +1,5 @@
+import { Cloak } from "../../component/cloak.js";
 import { Builder } from "../../layout/builder.js";
-import { Cloak } from "./cloak.js";
 
 /**
  * ComponentHelper
