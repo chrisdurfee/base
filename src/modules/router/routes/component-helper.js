@@ -115,7 +115,6 @@ export class ComponentHelper
 	{
         if (!this.template.isUnit)
 		{
-			console.log('cloak', this.template, this.parent)
             this.template = new (Cloak(this.template));
         }
 
