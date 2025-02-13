@@ -1,5 +1,5 @@
-import { Jot } from "../../component/jot.js";
 import { Builder } from "../../layout/builder.js";
+import { Cloak } from "./cloak.js";
 
 /**
  * ComponentHelper
@@ -115,7 +115,7 @@ export class ComponentHelper
 	{
         if (!this.template.isUnit)
 		{
-            this.template = new (Jot(this.template));
+            this.template = new Cloak(this.template);
         }
 
         const comp = this.template;
