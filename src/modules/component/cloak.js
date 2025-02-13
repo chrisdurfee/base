@@ -19,7 +19,7 @@ export const CloakComponent = Jot(
 	 */
 	getChildScope()
 	{
-		return this.parent;
+		return this.parent?.parent ?? this.parent;
 	}
 });
 
