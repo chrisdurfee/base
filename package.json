@@ -1,6 +1,6 @@
 {
 	"name": "@base-framework/base",
-	"version": "3.0.295",
+	"version": "3.0.296",
 	"description": "This is a javascript framework.",
 	"main": "./dist/base.js",
 	"type": "module",
@@ -24,8 +24,8 @@
 		"url": "https://github.com/chrisdurfee/base/issues"
 	},
 	"devDependencies": {
-		"esbuild": "^0.15.7",
-		"typescript": "^5.4.2"
+		"esbuild": "^0.25.0",
+		"typescript": "^5.7.3"
 	},
 	"types": "dist/types/base.d.ts",
 	"files": [
