@@ -95,8 +95,8 @@ export class Model extends Data
 	{
 		this.attributes = {};
 		this.stage = {};
-		this.url = null;
-		this.xhr = null;
+		this.url = this.url || '';
+		this.xhr = this.xhr || {};
 	}
 
 	/**
