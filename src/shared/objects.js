@@ -85,13 +85,23 @@ export const Objects =
 	{
 		const source = this.getClassObject(sourceClass);
 		const target = this.getClassObject(targetClass);
-
-		if (!Types.isObject(source) || !Types.isObject(target))
+		if (typeof source !== 'object' || typeof target !== 'object')
 		{
 			return false;
 		}
 
-		return { ...Object.create(source), ...target };
+		/* we want to create a new object and add the source
+		prototype to the new object */
+		const obj = Object.create(source);
+
+		/* we want to add any additional properties from the
+		target class to the new object */
+		for (var prop in target)
+		{
+			obj[prop] = target[prop];
+		}
+
+		return obj;
 	},
 
 	/**

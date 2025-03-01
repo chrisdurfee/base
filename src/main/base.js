@@ -53,10 +53,14 @@ class Base
 			return this;
 		}
 
-		Object.entries(methods).forEach(([property, method]) =>
+		const prototype = this.constructor.prototype;
+		for (var property in methods)
 		{
-            this.constructor.prototype[property] = method;
-        });
+			if (Object.prototype.hasOwnProperty.call(methods, property))
+			{
+				prototype[property] = methods[property];
+			}
+		}
 		return this;
 	}
 

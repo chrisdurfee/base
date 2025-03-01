@@ -360,7 +360,7 @@ export class XhrRequest
 		/* we want to create a clone of the default
 		settings before adding the new settings */
 		// @ts-ignore
-		let settings = this.settings = Object.create(base.xhrSettings);
+		let settings = this.settings = {...base.xhrSettings};
 
 		/* we want to check if we are adding the ajax settings by
 		individual args or by a settings object */
@@ -425,8 +425,10 @@ export class XhrRequest
 	 */
 	createXHR()
 	{
-		const settings = this.settings,
-		xhr = new XMLHttpRequest();
+		const settings = this.settings;
+		console.log(settings);
+		console.log(settings.responseType);
+		const xhr = new XMLHttpRequest();
 		xhr.responseType = settings.responseType;
 
 		if (settings.withCredentials === true)
