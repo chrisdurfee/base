@@ -425,10 +425,8 @@ export class XhrRequest
 	 */
 	createXHR()
 	{
-		const settings = this.settings;
-		console.log(settings);
-		console.log(settings.responseType);
-		const xhr = new XMLHttpRequest();
+		const settings = this.settings,
+		xhr = new XMLHttpRequest();
 		xhr.responseType = settings.responseType;
 
 		if (settings.withCredentials === true)
