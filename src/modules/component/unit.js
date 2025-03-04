@@ -547,7 +547,7 @@ export class Unit
 	 * @protected
 	 * @returns {void}
 	 */
-	remove()
+	_remove()
 	{
 		this.prepareDestroy();
 		this.removeContext();
@@ -586,6 +586,6 @@ export class Unit
 	 */
 	destroy()
 	{
-		this.remove();
+		this._remove();
 	}
 }
