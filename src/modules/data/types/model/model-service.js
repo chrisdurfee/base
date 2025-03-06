@@ -187,8 +187,7 @@ export class ModelService
 	get(instanceParams, callBack)
 	{
 		const id = this.model.get('id'),
-		params = 'op=get' +
-			'&id=' + id;
+		params = 'id=' + id;
 
 		const model = this.model;
 		return this._get('', params, instanceParams, callBack, (response) =>
@@ -247,8 +246,7 @@ export class ModelService
 			return false;
 		}
 
-		let params = 'op=setup' +
-			'&' + this.setupObjectData();
+		let params = this.setupObjectData();
 
 		return this._put('', params, instanceParams, callBack);
 	}
@@ -267,8 +265,7 @@ export class ModelService
 			return false;
 		}
 
-		let params = 'op=add' +
-			'&' + this.setupObjectData();
+		let params = this.setupObjectData();
 
 		return this._post('', params, instanceParams, callBack);
 	}
@@ -287,8 +284,7 @@ export class ModelService
 			return false;
 		}
 
-		let params = 'op=update' +
-			'&' + this.setupObjectData();
+		let params = this.setupObjectData();
 
 		return this._patch('', params, instanceParams, callBack);
 	}
@@ -303,8 +299,7 @@ export class ModelService
 	delete(instanceParams, callBack)
 	{
 		const id = this.model.get('id'),
-		params = 'op=delete' +
-			'&id=' + id;
+		params = 'id=' + id;
 
 		return this._delete('', params, instanceParams, callBack);
 	}
@@ -321,12 +316,16 @@ export class ModelService
 	 */
 	all(instanceParams, callBack, start, count, filter)
 	{
-		filter = filter || '';
+		filter = this.model.get('filter') || filter || '';
 		start = !isNaN(start)? start : 0;
 		count = !isNaN(count)? count : 50;
 
-		let params = 'op=all' +
-			'&option=' + filter +
+		if (typeof filter === 'object')
+		{
+			filter = JSON.stringify(filter);
+		}
+
+		let params = '&filter=' + filter +
 			'&start=' + start +
 			'&stop=' + count;
 
