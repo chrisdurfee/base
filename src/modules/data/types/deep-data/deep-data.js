@@ -194,6 +194,31 @@ export class Data extends BasicData
 	}
 
 	/**
+	 * This will get the index of the value in the array.
+	 *
+	 * @param {string} attr
+	 * @param {*} key
+	 * @param {*} value
+	 * @returns {number}
+	 */
+	getIndex(attr, key, value)
+	{
+		let currentValue = this.get(attr);
+		if (Array.isArray(currentValue) === false)
+		{
+			return -1;
+		}
+
+		const firstItem = currentValue[0];
+		if (typeof firstItem !== 'object')
+		{
+			return currentValue.indexOf(key);
+		}
+
+		return currentValue.findIndex((item) => item[key] === value);
+	}
+
+	/**
 	 * This will pop the last value from an array and set the result.
 	 *
 	 * @param {string} attr
