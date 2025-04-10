@@ -98,6 +98,27 @@ export const WatcherHelper =
 	},
 
 	/**
+	 * This will replace the params in a string with the data values.
+	 *
+	 * @param {string} string
+	 * @param {object} data
+	 * @param {boolean} isArray
+	 * @returns {string}
+	 */
+	replaceParams(string, data, isArray = false)
+	{
+		let count = 0;
+		return string.replace(WATCHER_PATTERN, function()
+		{
+			const watcherData = (isArray)? data[count] : data;
+			count++;
+
+			const result = watcherData.get(arguments[2]);
+			return (typeof result !== 'undefined'? result : '');
+		});
+	},
+
+	/**
 	 * This will get a watcher callBack.
 	 *
 	 * @protected
@@ -112,15 +133,7 @@ export const WatcherHelper =
 	{
 		return () =>
 		{
-			let count = 0,
-			value = string.replace(WATCHER_PATTERN, function()
-			{
-				const watcherData = (isArray)? data[count] : data;
-				count++;
-
-				const result = watcherData.get(arguments[2]);
-				return (typeof result !== 'undefined'? result : '');
-			});
+			let value = this.replaceParams(string, data, isArray);
 			this.updateAttr(ele, attr, value);
 		};
 	},

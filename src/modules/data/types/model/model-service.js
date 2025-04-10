@@ -1,6 +1,7 @@
 import { Encode } from '../../../../shared/encode/encode.js';
 import { Strings } from '../../../../shared/strings.js';
 import { Ajax } from '../../../ajax/ajax.js';
+import { WatcherHelper } from '../../../layout/watcher-helper.js';
 
 /**
  * ModelService
@@ -344,15 +345,14 @@ export class ModelService
 		let baseUrl = this.url;
 		if (!url)
 		{
-			return baseUrl;
+			return this.replaceUrl(baseUrl);
 		}
 
-		if (url[0] === '?')
-		{
-			return baseUrl + url;
-		}
+		const fullUrl = (url[0] === '?')
+		? baseUrl + url
+		: baseUrl + '/' + url;
 
-		return baseUrl += '/' + url;
+		return this.replaceUrl(fullUrl);
 	}
 
 	/**
@@ -390,6 +390,27 @@ export class ModelService
 		}
 
 		return Ajax(settings);
+	}
+
+	/**
+	 * This will replace the url params with the model data.
+	 *
+	 * @param {string} url
+	 * @returns {string}
+	 */
+	replaceUrl(url)
+	{
+		if (WatcherHelper.isWatching(url))
+		{
+			url = WatcherHelper.replaceParams(url, this.model);
+		}
+
+		if (url.endsWith('/'))
+		{
+			url = url.substring(0, url.length - 1);
+		}
+
+		return url;
 	}
 
 	/**
