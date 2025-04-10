@@ -299,8 +299,8 @@ export class ModelService
 	 */
 	delete(instanceParams, callBack)
 	{
-		const id = this.model.get('id'),
-		params = 'id=' + id;
+		const id = this.model.get('id');
+		const params = (typeof id !== 'undefined')? 'id=' + id : this.setupObjectData();;
 
 		return this._delete('', params, instanceParams, callBack);
 	}
