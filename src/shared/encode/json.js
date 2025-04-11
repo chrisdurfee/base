@@ -13,13 +13,13 @@ const replacements = { '\n': '\\n', '\r': '\\n', '\t': '\\t' };
  */
 const escapeChars = (str, removeNewLines) =>
 {
-    if (typeof str !== 'string')
-    {
-        str = String(str);
-    }
+	if (typeof str !== 'string')
+	{
+		str = String(str);
+	}
 
-    const pattern = removeNewLines ? /[\n\r\t]/g : /\t/g;
-    return str.replace(pattern, match => replacements[match]);
+	const pattern = removeNewLines ? /[\n\r\t]/g : /\t/g;
+	return str.replace(pattern, match => replacements[match]);
 };
 
 /**
@@ -31,20 +31,20 @@ const escapeChars = (str, removeNewLines) =>
  */
 const sanitize = (text, removeNewLines) =>
 {
-    if (typeof text !== 'string')
-    {
-        return text;
-    }
+	if (typeof text !== 'string')
+	{
+		return text;
+	}
 
-    /* we need to escape chars and encode the uri
-    components */
-    text = escapeChars(text, removeNewLines);
-    text = encodeURIComponent(text);
+	/* we need to escape chars and encode the uri
+	components */
+	text = escapeChars(text, removeNewLines);
+	text = encodeURIComponent(text);
 
-    /* we want to re-encode the double quotes so they
-    will be escaped by the json encoder */
-    const pattern = /%22/g;
-    return text.replace(pattern, '"');
+	/* we want to re-encode the double quotes so they
+	will be escaped by the json encoder */
+	const pattern = /%22/g;
+	return text.replace(pattern, '"');
 };
 
 /**
@@ -56,28 +56,28 @@ const sanitize = (text, removeNewLines) =>
  */
 export const prepareUrl = (data, removeNewLines) =>
 {
-    const type = typeof data;
-    if (type === "undefined")
-    {
-        return data;
-    }
+	const type = typeof data;
+	if (type === "undefined")
+	{
+		return data;
+	}
 
-    if (type !== 'object')
-    {
-        data = sanitize(data);
-        return data;
-    }
+	if (type !== 'object')
+	{
+		data = sanitize(data);
+		return data;
+	}
 
-    Object.entries(data).forEach(([prop, value]) =>
-    {
-        if (value === null)
-        {
-            return;
-        }
+	Object.entries(data).forEach(([prop, value]) =>
+	{
+		if (value === null)
+		{
+			return;
+		}
 
-        data[prop] = (typeof value === 'string') ? prepareUrl(value, removeNewLines) : sanitize(value, removeNewLines);
-    });
-    return data;
+		data[prop] = (typeof value === 'string') ? prepareUrl(value, removeNewLines) : sanitize(value, removeNewLines);
+	});
+	return data;
 };
 
 /**
@@ -88,7 +88,7 @@ export const prepareUrl = (data, removeNewLines) =>
  */
 export function decode(data)
 {
-    return (typeof data !== "undefined" && data.length > 0)? JSON.parse(data) : false;
+	return (typeof data !== "undefined" && data.length > 0)? JSON.parse(data) : false;
 }
 
 /**
@@ -99,5 +99,5 @@ export function decode(data)
  */
 export function encode(data)
 {
-    return (typeof data !== "undefined")? JSON.stringify(data) : null;
+	return (typeof data !== "undefined")? JSON.stringify(data) : null;
 }

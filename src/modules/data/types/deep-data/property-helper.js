@@ -87,7 +87,7 @@ export class PropertyHelper
 			{
 				if (Array.isArray(obj))
 				{
-					obj.splice(prop, 1);
+					obj.splice(Number(prop), 1);
 					break;
 				}
 
