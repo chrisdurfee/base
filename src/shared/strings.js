@@ -15,7 +15,7 @@ export class Strings
 	 * @param {number} [maxLength]
 	 * @returns {string}
 	 */
-	static limit(str, maxLength = 1000)
+	static limit(str, maxLength = 1000000)
 	{
 		if (typeof str !== 'string')
 		{
@@ -33,7 +33,7 @@ export class Strings
 	 * @param {boolean} [decode]
 	 * @returns {object}
 	 */
-	static parseQueryString(str, decode)
+	static parseQueryString(str, decode, limit = true)
 	{
 		if (typeof str !== 'string')
 		{
