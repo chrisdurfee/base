@@ -26,6 +26,20 @@ export class ServerRender extends Render
 	}
 
 	/**
+	 * This will create a component.
+	 *
+	 * @param {object} component
+	 * @param {object} container
+	 * @param {object} parent
+	 * @returns {*} the build result.
+	 */
+	createComponent(component, container, parent)
+	{
+		this.setupComponent(component, container, parent);
+		return this.buildComponent(component);
+	}
+
+	/**
    * This will build an element or component and return an HTML string.
    *
    * @protected

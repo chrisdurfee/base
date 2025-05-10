@@ -22,17 +22,16 @@ export class Render
 	}
 
 	/**
-	 * This will create a component.
+	 * This will set up the component.
 	 *
-	 * @param {object} obj
+	 * @protected
+	 * @param {object} component
 	 * @param {object} container
 	 * @param {object} parent
-	 * @returns {*} the build result.
+	 * @returns {void}
 	 */
-	createComponent(obj, container, parent)
+	setupComponent(component, container, parent)
 	{
-		const component = obj;
-
 		/**
 		 * We want to set the parent to the component before setting
 		 * up the component.
@@ -58,16 +57,48 @@ export class Render
 		 * call the afterBuild method.
 		 */
 		component.setup(container);
+	}
 
+	/**
+	 * This will build a component.
+	 *
+	 * @protected
+	 * @param {object} component
+	 * @returns {*}
+	 */
+	buildComponent(component)
+	{
+		/**
+		 * This will build the layout and return the result.
+		 */
 		const layout = component.prepareLayout();
-		this.build(layout, component.container, component.getChildScope());
+		const result = this.build(layout, component.container, component.getChildScope());
 
 		component.afterBuild();
 
-		if (obj.component && typeof obj.onCreated === 'function')
+		/**
+		 * This will call the onCreated method if it exists.
+		 */
+		if (component.component && typeof component.onCreated === 'function')
 		{
-			obj.onCreated(component);
+			component.onCreated(component);
 		}
+
+		return result;
+	}
+
+	/**
+	 * This will create a component.
+	 *
+	 * @param {object} component
+	 * @param {object} container
+	 * @param {object} parent
+	 * @returns {*} the build result.
+	 */
+	createComponent(component, container, parent)
+	{
+		this.setupComponent(component, container, parent);
+		this.buildComponent(component);
 
 		return component;
 	}
