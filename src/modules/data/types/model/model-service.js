@@ -310,16 +310,16 @@ export class ModelService
 	 *
 	 * @param {string} instanceParams
 	 * @param {function} callBack
-	 * @param {number} start
-	 * @param {number} count
+	 * @param {number} offset
+	 * @param {number} limit
 	 * @param {string} filter
 	 * @returns {object}
 	 */
-	all(instanceParams, callBack, start, count, filter)
+	all(instanceParams, callBack, offset, limit, filter)
 	{
 		filter = this.model.get('filter') || filter || '';
-		start = !isNaN(start)? start : 0;
-		count = !isNaN(count)? count : 50;
+		offset = !isNaN(offset)? offset : 0;
+		limit = !isNaN(limit)? limit : 50;
 
 		if (typeof filter === 'object')
 		{
@@ -327,8 +327,8 @@ export class ModelService
 		}
 
 		let params = '&filter=' + filter +
-			'&start=' + start +
-			'&stop=' + count;
+			'&offset=' + offset +
+			'&limit=' + limit;
 
 		return this._get('', params, instanceParams, callBack);
 	}
