@@ -118,7 +118,7 @@ export class NavLink extends Component
     setupWatchers(href, text)
     {
         // @ts-ignore
-        const exact = (this.exact !== false),
+        const exact = (this.exact === true),
         data = router.data;
 
         const watchers = [];
