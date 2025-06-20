@@ -110,7 +110,7 @@ export class PropertyHelper
 	{
 		if (!utils.hasDeepData(attr))
 		{
-			return obj[attr];
+			return obj[attr] ?? undefined;
 		}
 
 		const props = utils.getSegments(attr),
@@ -120,7 +120,7 @@ export class PropertyHelper
 		for (var i = 0; i < length; i++)
 		{
 			var prop = props[i];
-			var propValue = obj[prop];
+			var propValue = obj[prop] ?? undefined;
 			if (propValue === undefined)
 			{
 				break;
