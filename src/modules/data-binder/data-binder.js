@@ -273,10 +273,7 @@ export class DataBinder
 		 * call the callback if the value is defined.
 		 */
 		const value = data.get(prop);
-		if (typeof value !== 'undefined')
-		{
-			callBack(value);
-		}
+		callBack(value);
 		return this;
 	}
 
