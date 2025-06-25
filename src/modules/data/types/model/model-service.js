@@ -249,8 +249,9 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
+		const url = (typeof id === 'undefined')? '' : `/${id}`;
 
-		return this._put(`/${id}`, params, instanceParams, callBack);
+		return this._put(url, params, instanceParams, callBack);
 	}
 
 	/**
@@ -269,8 +270,9 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
+		const url = (typeof id === 'undefined')? '' : `/${id}`;
 
-		return this._post(`/${id}`, params, instanceParams, callBack);
+		return this._post(url, params, instanceParams, callBack);
 	}
 
 	/**
@@ -289,8 +291,9 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
+		const url = (typeof id === 'undefined')? '' : `/${id}`;
 
-		return this._patch(`/${id}`, params, instanceParams, callBack);
+		return this._patch(url, params, instanceParams, callBack);
 	}
 
 	/**
@@ -304,8 +307,9 @@ export class ModelService
 	{
 		const id = this.model.get('id');
 		const params = (typeof id !== 'undefined')? 'id=' + id : this.setupObjectData();
+		const url = (typeof id === 'undefined')? '' : `/${id}`;
 
-		return this._delete(`/${id}`, params, instanceParams, callBack);
+		return this._delete(url, params, instanceParams, callBack);
 	}
 
 	/**

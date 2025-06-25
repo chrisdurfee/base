@@ -87,14 +87,17 @@ export const WatcherHelper =
 	updateAttr(ele, attr, value)
 	{
 		switch (attr) {
-            case 'text':
-            case 'textContent':
-                ele.textContent = value;
-                break;
-            default:
-                HtmlHelper.addAttr(ele, attr, value);
-                break;
-        }
+			case 'text':
+			case 'textContent':
+				ele.textContent = value;
+				break;
+			case 'disabled':
+				ele.disabled = (!value);
+				break;
+			default:
+				HtmlHelper.addAttr(ele, attr, value);
+				break;
+		}
 	},
 
 	/**
@@ -314,7 +317,7 @@ export const WatcherHelper =
 		if (typeof settings === "string")
 		{
 			this.addDataWatcher(ele, { value: settings }, parent);
-    		return;
+			return;
 		}
 
 		if (Array.isArray(settings))
