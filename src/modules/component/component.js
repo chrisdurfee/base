@@ -88,6 +88,19 @@ export class Component extends Unit
 	}
 
 	/**
+	 *  This will resume the component scope when persisting.
+	 *
+	 * @param {object} data
+	 * @param {object} state
+	 * @returns {void}
+	 */
+	resumeScope(data, state)
+	{
+		this.data = data;
+		this.state = state;
+	}
+
+	/**
 	 * This will initialize the component.
 	 *
 	 * @protected
