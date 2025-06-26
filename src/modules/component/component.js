@@ -90,14 +90,15 @@ export class Component extends Unit
 	/**
 	 *  This will resume the component scope when persisting.
 	 *
-	 * @param {object} data
-	 * @param {object} state
+	 * @param {object} persistedLayout
 	 * @returns {void}
 	 */
-	resumeScope(data, state)
+	resumeScope(persistedLayout)
 	{
-		this.data = data;
-		this.state = state;
+		this.data = persistedLayout.data;
+		this.state = persistedLayout.state;
+		this.persistedChildren = persistedLayout.persistedChildren;
+		this.id = persistedLayout.id;
 	}
 
 	/**
@@ -354,6 +355,7 @@ export class Component extends Unit
 	 */
 	prepareDestroy()
 	{
+		this.persistedCount = 0;
 		this.rendered = false;
 		this.beforeDestroy();
 		this.removeEvents();

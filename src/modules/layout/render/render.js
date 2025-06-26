@@ -45,6 +45,7 @@ export class Render
 		if (parent && parent.persist === true && component.persist !== false)
 		{
 			component.persist = true;
+			component.parent.addPersistedChild(component);
 		}
 
 		if (component.cache && parent)

@@ -15,7 +15,17 @@ DataTracker.addType('components', (data) =>
 	}
 
 	const component = data.component;
-	if (component && component.rendered === true)
+	if (!component || !component.isUnit)
+	{
+		return;
+	}
+
+	if (component.persistToken && component.parent)
+	{
+		component.parent.removePersistedChild(component.persistToken);
+	}
+
+	if (component.rendered === true)
 	{
 		component.prepareDestroy();
 	}
@@ -104,6 +114,8 @@ export class Unit
 		 * @member {array} children
 		 */
 		this.children = children || [];
+		this.persistedChildren = {};
+		this.persistedCount = 0;
 
 		this.onCreated();
 
@@ -138,6 +150,44 @@ export class Unit
 	declareProps()
 	{
 
+	}
+
+	/**
+	 * This will add a persisted child.
+	 *
+	 * @param {object} child
+	 * @returns {string}
+	 */
+	addPersistedChild(child)
+	{
+		const token = 'pc' + (this.persistedCount++);
+		child.persistToken = token;
+
+		const persistedChild = this.persistedChildren[token];
+		if (persistedChild)
+		{
+			child.resumeScope(persistedChild);
+			return token;
+		}
+
+		this.persistedChildren[token] = child;
+		return token;
+	}
+
+	/**
+	 * This will remove a persisted child by its token.
+	 *
+	 * @param {string} token
+	 * @returns {void}
+	 */
+	removePersistedChild(token)
+	{
+		if (!token || !this.persistedChildren[token])
+		{
+			return;
+		}
+
+		delete this.persistedChildren[token];
 	}
 
 	/**
@@ -362,46 +412,6 @@ export class Unit
 	}
 
 	/**
-	 * This will check if the layout is a component layout.
-	 *
-	 * @param {*} layout
-	 * @returns {boolean}
-	 */
-	_isComponentLayout(layout)
-	{
-		return (layout && layout.isComponent === true);
-	}
-
-	/**
-	 *  This will resume the scope of the component layout.
-	 *
-	 * @param {object} oldLayout
-	 * @param {object} newLayout
-	 * @returns {void}
-	 */
-	_applyChildrenScope(oldLayout, newLayout)
-	{
-		if (!oldLayout || !newLayout)
-		{
-			return;
-		}
-
-		const oldChildren = oldLayout.children || [];
-		const newChildren = newLayout.children || [];
-
-		for (let i = 0; i < oldChildren.length; i++)
-		{
-			const oldChild = oldChildren[i];
-			const newChild = newChildren[i];
-
-			if (this._isComponentLayout(oldChild) && this._isComponentLayout(newChild))
-			{
-				newChild.resumeScope(oldChild.data, oldChild.state);
-			}
-		}
-	}
-
-	/**
 	 * This will create the component layout.
 	 *
 	 * @protected
@@ -409,18 +419,6 @@ export class Unit
 	 */
 	_createLayout()
 	{
-		if (this.persist)
-		{
-			const oldLayout = this._layout;
-			const newLayout = this.render();
-			if (oldLayout && newLayout)
-			{
-				this._applyChildrenScope(oldLayout, newLayout);
-			}
-
-			return (this._layout = newLayout);
-		}
-
 		return this.render();
 	}
 
@@ -611,6 +609,7 @@ export class Unit
 	 */
 	prepareDestroy()
 	{
+		this.persistedCount = 0;
 		this.rendered = false;
 		this.beforeDestroy();
 	}

@@ -15,7 +15,7 @@ import { SHORTHAND_METHODS } from './shorthand-methods.js';
  * methods to the full methods.
  *
  * @param {object} proxy
- * @param {object} component
+ * @param {typeof Component} component
  * @returns {object}
  */
 const modifyMethods = (proxy, component) =>
@@ -32,7 +32,7 @@ const modifyMethods = (proxy, component) =>
 /**
  * This will create a class.
  *
- * @param {object} Base
+ * @param {typeof Component} Base
  * @returns {typeof Component}
  */
 const extendBaseClass = (Base) =>
@@ -44,7 +44,7 @@ const extendBaseClass = (Base) =>
  * This will create a pod component.
  *
  * @param {function} callBack
- * @param {object} extend - The class to extend.
+ * @param {typeof Component} extend - The class to extend.
  * @returns {typeof Component}
  */
 export const Pod = (callBack, extend = Component) =>
