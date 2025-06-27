@@ -280,6 +280,8 @@ export class Html
 	 */
 	static removeElementData(ele)
 	{
+		DataTracker.remove(ele);
+
 		/* we want to do a recursive remove child
 		removal */
 		const children = ele.childNodes;
@@ -299,8 +301,6 @@ export class Html
 				this.removeElementData(child);
 			}
 		}
-
-		DataTracker.remove(ele);
 
 		const bound = ele.bindId;
 		if (bound)

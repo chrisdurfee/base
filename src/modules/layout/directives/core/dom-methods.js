@@ -138,7 +138,7 @@ const checkPreviousResult = (parent, prop, value, result) =>
 		return result;
 	}
 
-	return setPreviousResult(parent, prop, value, result);
+	return result;
 };
 
 /**

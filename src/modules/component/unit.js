@@ -20,14 +20,14 @@ DataTracker.addType('components', (data) =>
 		return;
 	}
 
-	if (component.persistToken && component.parent)
-	{
-		component.parent.removePersistedChild(component.persistToken);
-	}
-
 	if (component.rendered === true)
 	{
 		component.prepareDestroy();
+	}
+
+	if (component.persistToken && component.parent)
+	{
+		component.parent.removePersistedChild(component.persistToken);
 	}
 });
 
@@ -160,16 +160,34 @@ export class Unit
 	 */
 	addPersistedChild(child)
 	{
-		const token = 'pc' + (this.persistedCount++);
-		child.persistToken = token;
-
-		const persistedChild = this.persistedChildren[token];
-		if (persistedChild)
+		if (child.persistToken)
 		{
-			child.resumeScope(persistedChild);
-			return token;
+			return;
 		}
 
+		const count = this.persistedCount++;
+		let token = ('pc' + count);
+
+		const keys = Object.keys(this.persistedChildren);
+		const key = keys[count];
+
+		/**
+		 * Check to see if the child has a persisted state
+		 * and if so, resume the scope with the persisted state.
+		 */
+		const persistedChild = this.persistedChildren[key];
+		if (persistedChild)
+		{
+			token = key;
+			child.resumeScope(persistedChild);
+		}
+
+		child.persistToken = token;
+
+		/**
+		 * This will add the child to the persisted children
+		 * so that it can be resumed later.
+		 */
 		this.persistedChildren[token] = child;
 		return token;
 	}
@@ -182,6 +200,11 @@ export class Unit
 	 */
 	removePersistedChild(token)
 	{
+		if (!this.rendered)
+		{
+			return;
+		}
+
 		if (!token || !this.persistedChildren[token])
 		{
 			return;
@@ -419,6 +442,11 @@ export class Unit
 	 */
 	_createLayout()
 	{
+		// if (this.persist)
+		// {
+		// 	return this._layout || (this._layout = this.render());
+		// }
+
 		return this.render();
 	}
 

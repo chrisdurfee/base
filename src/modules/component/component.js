@@ -97,6 +97,7 @@ export class Component extends Unit
 	{
 		this.data = persistedLayout.data;
 		this.state = persistedLayout.state;
+		this.stateHelper = persistedLayout.stateHelper;
 		this.persistedChildren = persistedLayout.persistedChildren;
 		this.id = persistedLayout.id;
 	}
