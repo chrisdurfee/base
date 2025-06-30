@@ -628,7 +628,6 @@ export class Router
 		if (!selected)
 		{
 			this.select(firstRoute);
-			return;
 		}
 	}
 
