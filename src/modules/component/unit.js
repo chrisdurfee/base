@@ -160,11 +160,6 @@ export class Unit
 	 */
 	addPersistedChild(child)
 	{
-		if (child.persistToken)
-		{
-			return;
-		}
-
 		const count = this.persistedCount++;
 		let token = ('pc' + count);
 
