@@ -49,6 +49,24 @@ const getPromise = (src) =>
 export const ImportWrapper = Jot(
 {
 	/**
+	 * This will declare the component props.
+	 *
+	 * @returns {void}
+	 */
+	declareProps()
+	{
+		/**
+		 * @member {boolean}
+		 */
+		this.loaded = false;
+
+		/**
+		 * @member {boolean}
+		 */
+		this.blockRender = false;
+	},
+
+	/**
 	 * This will render the import wrapper.
 	 *
 	 * @returns {object}
@@ -111,6 +129,16 @@ export const ImportWrapper = Jot(
 		ModuleLoader.load(this.src, (module) =>
 		{
 			this.loaded = true;
+
+			/**
+			 * We don't want to render if the render has been blocked
+			 * by the destroy method.
+			 */
+			if (this.blockRender === true)
+			{
+				this.blockRender = false;
+				return;
+			}
 
 			const layout = this.layout || LayoutManager.process(module,
 			{
@@ -185,9 +213,17 @@ export const ImportWrapper = Jot(
 	{
 		if (!this.layoutRoot)
 		{
+			/**
+			 * The layout has been requested to load and now is called
+			 * destroy before the module has loaded.
+			 *
+			 * We will block the render and exit now.
+			 */
+			this.blockRender = true;
 			return;
 		}
 
+		this.blockRender = false;
 		Builder.removeNode(this.layoutRoot);
 	}
 });

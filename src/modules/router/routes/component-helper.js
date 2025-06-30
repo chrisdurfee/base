@@ -56,15 +56,6 @@ export class ComponentHelper
 	 */
 	setupTemplate()
 	{
-		/**
-		 * If the component is already set, then
-		 * we do not need to setup the template.
-		 */
-		if (this.component && this.persist)
-		{
-			return;
-		}
-
 		const template = this.template;
 		const type = typeof template;
 		if (type === 'function')
@@ -167,11 +158,7 @@ export class ComponentHelper
 			component.destroy();
 		}
 
-		// this will remove the reference to the component if persit is false
-		if (this.persist === false)
-		{
-			this.component = null;
-		}
+		this.component = null;
 	}
 
 	/**
