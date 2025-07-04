@@ -96,6 +96,10 @@ export const WatcherHelper =
 				break;
 			case 'checked':
 				ele.checked = (Boolean(value) !== false);
+				break;
+			case 'required':
+				ele.required = (Boolean(value) !== false);
+				break;
 			default:
 				HtmlHelper.addAttr(ele, attr, value);
 				break;
