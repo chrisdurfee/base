@@ -223,7 +223,7 @@ export class XhrRequest
 	beforeSend()
 	{
 		// @ts-ignore
-		const items = base.xhrSettings.beforeSend;
+		const items = XhrDefaultSettings.beforeSend;
 		if (items.length < 1)
 		{
 			return;

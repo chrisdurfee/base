@@ -436,18 +436,19 @@ export class BasicData
 	 * This will delete a property value or the model data.
 	 *
 	 * @param {object|string|null} [attrName]
-	 * @returns {void}
+	 * @returns {object} this
 	 */
 	delete(attrName)
 	{
 		if (typeof attrName === 'string')
 		{
 			this._deleteAttr(this.stage, attrName);
-			return;
+			return this;
 		}
 
 		// this will clear the stage and attributes
 		this.setup();
+		return this;
 	}
 
 	/**
