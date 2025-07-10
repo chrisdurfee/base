@@ -165,7 +165,7 @@ export class Route extends BasicData
 			return;
 		}
 
-		const {container, persist = false, parent} = settings;
+		const {container, persist, parent} = settings;
 		const helperSettings =
 		{
 			component,

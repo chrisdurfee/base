@@ -324,18 +324,35 @@ export class ModelService
 	 */
 	all(instanceParams, callBack, offset, limit, filter)
 	{
-		filter = this.model.get('filter') || filter || '';
+		const data = this.model.get();
 		offset = !isNaN(offset)? offset : 0;
 		limit = !isNaN(limit)? limit : 50;
+		const search = data.search || '';
 
+		filter = data.filter || filter || '';
 		if (typeof filter === 'object')
 		{
 			filter = JSON.stringify(filter);
 		}
 
+		let dates = data.dates || '';
+		if (typeof dates === 'object')
+		{
+			dates = JSON.stringify(dates);
+		}
+
+		let orderBy = data.orderBy || '';
+		if (typeof orderBy === 'object')
+		{
+			orderBy = JSON.stringify(orderBy);
+		}
+
 		let params = '&filter=' + filter +
 			'&offset=' + offset +
-			'&limit=' + limit;
+			'&limit=' + limit +
+			'&dates=' + dates +
+			'&orderBy=' + orderBy +
+			'&search=' + search;
 
 		return this._get('', params, instanceParams, callBack);
 	}

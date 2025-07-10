@@ -102,6 +102,11 @@ export class Unit
 		 */
 		this.parent = null;
 
+		/**
+		 * @member {?string} unitType
+		 */
+		this.unitType = null;
+
 		this.init();
 
 		/**
@@ -140,6 +145,8 @@ export class Unit
 	init()
 	{
 		this.id = 'cp-' + (unitNumber++);
+		// @ts-ignore
+		this.unitType = this.constructor.name.toLowerCase();
 	}
 
 	/**
@@ -173,8 +180,11 @@ export class Unit
 		const persistedChild = this.persistedChildren[key];
 		if (persistedChild)
 		{
-			token = key;
-			child.resumeScope(persistedChild);
+			if (child.unitType === persistedChild.unitType)
+			{
+				token = key;
+				child.resumeScope(persistedChild);
+			}
 		}
 
 		child.persistToken = token;
