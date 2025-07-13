@@ -347,11 +347,18 @@ export class ModelService
 			orderBy = JSON.stringify(orderBy);
 		}
 
+		let groupBy = data.groupBy || '';
+		if (Array.isArray(groupBy))
+		{
+			groupBy = JSON.stringify(groupBy);
+		}
+
 		let params = '&filter=' + filter +
 			'&offset=' + offset +
 			'&limit=' + limit +
 			'&dates=' + dates +
 			'&orderBy=' + orderBy +
+			'&groupBy=' + groupBy +
 			'&search=' + search;
 
 		return this._get('', params, instanceParams, callBack);
