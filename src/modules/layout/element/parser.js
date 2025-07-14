@@ -87,21 +87,22 @@ export class Parser
 	 */
 	static setTextAsWatcher(directives, key, value)
 	{
-		/**
-		 * This will convert the watcher to a custom
-		 * watcher object.
-		 *
-		 * We also need to normalize the attribute name.
-		 */
-		const dirValue = {
-			attr: normalizeAttr(key),
-			value
-		};
+		directives.push(
+			AttributeDirective(
+				Attribute(
+					key,
 
-		directives.push(AttributeDirective(
-			Attribute(key, dirValue),
-			Directives.get('watch')
-		));
+					/**
+					 * This will convert the watcher to a custom
+					 * watcher object.
+					 *
+					 * We also need to normalize the attribute name.
+					 */
+					WatcherHelper.getWatcherSettings(value, normalizeAttr(key))
+				),
+				Directives.get('watch')
+			)
+		);
 	}
 
 	/**
@@ -116,8 +117,8 @@ export class Parser
 	{
 		if (tag === 'button')
 		{
-            const type = obj.type || 'button';
-            attr.push(Attribute('type', type));
+			const type = obj.type || 'button';
+			attr.push(Attribute('type', type));
 		}
 	}
 
@@ -133,7 +134,7 @@ export class Parser
 	{
 		const attr = [],
 		directives = [],
-        tag = this.getTag(obj);
+		tag = this.getTag(obj);
 
 		this.setButtonType(tag, obj, attr);
 		this.setupChildren(obj);
@@ -158,10 +159,12 @@ export class Parser
 			 */
 			if ((directive = Directives.get(key)) !== null)
 			{
-				directives.push(AttributeDirective(
-					Attribute(key, value),
-					directive
-				));
+				directives.push(
+					AttributeDirective(
+						Attribute(key, value),
+						directive
+					)
+				);
 				continue;
 			}
 
@@ -221,10 +224,10 @@ export class Parser
 		}
 
 		return Element(
-            tag,
-            attr,
-            directives,
-            children
-        );
+			tag,
+			attr,
+			directives,
+			children
+		);
 	}
 }

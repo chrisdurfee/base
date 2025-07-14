@@ -303,6 +303,50 @@ export const WatcherHelper =
 	},
 
 	/**
+	 * This will get the watcher array settings.
+	 *
+	 * @param {string|object|array} settings
+	 * @param {string} [attribute=null]
+	 * @returns {object}
+	 */
+	getWatcherSettings(settings, attribute = null)
+	{
+		/**
+		 * Handle case where `watch` is a string (multi-property string updating).
+		 */
+		if (typeof settings === "string")
+		{
+			return { attr: attribute, value: settings };
+		}
+
+		if (Array.isArray(settings))
+		{
+			/**
+			 * Handle shorthand syntax (array).
+			 */
+			let lastItem = settings[settings.length - 1];
+			if (lastItem && typeof lastItem === "object")
+			{
+				lastItem = (attribute !== null) ? attribute : null;
+			}
+
+			/**
+			 * This will set up the value based on length to support
+			 * optional data and callback parameters.
+			 */
+			const value = (settings[1] && typeof settings[1] === 'object')
+				? [settings[0], settings[1]] // `['[[id]]', data]`
+				: [settings[0]]; // `['[[id]]'`
+
+			return ((typeof lastItem === "function")
+				? { attr: attribute, value, callBack: lastItem } // Callback format
+				: { attr: lastItem || "textContent", value }); // Attribute format
+		}
+
+		return settings;
+	},
+
+	/**
 	 * This will setup a data watcher.
 	 *
 	 * @param {object} ele
@@ -317,41 +361,11 @@ export const WatcherHelper =
 			return;
 		}
 
-		/**
-		 * Handle case where `watch` is a string (multi-property string updating).
-		 */
-		if (typeof settings === "string")
-		{
-			this.addDataWatcher(ele, { value: settings }, parent);
-			return;
-		}
-
-		if (Array.isArray(settings))
-		{
-			/**
-			 * Handle shorthand syntax (array).
-			 */
-			const lastItem = settings[settings.length - 1];
-
-			/**
-			 * This will set up the value based on length to suppport
-			 * optional data and callback parameters.
-			 */
-			const value = (settings[1] && typeof settings[1] === 'object')
-				? [settings[0], settings[1]] // `['[[id]]', data]`
-				: [settings[0]]; // `['[[id]]'`
-
-			this.addDataWatcher(
-				ele,
-				(typeof lastItem === "function")
-					? { value, callBack: lastItem } // Callback format
-					: { attr: lastItem || "textContent", value }, // Attribute format
-				parent
-			);
-			return;
-		}
-
-		this.addDataWatcher(ele, settings, parent);
+		this.addDataWatcher(
+			ele,
+			this.getWatcherSettings(settings),
+			parent
+		);
 	},
 
 	/**

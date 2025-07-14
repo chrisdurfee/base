@@ -57,6 +57,23 @@ const parseArgs = (args) =>
 		return WatcherProp(first);
 	}
 
+	// @ts-ignore
+	const children = args[1] ?? args[0] ?? [];
+	if (children && Array.isArray(children))
+	{
+		/**
+		 * This will check if the first child is a watcher array
+		 * and set it as a watcher prop.
+		 */
+		if (WatcherHelper.isWatching(children) === true)
+		{
+			args[0] = (!Array.isArray(args[0]))? args[0] : {};
+			// @ts-ignore
+			args[0].watch = children;
+			args[1] = [];
+		}
+	}
+
 	/**
 	 * This will handle default props and children.
 	 */
