@@ -319,17 +319,17 @@ export class ModelService
 	 * @param {function} callBack
 	 * @param {number} offset
 	 * @param {number} limit
-	 * @param {string} filter
+	 * @param {*} lastCursor
 	 * @returns {object}
 	 */
-	all(instanceParams, callBack, offset, limit, filter)
+	all(instanceParams, callBack, offset, limit, lastCursor = null)
 	{
 		const data = this.model.get();
 		offset = !isNaN(offset)? offset : 0;
 		limit = !isNaN(limit)? limit : 50;
 		const search = data.search || '';
 
-		filter = data.filter || filter || '';
+		let filter = data.filter || '';
 		if (typeof filter === 'object')
 		{
 			filter = JSON.stringify(filter);
@@ -359,7 +359,8 @@ export class ModelService
 			'&dates=' + dates +
 			'&orderBy=' + orderBy +
 			'&groupBy=' + groupBy +
-			'&search=' + search;
+			'&search=' + search +
+			'&lastCursor=' + lastCursor;
 
 		return this._get('', params, instanceParams, callBack);
 	}
