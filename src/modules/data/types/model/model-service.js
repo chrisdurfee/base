@@ -360,7 +360,7 @@ export class ModelService
 			'&orderBy=' + orderBy +
 			'&groupBy=' + groupBy +
 			'&search=' + search +
-			'&lastCursor=' + (lastCursor === 'undefined' || lastCursor === null) ? '' : lastCursor;
+			'&lastCursor=' + ((typeof lastCursor !== 'undefined' && lastCursor !== null) ? lastCursor : '');
 
 		return this._get('', params, instanceParams, callBack);
 	}
