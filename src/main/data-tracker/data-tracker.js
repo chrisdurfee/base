@@ -14,115 +14,139 @@ import { Tracker } from './tracker.js';
  */
 export class DataTracker
 {
-    /**
-     * @private
-     * @static
-     * @member {Map} trackers This is an object that stores all tracker
-     * objects by tracking id.
-     */
-    static trackers = new Map();
+	/**
+	 * @private
+	 * @static
+	 * @member {Map} trackers This is an object that stores all tracker
+	 * objects by tracking id.
+	 */
+	static trackers = new Map();
 
-    /**
-     * @private
-     * @static
-     * @member {number} trackingCount
-     */
-    static trackingCount = 0;
+	/**
+	 * @private
+	 * @static
+	 * @member {number} trackingCount
+	 */
+	static trackingCount = 0;
 
-    /**
-     * This will add a new type to the data tracker.
-     *
-     * @public
-     * @param {string} type The new type.
-     * @param {function} callBack The callBack to help clean
-     * up data when removed.
-     * @returns {void}
-     */
-    static addType(type, callBack)
-    {
-        TrackerTypes.add(type, callBack);
-    }
+	/**
+	 * This will add a new type to the data tracker.
+	 *
+	 * @public
+	 * @param {string} type The new type.
+	 * @param {function} callBack The callBack to help clean
+	 * up data when removed.
+	 * @returns {void}
+	 */
+	static addType(type, callBack)
+	{
+		TrackerTypes.add(type, callBack);
+	}
 
-    /**
-     * This will remove a type from the data tracker.
-     *
-     * @param {string} type
-     * @returns {void}
-     */
-    static removeType(type)
-    {
-        TrackerTypes.remove(type);
-    }
+	/**
+	 * This will remove a type from the data tracker.
+	 *
+	 * @param {string} type
+	 * @returns {void}
+	 */
+	static removeType(type)
+	{
+		TrackerTypes.remove(type);
+	}
 
-    /**
-     * This will get the object tracking id or set it if
-     * not set.
-     *
-     * @param {object} obj
-     * @returns {string}
-     */
-    static getTrackingId(obj)
-    {
-        if (!obj)
-        {
-            return '';
-        }
+	/**
+	 * This will get the object tracking id or set it if
+	 * not set.
+	 *
+	 * @param {object} obj
+	 * @returns {string}
+	 */
+	static getTrackingId(obj)
+	{
+		if (!obj)
+		{
+			return '';
+		}
 
-        return obj.trackingId || (obj.trackingId = `dt${this.trackingCount++}`);
-    }
+		return obj.trackingId || (obj.trackingId = `dt${this.trackingCount++}`);
+	}
 
-    /**
-     * This will add data to an object.
-     *
-     * @param {object} obj
-     * @param {string} type The type name.
-     * @param {*} data The data to track.
-     * @returns {void}
-     */
-    static add(obj, type, data)
-    {
-        const id = this.getTrackingId(obj),
-        tracker = this.find(id);
-        tracker.add(type, data);
-    }
+	/**
+	 * This will add data to an object.
+	 *
+	 * @param {object} obj
+	 * @param {string} type The type name.
+	 * @param {*} data The data to track.
+	 * @returns {void}
+	 */
+	static add(obj, type, data)
+	{
+		const id = this.getTrackingId(obj),
+		tracker = this.find(id);
+		tracker.add(type, data);
+	}
 
-    /**
-     * This will get the data from a type or the tracker object
-     * if type is not set.
-     *
-     * @param {object} obj
-     * @param {string} [type]
-     * @returns {*}
-     */
-    static get(obj, type)
-    {
-        const id = obj.trackingId;
-        const tracker = this.trackers.get(id);
-        if (!tracker)
-        {
-            return false;
-        }
+	/**
+	 * This will get the data from a type or the tracker object
+	 * if type is not set.
+	 *
+	 * @param {object} obj
+	 * @param {string} [type]
+	 * @returns {*}
+	 */
+	static get(obj, type)
+	{
+		const id = obj.trackingId;
+		const tracker = this.trackers.get(id);
+		if (!tracker)
+		{
+			return false;
+		}
 
-        return (type)? tracker.get(type) : tracker;
-    }
+		return (type)? tracker.get(type) : tracker;
+	}
 
-    /**
-     * This will get the tracker or create a new tracker
-     * if no tracker is set.
-     *
-     * @param {string} id
-     * @returns {object} The tracker.
-     */
-    static find(id)
-    {
-        if (!this.trackers.has(id))
-        {
-            this.trackers.set(id, new Tracker());
-        }
-        return this.trackers.get(id);
-    }
+	/**
+	 * This will check if an object has a specific type.
+	 *
+	 * @param {object} obj
+	 * @param {string} type
+	 * @returns {boolean}
+	 */
+	static has(obj, type)
+	{
+		const id = this.getTrackingId(obj);
+		if (!id)
+		{
+			return false;
+		}
 
-    /**
+		const tracker = this.trackers.get(id);
+		if (!tracker)
+		{
+			return false;
+		}
+
+		return (type)? tracker.has(type) : false;
+	}
+
+	/**
+	 * This will get the tracker or create a new tracker
+	 * if no tracker is set.
+	 *
+	 * @param {string} id
+	 * @returns {object} The tracker.
+	 */
+	static find(id)
+	{
+		if (!this.trackers.has(id))
+		{
+			this.trackers.set(id, new Tracker());
+		}
+		return this.trackers.get(id);
+	}
+
+	/**
 	 * This will check if an object is empty.
 	 *
 	 * @param {object} obj
@@ -138,42 +162,42 @@ export class DataTracker
 		return (obj.size === 0);
 	}
 
-    /**
-     * This will remove a type or all data for an object if
-     * no type is set.
-     *
-     * @param {object} obj
-     * @param {string} [type]
-     * @returns {void}
-     */
-    static remove(obj, type)
-    {
-        const id = obj.trackingId;
-        if (!id || !this.trackers.has(id))
-        {
-            return;
-        }
+	/**
+	 * This will remove a type or all data for an object if
+	 * no type is set.
+	 *
+	 * @param {object} obj
+	 * @param {string} [type]
+	 * @returns {void}
+	 */
+	static remove(obj, type)
+	{
+		const id = obj.trackingId;
+		if (!id || !this.trackers.has(id))
+		{
+			return;
+		}
 
-        const tracker = this.trackers.get(id);
+		const tracker = this.trackers.get(id);
 
-        /**
-         * if no type is set then remove the whole tracker.
-         */
-        if (!type)
-        {
-            tracker.remove();
-            this.trackers.delete(id);
-            return;
-        }
+		/**
+		 * if no type is set then remove the whole tracker.
+		 */
+		if (!type)
+		{
+			tracker.remove();
+			this.trackers.delete(id);
+			return;
+		}
 
-        tracker.remove(type);
+		tracker.remove(type);
 
-        /**
-         * if the tracker is empty then remove the tracker.
-         */
-        if (this.isEmpty(tracker.types))
-        {
-            this.trackers.delete(id);
-        }
-    }
+		/**
+		 * if the tracker is empty then remove the tracker.
+		 */
+		if (this.isEmpty(tracker.types))
+		{
+			this.trackers.delete(id);
+		}
+	}
 }

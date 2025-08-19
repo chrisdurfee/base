@@ -324,10 +324,23 @@ export class Html
 			return this;
 		}
 
+		/**
+		 * This will check if the element has a manual destroy tracker.
+		 */
+		const manualDestroy = DataTracker.has(obj, 'manual-destroy');
+
 		/* this will remove all element data and binding
 		and remove from the parent container */
 		this.removeElementData(obj);
-		obj.remove();
+
+		/**
+		 * This will only remove the element if it does not have a
+		 * manual destroy tracker.
+		 */
+		if (manualDestroy === false)
+		{
+			obj.remove();
+		}
 
 		return this;
 	}

@@ -1,4 +1,5 @@
 import { Directives } from '../directives.js';
+import { animateIn, animateOut } from './animate/animate.js';
 import { addAria, addRole } from './aria/aria.js';
 import { addContext, context, useContext } from './context/context-directives.js';
 import { debug } from './debug.js';
@@ -22,6 +23,8 @@ Directives
 	.add('bind', bind)
 	.add('onSet', onSet)
 	.add('onState', onState)
+	.add('animateIn', animateIn)
+	.add('animateOut', animateOut)
 	.add('watch', watch)
 	.add('useParent', useParent)
 	.add('useData', useData)
