@@ -1,3 +1,4 @@
+import { Dom } from "../../../../../base.js";
 import { DataTracker } from "../../../../../main/data-tracker/data-tracker.js";
 import { Events } from "../../../../../main/events/events.js";
 
@@ -14,7 +15,7 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 {
 	Events.on('animationend', ele, function animateEnd()
 	{
-		ele.classList.remove(className);
+		Dom.removeClass(ele, className);
 		Events.off('animationend', ele, animateEnd);
 
 		if (doneCallBack)
@@ -23,7 +24,7 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 		}
 	});
 
-	ele.classList.add(className);
+	Dom.addClass(ele, className);
 };
 
 /**

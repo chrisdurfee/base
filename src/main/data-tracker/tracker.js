@@ -52,6 +52,16 @@ export class Tracker
 	}
 
 	/**
+	 * This will check if a type exists.
+	 * @param {*} type
+	 * @returns {boolean}
+	 */
+	has(type)
+	{
+		return this.types.has(type);
+	}
+
+	/**
 	 * This will call the callBack with the data.
 	 *
 	 * @private
