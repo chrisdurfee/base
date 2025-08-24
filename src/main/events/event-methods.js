@@ -113,7 +113,7 @@ export const EventMethods =
 		switch (eventType)
 		{
 			case 'HTMLEvents':
-				e = new Event(event);
+				e = new Event(event, settings);
 				break;
 			case 'MouseEvents':
 				e = new MouseEvent(event, settings);

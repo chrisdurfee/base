@@ -380,6 +380,11 @@ export class ModelService
 			return this.replaceUrl(baseUrl);
 		}
 
+		if (url[0] === '/')
+		{
+			url = url.substring(1);
+		}
+
 		const fullUrl = (url[0] === '?')
 		? baseUrl + url
 		: baseUrl + '/' + url;
