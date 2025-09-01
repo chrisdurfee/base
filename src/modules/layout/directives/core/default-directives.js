@@ -5,7 +5,7 @@ import { addContext, context, useContext } from './context/context-directives.js
 import { debug } from './debug.js';
 import { addEvent, addState, cache, getId, useData, useParent, useState } from './parent/parent-directives.js';
 import { bind } from './reactive/bind.js';
-import { addDataSet } from './reactive/data-set.js';
+import { addDataSet, addDataStateSet } from './reactive/data-set.js';
 import { forEach } from './reactive/for-each.js';
 import { map } from './reactive/map.js';
 import { onCreated } from './reactive/on-created.js';
@@ -43,4 +43,5 @@ Directives
 	.add('route', addRoute)
 	.add('debug', debug)
 	.add('dataSet', addDataSet)
+	.add('dataStateSet', addDataStateSet)
 	.add('switch', addSwitch);
