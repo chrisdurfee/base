@@ -31,18 +31,12 @@ export class XhrRequest
 	 *
 	 * @protected
 	 * @param {*} args
-	 * @returns {(object|boolean)}
 	 */
 	setup(args)
 	{
 		this.getXhrSettings(args);
 
 		const xhr = this.xhr = this.createXHR();
-		if (xhr === false)
-		{
-			return false;
-		}
-
 		const {method, url, async} = this.settings;
 		xhr.open(method, url, async);
 
@@ -262,7 +256,7 @@ export class XhrRequest
 	 * This will create the xhr object.
 	 *
 	 * @protected
-	 * @returns {(object|boolean)}
+	 * @returns {XMLHttpRequest}
 	 */
 	createXHR()
 	{

@@ -79,7 +79,7 @@ export class NavLink extends Component
             text: this.getString(text),
             nest: this.nest || this.children,
             // @ts-ignore
-            dataSet: this.dataSet,
+            dataStateSet: this.dataSet,
             watch: watchers
         };
     }

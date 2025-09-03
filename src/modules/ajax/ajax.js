@@ -27,7 +27,7 @@ setupBaseAjaxMethods();
  * 	}
  * }
  *
- * @returns {object} xhr object.
+ * @returns {XMLHttpRequest} xhr object.
  */
 export const Ajax = (...args) =>
 {
@@ -39,3 +39,4 @@ export const Ajax = (...args) =>
 
 /* Re-export XhrRequest for backwards compatibility */
 export { XhrRequest };
+

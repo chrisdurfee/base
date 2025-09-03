@@ -139,7 +139,7 @@ export class ModelService
 	 * @protected
 	 * @param {*} params
 	 * @param {*} addingParams
-	 * @returns {(string|object)}
+	 * @returns {string|object}
 	 */
 	addParams(params, addingParams)
 	{
@@ -183,7 +183,7 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	get(instanceParams, callBack)
 	{
@@ -238,13 +238,13 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest|void}
 	 */
 	setup(instanceParams, callBack)
 	{
 		if (!this.isValid())
 		{
-			return false;
+			return;
 		}
 
 		let params = this.setupObjectData();
@@ -259,13 +259,13 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest|void}
 	 */
 	add(instanceParams, callBack)
 	{
 		if (!this.isValid())
 		{
-			return false;
+			return;
 		}
 
 		let params = this.setupObjectData();
@@ -280,13 +280,13 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest|void}
 	 */
 	update(instanceParams, callBack)
 	{
 		if (!this.isValid())
 		{
-			return false;
+			return;
 		}
 
 		let params = this.setupObjectData();
@@ -301,7 +301,7 @@ export class ModelService
 	 *
 	 * @param {string} [instanceParams]
 	 * @param {function} [callBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	delete(instanceParams, callBack)
 	{
@@ -320,7 +320,7 @@ export class ModelService
 	 * @param {number} offset
 	 * @param {number} limit
 	 * @param {*} lastCursor
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	all(instanceParams, callBack, offset, limit, lastCursor = null)
 	{
@@ -401,7 +401,7 @@ export class ModelService
 	 * @param {(string|object)} params
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	setupRequest(url, method, params, callBack, requestCallBack)
 	{
@@ -470,7 +470,7 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	request(params, instanceParams, callBack, requestCallBack)
 	{
@@ -486,7 +486,7 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	_get(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -512,7 +512,7 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	_post(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -528,7 +528,7 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	_put(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -544,7 +544,7 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	_patch(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -560,7 +560,7 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	_delete(url, params, instanceParams, callBack, requestCallBack)
 	{
@@ -577,7 +577,7 @@ export class ModelService
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
-	 * @returns {object}
+	 * @returns {XMLHttpRequest}
 	 */
 	_request(url, method, params, instanceParams, callBack, requestCallBack)
 	{
