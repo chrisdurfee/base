@@ -24,7 +24,7 @@ const isComponent = (layout) => (typeof layout === 'object' && layout.isUnit ===
 const createJotComponent = (layout) =>
 {
 	const Component = Jot(layout);
-    return new Component();
+	return new Component();
 };
 
 /**
@@ -53,10 +53,10 @@ export class Builder
 
 		if (!isComponent(layout))
 		{
-            layout = createJotComponent(layout);
-        }
+			layout = createJotComponent(layout);
+		}
 
-        return render.createComponent(layout, container, parent);
+		return render.createComponent(layout, container, parent);
 	}
 
 	/**
