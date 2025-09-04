@@ -100,6 +100,9 @@ export const WatcherHelper =
 			case 'required':
 				ele.required = (Boolean(value) !== false);
 				break;
+			case 'src':
+				ele.src = (value && value.indexOf('.') !== -1)? value : '';
+				break;
 			default:
 				HtmlHelper.addAttr(ele, attr, value);
 				break;
@@ -123,7 +126,7 @@ export const WatcherHelper =
 			count++;
 
 			const result = watcherData.get(arguments[2]);
-			return (typeof result !== 'undefined'? result : '');
+			return ((typeof result !== 'undefined' && result !== null)? result : '');
 		});
 	},
 
