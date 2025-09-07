@@ -1,6 +1,7 @@
 import { Dom } from "../../../../shared/dom.js";
 import { dataBinder } from "../../../data-binder/data-binder.js";
 import { getBindAttr } from "../../../data-binder/sources/get-bind-attr.js";
+import { Html } from "../../../html/html.js";
 import { Builder } from "../../builder.js";
 
 /**
@@ -111,7 +112,13 @@ const updateElement = (ele, callBack, prop, value, parent) =>
 			break;
 		case 'string':
 			const attr = getBindAttr(ele);
-			Dom.setAttr(ele, attr, result);
+			if (attr !== 'textContent')
+			{
+				Dom.setAttr(ele, attr, result);
+				break;
+			}
+
+			Html.addHtml(ele, result);
 			break;
 	}
 };
