@@ -1,6 +1,6 @@
 import { Dom } from "../../../../shared/dom.js";
 import { dataBinder } from "../../../data-binder/data-binder.js";
-import { Html } from "../../../html/html.js";
+import { getBindAttr } from "../../../data-binder/sources/get-bind-attr.js";
 import { Builder } from "../../builder.js";
 
 /**
@@ -107,61 +107,13 @@ const updateElement = (ele, callBack, prop, value, parent) =>
 			/**
 			 * This will set the previous result if needed.
 			 */
-			result = checkPreviousResult(parent, prop, value, result);
 			rebuild(result, ele, parent);
 			break;
 		case 'string':
-			Html.addHtml(ele, result);
+			const attr = getBindAttr(ele);
+			Dom.setAttr(ele, attr, result);
 			break;
 	}
-};
-
-/**
- * This will set a previous result.
- *
- * @private
- * @param {object} parent
- * @param {string} prop
- * @param {string} value
- * @param {object} result
- * @returns {*}
- */
-const checkPreviousResult = (parent, prop, value, result) =>
-{
-	if (!parent || !result)
-	{
-		return result;
-	}
-
-	if (result.isUnit !== true || parent.persist !== true || !parent.state)
-	{
-		return result;
-	}
-
-	return result;
-};
-
-/**
- * This will set the previous result.
- *
- * @param {object} parent
- * @param {string} prop
- * @param {string} value
- * @param {object} result
- * @returns {*}
- */
-const setPreviousResult = (parent, prop, value, result) =>
-{
-	let key = prop + ':' + value,
-	state = parent.state,
-	previousResult = state.get(key);
-	if (typeof previousResult !== 'undefined')
-	{
-		result = previousResult;
-	}
-
-	state.set(key, result);
-	return result;
 };
 
 /**

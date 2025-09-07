@@ -1,4 +1,5 @@
 import { Dom } from '../../../shared/dom.js';
+import { getBindAttr } from './get-bind-attr.js';
 import { TwoWaySource } from './two-way-source.js';
 
 /**
@@ -175,43 +176,7 @@ export class ElementSource extends TwoWaySource
 			return customAttr;
 		}
 
-		/**
-		 * If no custom attr has been requested we will get the
-		 * default attr of the element.
-		 */
-		let attr = 'textContent';
-		const element = this.element;
-		if (!element || typeof element !== 'object')
-		{
-			return attr;
-		}
-
-		/**
-		 * This will get the default attr by the element type.
-		 */
-		const tagName = element.tagName.toLowerCase();
-		if (tagName === "input" || tagName === "textarea" || tagName === "select")
-		{
-			const type = element.type;
-			if (!type)
-			{
-				attr = 'value';
-				return attr;
-			}
-
-			switch (type)
-			{
-				case 'checkbox':
-					attr = 'checked';
-					break;
-				case 'file':
-					attr = 'files';
-					break;
-				default:
-					attr = 'value';
-			}
-		}
-		return attr;
+		return getBindAttr(this.element);
 	}
 
 	/**
