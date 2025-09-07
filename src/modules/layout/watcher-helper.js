@@ -101,7 +101,12 @@ export const WatcherHelper =
 				ele.required = (Boolean(value) !== false);
 				break;
 			case 'src':
-				ele.src = (value && value.indexOf('.') !== -1)? value : '';
+				if (ele.tagName.toLowerCase() === 'img')
+				{
+					ele.src = (value && value.indexOf('.') !== -1)? value : '';
+					break;
+				}
+				ele.src = value;
 				break;
 			default:
 				HtmlHelper.addAttr(ele, attr, value);
