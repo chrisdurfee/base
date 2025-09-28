@@ -10,6 +10,16 @@ The framework is modular and has additional modules to help with ajax, HTML, lay
 
 You can learn more about how to use Base in the wiki documentation. [Base Wiki](https://github.com/chrisdurfee/base/wiki)
 
+## AI Quickstart
+- For contributors using GitHub Copilot, start with `.github/copilot-instructions.md` (concise in-repo rules) and `copilot.md` (detailed guide).
+- Key patterns Copilot should follow here:
+    - Author layouts as JS objects: `{ tag:'div', class:'name', children:[...] }` (`nest` is shorthand). Use `text` for text nodes; `html|innerHTML` for raw HTML.
+    - Events on elements receive `(event, parentComponent)`: `{ click(e, parent) { parent.doThing(); } }`.
+    - Watchers: embed `[[path]]` in strings or arrays (auto-converted to `watch` directive). Example: `{ class: 'counter-[[count]]' }` or `{ value: ['[[path]]', data] }`.
+    - Components extend `Component`, implement `render()`, declare state in `setupStates()` and data in `setData()`; render via `Builder.render(...)`.
+    - Directives live in `modules/layout/directives/core/default-directives.js` (e.g., `bind`, `watch`, `map`, `for`, `route`, `switch`, `useData`, `useState`, `onCreated`, `onDestroyed`).
+    - Routing: `router.data.path` is reactive; navigate with `router.navigate(uri, data?, replace?)`; `NavLink` watches `router.data.path`.
+
 ## Base Converter
 
 There is a GPT created with ChatGPT that can convert code from other frameworks to Base. The GPT is new so it still has some issues but it is a good start. [Base Converter](https://chatgpt.com/g/g-uNL6KKeCo-base-converter/)

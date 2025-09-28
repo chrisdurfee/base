@@ -31,7 +31,8 @@
 	"files": [
 		"package.json",
 		"readme.md",
-		"dist"
+		"dist",
+		"copilot.md"
 	],
 	"exports": {
 		"./package.json": "./package.json",

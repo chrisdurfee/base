@@ -15,6 +15,7 @@ Purpose: concise, project-specific guidance so AI agents are instantly productiv
 - Watchers become `watch` directives automatically:
   - Current data: `{ class: 'counter-[[count]]' }`
   - Specific data: `{ value: ['[[path]]', data] }`
+  - Multi-source with callback: `{ class: ['[[a]] [[b]]', [dataA, dataB], ([a,b]) => `${a}-${b}`] }`
 - Directives are just attrs mapped in `modules/layout/directives/core/default-directives.js` (e.g., `bind`, `watch`, `map`, `for`, `route`, `switch`, `useState`, `useData`, `onCreated`, `onDestroyed`).
 
 ## Components and state/data
@@ -22,10 +23,12 @@ Purpose: concise, project-specific guidance so AI agents are instantly productiv
 - State: override `setupStates()` (primitive or `{ state, callBack }`). Access via `this.state`, e.g., `this.state.increment('count')`.
 - Data: override `setData()` to attach `this.data = new Data(...)` (or `SimpleData`/`Model`). Components with `route`/`switch` receive a bindable `route`.
 - Lifecycle: `onCreated`, `beforeSetup`, `afterSetup`, `afterLayout`, `beforeDestroy`. For survival across re-renders, set parent `persist: true` (child may opt-out with `persist: false`).
+ - Jot shorthand: wrap object/functions as lightweight components; non-Unit inputs to `Builder.render` are auto-wrapped with `Jot`.
 
 ## Rendering and routing
 - Render anything (function/layout/Unit/Component): `Builder.render(x, container, parent?)`. Non-Unit inputs are wrapped in a `Jot` component.
 - Router: `router.data.path` is reactive; navigate via `router.navigate(uri, data?, replace?)`. `NavLink` uses `[value: ['[[path]]', router.data]]` to track active path.
+ - Routes via directives: `route` renders all matches; `switch` renders the first match. Both can lazy-load components via `import`.
 
 ## Build and types
 - Build to `dist/` with esbuild + TypeScript declarations: `npm run build` (bundles `src/base.js`, ESM, minified, sourcemaps; emits `dist/types/*.d.ts`).
