@@ -18,6 +18,15 @@ Purpose: concise, project-specific guidance so AI agents are instantly productiv
   - Multi-source with callback: `{ class: ['[[a]] [[b]]', [dataA, dataB], ([a,b]) => `${a}-${b}`] }`
 - Directives are just attrs mapped in `modules/layout/directives/core/default-directives.js` (e.g., `bind`, `watch`, `map`, `for`, `route`, `switch`, `useState`, `useData`, `onCreated`, `onDestroyed`).
 
+## Common directives (quick cookbook)
+- bind (two-way by default):
+  - Text: `{ tag: 'input', type: 'text', bind: 'form.name' }`
+  - Checkbox: `{ tag: 'input', type: 'checkbox', bind: 'form.accepted' }`
+  - Select + options: `{ tag: 'select', bind: 'form.color', children: [{ map: ['[[colors]]', data, (c) => ({ tag:'option', value:c, text:c })] }] }`
+- map (render lists): `{ tag: 'ul', children: [{ map: ['[[items]]', data, (item,i) => ({ tag:'li', text:item.name })] }] }`
+- Lifecycle hooks: `{ onCreated: (el,p) => {/*...*/}, onDestroyed: (el,p) => {/*...*/} }`
+- Cache/persist: parent `persist: true` to preserve child component state across re-renders; disable per child with `persist: false`.
+
 ## Components and state/data
 - Extend `Component` and implement `render()`; root gets cached as `panel` via `Unit._cacheRoot`. Use `this.getId('child')` for stable ids.
 - State: override `setupStates()` (primitive or `{ state, callBack }`). Access via `this.state`, e.g., `this.state.increment('count')`.
@@ -25,10 +34,17 @@ Purpose: concise, project-specific guidance so AI agents are instantly productiv
 - Lifecycle: `onCreated`, `beforeSetup`, `afterSetup`, `afterLayout`, `beforeDestroy`. For survival across re-renders, set parent `persist: true` (child may opt-out with `persist: false`).
  - Jot shorthand: wrap object/functions as lightweight components; non-Unit inputs to `Builder.render` are auto-wrapped with `Jot`.
 
+### Useful state/data ops
+- State helpers: `set`, `toggle`, `increment`, `decrement` on `this.state` keys (when defined in `setupStates()`).
+- Data helpers: `set('a.b', v)`, `push('arr', v)`, `splice('arr', idx, count?)`, `refresh('key')`, `revert()`; link stores: `link(otherData[, key])`.
+- Local storage: `data.setKey('KEY'); data.resume(defaults); data.store()` to persist and restore.
+
 ## Rendering and routing
 - Render anything (function/layout/Unit/Component): `Builder.render(x, container, parent?)`. Non-Unit inputs are wrapped in a `Jot` component.
 - Router: `router.data.path` is reactive; navigate via `router.navigate(uri, data?, replace?)`. `NavLink` uses `[value: ['[[path]]', router.data]]` to track active path.
  - Routes via directives: `route` renders all matches; `switch` renders the first match. Both can lazy-load components via `import`.
+ - Lazy imports: use `Import` or dynamic `import()` in route/switch children to defer loading.
+ - NavLink patterns: `{ tag:'a', route:'/users', children:['Users'], useData: router.data }` or use `NavLink` which watches `router.data.path` for active state.
 
 ## Build and types
 - Build to `dist/` with esbuild + TypeScript declarations: `npm run build` (bundles `src/base.js`, ESM, minified, sourcemaps; emits `dist/types/*.d.ts`).
