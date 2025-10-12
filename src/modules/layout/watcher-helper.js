@@ -103,7 +103,7 @@ export const WatcherHelper =
 			case 'src':
 				if (ele.tagName.toLowerCase() === 'img')
 				{
-					ele.src = (value && value.indexOf('.') !== -1)? value : '';
+					ele.src = (value && (value.indexOf('.') !== -1 || value.indexOf('blob:') !== -1))? value : '';
 					break;
 				}
 				ele.src = value;
