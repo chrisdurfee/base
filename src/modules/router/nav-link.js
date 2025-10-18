@@ -137,6 +137,11 @@ export class NavLink extends Component
             value: ['[[path]]', data],
             callBack: (value, ele) =>
             {
+                if (typeof ele.pathname === 'undefined')
+                {
+                    return;
+                }
+
                 const path = ele.pathname + ele.hash;
 				const selected = exact? (value === path) : (iSActive(ele.pathname, value));
                 this.update(selected);

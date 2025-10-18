@@ -320,9 +320,10 @@ export class ModelService
 	 * @param {number} offset
 	 * @param {number} limit
 	 * @param {*} lastCursor
+	 * @param {*} since
 	 * @returns {XMLHttpRequest}
 	 */
-	all(instanceParams, callBack, offset, limit, lastCursor = null)
+	all(instanceParams, callBack, offset, limit, lastCursor = null, since = null)
 	{
 		const data = this.model.get();
 		offset = !isNaN(offset)? offset : 0;
@@ -360,7 +361,8 @@ export class ModelService
 			'&orderBy=' + orderBy +
 			'&groupBy=' + groupBy +
 			'&search=' + search +
-			'&lastCursor=' + ((typeof lastCursor !== 'undefined' && lastCursor !== null) ? lastCursor : '');
+			'&lastCursor=' + ((typeof lastCursor !== 'undefined' && lastCursor !== null) ? lastCursor : '') +
+			'&since=' + ((typeof since !== 'undefined' && since !== null) ? since : '');
 
 		return this._get('', params, instanceParams, callBack);
 	}
