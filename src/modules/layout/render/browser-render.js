@@ -24,7 +24,7 @@ export class BrowserRender extends Render
 	{
 		const fragment = HtmlHelper.createDocFragment();
 		const elements = Array.isArray(obj) ? obj : [obj];
-        elements.forEach(element => this.buildElement(element, fragment, parent));
+		elements.forEach(element => this.buildElement(element, fragment, parent));
 
 		if (container && typeof container === 'object')
 		{
@@ -78,11 +78,11 @@ export class BrowserRender extends Render
 		the new element */
 		settings.children.forEach(child =>
 		{
-            if (child !== null)
+			if (child !== null)
 			{
-                this.buildElement(child, ele, parent);
-            }
-        });
+				this.buildElement(child, ele, parent);
+			}
+		});
 
 		const directives = settings.directives;
 		if (directives && directives.length)
@@ -103,8 +103,8 @@ export class BrowserRender extends Render
 	{
 		directives.forEach(directive =>
 		{
-            this.handleDirective(ele, directive, parent);
-        });
+			this.handleDirective(ele, directive, parent);
+		});
 	}
 
 	/**
