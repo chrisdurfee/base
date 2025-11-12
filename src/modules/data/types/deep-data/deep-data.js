@@ -155,6 +155,26 @@ export class Data extends BasicData
 	}
 
 	/**
+	 * This will concatenate values to an array and set the result.
+	 *
+	 * @param {string} attr
+	 * @param {array} values
+	 * @returns {object} this
+	 */
+	concat(attr, values)
+	{
+		let currentValue = this.get(attr);
+		if (Array.isArray(currentValue) === false)
+		{
+			currentValue = [];
+		}
+
+		currentValue = currentValue.concat(values);
+		this.set(attr, currentValue);
+		return this;
+	}
+
+	/**
 	 * This will add a value to an array and set the result.
 	 *
 	 * @param {string} attr
