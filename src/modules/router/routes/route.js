@@ -109,6 +109,7 @@ export class Route extends BasicData
 	 */
 	setTitle(title)
 	{
+		this.title = title;
 		this.titleCallBack(this, title);
 	}
 
