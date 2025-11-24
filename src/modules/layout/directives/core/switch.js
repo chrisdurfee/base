@@ -38,6 +38,11 @@ export const addSwitch = (ele, group, parent) =>
 
 	group.forEach((item) =>
 	{
+		if (!item)
+		{
+			return;
+		}
+
 		item.container = ele;
 		item.parent = parent;
 	});

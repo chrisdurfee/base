@@ -40,6 +40,11 @@ export const addRoute = (ele, route, parent) =>
     {
         route.forEach((item) =>
         {
+            if (!item)
+            {
+                return;
+            }
+
             setupRoute(ele, item, parent);
         });
     }

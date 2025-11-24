@@ -250,6 +250,11 @@ export class Router
 
 		group.forEach((item) =>
 		{
+			if (!item)
+			{
+				return;
+			}
+
 			const route = this.createRoute(item);
 			switchArray.push(route);
 		});
