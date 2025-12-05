@@ -432,6 +432,96 @@ export class ModelService
 	}
 
 	/**
+	 * Set up an EventSource for real-time activity updates with auto-reconnection.
+	 *
+	 * @param {string} url - The URL path relative to the model's base URL.
+	 * @param {string} params - The query parameters.
+	 * @param {function} callBack - The callback function for incoming updates.
+	 * @param {function|null} onOpenCallBack - Optional callback when connection opens.
+	 * @param {boolean} [reconnect=true] - Whether to auto-reconnect on disconnection.
+	 * @returns {object} Object with source and cleanup function
+	 */
+	setupEventSource(url, params, callBack, onOpenCallBack, reconnect = true)
+	{
+		let source = null;
+		let reconnectTimer = null;
+		let intentionallyClosed = false;
+
+		/**
+		 * Connects to the EventSource and sets up event handlers.
+		 *
+		 * @returns {void}
+		 */
+		const connect = () =>
+		{
+			if (intentionallyClosed)
+			{
+				return;
+			}
+
+			const fullUrl = this.getUrl(url);
+			const queryString = params ? '?' + params : '';
+			source = new EventSource(fullUrl + queryString, { withCredentials: true });
+
+			source.onopen = () =>
+			{
+				if (onOpenCallBack)
+				{
+					onOpenCallBack();
+				}
+			};
+
+			source.onerror = (error) =>
+			{
+				source.close();
+
+				if (!intentionallyClosed && reconnect)
+				{
+					const RECONNECT_DELAY = 3000; // 3 seconds
+					reconnectTimer = setTimeout(() =>
+					{
+						connect();
+					}, RECONNECT_DELAY);
+				}
+			};
+
+			source.onmessage = (event) =>
+			{
+				try
+				{
+					const data = JSON.parse(event.data);
+					if (callBack)
+					{
+						callBack(data);
+					}
+				}
+				catch (error)
+				{
+				}
+			};
+		};
+
+		connect();
+
+		// Return object with source getter and cleanup function
+		return {
+			get source() { return source; },
+			close: () =>
+			{
+				intentionallyClosed = true;
+				if (reconnectTimer && reconnect)
+				{
+					clearTimeout(reconnectTimer);
+				}
+				if (source)
+				{
+					source.close();
+				}
+			}
+		};
+	}
+
+	/**
 	 * This will replace the url params with the model data.
 	 *
 	 * @param {string} url
