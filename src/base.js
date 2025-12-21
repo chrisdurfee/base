@@ -16,7 +16,8 @@ import { Builder } from './modules/layout/builder.js';
 import './modules/layout/directives/core/default-directives.js';
 import { Directives } from './modules/layout/directives/directives.js';
 import { NavLink, router } from './modules/router/router.js';
-import { StateTracker as State } from './modules/state/state-tracker.js';
+import { StateTracker as Store } from './modules/state/state-tracker.js';
+import { State } from './modules/state/state.js';
 import { Arrays } from './shared/arrays.js';
 import { Dom } from './shared/dom.js';
 import { Encode } from './shared/encode/encode.js';
@@ -46,5 +47,5 @@ base.augment(
 /**
  * This will export base and all the modules.
  */
-export { Ajax, Arrays, Atom, base, Builder, Component, Data, dataBinder, DataTracker, DateTime, Directives, Dom, Encode, EventMethods as Events, Html, Import, Jot, Model, NavLink, Objects, Pod, router, SimpleData, State, Strings, Types, Unit };
+export { Ajax, Arrays, Atom, base, Builder, Component, Data, dataBinder, DataTracker, DateTime, Directives, Dom, Encode, EventMethods as Events, Html, Import, Jot, Model, NavLink, Objects, Pod, router, SimpleData, State, Store, Strings, Types, Unit };
 

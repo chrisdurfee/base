@@ -1,3 +1,4 @@
+import { Component } from '../../component/component.js';
 import { Parser } from '../element/parser.js';
 import { HtmlHelper } from '../html-helper.js';
 import { Render } from './render.js';
@@ -69,8 +70,19 @@ export class BrowserRender extends Render
 	 */
 	createElement(obj, container, parent)
 	{
-		const settings = Parser.parse(obj, parent),
-		ele = this.createNode(settings, container, parent);
+		/**
+		 * If there is data or state bindings, we want to
+		 * create a temporary component to handle those
+		 * bindings and nest the layout inside of it.
+		 */
+		if (obj.data || obj.state)
+		{
+			this.createTempComponent(obj, container, parent);
+			return;
+		}
+
+		const settings = Parser.parse(obj, parent);
+		const ele = this.createNode(settings, container, parent);
 
 		this.cache(ele, obj.cache, parent);
 
@@ -89,6 +101,37 @@ export class BrowserRender extends Render
 		{
 			this.setDirectives(ele, directives, parent);
 		}
+	}
+
+	/**
+	 * This will create a temporary component for data/state
+	 * bindings in the layout.
+	 *
+	 * @param {object} obj
+	 * @param {object} container
+	 * @param {object} parent
+	 * @returns {void}
+	 */
+	createTempComponent(obj, container, parent)
+	{
+		const props = {
+			setData: () => obj.data,
+			render()
+			{
+				return {...obj, data: null, state: null};
+			}
+		};
+
+		if (obj.state)
+		{
+			props.setupStateTarget = function(id)
+			{
+				this.state = obj.state;;
+			};
+		}
+
+		const component = new Component(props);
+		this.createComponent(component, container, parent);
 	}
 
 	/**
