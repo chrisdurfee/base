@@ -9,19 +9,20 @@ import { ArrayProp, DefaultProps, ObjectProp, StringProp } from "./prop-utils.js
 export const parseArgs = (args) =>
 {
 	if (!args)
-    {
+	{
 		return DefaultProps();
-    }
+	}
 
 	/**
 	 * This will handle string children and allow them
 	 * to have watcher props.
 	 */
-    const first = args[0];
-    if (typeof first === 'string')
-    {
+	const first = args[0];
+	const firstType = typeof first;
+	if (firstType === 'string' || firstType === 'number')
+	{
 		return StringProp(first);
-    }
+	}
 
 	/**
 	 * This will handle the child array.
@@ -34,5 +35,5 @@ export const parseArgs = (args) =>
 	/**
 	 * This will handle default props and children.
 	 */
-    return ObjectProp(args);
+	return ObjectProp(args);
 };

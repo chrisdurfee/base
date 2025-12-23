@@ -23,19 +23,20 @@ const WatcherProp = (watch) => ({
 const parseArgs = (args) =>
 {
 	if (!args)
-    {
+	{
 		return DefaultProps();
-    }
+	}
 
 	/**
 	 * This will handle string children and allow them
 	 * to have watcher props.
 	 */
-    const first = args[0];
-    if (typeof first === 'string')
-    {
+	const first = args[0];
+	const firstType = typeof first;
+	if (firstType === 'string' || firstType === 'number')
+	{
 		return StringProp(first);
-    }
+	}
 
 	/**
 	 * This will check if we have a child array or
@@ -77,7 +78,7 @@ const parseArgs = (args) =>
 	/**
 	 * This will handle default props and children.
 	 */
-    return ObjectProp(args);
+	return ObjectProp(args);
 };
 
 /**
@@ -94,11 +95,11 @@ export const Atom = (callBack) =>
 	 * callback.
 	 */
 	return (...args) =>
-    {
+	{
 		/**
 		 * Thi swill allow the atom to access optional args.
 		 */
 		const {props, children} = parseArgs(args);
-        return callBack(props, children);
-    };
+		return callBack(props, children);
+	};
 };
