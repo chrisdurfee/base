@@ -324,9 +324,10 @@ export class BasicData
 	 * This will increment an attribute.
 	 *
 	 * @param {string} attr
+	 * @param {number|null} value
 	 * @returns {object} this
 	 */
-	increment(attr)
+	increment(attr, value = null)
 	{
 		if (typeof attr === 'undefined')
 		{
@@ -334,7 +335,7 @@ export class BasicData
 		}
 
 		let val = this.get(attr);
-		this.set(attr, ++val);
+		this.set(attr, val + (value !== null ? value : 1));
 		return this;
 	}
 
@@ -342,9 +343,10 @@ export class BasicData
 	 * This will decrement an attribute.
 	 *
 	 * @param {string} attr
+	 * @param {number|null} value
 	 * @returns {object} this
 	 */
-	decrement(attr)
+	decrement(attr, value = null)
 	{
 		if (typeof attr === 'undefined')
 		{
@@ -352,7 +354,7 @@ export class BasicData
 		}
 
 		let val = this.get(attr);
-		this.set(attr, --val);
+		this.set(attr, val - (value !== null ? value : 1));
 		return this;
 	}
 
