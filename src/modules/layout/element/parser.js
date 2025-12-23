@@ -155,6 +155,17 @@ export class Parser
 			}
 
 			/**
+			 * Handle children separately to prevent it from being
+			 * set as an attribute (which would fail since DOM elements
+			 * have a read-only children property).
+			 */
+			if (key === 'children')
+			{
+				children = Array.isArray(value) ? children.concat(value) : children.concat([value]);
+				continue;
+			}
+
+			/**
 			 * This will set up the attribute directives.
 			 */
 			if ((directive = Directives.get(key)) !== null)
@@ -171,12 +182,6 @@ export class Parser
 			const type = typeof value;
 			if (type === 'object')
 			{
-				if (key === 'children')
-				{
-					children = children.concat(value);
-					continue;
-				}
-
 				/**
 				 * This will check if the value is a watcher.
 				 */

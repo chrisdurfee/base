@@ -70,6 +70,15 @@ export class HtmlHelper extends Html
 			return;
 		}
 
+		/**
+		 * Prevent setting reserved DOM properties that have read-only getters.
+		 * 'children' is a read-only property on all DOM elements.
+		 */
+		if (attr === 'children')
+		{
+			return;
+		}
+
 		if (attr === 'innerHTML')
 		{
 			ele.innerHTML = value;
