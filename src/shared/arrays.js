@@ -8,7 +8,7 @@
  */
 export class Arrays
 {
-    /**
+	/**
 	 * This will convert an object or collection into an array.
 	 *
 	 * @param {object} list
@@ -31,7 +31,7 @@ export class Arrays
 	{
 		if (!Array.isArray(array))
 		{
-	        return -1;
+			return -1;
 		}
 
 		return array.indexOf(element, fromIndex);

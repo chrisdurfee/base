@@ -126,7 +126,7 @@ export class BrowserRender extends Render
 		{
 			props.setupStateTarget = function(id)
 			{
-				this.state = obj.state;;
+				this.state = obj.state;
 			};
 		}
 

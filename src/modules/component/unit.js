@@ -447,11 +447,6 @@ export class Unit
 	 */
 	_createLayout()
 	{
-		// if (this.persist)
-		// {
-		// 	return this._layout || (this._layout = this.render());
-		// }
-
 		return this.render();
 	}
 
@@ -645,6 +640,14 @@ export class Unit
 		this.persistedCount = 0;
 		this.rendered = false;
 		this.beforeDestroy();
+
+		/**
+		 * This will unlink the data to prevent memory leaks.
+		 */
+		if (this.data && typeof this.data.unlink === 'function')
+		{
+			this.data.unlink();
+		}
 	}
 
 	/**

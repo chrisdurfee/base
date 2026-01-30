@@ -25,7 +25,7 @@ export class Strings
 		return str.substring(0, maxLength);
 	}
 
-    /**
+	/**
 	 * This will parse a query string.
 	 *
 	 * @param {string} [str] The string to parse or the global

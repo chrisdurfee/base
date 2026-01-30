@@ -28,7 +28,7 @@ export class State extends SimpleData
 	 *
 	 * @param {string} action
 	 * @param {*} state
-	 * @returns {void}
+	 * @returns {object} self
 	 */
 	addAction(action, state)
 	{
@@ -36,6 +36,8 @@ export class State extends SimpleData
 		{
 			this.set(action, state);
 		}
+
+		return this;
 	}
 
 	/**
@@ -56,7 +58,7 @@ export class State extends SimpleData
 	 *
 	 * @param {string} action
 	 * @param {string} [token]
-	 * @returns {void}
+	 * @returns {object} self
 	 */
 	removeAction(action, token)
 	{
@@ -65,7 +67,7 @@ export class State extends SimpleData
 		if (token)
 		{
 			this.off(action, token);
-			return;
+			return this;
 		}
 
 		const actions = this.stage;
@@ -73,5 +75,7 @@ export class State extends SimpleData
 		{
 			delete actions[action];
 		}
+
+		return this;
 	}
 }

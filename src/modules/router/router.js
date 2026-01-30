@@ -447,6 +447,20 @@ export class Router
 	 */
 	reset()
 	{
+		/**
+		 * Deactivate all routes to properly clean up their components
+		 * before clearing the arrays.
+		 */
+		const routes = this.routes;
+		for (let i = 0, length = routes.length; i < length; i++)
+		{
+			const route = routes[i];
+			if (route && typeof route.deactivate === 'function')
+			{
+				route.deactivate();
+			}
+		}
+
 		this.routes = [];
 		this.switches = new Map();
 		this.switchCount = 0;

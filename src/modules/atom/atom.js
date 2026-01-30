@@ -97,7 +97,7 @@ export const Atom = (callBack) =>
 	return (...args) =>
 	{
 		/**
-		 * Thi swill allow the atom to access optional args.
+		 * This will allow the atom to access optional args.
 		 */
 		const {props, children} = parseArgs(args);
 		return callBack(props, children);

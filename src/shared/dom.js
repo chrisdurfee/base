@@ -12,7 +12,7 @@ import { Types } from './types.js';
  */
 export class Dom
 {
-    /**
+	/**
 	 * This will select an element by id.
 	 *
 	 * @param {string} id

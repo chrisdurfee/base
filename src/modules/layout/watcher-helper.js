@@ -283,7 +283,7 @@ export const WatcherHelper =
 		isDataArray = Array.isArray(data);
 
 		/**
-		 * Thi swill set up the watcher callBack.
+		 * This will set up the watcher callBack.
 		 *
 		 * @type {function} callBack
 		 */
