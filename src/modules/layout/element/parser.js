@@ -202,10 +202,17 @@ export class Parser
 			if (type === 'function')
 			{
 				const callback = value;
-				value = function(e)
+				/**
+				 * Store the original callback reference on the wrapper function
+				 * so it can be matched during event removal.
+				 */
+				const wrapper = function(e)
 				{
 					callback.call(this, e, parent);
 				};
+				// @ts-ignore - Add originalCallback for event cleanup tracking
+				wrapper.originalCallback = callback;
+				value = wrapper;
 			}
 
 			/**

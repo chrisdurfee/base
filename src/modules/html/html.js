@@ -185,7 +185,19 @@ export class Html
 			/* this will add the event using the events
 			so the event is tracked */
 			attr = removeEventPrefix(attr);
-			Events.add(attr, obj, value);
+
+			/**
+			 * If the function has an originalCallback reference (added by Parser),
+			 * pass it to Events.add so it can be properly tracked and removed.
+			 */
+			if (value.originalCallback)
+			{
+				Events.add(attr, obj, value, false, false, value.originalCallback);
+			}
+			else
+			{
+				Events.add(attr, obj, value);
+			}
 		}
 		else
 		{
