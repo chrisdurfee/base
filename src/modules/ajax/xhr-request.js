@@ -281,7 +281,7 @@ export class XhrRequest
 	setupHeaders()
 	{
 		const settings = this.settings;
-		if (!settings && typeof settings.headers !== 'object')
+		if (!settings || typeof settings.headers !== 'object')
 		{
 			return;
 		}

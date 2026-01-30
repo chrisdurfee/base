@@ -23,6 +23,10 @@ export class ModuleLoader
 				callback(module);
 			}
 			return module;
+		})
+		.catch(error =>
+		{
+			console.error('Error loading module:', error);
 		});
 	}
 }
