@@ -2,28 +2,28 @@
 /**
  * ConnectionTracker
  *
- * This will create a new connection tracker to track active
- * connections in the data binder.
+ * Tracks active connections in the data binder. Supports multiple
+ * connections per element+attribute pair.
  *
  * @class
  */
 export class ConnectionTracker
 {
 	/**
-	 * This will create a connection tracker.
+	 * Creates a connection tracker.
 	 *
 	 * @constructor
 	 */
 	constructor()
 	{
 		/**
-		 * @member {Map} connections
+		 * @member {Map<string, Map<string, object|object[]>>} connections
 		 */
 		this.connections = new Map();
 	}
 
 	/**
-	 * This will add a new connection to be tracked.
+	 * Adds a connection to be tracked.
 	 *
 	 * @param {string} id
 	 * @param {string} attr
@@ -32,90 +32,118 @@ export class ConnectionTracker
 	 */
 	add(id, attr, connection)
 	{
-		const connections = this.find(id);
-		connections.set(attr, connection);
+		const attrMap = this.getOrCreate(id);
+		const existing = attrMap.get(attr);
+		if (!existing)
+		{
+			attrMap.set(attr, connection);
+		}
+		else if (Array.isArray(existing))
+		{
+			existing.push(connection);
+		}
+		else
+		{
+			attrMap.set(attr, [existing, connection]);
+		}
+
 		return connection;
 	}
 
 	/**
-	 * This will get a connection.
+	 * Gets the most recent connection for an element+attribute.
 	 *
 	 * @param {string} id
 	 * @param {string} attr
-	 * @returns {object|boolean}
+	 * @returns {object|false}
 	 */
 	get(id, attr)
 	{
-		const connections = this.connections.get(id);
-		if (connections)
+		const value = this.connections.get(id)?.get(attr);
+		if (!value)
 		{
-			return (connections.get(attr) || false);
+			return false;
 		}
-		return false;
+
+		return Array.isArray(value) ? (value[value.length - 1] || false) : value;
 	}
 
 	/**
-	 * This will find a connection.
+	 * Gets or creates the attribute map for an element.
 	 *
 	 * @param {string} id
-	 * @returns {object}
+	 * @returns {Map<string, object|object[]>}
 	 */
-	find(id)
+	getOrCreate(id)
 	{
-		const connections = this.connections.get(id);
-		if (connections)
+		let attrMap = this.connections.get(id);
+		if (!attrMap)
 		{
-			return connections;
+			attrMap = new Map();
+			this.connections.set(id, attrMap);
 		}
-
-		const map = new Map();
-		this.connections.set(id, map);
-		return map;
+		return attrMap;
 	}
 
 	/**
-	 * This will remove a connection or all connections by id.
+	 * Removes connections by id, or by id+attr.
+	 *
 	 * @param {string} id
 	 * @param {string} [attr]
 	 * @returns {void}
 	 */
 	remove(id, attr)
 	{
-		const connections = this.connections.get(id);
-		if (!connections)
+		const attrMap = this.connections.get(id);
+		if (!attrMap)
 		{
 			return;
 		}
 
-		let connection;
 		if (attr)
 		{
-			connection = connections.get(attr);
-			if (connection)
-			{
-				connection.unsubscribe();
-				connections.delete(attr);
-			}
+			this.unsubscribe(attrMap.get(attr));
+			attrMap.delete(attr);
 
-			/* this will remove the msg from the elements
-			if no elements are listed under the msg */
-			if (connections.size === 0)
+			if (attrMap.size === 0)
 			{
 				this.connections.delete(id);
 			}
 		}
 		else
 		{
-			const values = connections.values();
-			for (const connection of values)
+			for (const connection of attrMap.values())
 			{
-				if (connection)
-				{
-					connection.unsubscribe();
-				}
+				this.unsubscribe(connection);
 			}
-
 			this.connections.delete(id);
+		}
+	}
+
+	/**
+	 * Unsubscribes a connection or array of connections.
+	 *
+	 * @private
+	 * @param {object|object[]|undefined} connection
+	 * @returns {void}
+	 */
+	unsubscribe(connection)
+	{
+		if (!connection)
+		{
+			return;
+		}
+
+		if (Array.isArray(connection))
+		{
+			for (let i = 0, len = connection.length; i < len; i++)
+			{
+				connection[i]?.unsubscribe();
+			}
+		}
+		else
+		{
+			connection.unsubscribe();
 		}
 	}
 }

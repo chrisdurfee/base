@@ -71,4 +71,17 @@ export class DataSource extends TwoWaySource
 			this.data.set(this.prop, value, committer);
 		}
 	}
+
+	/**
+	 * This will clean up the data source.
+	 *
+	 * @override
+	 * @returns {void}
+	 */
+	unsubscribe()
+	{
+		super.unsubscribe();
+		this.data = null;
+		this.prop = null;
+	}
 }

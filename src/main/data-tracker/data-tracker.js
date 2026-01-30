@@ -187,6 +187,7 @@ export class DataTracker
 		{
 			tracker.remove();
 			this.trackers.delete(id);
+			delete obj.trackingId;
 			return;
 		}
 
@@ -198,6 +199,7 @@ export class DataTracker
 		if (this.isEmpty(tracker.types))
 		{
 			this.trackers.delete(id);
+			delete obj.trackingId;
 		}
 	}
 }

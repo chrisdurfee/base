@@ -253,4 +253,20 @@ export class ElementSource extends TwoWaySource
 		}
 		return this;
 	}
+
+	/**
+	 * This will clean up the element source.
+	 *
+	 * @override
+	 * @returns {void}
+	 */
+	unsubscribe()
+	{
+		super.unsubscribe();
+		this.element = null;
+		this.attr = null;
+		this.filter = null;
+		this.setValue = null;
+		this.getValue = null;
+	}
 }

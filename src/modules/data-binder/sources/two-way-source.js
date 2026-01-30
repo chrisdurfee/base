@@ -48,7 +48,13 @@ export class TwoWaySource extends Source
 	 */
 	unsubscribe()
 	{
-		this.pubSub.off(this.msg, this.token);
+		if (this.pubSub && this.msg && this.token)
+		{
+			this.pubSub.off(this.msg, this.token);
+		}
+		this.pubSub = null;
+		this.msg = null;
+		this.token = null;
 	}
 
 	/**

@@ -42,6 +42,12 @@ export class OneWaySource extends Source
 	 */
 	unsubscribe()
 	{
-		this.data.off(this.msg, this.token);
+		if (this.data && this.msg && this.token)
+		{
+			this.data.off(this.msg, this.token);
+		}
+		this.data = null;
+		this.msg = null;
+		this.token = null;
 	}
 }
