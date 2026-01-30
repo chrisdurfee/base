@@ -627,6 +627,31 @@ export class Unit
 
 		const panel = this.panel || this.id;
 		Html.removeElement(panel);
+
+		/**
+		 * This will clear the panel and container references
+		 * to prevent memory leaks.
+		 */
+		this.panel = null;
+		this.container = null;
+
+		/**
+		 * This will clear the component data if it is not
+		 * set to persist to free up memory.
+		 */
+		if (this.persist === false)
+		{
+			this.data = null;
+			this.state = null;
+			this.stateHelper = null;
+			this.children = [];
+			this.context = null;
+			this.parent = null;
+			this.persistedChildren = {};
+			this.unitType = null;
+			this.id = null;
+			this.persistToken = null;
+		}
 	}
 
 	/**
