@@ -69,7 +69,7 @@ export class BasicData
 		 * @default {}
 		 * @protected
 		 */
-		this.links = {};
+		this.links = new Map();
 
 		this._init();
 		this.setup();
@@ -334,8 +334,11 @@ export class BasicData
 			return;
 		}
 
+		// this will ensure we have a number value
+		value = (value !== null && typeof value === 'number' ? value : 1);
+
 		let val = this.get(attr);
-		this.set(attr, val + (value !== null ? value : 1));
+		this.set(attr, val + value);
 		return this;
 	}
 
@@ -353,8 +356,11 @@ export class BasicData
 			return;
 		}
 
+		// this will ensure we have a number value
+		value = (value !== null && typeof value === 'number' ? value : 1);
+
 		let val = this.get(attr);
-		this.set(attr, val - (value !== null ? value : 1));
+		this.set(attr, val - value);
 		return this;
 	}
 
@@ -564,7 +570,7 @@ export class BasicData
 	 */
 	addLink(token, data)
 	{
-		this.links[token] = data;
+		this.links.set(token, data);
 	}
 
 	/**
@@ -587,11 +593,11 @@ export class BasicData
 			return;
 		}
 
-		Object.entries(links).forEach(([key, token]) =>
+		links.forEach((data, token) =>
 		{
 			this.removeLink(token, false);
 		});
-		this.links = {};
+		this.links = new Map();
 	}
 
 	/**
@@ -603,7 +609,7 @@ export class BasicData
 	 */
 	removeLink(token, removeFromLinks = true)
 	{
-		const data = this.links[token];
+		const data = this.links.get(token);
 		if (data)
 		{
 			data.off(token);
@@ -614,7 +620,7 @@ export class BasicData
 			return;
 		}
 
-		delete this.links[token];
+		this.links.delete(token);
 	}
 }
 
