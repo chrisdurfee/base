@@ -225,5 +225,11 @@ export const ImportWrapper = Jot(
 
 		this.blockRender = false;
 		Builder.removeNode(this.layoutRoot);
+
+		if (this.persist === false)
+		{
+			this.layoutRoot = null;
+			this.layout = null;
+		}
 	}
 });
