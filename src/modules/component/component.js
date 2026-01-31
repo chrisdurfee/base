@@ -363,7 +363,11 @@ export class Component extends Unit
 		this.removeStates();
 		this.removeContext();
 
-		if (this.data && this.persist === false)
+		/**
+		 * Unlink data when not persisting to prevent memory leaks.
+		 * Data watchers keep references to the component and DOM.
+		 */
+		if (this.data && this.persist !== true)
 		{
 			this.data.unlink();
 		}

@@ -650,7 +650,7 @@ export class Unit
 		 * This will clear the component data if it is not
 		 * set to persist to free up memory.
 		 */
-		if (this.persist === false)
+		if (this.persist !== true)
 		{
 			this.data = null;
 			this.state = null;
