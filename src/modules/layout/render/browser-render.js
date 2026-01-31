@@ -165,17 +165,17 @@ export class BrowserRender extends Render
 	}
 
 	/**
-	 * This will cache an element ot the parent.
+	 * This will cache an element to the parent.
 	 *
 	 * @param {object} ele
-	 * @param {object} propName
+	 * @param {string} propName
 	 * @param {object} parent
 	 */
 	cache(ele, propName, parent)
 	{
 		if (parent && propName)
 		{
-			parent[propName] = ele;
+			parent.cacheEle(ele, propName);
 		}
 	}
 

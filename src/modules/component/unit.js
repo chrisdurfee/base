@@ -108,6 +108,11 @@ export class Unit
 		 */
 		this.unitType = null;
 
+		/**
+		 * @member {array} cached
+		 */
+		this.cached = [];
+
 		this.init();
 
 		/**
@@ -559,6 +564,24 @@ export class Unit
 	}
 
 	/**
+	 * This will cache an element to the component.
+	 *
+	 * @param {object} ele
+	 * @param {string} propName
+	 * @returns {void}
+	 */
+	cacheEle(ele, propName)
+	{
+		if (!propName)
+		{
+			return;
+		}
+
+		this[propName] = ele;
+		this.cached.push(propName);
+	}
+
+	/**
 	 * This will initialize the component.
 	 *
 	 * @protected
@@ -645,6 +668,16 @@ export class Unit
 		 */
 		this.panel = null;
 		this.container = null;
+
+		/**
+		 * This will clear all cached element references
+		 * to prevent memory leaks.
+		 */
+		this.cached.forEach(propName =>
+		{
+			this[propName] = null;
+		});
+		this.cached = [];
 
 		/**
 		 * This will clear the component data if it is not
