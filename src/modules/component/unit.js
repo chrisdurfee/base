@@ -20,14 +20,15 @@ DataTracker.addType('components', (data) =>
 		return;
 	}
 
-	if (component.rendered === true)
-	{
-		component.prepareDestroy();
-	}
-
 	if (component.persistToken && component.parent)
 	{
 		component.parent.removePersistedChild(component.persistToken);
+	}
+
+	if (component.rendered === true)
+	{
+		component.prepareDestroy();
+		component.cleanUpAfterDestroy();
 	}
 });
 
@@ -628,6 +629,16 @@ export class Unit
 		const panel = this.panel || this.id;
 		Html.removeElement(panel);
 
+		this.cleanUpAfterDestroy();
+	}
+
+	/**
+	 * This will clean up after destroy.
+	 * @protected
+	 * @returns {void}
+	 */
+	cleanUpAfterDestroy()
+	{
 		/**
 		 * This will clear the panel and container references
 		 * to prevent memory leaks.
