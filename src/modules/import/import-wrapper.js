@@ -182,7 +182,7 @@ export const ImportWrapper = Jot(
 	updateModuleLayout(params)
 	{
 		const layout = this.layout;
-		if (this.shouldUpdate(layout))
+		if (this.shouldUpdate(layout) && layout)
 		{
 			layout.update(params);
 		}
