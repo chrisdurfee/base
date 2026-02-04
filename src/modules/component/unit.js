@@ -649,8 +649,11 @@ export class Unit
 		this.prepareDestroy();
 		this.removeContext();
 
-		const panel = this.panel || this.id;
-		Html.removeElement(panel);
+		const panel = this.panel;
+		if (panel)
+		{
+			Html.removeElement(panel);
+		}
 
 		this.cleanUpAfterDestroy();
 	}
@@ -685,15 +688,7 @@ export class Unit
 		 */
 		if (this.persist !== true)
 		{
-			this.data = null;
-			this.state = null;
-			this.stateHelper = null;
-			this.children = [];
-			this.context = null;
-			this.parent = null;
 			this.persistedChildren = {};
-			this.unitType = null;
-			this.id = null;
 			this.persistToken = null;
 		}
 	}

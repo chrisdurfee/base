@@ -63,7 +63,7 @@ export class DataTracker
 	 */
 	static getTrackingId(obj)
 	{
-		if (!obj)
+		if (!obj || typeof obj !== 'object')
 		{
 			return '';
 		}
