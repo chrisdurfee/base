@@ -446,6 +446,43 @@ export class ModelService
 		let source = null;
 		let reconnectTimer = null;
 		let intentionallyClosed = false;
+		let isConnecting = false;
+
+		/**
+		 * Clears any pending reconnect timer.
+		 *
+		 * @returns {void}
+		 */
+		const clearReconnectTimer = () =>
+		{
+			if (reconnectTimer)
+			{
+				clearTimeout(reconnectTimer);
+				reconnectTimer = null;
+			}
+		};
+
+		/**
+		 * Schedules a reconnection attempt.
+		 *
+		 * @returns {void}
+		 */
+		const scheduleReconnect = () =>
+		{
+			if (intentionallyClosed || !reconnect || isConnecting)
+			{
+				return;
+			}
+
+			clearReconnectTimer();
+
+			const RECONNECT_DELAY = 3000; // 3 seconds
+			reconnectTimer = setTimeout(() =>
+			{
+				reconnectTimer = null;
+				connect();
+			}, RECONNECT_DELAY);
+		};
 
 		/**
 		 * Connects to the EventSource and sets up event handlers.
@@ -454,10 +491,26 @@ export class ModelService
 		 */
 		const connect = () =>
 		{
-			if (intentionallyClosed)
+			if (intentionallyClosed || isConnecting)
 			{
 				return;
 			}
+
+			// Close any existing connection before creating a new one
+			if (source)
+			{
+				try
+				{
+					source.close();
+				}
+				catch (e)
+				{
+					// Ignore close errors
+				}
+				source = null;
+			}
+
+			isConnecting = true;
 
 			const fullUrl = this.getUrl(url);
 			const queryString = params ? '?' + params : '';
@@ -465,23 +518,25 @@ export class ModelService
 
 			source.onopen = () =>
 			{
+				isConnecting = false;
+				clearReconnectTimer();
+
 				if (onOpenCallBack)
 				{
 					onOpenCallBack();
 				}
 			};
 
-			source.onerror = (error) =>
+			source.onerror = () =>
 			{
-				source.close();
+				isConnecting = false;
 
-				if (!intentionallyClosed && reconnect)
+				// Only handle if connection is closed (readyState === 2)
+				// If readyState is 0 (CONNECTING), let the browser retry first
+				if (source && source.readyState === EventSource.CLOSED)
 				{
-					const RECONNECT_DELAY = 3000; // 3 seconds
-					reconnectTimer = setTimeout(() =>
-					{
-						connect();
-					}, RECONNECT_DELAY);
+					source = null;
+					scheduleReconnect();
 				}
 			};
 
@@ -497,6 +552,7 @@ export class ModelService
 				}
 				catch (error)
 				{
+					// Ignore parse errors
 				}
 			};
 		};
@@ -509,13 +565,20 @@ export class ModelService
 			close: () =>
 			{
 				intentionallyClosed = true;
-				if (reconnectTimer && reconnect)
-				{
-					clearTimeout(reconnectTimer);
-				}
+				isConnecting = false;
+				clearReconnectTimer();
+
 				if (source)
 				{
-					source.close();
+					try
+					{
+						source.close();
+					}
+					catch (e)
+					{
+						// Ignore close errors
+					}
+					source = null;
 				}
 			}
 		};
