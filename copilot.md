@@ -67,9 +67,6 @@ Purpose: concise, project-specific guidance so AI agents are instantly productiv
   - Basic: `{ for: [5, (i) => ({ tag: 'div', text: `Item ${i}` })] }`
   - With data: `{ for: [['[[count]]', data], (i) => ({ tag: 'span', text: i })] }`
 
-- **if** (conditional rendering):
-  - Basic: `{ if: [() => condition, { tag: 'div', text: 'Shown' }] }`
-  - With data: `{ if: [['[[isVisible]]', data], { tag: 'div', text: 'Visible' }] }`
   - **NOTE**: Use regular JavaScript `condition && layout` for simpler cases
 
 - **Watchers** (one-way binding, auto-updates when data changes):
