@@ -24,6 +24,11 @@ export class AnimationController
 		/* this will setup the fps */
 		this.fps = settings.fps || 60;
 
+		/**
+		 * @type {Function|null} animationCallBack
+		 */
+		this.animationCallBack = null;
+
 		/* this will setup the new animation object and start
 		the animation if all is correct or stop and return an
 		error */
@@ -173,11 +178,11 @@ export class AnimationController
 		{
 			this.stopTimer();
 			this.updateStatus('completed');
+			return;
 		}
-		else
-		{
-			this.timer = window.requestAnimationFrame(this.animationCallBack);
-		}
+
+		// @ts-ignore
+		this.timer = window.requestAnimationFrame(this.animationCallBack);
 	}
 
 	updateStatus(status)

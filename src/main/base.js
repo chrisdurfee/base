@@ -1,6 +1,6 @@
 /**
  * Base Framework
- * @version 3.5.0
+ * @version 3.5.1
  * @author Chris Durfee
  * @file This is a javascript framework to allow complex
  * functions to work in many browsers and versions.

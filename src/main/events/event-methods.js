@@ -218,7 +218,7 @@ export const EventMethods =
 	},
 
 	/**
-	 * @type {string} mouseWheelEventType The mouse wheel event name.
+	 * @type {string|null} mouseWheelEventType The mouse wheel event name.
 	 * @protected
 	 */
 	mouseWheelEventType: null,

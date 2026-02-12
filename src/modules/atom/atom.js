@@ -4,7 +4,7 @@ import { WatcherHelper } from "../layout/watcher-helper.js";
 /**
  * This will create a watcher prop.
  *
- * @param {array} watch
+ * @param {Array<any>} watch
  * @returns {object}
  */
 const WatcherProp = (watch) => ({
@@ -17,7 +17,7 @@ const WatcherProp = (watch) => ({
 /**
  * This will parse the arguments passed to the atom.
  *
- * @param {array} args
+ * @param {Array<any>} args
  * @returns {object}
  */
 const parseArgs = (args) =>

@@ -45,7 +45,7 @@ const extendBaseClass = (Base) =>
  *
  * @param {function} callBack
  * @param {typeof Component} extend - The class to extend.
- * @returns {typeof Component}
+ * @returns {typeof Component|null}
  */
 export const Pod = (callBack, extend = Component) =>
 {

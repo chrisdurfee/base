@@ -101,10 +101,10 @@ export class XhrRequest
 	 *
 	 * @protected
 	 * @param {*} params
-	 * @param {*} addingParams
+	 * @param {*} [addingParams]
 	 * @returns {*}
 	 */
-	setupParams(params, addingParams)
+	setupParams(params, addingParams = null)
 	{
 		const paramsType = typeof params;
 		if (!addingParams)
@@ -187,7 +187,7 @@ export class XhrRequest
 	 * This will set the settings from the args.
 	 *
 	 * @protected
-	 * @param {array} args
+	 * @param {Array<any>} args
 	 * @returns {void}
 	 */
 	getXhrSettings(args)
@@ -293,7 +293,7 @@ export class XhrRequest
 		{
 			if (Object.prototype.hasOwnProperty.call(headers, header))
 			{
-				this.xhr.setRequestHeader(header, headers[header]);
+				this.xhr?.setRequestHeader(header, headers[header]);
 			}
 		}
 	}
@@ -313,7 +313,7 @@ export class XhrRequest
 		after the events are completed, aborted, or errored */
 		const removeEvents = () =>
 		{
-			Events.removeEvents(xhr.upload);
+			Events.removeEvents(xhr?.upload);
 			Events.removeEvents(xhr);
 		};
 
@@ -366,6 +366,11 @@ export class XhrRequest
 	getResponseData()
 	{
 		const xhr = this.xhr;
+		if (!xhr)
+		{
+			return null;
+		}
+
 		const responseType = xhr.responseType;
 		if (!responseType || responseType === 'text')
 		{
@@ -389,8 +394,13 @@ export class XhrRequest
 			return;
 		}
 
-		const xhr = this.xhr,
-		callBack = this.update.bind(this);
+		const xhr = this.xhr;
+		if (!xhr)
+		{
+			return;
+		}
+
+		const callBack = this.update.bind(this);
 		Events.on(['load', 'error', 'abort'], xhr, callBack);
 		Events.on('progress', xhr.upload, callBack);
 	}

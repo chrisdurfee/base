@@ -27,6 +27,6 @@ export class CloakComponent extends Component
  * This will create a Cloak component.
  *
  * @param  {*} props
- * @returns {typeof CloakComponent}
+ * @returns {typeof Component|null}
  */
 export const Cloak = (props) => Jot(props, CloakComponent);

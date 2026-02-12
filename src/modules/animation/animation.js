@@ -24,7 +24,7 @@ const removeAnimationClass = (obj, animationClass, callBack) =>
 {
 	if(typeof callBack === 'function')
 	{
-		callBack.call();
+		callBack();
 	}
 
 	Dom.removeClass(obj, animationClass);
@@ -44,7 +44,7 @@ export const animate =
 	animating:
 	{
 		/**
-		 * @param array objects
+		 * @type {Array<object>}
 		 */
 		objects: [],
 
@@ -125,7 +125,7 @@ export const animate =
 		/**
 		 * This will check if the element is animating.
 		 * @param {object} obj
-		 * @returns {array}
+		 * @returns {Array<any>}
 		 */
 		checkAnimating(obj)
 		{

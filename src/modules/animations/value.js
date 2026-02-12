@@ -1,4 +1,3 @@
-import { Arrays } from '../../shared/arrays.js';
 
 export class Value
 {
@@ -86,8 +85,12 @@ export class Value
 	{
 		/* we want to check if we are adding to the start or
 		just modifying the value */
-		let value = this.value,
-		endTotal = value.end,
+		let value = this.value;
+		if (!value)
+		{
+			return false;
+		}
+		let endTotal = value.end,
 		startValue = value.start;
 		if (value.combining === true)
 		{
@@ -98,18 +101,22 @@ export class Value
 
 	combindValue(delta)
 	{
-		return (this.value.end * delta);
+		return (this.value?.end ?? 0) * delta;
 	}
 
 	calcValue(delta)
 	{
-		return (this.value.difference * delta);
+		return (this.value?.difference ?? 0) * delta;
 	}
 
 	step(delta)
 	{
 		let step,
 		value = this.value;
+		if (!value)
+		{
+			return 0;
+		}
 		if (value.combining === true)
 		{
 			step = this.combindValue;
@@ -118,7 +125,7 @@ export class Value
 		{
 			step = this.calcValue;
 		}
-		return (this.step = step).apply(this, Arrays.toArray(arguments));
+		return (this.step = step).call(this, delta);
 	}
 
 	update(delta)
@@ -146,6 +153,6 @@ export class Value
 	applyStep(value, step)
 	{
 		const applyStep = (value.increasing === true)? this.increaseValue : this.decreaseValue;
-		return (this.applyStep = applyStep).apply(this, arguments);
+		return (this.applyStep = applyStep).call(this, value, step);
 	}
 }

@@ -27,7 +27,7 @@ setupBaseAjaxMethods();
  * 	}
  * }
  *
- * @returns {XMLHttpRequest} xhr object.
+ * @returns {XMLHttpRequest|null} xhr object.
  */
 export const Ajax = (...args) =>
 {

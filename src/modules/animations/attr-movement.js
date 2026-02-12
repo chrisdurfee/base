@@ -72,6 +72,8 @@ export class AttrMovement extends Movement
 				return value;
 			};
 		}
+
+		// @ts-ignore
 		return (this.filterValue = filter).apply(this, Arrays.toArray(arguments));
 	}
 

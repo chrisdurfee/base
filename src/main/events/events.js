@@ -33,7 +33,7 @@ export const Events =
 	 * @param {function} fn
 	 * @param {boolean|object} [capture]
 	 * @param {boolean} [swapped]
-	 * @param {function} [originalFn]
+	 * @param {function|null} [originalFn]
 	 * @returns {object}
 	 */
 	create(event, obj, fn, capture = false, swapped = false, originalFn = null)
@@ -104,7 +104,7 @@ export const Events =
 	 * @param {function} fn
 	 * @param {object|boolean} [capture]
 	 * @param {boolean} [swapped]
-	 * @param {function} [originalFn]
+	 * @param {function|null} [originalFn]
 	 * @returns {object} The events object.
 	 */
 	add(event, obj, fn, capture = false, swapped = false, originalFn = null)
