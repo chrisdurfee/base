@@ -355,7 +355,7 @@ export class Dom
 	 *
 	 * @param {object} obj
 	 * @param {string} queryString
-	 * @returns {array}
+	 * @returns {Array<any>}
 	 */
 	static find(obj, queryString)
 	{
