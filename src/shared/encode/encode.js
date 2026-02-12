@@ -18,14 +18,14 @@ export class Encode
 	 *
 	 * @param {object} obj
 	 * @param {boolean} [removeNewLines]
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	static prepareJsonUrl(obj, removeNewLines = false)
 	{
 		/* we want to check to clone object so we won't modify the
 		original object */
-		const before = (typeof obj === 'object')? Objects.clone(obj) : obj,
-		after = prepareUrl(before, removeNewLines);
+		const before = (typeof obj === 'object')? Objects.clone(obj) : obj;
+		let after = prepareUrl(before, removeNewLines);
 		return encode(after);
 	}
 

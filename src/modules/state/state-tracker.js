@@ -99,6 +99,11 @@ export class StateTracker
 	 */
 	static removeAction(targetId, action, token)
 	{
+		if (!token)
+		{
+			return;
+		}
+
 		this.off(targetId, action, token);
 	}
 

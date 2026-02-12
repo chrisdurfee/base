@@ -61,8 +61,8 @@ export class Route extends BasicData
 		this.uri = null;
 		this.uriQuery = null;
 		this.controller = null;
-		this.paramKeys = null;
-		this.titleCallBack = null;
+		this.paramKeys = [];
+		this.titleCallBack = () => {};
 		this.path = null;
 		this.referralPath = null;
 		this.params = null;
@@ -283,6 +283,7 @@ export class Route extends BasicData
 		 * We want to check to use the supplied uri or get the
 		 * current uri if not setup.
 		 */
+		// @ts-ignore
 		const result = path.match(this.uriQuery);
 		if (result === null)
 		{

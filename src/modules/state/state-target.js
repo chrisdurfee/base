@@ -33,6 +33,6 @@ export class StateTarget extends State
 	setup()
 	{
 		this.stage = {};
-		this.id = null;
+		this.id = '';
 	}
 }

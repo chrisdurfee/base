@@ -172,6 +172,12 @@ export class NavLink extends Component
      */
     update(selected)
     {
+        if (!this.state)
+        {
+            return;
+        }
+
+        // @ts-ignore
         this.state.selected = selected;
     }
 }
