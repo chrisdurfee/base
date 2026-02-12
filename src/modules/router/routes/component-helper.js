@@ -22,13 +22,17 @@ export class ComponentHelper
 	{
 		this.route = routeProxy;
 
+		// @ts-ignore
 		this.template = settings.component;
 		this.component = null;
 		this.hasTemplate = false;
 
 		this.setup = false;
+		// @ts-ignore
 		this.container = settings.container;
+		// @ts-ignore
 		this.persist = settings.persist;
+		// @ts-ignore
 		this.parent = settings.parent;
 	}
 
@@ -91,6 +95,7 @@ export class ComponentHelper
 	 */
 	transferSettings(comp)
 	{
+		// @ts-ignore
 		this.persist = (this.persist && comp.persist !== false);
         Object.assign(comp, { route: this.route, persist: this.persist });
 		this.component = comp;
@@ -130,6 +135,7 @@ export class ComponentHelper
 
 		this.setup = true;
 		const comp = this.component;
+		// @ts-ignore
 		Builder.render(comp, this.container, this.parent);
 	}
 
@@ -153,8 +159,10 @@ export class ComponentHelper
 			return;
 		}
 
+		// @ts-ignore
 		if (typeof component.destroy === 'function')
 		{
+			// @ts-ignore
 			component.destroy();
 		}
 
@@ -176,8 +184,10 @@ export class ComponentHelper
 			return;
 		}
 
+		// @ts-ignore
 		if (typeof component.update === 'function')
 		{
+			// @ts-ignore
 			component.update(params);
 		}
 	}
