@@ -3,7 +3,7 @@ import { ArrayProp, DefaultProps, ObjectProp, StringProp } from "./prop-utils.js
 /**
  * This will parse the arguments passed to the atom.
  *
- * @param {array} args
+ * @param {Array<any>} args
  * @returns {object}
  */
 export const parseArgs = (args) =>

@@ -52,7 +52,7 @@ export const StringProp = (value) => ({
 /**
  * This will set the array prop.
  *
- * @param {array} value
+ * @param {Array<any>} value
  * @returns {object}
  */
 export const ArrayProp = (value) => ({
@@ -63,7 +63,7 @@ export const ArrayProp = (value) => ({
 /**
  * This will set the object prop.
  *
- * @param {array} args
+ * @param {Array<any>} args
  * @returns {object}
  */
 export const ObjectProp = (args) => ({
