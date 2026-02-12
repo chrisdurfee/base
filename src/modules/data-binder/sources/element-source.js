@@ -216,6 +216,7 @@ export class ElementSource extends TwoWaySource
 			value = this.filter(value);
 		}
 
+		// @ts-ignore
 		this.setValue(element, this.attr, value);
 		return this;
 	}
@@ -233,6 +234,7 @@ export class ElementSource extends TwoWaySource
 			return '';
 		}
 
+		// @ts-ignore
 		return this.getValue(element, this.attr);
 	}
 
@@ -263,9 +265,9 @@ export class ElementSource extends TwoWaySource
 	unsubscribe()
 	{
 		super.unsubscribe();
-		this.element = null;
-		this.attr = null;
-		this.filter = null;
+		this.element = {};
+		this.attr = '';
+		this.filter = () => {};
 		this.setValue = null;
 		this.getValue = null;
 	}

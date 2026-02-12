@@ -1,5 +1,7 @@
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
+import { Data } from '../data/data.js';
 import { Html } from '../html/html.js';
+import { StateTarget } from '../state/state-target.js';
 import { parseArgs } from './parse-args.js';
 
 /**
@@ -560,7 +562,7 @@ export class Unit
 		{
 			mainId += '-' + id;
 		}
-		return mainId;
+		return String(mainId);
 	}
 
 	/**

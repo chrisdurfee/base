@@ -43,7 +43,7 @@ export class TwoWayConnection extends Connection
 	 *
 	 * @param {object} element
 	 * @param {string} attr
-	 * @param {(string|function)} filter
+	 * @param {string|function} filter
 	 * @returns {object}
 	 */
 	addElement(element, attr, filter)

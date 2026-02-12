@@ -5,7 +5,7 @@ import { getParentData } from './get-parent-data.js';
  * This will add an onSet watcher.
  *
  * @param {object} ele
- * @param {array} onSet
+ * @param {Array<any>} onSet
  * @param {object} parent
  * @returns {void}
  */

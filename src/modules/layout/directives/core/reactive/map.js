@@ -4,7 +4,7 @@ import { Builder } from "../../../builder.js";
  * This will map children to the element.
  *
  * @param {object} ele
- * @param {array} settings
+ * @param {Array<any>} settings
  * @param {object} parent
  * @returns {void}
  */

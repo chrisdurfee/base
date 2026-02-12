@@ -138,7 +138,7 @@ export class BrowserRender extends Render
 	 * This will add the element directives.
 	 *
 	 * @param {object} ele
-	 * @param {array} directives
+	 * @param {Array<any>} directives
 	 * @param {object} parent
 	 * @returns {void}
 	 */

@@ -127,7 +127,7 @@ export class BasicData
 	 */
 	getDataId()
 	{
-		return this._id;
+		return String(this._id);
 	}
 
 	/**
@@ -418,7 +418,7 @@ export class BasicData
 	 */
 	resume(defaultValue)
 	{
-		const data = LocalData.resume(this.key, defaultValue);
+		const data = LocalData.resume(String(this.key), defaultValue);
 		if (!data)
 		{
 			return this;
@@ -437,7 +437,7 @@ export class BasicData
 	store()
 	{
 		const data = this.get();
-		return LocalData.store(this.key, data);
+		return LocalData.store(String(this.key), data);
 	}
 
 	/**

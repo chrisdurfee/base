@@ -80,7 +80,7 @@ export class DataBinder
 	 * @param {object} element
 	 * @param {object} data
 	 * @param {string} prop
-	 * @param {(string|function)} [filter]
+	 * @param {string|function} filter
 	 * @returns {object} an instance of the databinder.
 	 */
 	bind(element, data, prop, filter)
@@ -105,7 +105,8 @@ export class DataBinder
 		 * and assign a bind id attr to support two way
 		 * binding.
 		 */
-		const connection = this.setupConnection(element, data, bindProp, bindAttr, filter);
+		const attr = bindAttr ?? '';
+		const connection = this.setupConnection(element, data, bindProp, attr, filter);
 
 		/**
 		 * We want to get the starting value of the data and
@@ -140,7 +141,7 @@ export class DataBinder
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {string} customAttr
-	 * @param {(string|function)} [filter]
+	 * @param {string|function} filter
 	 * @returns {object} The new connection.
 	 */
 	setupConnection(element, data, prop, customAttr, filter)
@@ -388,6 +389,9 @@ export class DataBinder
 	 */
 	setupEvents()
 	{
+		/**
+		 * @type {function} changeHandler
+		 */
 		this.changeHandler = this.bindHandler.bind(this);
 		this.addEvents();
 	}
@@ -402,6 +406,7 @@ export class DataBinder
 	{
 		if (typeof document !== 'undefined')
 		{
+			// @ts-ignore
 			Events.on(["change", "paste", "input"], document, this.changeHandler, false);
 		}
 	}
@@ -416,6 +421,7 @@ export class DataBinder
 	{
 		if (typeof document !== 'undefined')
 		{
+			// @ts-ignore
 			Events.off(["change", "paste", "input"], document, this.changeHandler, false);
 		}
 	}

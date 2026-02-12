@@ -192,7 +192,7 @@ export class Html
 			 */
 			if (value.originalCallback)
 			{
-				Events.add(attr, obj, value, false, false, value.originalCallback);
+				Events.add(attr, obj, value, false, true, value.originalCallback);
 			}
 			else
 			{
@@ -256,7 +256,7 @@ export class Html
 	 * This will create the options on a select.
 	 *
 	 * @param {object} selectElem
-	 * @param {array} optionArray
+	 * @param {Array<any>} optionArray
 	 * @param {string} [defaultValue]
 	 */
 	static setupSelectOptions(selectElem, optionArray, defaultValue)

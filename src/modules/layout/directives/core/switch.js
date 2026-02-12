@@ -22,7 +22,7 @@ DataTracker.addType('switch', (data) =>
  *
  * @protected
  * @param {object} ele
- * @param {array} group
+ * @param {Array<any>} group
  * @param {object} parent
  * @returns {void}
  */

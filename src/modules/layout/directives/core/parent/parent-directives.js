@@ -139,7 +139,7 @@ export const addState = (ele, callBack, parent) =>
  * This will add an event to the parent events.
  *
  * @param {object} ele
- * @param {array} event - event, element, function, capture
+ * @param {Array<any>} event - event, element, function, capture
  * @param {object} parent
  * @returns {void}
  */

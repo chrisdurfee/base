@@ -2,9 +2,9 @@
  * This will create an element object.
  *
  * @param {string} tag
- * @param {array} attr
- * @param {array} directives
- * @param {array} children
+ * @param {Array<any>} attr
+ * @param {Array<any>} directives
+ * @param {Array<any>} children
  * @returns {object}
  */
 export const Element = (tag, attr, directives, children) =>

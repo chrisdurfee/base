@@ -49,8 +49,8 @@ export class Parser
 	 *
 	 * @param {string} key
 	 * @param {*} value
-	 * @param {array} attr
-	 * @param {array} children
+	 * @param {Array<any>} attr
+	 * @param {Array<any>} children
 	 * @returns {boolean}
 	 */
 	static setElementContent(key, value, attr, children)
@@ -80,7 +80,7 @@ export class Parser
 	 *
 	 * @private
 	 * @static
-	 * @param {array} directives
+	 * @param {Array<any>} directives
 	 * @param {string} key
 	 * @param {string} value
 	 * @returns {void}
@@ -111,7 +111,7 @@ export class Parser
 	 * @static
 	 * @param {string} tag
 	 * @param {object} obj
-	 * @param {array} attr
+	 * @param {Array<any>} attr
 	 */
 	static setButtonType(tag, obj, attr)
 	{
@@ -208,6 +208,7 @@ export class Parser
 				 */
 				const wrapper = function(e)
 				{
+					// @ts-ignore
 					callback.call(this, e, parent);
 				};
 				// @ts-ignore - Add originalCallback for event cleanup tracking

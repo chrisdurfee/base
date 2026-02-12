@@ -4,7 +4,7 @@
 export const DataUtils =
 {
     /**
-     * @type {RexExp} deepDataPattern
+     * @type {RegExp} deepDataPattern
      */
 	deepDataPattern: /(\w+)|(?:\[(\d)\))/g,
 
@@ -23,7 +23,7 @@ export const DataUtils =
 	 * This will get the deep data segments.
 	 *
 	 * @param {string} str
-	 * @returns {Array<any>}
+	 * @returns {Array<any>|null}
 	 */
 	getSegments(str)
 	{

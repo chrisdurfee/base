@@ -56,7 +56,7 @@ export class ServerRender extends Render
 
 		if (obj.isUnit === true)
 		{
-			return this.createComponent(obj, parent);
+			return this.createComponent(obj, {}, parent);
 		}
 
 		return this.createElement(obj, parent);

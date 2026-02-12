@@ -158,7 +158,7 @@ export class Data extends BasicData
 	 * This will concatenate values to an array and set the result.
 	 *
 	 * @param {string} attr
-	 * @param {array} values
+	 * @param {Array<any>} values
 	 * @returns {object} this
 	 */
 	concat(attr, values)

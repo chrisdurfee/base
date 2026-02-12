@@ -27,8 +27,13 @@ export class Publisher
 		}
 
 		let prop,
-		props = utils.getSegments(attr),
-		length = props.length,
+		props = utils.getSegments(attr);
+		if (!props)
+		{
+			return;
+		}
+
+		const length = props.length,
 		end = length - 1;
 
 		/* the path is a string equivalent of the javascript dot notation path
@@ -120,7 +125,7 @@ export class Publisher
      *
      * @protected
      * @param {string} pathString
-     * @param {array} obj
+     * @param {Array<any>} obj
      * @param {function} callBack
      * @returns {void}
      */

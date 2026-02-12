@@ -5,7 +5,7 @@ import { onState } from "./on-state.js";
 /**
  * This will setup the onSet callBack.
  *
- * @param {array} dataValue
+ * @param {Array<any>} dataValue
  * @returns {function}
  */
 const onSetCallBack = (dataValue) =>
@@ -22,7 +22,7 @@ const onSetCallBack = (dataValue) =>
  * This will add data set attibute by binding to the data prop.
  *
  * @param {object} ele
- * @param {array} attribute
+ * @param {Array<any>} attribute
  * @param {object} parent
  * @returns {void}
  */
@@ -52,7 +52,7 @@ export const addDataSet = (ele, attribute, parent) =>
  * This will add data set attibute by binding to the data prop.
  *
  * @param {object} ele
- * @param {array} attribute
+ * @param {Array<any>} attribute
  * @param {object} parent
  * @returns {void}
  */

@@ -4,7 +4,7 @@ import { onUpdate } from '../dom-methods.js';
  * This will add an onState watcher.
  *
  * @param {object} ele
- * @param {array} onState
+ * @param {Array<any>} onState
  * @param {object} parent
  * @returns {void}
  */

@@ -29,8 +29,13 @@ export class PropertyHelper
 		}
 
 		let prop,
-		props = utils.getSegments(attr),
-		length = props.length,
+		props = utils.getSegments(attr);
+		if (!props)
+		{
+			return;
+		}
+
+		const length = props.length,
 		end = length - 1;
 
 		for (var i = 0; i < length; i++)
@@ -70,8 +75,13 @@ export class PropertyHelper
 			return;
 		}
 
-		const props = utils.getSegments(attr),
-		length = props.length,
+		const props = utils.getSegments(attr);
+		if (!props)
+		{
+			return;
+		}
+
+		const length = props.length,
 		end = length - 1;
 
 		for (var i = 0; i < length; i++)
@@ -113,8 +123,13 @@ export class PropertyHelper
 			return obj[attr] ?? undefined;
 		}
 
-		const props = utils.getSegments(attr),
-		length = props.length,
+		const props = utils.getSegments(attr);
+		if (!props)
+		{
+			return undefined;
+		}
+
+		const length = props.length,
 		end = length - 1;
 
 		for (var i = 0; i < length; i++)

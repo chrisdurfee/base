@@ -21,7 +21,7 @@ export class ModelService
 	constructor(model)
 	{
 		/**
-		 * @type {Model} model
+		 * @type {any} model
 		 */
 		this.model = model;
 
@@ -36,7 +36,7 @@ export class ModelService
 		this.url = '';
 
 		/**
-		 * @type {function} validateCallBack
+		 * @type {function|null} validateCallBack
 		 */
 		this.validateCallBack = null;
 		this.init();
@@ -187,11 +187,18 @@ export class ModelService
 	 */
 	get(instanceParams, callBack)
 	{
-		const id = this.model.get('id'),
-		params = 'id=' + id;
+		const id = this.model.get('id');
+		const params = 'id=' + id;
+		/** @type {string} */
+		let url;
+		if (id) {
+			url = `/${id}`;
+		} else {
+			url = '';
+		}
 
 		const model = this.model;
-		return this._get(`/${id}`, params, instanceParams, callBack, (response) =>
+		return this._get(url, params, instanceParams, callBack, (response) =>
 		{
 			if (response)
 			{
@@ -249,7 +256,13 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
-		const url = (typeof id === 'undefined')? '' : `/${id}`;
+		/** @type {string} */
+		let url;
+		if (typeof id === 'undefined' || id === null) {
+			url = '';
+		} else {
+			url = `/${id}`;
+		}
 
 		return this._put(url, params, instanceParams, callBack);
 	}
@@ -270,7 +283,13 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
-		const url = (typeof id === 'undefined')? '' : `/${id}`;
+		/** @type {string} */
+		let url;
+		if (typeof id === 'undefined' || id === null) {
+			url = '';
+		} else {
+			url = `/${id}`;
+		}
 
 		return this._post(url, params, instanceParams, callBack);
 	}
@@ -291,7 +310,13 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
-		const url = (typeof id === 'undefined')? '' : `/${id}`;
+		/** @type {string} */
+		let url;
+		if (typeof id === 'undefined' || id === null) {
+			url = '';
+		} else {
+			url = `/${id}`;
+		}
 
 		return this._patch(url, params, instanceParams, callBack);
 	}
@@ -307,7 +332,13 @@ export class ModelService
 	{
 		const id = this.model.get('id');
 		const params = (typeof id !== 'undefined')? 'id=' + id : this.setupObjectData();
-		const url = (typeof id === 'undefined')? '' : `/${id}`;
+		/** @type {string} */
+		let url;
+		if (typeof id === 'undefined' || id === null) {
+			url = '';
+		} else {
+			url = `/${id}`;
+		}
 
 		return this._delete(url, params, instanceParams, callBack);
 	}

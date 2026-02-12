@@ -92,14 +92,23 @@ export class HtmlHelper extends Html
 			/* this will add the event using the base events
 			so the event is tracked */
 			attr = removeEventPrefix(attr);
-			Events.add(attr, ele, function(e)
+
+			const callback = value;
+			/**
+			 * Store the original callback reference on the wrapper function
+			 * so it can be matched during event removal.
+			 */
+			const wrapper = function(e)
 			{
-				value.call(this, e, parent);
-			});
+				// @ts-ignore
+				callback.call(this, e, parent);
+			};
+
+			Events.add(attr, ele, wrapper, false, true, callback);
 			return;
 		}
 
-		if (attr.substr(4, 1) === '-')
+		if (attr.substring(4, 1) === '-')
 		{
 			// this will handle data and aria attributes
 			Dom.setAttr(ele, attr, value);

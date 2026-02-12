@@ -19,12 +19,12 @@ const isComponent = (layout) => (typeof layout === 'object' && layout.isUnit ===
  * This will create a Jot component.
  *
  * @param {object} layout
- * @returns {object}
+ * @returns {object|null}
  */
 const createJotComponent = (layout) =>
 {
 	const Component = Jot(layout);
-	return new Component();
+	return Component ? new Component() : null;
 };
 
 /**
@@ -54,6 +54,11 @@ export class Builder
 		if (!isComponent(layout))
 		{
 			layout = createJotComponent(layout);
+		}
+
+		if (!layout)
+		{
+			return null;
 		}
 
 		return render.createComponent(layout, container, parent);
@@ -90,7 +95,7 @@ export class Builder
 	 * This will add the element directives.
 	 *
 	 * @param {object} ele
-	 * @param {array} directives
+	 * @param {Array<any>} directives
 	 * @param {object} parent
 	 * @returns {void}
 	 */

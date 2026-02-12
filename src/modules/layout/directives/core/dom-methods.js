@@ -38,7 +38,7 @@ export const onUpdate = (ele, data, settings, parent) =>
  *
  * @param {object} ele
  * @param {object} data
- * @param {array} settings
+ * @param {Array<any>} settings
  * @param {string} parent
  * @returns {void}
  */
