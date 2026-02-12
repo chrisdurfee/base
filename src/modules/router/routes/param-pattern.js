@@ -1,8 +1,8 @@
 /**
  * This will get the default route params.
  *
- * @param {Array<any>} params
- * @returns {(object|null)}
+ * @param {Array<string>} params
+ * @returns {object|null}
  */
 export const getParamDefaults = (params) =>
 {
@@ -11,6 +11,9 @@ export const getParamDefaults = (params) =>
 		return null;
 	}
 
+	/**
+	 * @type {Record<string, any>} defaults
+	 */
 	const defaults = {};
 	params.forEach((param) =>
 	{
@@ -24,10 +27,13 @@ export const getParamDefaults = (params) =>
  * This will get the param keys from the uri.
  *
  * @param {string} uri
- * @returns {Array<any>}
+ * @returns {Array<string>}
  */
 export const paramPattern = (uri) =>
 {
+	/**
+	 * @type {Array<string>} params
+	 */
 	const params = [];
 	if (!uri)
 	{
