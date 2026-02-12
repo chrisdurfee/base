@@ -189,13 +189,7 @@ export class ModelService
 	{
 		const id = this.model.get('id');
 		const params = 'id=' + id;
-		/** @type {string} */
-		let url;
-		if (id) {
-			url = `/${id}`;
-		} else {
-			url = '';
-		}
+		const url = id ? `/${id}` : '';
 
 		const model = this.model;
 		return this._get(url, params, instanceParams, callBack, (response) =>
@@ -256,13 +250,7 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
-		/** @type {string} */
-		let url;
-		if (typeof id === 'undefined' || id === null) {
-			url = '';
-		} else {
-			url = `/${id}`;
-		}
+		const url = (id != null) ? `/${id}` : '';
 
 		return this._put(url, params, instanceParams, callBack);
 	}
@@ -283,13 +271,7 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
-		/** @type {string} */
-		let url;
-		if (typeof id === 'undefined' || id === null) {
-			url = '';
-		} else {
-			url = `/${id}`;
-		}
+		const url = (id != null) ? `/${id}` : '';
 
 		return this._post(url, params, instanceParams, callBack);
 	}
@@ -310,13 +292,7 @@ export class ModelService
 
 		let params = this.setupObjectData();
 		const id = this.model.id;
-		/** @type {string} */
-		let url;
-		if (typeof id === 'undefined' || id === null) {
-			url = '';
-		} else {
-			url = `/${id}`;
-		}
+		const url = (id != null) ? `/${id}` : '';
 
 		return this._patch(url, params, instanceParams, callBack);
 	}
@@ -332,13 +308,7 @@ export class ModelService
 	{
 		const id = this.model.get('id');
 		const params = (typeof id !== 'undefined')? 'id=' + id : this.setupObjectData();
-		/** @type {string} */
-		let url;
-		if (typeof id === 'undefined' || id === null) {
-			url = '';
-		} else {
-			url = `/${id}`;
-		}
+		const url = (id != null) ? `/${id}` : '';
 
 		return this._delete(url, params, instanceParams, callBack);
 	}
@@ -432,7 +402,7 @@ export class ModelService
 	 * @param {string} url
 	 * @param {string} method
 	 * @param {(string|object)} params
-	 * @param {function} callBack
+	 * @param {function} [callBack]
 	 * @param {function} [requestCallBack]
 	 * @returns {XMLHttpRequest}
 	 */
@@ -669,8 +639,8 @@ export class ModelService
 	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
-	 * @param {string} instanceParams
-	 * @param {function} callBack
+	 * @param {string} [instanceParams]
+	 * @param {function} [callBack]
 	 * @param {function} [requestCallBack]
 	 * @returns {XMLHttpRequest}
 	 */
@@ -695,8 +665,8 @@ export class ModelService
 	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
-	 * @param {string} instanceParams
-	 * @param {function} callBack
+	 * @param {string} [instanceParams]
+	 * @param {function} [callBack]
 	 * @param {function} [requestCallBack]
 	 * @returns {XMLHttpRequest}
 	 */
@@ -711,8 +681,8 @@ export class ModelService
 	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
-	 * @param {string} instanceParams
-	 * @param {function} callBack
+	 * @param {string} [instanceParams]
+	 * @param {function} [callBack]
 	 * @param {function} [requestCallBack]
 	 * @returns {XMLHttpRequest}
 	 */
@@ -727,8 +697,8 @@ export class ModelService
 	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
-	 * @param {string} instanceParams
-	 * @param {function} callBack
+	 * @param {string} [instanceParams]
+	 * @param {function} [callBack]
 	 * @param {function} [requestCallBack]
 	 * @returns {XMLHttpRequest}
 	 */
@@ -743,8 +713,8 @@ export class ModelService
 	 * @protected
 	 * @param {string} url
 	 * @param {(string|object)} params
-	 * @param {string} instanceParams
-	 * @param {function} callBack
+	 * @param {string} [instanceParams]
+	 * @param {function} [callBack]
 	 * @param {function} [requestCallBack]
 	 * @returns {XMLHttpRequest}
 	 */
@@ -760,8 +730,8 @@ export class ModelService
 	 * @param {string} url
 	 * @param {string} method
 	 * @param {(string|object)} params
-	 * @param {string} instanceParams
-	 * @param {function} callBack
+	 * @param {string} [instanceParams]
+	 * @param {function} [callBack]
 	 * @param {function} [requestCallBack]
 	 * @returns {XMLHttpRequest}
 	 */
@@ -778,8 +748,8 @@ export class ModelService
 	 *
 	 * @protected
 	 * @param {object} response
-	 * @param {function} callBack
-	 * @param {object} xhr
+	 * @param {function} [callBack]
+	 * @param {object} [xhr]
 	 * @returns {void}
 	 */
 	getResponse(response, callBack, xhr)
