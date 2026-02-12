@@ -13,7 +13,7 @@ export const Events =
 	 * This will get the events on an element.
 	 *
 	 * @param {object} obj
-	 * @returns {array}
+	 * @returns {Array<any>}
 	 */
 	getEvents(obj)
 	{
@@ -198,7 +198,7 @@ export const Events =
 	 * This will search for an event from the object events.
 	 *
 	 * @param {object} eventObj
-	 * @param {array} events
+	 * @param {Array<any>} events
 	 * @returns {object|boolean}
 	 */
 	search(eventObj, events)
@@ -241,7 +241,7 @@ export const Events =
 	},
 
 	/**
-	 * @member {array} swap The swappable events.
+	 * @type {Array<any>} swap The swappable events.
 	 */
 	swap: [
 		'DOMMouseScroll',

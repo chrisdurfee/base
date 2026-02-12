@@ -18,7 +18,7 @@ export class DataPubSub
 	constructor()
 	{
 		/**
-		 * @member {Map} callBacks
+		 * @type {Map} callBacks
 		 * @protected
 		 */
 		this.callBacks = new Map();

@@ -8,7 +8,7 @@ import { Events } from './events.js';
 export const EventMethods =
 {
 	/**
-	 * @member {Events} events
+	 * @type {Events} events
 	 */
 	events: Events,
 
@@ -218,7 +218,7 @@ export const EventMethods =
 	},
 
 	/**
-	 * @member {string} mouseWheelEventType The mouse wheel event name.
+	 * @type {string} mouseWheelEventType The mouse wheel event name.
 	 * @protected
 	 */
 	mouseWheelEventType: null,

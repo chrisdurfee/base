@@ -24,12 +24,12 @@ export class DataSource extends TwoWaySource
 		super(pubSub);
 
 		/**
-		 * @member {object} data
+		 * @type {object} data
 		 */
 		this.data = data;
 
 		/**
-		 * @member {string} prop
+		 * @type {string} prop
 		 */
 		this.prop = prop;
 	}

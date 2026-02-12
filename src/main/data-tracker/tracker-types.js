@@ -9,7 +9,7 @@
 export const TrackerTypes =
 {
     /**
-     * @member {object} types The Type and callBack that is called
+     * @type {object} types The Type and callBack that is called
      * when the type is removed from the object.
      */
     types: {},

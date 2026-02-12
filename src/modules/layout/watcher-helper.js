@@ -161,7 +161,7 @@ export const WatcherHelper =
 	 * @private
 	 * @param {(string|object)} settings
 	 * @param {object} parent
-	 * @returns {array}
+	 * @returns {Array<any>}
 	 */
 	getValue(settings, parent)
 	{
@@ -188,9 +188,9 @@ export const WatcherHelper =
 	 * This will get the prop values.
 	 *
 	 * @param {object} data
-	 * @param {array} props
+	 * @param {Array<any>} props
 	 * @param {boolean} isArray
-	 * @returns {array}
+	 * @returns {Array<any>}
 	 */
 	getPropValues(data, props, isArray)
 	{
@@ -292,7 +292,7 @@ export const WatcherHelper =
 		/**
 		 * This will get the props to watch.
 		 *
-		 * @type {array} props
+		 * @type {Array<any>} props
 		 */
 		props = this._getWatcherProps(string);
 

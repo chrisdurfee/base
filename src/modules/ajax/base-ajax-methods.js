@@ -11,7 +11,7 @@ export const setupBaseAjaxMethods = () =>
 	base.augment(
 	{
 		/**
-		 * @member {object} xhrSettings
+		 * @type {object} xhrSettings
 		 */
 		xhrSettings: XhrDefaultSettings,
 

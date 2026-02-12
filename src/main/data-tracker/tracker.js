@@ -19,7 +19,7 @@ export class Tracker
 	constructor()
 	{
 		/**
-		 * @member {Map} types
+		 * @type {Map} types
 		 */
 		this.types = new Map();
 	}

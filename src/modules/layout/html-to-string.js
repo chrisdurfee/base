@@ -16,7 +16,7 @@ export class HtmlToString
      * This will create a node string.
      *
      * @param {string} tag
-     * @param {array} attrs
+     * @param {Array<any>} attrs
      * @param {string} children
      * @returns {string}
      */
@@ -84,7 +84,7 @@ export class HtmlToString
     /**
      * This will create a text node.
      *
-     * @param {array} attrs
+     * @param {Array<any>} attrs
      * @returns {string}
      */
     static createAttributes(attrs = [])

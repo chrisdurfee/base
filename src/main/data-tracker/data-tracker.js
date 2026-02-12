@@ -17,7 +17,7 @@ export class DataTracker
 	/**
 	 * @private
 	 * @static
-	 * @member {Map} trackers This is an object that stores all tracker
+	 * @type {Map} trackers This is an object that stores all tracker
 	 * objects by tracking id.
 	 */
 	static trackers = new Map();
@@ -25,7 +25,7 @@ export class DataTracker
 	/**
 	 * @private
 	 * @static
-	 * @member {number} trackingCount
+	 * @type {number} trackingCount
 	 */
 	static trackingCount = 0;
 

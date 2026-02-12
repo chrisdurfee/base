@@ -22,7 +22,7 @@ export class TwoWaySource extends Source
 		super();
 
 		/**
-		 * @member {object} pubSub
+		 * @type {object} pubSub
 		 */
 		this.pubSub = pubSub;
 	}

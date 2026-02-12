@@ -23,17 +23,17 @@ export class TwoWayConnection extends Connection
 		super();
 
 		/**
-		 * @member {object|null} element
+		 * @type {object|null} element
 		 */
 		this.element = null;
 
 		/**
-		 * @member {object|null} data
+		 * @type {object|null} data
 		 */
 		this.data = null;
 
 		/**
-		 * @member {object} pubSub
+		 * @type {object} pubSub
 		 */
 		this.pubSub = pubSub;
 	}

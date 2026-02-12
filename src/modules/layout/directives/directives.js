@@ -8,12 +8,12 @@ import { Directive } from './directive.js';
 export const Directives =
 {
     /**
-     * @member {array} keys
+     * @type {Array<any>} keys
      */
     keys: [],
 
     /**
-     * @member {object} items
+     * @type {object} items
      */
     items: {},
 
@@ -46,7 +46,7 @@ export const Directives =
     /**
      * This will get all directive names.
      *
-     * @returns {array}
+     * @returns {Array<any>}
      */
     all()
     {

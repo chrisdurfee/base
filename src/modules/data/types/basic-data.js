@@ -59,13 +59,13 @@ export class BasicData
 	constructor(settings = {})
 	{
 		/**
-		 * @member {boolean} dirty
+		 * @type {boolean} dirty
 		 * @default false
 		 */
 		this.dirty = false;
 
 		/**
-		 * @member {object} links
+		 * @type {object} links
 		 * @default {}
 		 * @protected
 		 */
@@ -75,7 +75,7 @@ export class BasicData
 		this.setup();
 
 		/**
-		 * @member {string} dataTypeId
+		 * @type {string} dataTypeId
 		 */
 		this.dataTypeId = 'bd';
 
@@ -100,7 +100,7 @@ export class BasicData
 	setup()
 	{
 		/**
-		 * @member {object} stage
+		 * @type {object} stage
 		 */
 		this.stage = {};
 	}

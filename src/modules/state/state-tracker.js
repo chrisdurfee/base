@@ -12,7 +12,7 @@ import { StateTarget } from './state-target.js';
 export class StateTracker
 {
 	/**
-	 * @member {Map} targets
+	 * @type {Map} targets
 	 * @private
 	 */
 	static targets = new Map();

@@ -78,22 +78,22 @@ export class Group
 	constructor(callBack)
 	{
 		/**
-		 * @member {number} percent
+		 * @type {number} percent
 		 */
 		this.percent = 0;
 
 		/**
-		 * @member {number} loaded
+		 * @type {number} loaded
 		 */
 		this.loaded = 0;
 
 		/**
-		 * @member {number} total
+		 * @type {number} total
 		 */
 		this.total = 0;
 
 		/**
-		 * @member {function} callBack
+		 * @type {function} callBack
 		 */
 		this.callBack = callBack || null;
 	}

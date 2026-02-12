@@ -56,12 +56,12 @@ export const ImportWrapper = Jot(
 	declareProps()
 	{
 		/**
-		 * @member {boolean}
+		 * @type {boolean}
 		 */
 		this.loaded = false;
 
 		/**
-		 * @member {boolean}
+		 * @type {boolean}
 		 */
 		this.blockRender = false;
 	},

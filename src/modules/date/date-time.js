@@ -6,12 +6,12 @@
 export const DateTime =
 {
 	/**
-	 * @member {array} monthName
+	 * @type {Array<any>} monthName
 	 */
 	monthNames: ["January","February","March","April","May","June","July","August","September","October","November","December"],
 
 	/**
-	 * @member {array} dayNames
+	 * @type {Array<any>} dayNames
 	 */
 	dayNames: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
 
@@ -273,7 +273,7 @@ export const DateTime =
 	 * This will get the length of all the months.
 	 *
 	 * @param {number} year
-	 * @returns {array}
+	 * @returns {Array<any>}
 	 */
 	getMonthsLength(year = new Date().getFullYear())
 	{

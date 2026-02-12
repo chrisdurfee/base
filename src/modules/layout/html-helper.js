@@ -18,7 +18,7 @@ export class HtmlHelper extends Html
 	 *
 	 * @override
 	 * @param {string} nodeName The node name.
-	 * @param {array} attrs The node attributes.
+	 * @param {Array<any>} attrs The node attributes.
 	 * @param {object} container The node container.
 	 * @param {object} parent
 	 * @returns {object} The new element.
@@ -37,7 +37,7 @@ export class HtmlHelper extends Html
 	 *
 	 * @overload
 	 * @param {object} ele
-	 * @param {array} attrs
+	 * @param {Array<any>} attrs
 	 * @param {object} parent
      * @returns {void}
 	 */

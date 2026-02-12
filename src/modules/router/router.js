@@ -26,7 +26,7 @@ export class Router
 	constructor()
 	{
 		/**
-		 * @member {string} version
+		 * @type {string} version
 		 */
 		this.version = '1.0.2';
 
@@ -49,13 +49,14 @@ export class Router
 
 		/**
 		 * This will store each route added to the router.
+		 * @type {Array<object>} routes
 		 */
 		this.routes = [];
 		this.switches = new Map();
 		this.switchCount = 0;
 
 		/**
-		 * @member {object} data
+		 * @type {object} data
 		 */
 		this.data = new Data(
 		{
@@ -83,7 +84,9 @@ export class Router
 	 */
 	createRoute(settings)
 	{
+		// @ts-ignore
 		const uri = settings.uri || '*';
+		// @ts-ignore
 		settings.baseUri = this.createURI(uri);
 
 		return new Route(settings, this.updateTitle.bind(this));
@@ -137,6 +140,7 @@ export class Router
 	 */
 	resume(route, container)
 	{
+		// @ts-ignore
 		route.resume(container);
 		this.addRoute(route);
 	}
@@ -178,7 +182,7 @@ export class Router
 	 * This will get a route by uri.
 	 *
 	 * @param {string} uri
-	 * @returns {(object|boolean)}
+	 * @returns {object|null}
 	 */
 	getRoute(uri)
 	{
@@ -195,14 +199,14 @@ export class Router
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
 	 * This will get a route by id.
 	 *
 	 * @param {string} id
-	 * @returns {(object|boolean)}
+	 * @returns {object|boolean}
 	 */
 	getRouteById(id)
 	{
@@ -240,7 +244,7 @@ export class Router
 	/**
 	 * This will add a switch.
 	 *
-	 * @param {array} group
+	 * @param {Array<object>} group
 	 * @returns {number} the switch id.
 	 */
 	addSwitch(group)
@@ -266,7 +270,7 @@ export class Router
 	/**
 	 * This will resume a switch.
 	 *
-	 * @param {object} group
+	 * @param {Array<object>} group
 	 * @param {object} container
 	 * @returns {number} the switch id.
 	 */
@@ -277,6 +281,7 @@ export class Router
 
 		group.forEach((item) =>
 		{
+			// @ts-ignore
 			const route = item.component.route;
 			route.resume(container);
 			switchArray.push(route);
@@ -290,7 +295,7 @@ export class Router
 	 * This will get a switch group by id.
 	 *
 	 * @param {number} id
-	 * @returns {array}
+	 * @returns {Array<object>}
 	 */
 	getSwitchGroup(id)
 	{
@@ -300,6 +305,9 @@ export class Router
 			return switches;
 		}
 
+		/**
+		 * @type {Array<object>} group
+		 */
 		const group = [];
 		this.switches.set(id, group);
 		return group;
@@ -308,7 +316,7 @@ export class Router
 	/**
 	 * This will remove a switch by id.
 	 *
-	 * @param {string} id
+	 * @param {number} id
 	 * @returns {void}
 	 */
 	removeSwitch(id)
@@ -327,7 +335,7 @@ export class Router
 		uri = this.createURI(uri);
 
 		const route = this.getRoute(uri);
-		if (route !== false)
+		if (route)
 		{
 			this.removeRoute(route);
 		}
@@ -483,7 +491,7 @@ export class Router
 	 * This will navigate the router.
 	 *
 	 * @param {string} uri
-	 * @param {object} [data]
+	 * @param {object|null} [data]
 	 * @param {boolean} [replace]
 	 * @returns {object} a reference to the router object.
 	 */

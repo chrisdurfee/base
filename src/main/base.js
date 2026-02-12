@@ -30,12 +30,12 @@ class Base
 	constructor()
 	{
 		/**
-		 * @member {array} errors
+		 * @type {Array<any>} errors
 		 */
 		this.errors = [];
 
 		/**
-		 * @member {object} dataTracker
+		 * @type {object} dataTracker
 		 */
 		this.dataTracker = DataTracker;
 	}
@@ -58,6 +58,7 @@ class Base
 		{
 			if (Object.prototype.hasOwnProperty.call(methods, property))
 			{
+				// @ts-ignore
 				prototype[property] = methods[property];
 			}
 		}
@@ -70,11 +71,12 @@ class Base
 	 * @param {object} obj The object being modified.
 	 * @param {string} methodName the method name being overriden.
 	 * @param {function} overrideMethod The new function to call.
-	 * @param {array} args The args to pass to the first function call.
+	 * @param {Array<any>} args The args to pass to the first function call.
 	 * @returns {*} The results of the function being called.
 	 */
 	override(obj, methodName, overrideMethod, args)
 	{
+		// @ts-ignore
 		return (obj[methodName] = overrideMethod).apply(obj, Arrays.toArray(args));
 	}
 
@@ -103,7 +105,7 @@ class Base
 	/**
 	 * This will get the value from a property on an object.
 	 *
-	 * @param {object} obj
+	 * @param {Record<string, any>} obj
 	 * @param {string} property
 	 * @param {*} [defaultText] A value if no value is set.
 	 * @returns {string}
@@ -131,7 +133,7 @@ class Base
 	 *
 	 * @param {object} obj
 	 * @param {function} method
-	 * @param {array} [argArray] Default args to pass.
+	 * @param {Array<any>} [argArray] Default args to pass.
 	 * @param {boolean} [addArgs] Set to add merge args from the
 	 * curried function.
 	 * @returns {function|boolean} The callBack function or false.

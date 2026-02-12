@@ -5,6 +5,7 @@
 		"emitDeclarationOnly": true, // Instructs the compiler to only emit `.d.ts` declaration files
 		"declaration": true, // Enables generation of declaration files
 		"declarationDir": "./dist/types",
+		"rootDir": "./src",
 		"outDir": "./dist",
 		"noEmit": false, // Ensures that files are emitted
 		"esModuleInterop": true,

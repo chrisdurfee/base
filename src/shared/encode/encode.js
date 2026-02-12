@@ -32,7 +32,7 @@ export class Encode
 	/**
 	 * This will encode and decode json data.
 	 *
-	 * @member {object} json
+	 * @type {object} json
 	 */
 	static json = {
 		encode,

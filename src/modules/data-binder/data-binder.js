@@ -23,17 +23,17 @@ export class DataBinder
 	constructor()
 	{
 		/**
-		 * @member {string} version
+		 * @type {string} version
 		 */
 		this.version = "1.0.1";
 
 		/**
-		 * @member {string} attr
+		 * @type {string} attr
 		 */
 		this.attr = 'bindId';
 
 		/**
-		 * @member {array} blockedKeys
+		 * @type {Array<any>} blockedKeys
 		 * @protected
 		 */
 		this.blockedKeys = [
@@ -45,19 +45,19 @@ export class DataBinder
 		];
 
 		/**
-		 * @member {object} connections
+		 * @type {object} connections
 		 * @protected
 		 */
 		this.connections = new ConnectionTracker();
 
 		/**
-		 * @member {object} pubSub
+		 * @type {object} pubSub
 		 * @protected
 		 */
 		this.pubSub = new DataPubSub();
 
 		/**
-		 * @member {number} idCount
+		 * @type {number} idCount
 		 */
 		this.idCount = 0;
 		this.setup();

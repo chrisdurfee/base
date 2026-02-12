@@ -113,7 +113,7 @@ export class NavLink extends Component
      * @protected
      * @param {string} href
      * @param {string} text
-     * @returns {array}
+     * @returns {Array<any>}
      */
     setupWatchers(href, text)
     {

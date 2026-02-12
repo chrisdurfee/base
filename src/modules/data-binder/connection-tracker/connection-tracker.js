@@ -17,7 +17,7 @@ export class ConnectionTracker
 	constructor()
 	{
 		/**
-		 * @member {Map<string, Map<string, object|object[]>>} connections
+		 * @type {Map<string, Map<string, object|object[]>>} connections
 		 */
 		this.connections = new Map();
 	}

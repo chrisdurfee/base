@@ -104,18 +104,18 @@ export class ElementSource extends TwoWaySource
 		super(pubSub);
 
 		/**
-		 * @member {object} element
+		 * @type {object} element
 		 */
 		this.element = element;
 
 		/**
-		 * @member {string} attr
+		 * @type {string} attr
 		 */
 		this.attr = this.getAttrBind(attr);
 		this.addSetMethod(element, this.attr);
 
 		/**
-		 * @member {function} filter
+		 * @type {function} filter
 		 * @private
 		 */
 		this.filter = (typeof filter === 'string')? this.setupFilter(filter) : filter;

@@ -18,7 +18,7 @@ export class EventHelper
 	constructor()
 	{
 		/**
-		 * @member {Array<object>} events
+		 * @type {Array<object>} events
 		 */
 		this.events = [];
 	}
@@ -26,7 +26,7 @@ export class EventHelper
 	/**
 	 * This will add an array of events.
 	 *
-	 * @param {Array<Array>} events
+	 * @param {Array<Array<any>>} events
 	 * @returns {void}
 	 */
 	addEvents(events)
@@ -40,7 +40,7 @@ export class EventHelper
 		events.forEach((event) =>
 		{
 			/**
-			 * @type {array} event
+			 * @type {Array<any>} event
 			 */
 			// @ts-ignore
 			this.on(...event);
@@ -86,6 +86,7 @@ export class EventHelper
 		for (var i = 0, length = events.length; i < length; i++)
 		{
 			option = events[i];
+			// @ts-ignore
 			if (option.event === event && option.obj === obj)
 			{
 				events.splice(i, 1);
@@ -103,6 +104,7 @@ export class EventHelper
 	{
 		this.events.forEach((event) =>
 		{
+			// @ts-ignore
 			Events.on(event.event, event.obj, event.callBack, event.capture);
 		});
 	}
@@ -116,6 +118,7 @@ export class EventHelper
 	{
 		this.events.forEach((event) =>
 		{
+			// @ts-ignore
 			Events.off(event.event, event.obj, event.callBack, event.capture);
 		});
 	}

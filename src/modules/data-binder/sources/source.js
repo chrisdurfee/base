@@ -16,13 +16,13 @@ export class Source
 	constructor()
 	{
 		/**
-		 * @member {string} msg
+		 * @type {string} msg
 		 * @protected
 		 */
 		this.msg = null;
 
 		/**
-		 * @member {string} token
+		 * @type {string} token
 		 */
 		this.token = null;
 	}

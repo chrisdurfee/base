@@ -21,22 +21,22 @@ export class ModelService
 	constructor(model)
 	{
 		/**
-		 * @member {Model} model
+		 * @type {Model} model
 		 */
 		this.model = model;
 
 		/**
-		 * @member {string} objectType The return type.
+		 * @type {string} objectType The return type.
 		 */
 		this.objectType = this.objectType || 'item';
 
 		/**
-		 * @member {string} url
+		 * @type {string} url
 		 */
 		this.url = '';
 
 		/**
-		 * @member {function} validateCallBack
+		 * @type {function} validateCallBack
 		 */
 		this.validateCallBack = null;
 		this.init();

@@ -19,7 +19,7 @@ export class StateHelper
 	constructor(state, states)
 	{
 		/**
-		 * @member {array} remoteStates
+		 * @type {Array<any>} remoteStates
 		 */
 		this.remoteStates = [];
 
@@ -65,7 +65,7 @@ export class StateHelper
 	 *
 	 * @protected
 	 * @param {object} action
-	 * @returns {array}
+	 * @returns {Array<any>}
 	 */
 	convertStates(action)
 	{
@@ -107,8 +107,8 @@ export class StateHelper
 	 * This will setup remote states.
 	 *
 	 * @protected
-	 * @param {array} remotes
-	 * @param {array} actions
+	 * @param {Array<any>} remotes
+	 * @param {Array<any>} actions
 	 * @returns {void}
 	 */
 	setupRemoteStates(remotes, actions)
@@ -167,7 +167,7 @@ export class StateHelper
 	 * This will remove the actions.
 	 *
 	 * @param {object} state
-	 * @param {array} actions
+	 * @param {Array<any>} actions
 	 * @returns {void}
 	 */
 	removeActions(state, actions)
@@ -242,7 +242,7 @@ export class StateHelper
 	 *
 	 * @protected
 	 * @param {object} state
-	 * @param {array} actions
+	 * @param {Array<any>} actions
 	 * @returns {void}
 	 */
 	addStatesToTarget(state, actions)

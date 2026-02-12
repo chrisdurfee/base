@@ -69,47 +69,47 @@ export class Unit
 	constructor(...args)
 	{
 		/**
-		 * @member {boolean} isUnit
+		 * @type {boolean} isUnit
 		 */
 		this.isUnit = true;
 
 		/**
-		 * @member {Data|null} data
+		 * @type {Data|null} data
 		 */
 		this.data = null;
 
 		/**
-		 * @member {boolean|null} persist
+		 * @type {boolean|null} persist
 		 */
 		this.persist = null;
 
 		/**
-		 * @member {?array} nest
+		 * @type {?array} nest
 		 */
 		this.nest = null;
 
 		/**
-		 * @member {StateTarget|null} state
+		 * @type {StateTarget|null} state
 		 */
 		this.state = null;
 
 		/**
-		 * @member {?object} panel
+		 * @type {?object} panel
 		 */
 		this.panel = null;
 
 		/**
-		 * @member {?Unit} parent
+		 * @type {?Unit} parent
 		 */
 		this.parent = null;
 
 		/**
-		 * @member {?string} unitType
+		 * @type {?string} unitType
 		 */
 		this.unitType = null;
 
 		/**
-		 * @member {array} cached
+		 * @type {Array<any>} cached
 		 */
 		this.cached = [];
 
@@ -122,7 +122,7 @@ export class Unit
 		this.setupProps(props);
 
 		/**
-		 * @member {array} children
+		 * @type {Array<any>} children
 		 */
 		this.children = children || [];
 		this.persistedChildren = {};
@@ -131,12 +131,12 @@ export class Unit
 		this.onCreated();
 
 		/**
-		 * @member {boolean} rendered
+		 * @type {boolean} rendered
 		 */
 		this.rendered = false;
 
 		/**
-		 * @member {?object} container
+		 * @type {?object} container
 		 */
 		this.container = null;
 	}
@@ -513,9 +513,9 @@ export class Unit
 	 * This will map an array to children elements.
 	 *
 	 * @protected
-	 * @param {array} items
+	 * @param {Array<any>} items
 	 * @param {function} callBack
-	 * @returns {array}
+	 * @returns {Array<any>}
 	 */
 	map(items, callBack)
 	{

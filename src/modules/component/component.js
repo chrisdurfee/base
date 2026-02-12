@@ -51,7 +51,7 @@ export class Component extends Unit
 		/* this will allow the component to override the
 		state target id to add a custom id */
 		/**
-		 * @member {string} [stateTargetId] // optional override of state id
+		 * @type {string|null} stateTargetId // optional override of state id
 		 */
 		this.stateTargetId = null;
 		this._setupData();
@@ -90,7 +90,7 @@ export class Component extends Unit
 	/**
 	 *  This will resume the component scope when persisting.
 	 *
-	 * @param {object} persistedLayout
+	 * @param {{data: any, state: any, stateHelper: any, persistedChildren: any, id: string}} persistedLayout
 	 * @returns {void}
 	 */
 	resumeScope(persistedLayout)
@@ -106,7 +106,7 @@ export class Component extends Unit
 	 * This will initialize the component.
 	 *
 	 * @protected
-	 * @returns {object}
+	 * @returns {void}
 	 */
 	initialize()
 	{
@@ -137,7 +137,7 @@ export class Component extends Unit
 	setupStateTarget(id)
 	{
 		const targetId = id || this.stateTargetId || this.id;
-		this.state = StateTracker.getTarget(targetId);
+		this.state = StateTracker.getTarget(String(targetId));
 	}
 
 	/**
@@ -300,7 +300,7 @@ export class Component extends Unit
 	 * This will setup the events.
 	 *
 	 * @protected
-	 * @returns {array}
+	 * @returns {Array<Array<any>>}
 	 *
 	 * @example
 	 * return [
@@ -330,7 +330,10 @@ export class Component extends Unit
 		}
 
 		this.setEventHelper();
-		this.events.addEvents(events);
+		if (this.events)
+		{
+			this.events.addEvents(events);
+		}
 	}
 
 	/**
