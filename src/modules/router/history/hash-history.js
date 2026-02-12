@@ -39,6 +39,7 @@ export class HashHistory extends History
 	 */
 	check(evt)
 	{
+		// @ts-ignore
 		this.router.checkActiveRoutes(evt.newURL);
 	}
 

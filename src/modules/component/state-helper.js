@@ -272,7 +272,7 @@ export class StateHelper
 	 *
 	 * @param {object} target
 	 * @param {object} action
-	 * @returns {string}
+	 * @returns {string|null}
 	 */
 	addAction(target, action)
 	{
@@ -297,6 +297,6 @@ export class StateHelper
 			target.on(actionEvent, callBack);
 		}
 
-		return token;
+		return token || null;
 	}
 }

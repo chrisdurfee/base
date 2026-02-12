@@ -10,29 +10,29 @@ import { HashHistory } from './hash-history.js';
  */
 export class HistoryController
 {
-    /**
-     * This will check if browser based navigation is supported
-     *
-     * @returns {boolean}
-     */
-    static browserIsSupported()
-    {
-        return (typeof window === 'object' && 'history' in window && 'pushState' in window.history);
-    }
+	/**
+	 * This will check if browser based navigation is supported
+	 *
+	 * @returns {boolean}
+	 */
+	static browserIsSupported()
+	{
+		return (typeof window === 'object' && 'history' in window && 'pushState' in window.history);
+	}
 
-    /**
-     * This will create a History Object based on navigation support
-     *
-     * @param {object} router
-     * @returns {object}
-     */
-    static setup(router)
-    {
-        if (this.browserIsSupported())
-        {
-            return new BrowserHistory(router).setup();
-        }
+	/**
+	 * This will create a History Object based on navigation support
+	 *
+	 * @param {object} router
+	 * @returns {object}
+	 */
+	static setup(router)
+	{
+		if (this.browserIsSupported())
+		{
+			return new BrowserHistory(router).setup();
+		}
 
-        return new HashHistory(router).setup();
-    }
+		return new HashHistory(router).setup();
+	}
 }

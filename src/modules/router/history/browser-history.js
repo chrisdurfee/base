@@ -35,12 +35,13 @@ export class BrowserHistory extends History
 	/**
 	 * This will check to activate the router.
 	 *
-	 * @param {object} evt
+	 * @param {PointerEvent} evt
 	 */
 	check(evt)
 	{
 		/* we want to check if the event has a state and if the
 		state location is from the background */
+		// @ts-ignore
 		const state = evt.state;
 		if (!state || state.location !== this.locationId)
 		{
@@ -50,6 +51,7 @@ export class BrowserHistory extends History
 		evt.preventDefault();
 		evt.stopPropagation();
 
+		// @ts-ignore
 		this.router.checkActiveRoutes(state.uri);
 
 		const scrollPosition = state.scrollPosition;
@@ -63,12 +65,13 @@ export class BrowserHistory extends History
 	 * This will create a state object.
 	 *
 	 * @param {string} uri
-	 * @param {*} data
+	 * @param {object|null} data
 	 * @returns {object}
 	 */
 	createState(uri, data = {})
 	{
 		const scrollPosition = this.getScrollPosition();
+		data = (data === null)? {} : data;
 
 		return {
 			location: this.locationId,
@@ -82,7 +85,7 @@ export class BrowserHistory extends History
 	 * This will add a state to the history.
 	 *
 	 * @param {string} uri
-	 * @param {object} data
+	 * @param {object|null} data
 	 * @param {boolean} replace
 	 * @returns {object} a reference to the object.
 	 */
@@ -97,6 +100,7 @@ export class BrowserHistory extends History
 
 		const stateObj = this.createState(uri, data);
 		const method = (replace === false)? 'pushState' : 'replaceState';
+		// @ts-ignore
 		history[method](stateObj, null, uri);
 
 		return this;

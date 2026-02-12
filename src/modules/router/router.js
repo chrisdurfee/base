@@ -44,6 +44,10 @@ export class Router
 		 * This will be used to access our history object.
 		 */
 		this.history = null;
+
+		/**
+		 * @type {function|null} callBackLink
+		 */
 		this.callBackLink = null;
 		this.location = getLocation();
 
@@ -193,6 +197,7 @@ export class Router
 			for (var i = 0; i < length; i++)
 			{
 				var route = routes[i];
+				// @ts-ignore
 				if (route.uri === uri)
 				{
 					return route;
@@ -217,6 +222,7 @@ export class Router
 			for (var i = 0; i < length; i++)
 			{
 				var route = routes[i];
+				// @ts-ignore
 				if (route.id === id)
 				{
 					return route;
@@ -372,6 +378,12 @@ export class Router
 		return this;
 	}
 
+	/**
+	 * Update the base tag href to the base URI for correct relative URL resolution.
+	 *
+	 * @param {string} url
+	 * @return {void}
+	 */
 	updateBaseTag(url)
 	{
 		/* this will modify the base tag to ref from
@@ -386,8 +398,8 @@ export class Router
 	/**
 	 * This will get the parent element link.
 	 *
-	 * @param {object} ele
-	 * @returns {(object|boolean)}
+	 * @param {HTMLElement} ele
+	 * @returns {HTMLElement|boolean}
 	 */
 	getParentLink(ele)
 	{
@@ -396,6 +408,7 @@ export class Router
 		{
 			if (target.nodeName.toLowerCase() === 'a')
 			{
+				// @ts-ignore
 				return target;
 			}
 
@@ -408,7 +421,7 @@ export class Router
 	 * This will check if a link was routed.
 	 *
 	 * @protected
-	 * @param {object} evt
+	 * @param {PointerEvent} evt
 	 */
 	checkLink(evt)
 	{
@@ -417,23 +430,28 @@ export class Router
 			return true;
 		}
 
-		let target = evt.target || evt.srcElement;
-		if (target.nodeName.toLowerCase() !== 'a')
+		let target = evt.target;
+		// @ts-ignore
+		if (target?.nodeName.toLowerCase() !== 'a')
 		{
 			/* this will check to get the parent to check
 			if the child is contained in a link */
+			// @ts-ignore
 			target = this.getParentLink(target);
+			// @ts-ignore
 			if (target === false)
 			{
 				return true;
 			}
 		}
 
+		// @ts-ignore
 		if (target.target === '_blank' || Dom.data(target, 'cancel-route'))
 		{
 			return true;
 		}
 
+		// @ts-ignore
 		const href = target.getAttribute('href');
 		if (typeof href !== 'undefined')
 		{
@@ -463,8 +481,10 @@ export class Router
 		for (let i = 0, length = routes.length; i < length; i++)
 		{
 			const route = routes[i];
+			// @ts-ignore
 			if (route && typeof route.deactivate === 'function')
 			{
+				// @ts-ignore
 				route.deactivate();
 			}
 		}
@@ -498,6 +518,7 @@ export class Router
 	navigate(uri, data, replace)
 	{
 		uri = this.createURI(uri);
+		// @ts-ignore
 		this.history.addState(uri, data, replace);
 		this.activate();
 
@@ -569,7 +590,7 @@ export class Router
 	 * Activates the first matching route or falls back to the first route in the group if none match.
 	 *
 	 * @protected
-	 * @param {string} [path]
+	 * @param {string} path
 	 * @returns {void}
 	 */
 	checkSwitches(path)
@@ -803,7 +824,10 @@ export class Router
 	 */
 	destroy()
 	{
-		Events.off('click', document, this.callBackLink);
+		if (typeof this.callBackLink === 'function')
+		{
+			Events.off('click', document, this.callBackLink);
+		}
 	}
 
 	/**

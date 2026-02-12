@@ -35,7 +35,7 @@ export class History
 	/**
 	 * This will check to activate the router.
 	 *
-	 * @param {object} evt
+	 * @param {PointerEvent} evt
 	 */
 	check(evt)
 	{
@@ -63,6 +63,7 @@ export class History
 	 */
 	scrollTo(scrollPosition)
 	{
+		// @ts-ignore
 		window.scrollTo(scrollPosition.x, scrollPosition.y);
 	}
 
