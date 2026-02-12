@@ -103,7 +103,7 @@ export class CssMovement extends Movement
 	 * This will create a value.
 	 *
 	 * @param {object} settings
-	 * @returns {object}
+	 * @returns {any}
 	 */
 	createValue(settings)
 	{
@@ -139,11 +139,17 @@ export class CssMovement extends Movement
 		}
 	}
 
+	/**
+	 * Updates the value based on the animation delta.
+	 *
+	 * @param {number} delta - The delta value (0-1) representing animation progress
+	 * @returns {Array<string>} The updated value as an array of strings
+	 */
 	updateValue(delta)
 	{
-		let valueArray = [],
-		values = this.value;
-		if(values.length)
+		let valueArray = [];
+		const values = this.value;
+		if(values && values.length)
 		{
 			for(var i = 0, length = values.length; i < length; i++)
 			{

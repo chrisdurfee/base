@@ -21,6 +21,9 @@ export class Movement
 	{
 		this.element = element;
 		this.property = null;
+		/**
+		 * @type {any}
+		 */
 		this.value = null;
 
 		this.setup(settings);
@@ -41,7 +44,7 @@ export class Movement
 	 * Creates a Value instance for the movement.
 	 *
 	 * @param {object} settings - The settings containing start and end values
-	 * @returns {Value} A Value instance
+	 * @returns {any} A Value instance or array of Value instances
 	 */
 	createValue(settings)
 	{
@@ -105,7 +108,7 @@ export class Movement
 	 * Updates the value based on the animation delta.
 	 *
 	 * @param {number} delta - The delta value (0-1) representing animation progress
-	 * @returns {string} The updated value
+	 * @returns {any} The updated value (string or array of strings)
 	 */
 	updateValue(delta)
 	{

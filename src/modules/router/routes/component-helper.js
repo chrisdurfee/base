@@ -83,8 +83,8 @@ export class ComponentHelper
 	 */
 	initializeComponent()
 	{
-		const comp = this.template();
-        this.transferSettings(comp);
+		this.template = this.template();
+		this.initializeTemplateObject();
     }
 
 	/**
@@ -109,9 +109,16 @@ export class ComponentHelper
 	 */
 	initializeTemplateObject()
 	{
-        if (!this.template.isUnit)
+		const template = this.template;
+		if (!template)
 		{
-            this.template = new (Cloak(this.template));
+			return;
+		}
+
+        if (!template.isUnit)
+		{
+			// @ts-ignore
+            this.template = new (Cloak(template));
         }
 
         const comp = this.template;
