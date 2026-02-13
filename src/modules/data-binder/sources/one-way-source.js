@@ -31,6 +31,11 @@ export class OneWaySource extends Source
 	 */
 	subscribe(msg, callBack)
 	{
+		if (!this.data || typeof this.data.on !== 'function')
+		{
+			console.warn('OneWaySource: Cannot subscribe - data source is null or does not have an "on" method. Make sure your component has data, state, or context.data initialized.', msg, this.data);
+			return;
+		}
 		this.msg = msg;
 		this.token = this.data.on(msg, callBack);
 	}

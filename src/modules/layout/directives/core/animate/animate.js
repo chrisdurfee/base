@@ -13,18 +13,82 @@ import { Events } from "../../../../../main/events/events.js";
  */
 const addAnimationClass = (ele, className, doneCallBack = null) =>
 {
-	Events.on('animationend', ele, function animateEnd()
+	if (!ele)
 	{
-		Dom.removeClass(ele, className);
+		return;
+	}
+
+	let timeoutId = null;
+	let hasCompleted = false;
+
+	const complete = () =>
+	{
+		if (hasCompleted)
+		{
+			return;
+		}
+
+		hasCompleted = true;
+
+		if (timeoutId)
+		{
+			clearTimeout(timeoutId);
+			timeoutId = null;
+		}
+
 		Events.off('animationend', ele, animateEnd);
+
+		// Check if element still exists before cleanup
+		if (ele)
+		{
+			Dom.removeClass(ele, className);
+		}
 
 		if (doneCallBack)
 		{
 			doneCallBack();
 		}
-	});
+	};
 
-	Dom.addClass(ele, className);
+	const animateEnd = (event) =>
+	{
+		// Only handle events for this specific element and animation
+		if (event.target === ele)
+		{
+			complete();
+		}
+	};
+
+	Events.on('animationend', ele, animateEnd);
+
+	// Force browser reflow before adding class to ensure animation triggers
+	requestAnimationFrame(() =>
+	{
+		if (!ele)
+		{
+			complete();
+			return;
+		}
+
+		Dom.addClass(ele, className);
+
+		// Fallback timeout in case animationend doesn't fire
+		// Get animation duration from computed styles or use a safe maximum
+		try
+		{
+			const computedStyle = window.getComputedStyle(ele);
+			const duration = parseFloat(computedStyle.animationDuration) * 1000 || 1000;
+			const delay = parseFloat(computedStyle.animationDelay) * 1000 || 0;
+
+			// Add a buffer of 100ms to account for any delays
+			timeoutId = setTimeout(complete, duration + delay + 100);
+		}
+		catch (e)
+		{
+			// Fallback if getComputedStyle fails
+			timeoutId = setTimeout(complete, 1000);
+		}
+	});
 };
 
 /**
@@ -50,7 +114,15 @@ export const animateIn = (ele, animationClass, parent) =>
  */
 export const animateOut = (ele, animationClass, parent) =>
 {
-	const remove = () => (ele && ele.remove());
+	const remove = () =>
+	{
+		// Only remove if element still exists
+		if (ele && ele.remove)
+		{
+			ele.remove();
+		}
+	};
+
 	track(ele, () => addAnimationClass(ele, animationClass, remove), parent);
 };
 

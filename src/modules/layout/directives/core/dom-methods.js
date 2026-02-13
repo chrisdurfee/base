@@ -61,6 +61,12 @@ const setWatcher = (ele, data, settings, parent) =>
 		return;
 	}
 
+	if (typeof data.on !== 'function')
+	{
+		console.warn('Watcher directive: Data source does not have an "on" method. Make sure your component has data, state, or context.data initialized before using watchers like onSet, watch, or [[prop]] syntax.', ele, data);
+		return;
+	}
+
 	const update = getUpdateMethod(ele, prop, callBack, parent);
 	dataBinder.watch(ele, data, prop, update);
 };
