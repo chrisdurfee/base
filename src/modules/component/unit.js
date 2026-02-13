@@ -111,6 +111,11 @@ export class Unit
 		this.unitType = null;
 
 		/**
+		 * @type {boolean} transparent
+		 */
+		this.transparent = false;
+
+		/**
 		 * @type {Array<any>} cached
 		 */
 		this.cached = [];
@@ -252,12 +257,14 @@ export class Unit
 
 	/**
 	 * This will get the child scope instance of the component.
+	 * If the component is transparent, children see through
+	 * to the parent scope instead.
 	 *
 	 * @returns {object}
 	 */
 	getChildScope()
 	{
-		return this;
+		return (this.transparent && this.parent) ? this.parent : this;
 	}
 
 	/**
