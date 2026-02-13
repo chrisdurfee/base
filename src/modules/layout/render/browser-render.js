@@ -70,6 +70,8 @@ export class BrowserRender extends Render
 	 */
 	createElement(obj, container, parent)
 	{
+		const parentScope = parent?.getChildScope();
+
 		/**
 		 * If there is data or state bindings, we want to
 		 * create a temporary component to handle those
@@ -77,12 +79,12 @@ export class BrowserRender extends Render
 		 */
 		if (obj.data || obj.state)
 		{
-			this.createTempComponent(obj, container, parent);
+			this.createTempComponent(obj, container, parentScope);
 			return;
 		}
 
-		const settings = Parser.parse(obj, parent);
-		const ele = this.createNode(settings, container, parent);
+		const settings = Parser.parse(obj, parentScope);
+		const ele = this.createNode(settings, container, parentScope);
 
 		this.cache(ele, obj.cache, parent);
 
@@ -99,7 +101,7 @@ export class BrowserRender extends Render
 		const directives = settings.directives;
 		if (directives && directives.length)
 		{
-			this.setDirectives(ele, directives, parent);
+			this.setDirectives(ele, directives, parentScope);
 		}
 	}
 
@@ -138,7 +140,7 @@ export class BrowserRender extends Render
 	 * This will add the element directives.
 	 *
 	 * @param {object} ele
-	 * @param {Array<any>} directives
+	 * @param {array} directives
 	 * @param {object} parent
 	 * @returns {void}
 	 */

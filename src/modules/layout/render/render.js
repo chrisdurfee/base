@@ -36,21 +36,22 @@ export class Render
 		 * We want to set the parent to the component before setting
 		 * up the component.
 		 */
-		component.parent = parent;
+		const parentScope = parent?.getChildScope();
+		component.parent = parentScope;
 
 		/**
 		 * We only set the persist if both the parent allows
 		 * and the child does not explicitly deny it.
 		 */
-		if (parent && parent.persist === true && component.persist !== false)
+		if (parentScope && parentScope.persist === true && component.persist !== false)
 		{
 			component.persist = true;
 			component.parent.addPersistedChild(component);
 		}
 
-		if (component.cache && parent)
+		if (component.cache && parentScope)
 		{
-			parent[component.cache] = component;
+			parentScope[component.cache] = component;
 		}
 
 		/**
@@ -73,7 +74,7 @@ export class Render
 		 * This will build the layout and return the result.
 		 */
 		const layout = component.prepareLayout();
-		const result = this.build(layout, component.container, component.getChildScope());
+		const result = this.build(layout, component.container, component);
 
 		component.afterBuild();
 
