@@ -111,11 +111,6 @@ export class Unit
 		this.unitType = null;
 
 		/**
-		 * @type {boolean} transparent
-		 */
-		this.transparent = false;
-
-		/**
 		 * @type {Array<any>} cached
 		 */
 		this.cached = [];
@@ -264,7 +259,7 @@ export class Unit
 	 */
 	getChildScope()
 	{
-		return (this.transparent && this.parent) ? this.parent : this;
+		return this;
 	}
 
 	/**

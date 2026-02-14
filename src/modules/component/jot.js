@@ -56,13 +56,13 @@ const createClass = (Base, settings) =>
  *
  * @param {object|function} layout
  * @param {typeof Component} [extend=Component]
- * @returns {typeof Component|null} A class (constructor) or `null` if no layout is given.
+ * @returns {typeof Component} A class (constructor).
  */
 export const Jot = (layout, extend = Component) =>
 {
 	if (!layout)
 	{
-		return null;
+		layout = {};
 	}
 
 	let settings;
