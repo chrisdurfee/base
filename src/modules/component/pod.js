@@ -44,8 +44,8 @@ const extendBaseClass = (Base) =>
  * This will create a pod component.
  *
  * @param {function} callBack
- * @param {typeof Component} extend - The class to extend.
- * @returns {typeof Component|null}
+ * @param {typeof Component} [extend=Component] - The class to extend.
+ * @returns {{new(...args: any[]): Component}|null}
  */
 export const Pod = (callBack, extend = Component) =>
 {

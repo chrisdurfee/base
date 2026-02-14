@@ -56,7 +56,7 @@ const createClass = (Base, settings) =>
  *
  * @param {object|function} layout
  * @param {typeof Component} [extend=Component]
- * @returns {typeof Component} A class (constructor).
+ * @returns {{new(...args: any[]): Component}} A class constructor.
  */
 export const Jot = (layout, extend = Component) =>
 {
