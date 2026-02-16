@@ -17,8 +17,8 @@ const WatcherProp = (watch) => ({
 /**
  * This will parse the arguments passed to the atom.
  *
- * @param {Array<any>} args
- * @returns {object}
+ * @param {Array<any>} args - The arguments passed to the atom (props, children, or both)
+ * @returns {{props: object, children: *}} An object containing separated props and children
  */
 const parseArgs = (args) =>
 {
@@ -84,8 +84,29 @@ const parseArgs = (args) =>
 /**
  * This will create an atom.
  *
- * @param {function} callBack
- * @returns {function}
+ * An Atom is a reusable layout function that accepts flexible arguments (props, children, or both)
+ * and returns a layout object. The callback receives two separate parameters: props and children.
+ *
+ * @param {function(object, *): object} callBack - Callback function that receives (props, children) as separate parameters and returns a layout object
+ * @returns {function(...*): object} A function that accepts flexible arguments and returns a layout object
+ *
+ * @example
+ * // CORRECT: Two separate parameters
+ * const Button = Atom((props, children) => ({
+ *   tag: 'button',
+ *   type: 'button',
+ *   ...props,
+ *   children
+ * }));
+ *
+ * // CORRECT: Destructure inside the function body
+ * const Card = Atom((props, children) => {
+ *   const { width = 'w-64', image, badge } = props;
+ *   return { tag: 'div', class: width, children };
+ * });
+ *
+ * // INCORRECT: Don't destructure parameters (invalid JavaScript syntax)
+ * // const Bad = Atom({width, image} => ({ ... })); // ❌ Syntax Error
  */
 export const Atom = (callBack) =>
 {

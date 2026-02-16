@@ -17,7 +17,7 @@ const prepareChildren = (value) =>
 /**
  * This will set the child string.
  *
- * @param {string} value
+ * @param {string|number} value - The string or number value to convert
  * @returns {Array<object>}
  */
 const setChildString = (value) =>
@@ -31,7 +31,7 @@ const setChildString = (value) =>
 /**
  * This will set the default props.
  *
- * @returns {object}
+ * @returns {{props: object, children: Array}} An object with empty props and children
  */
 export const DefaultProps = () => ({
     props: {},
@@ -41,8 +41,8 @@ export const DefaultProps = () => ({
 /**
  * This will set the string prop.
  *
- * @param {string} value
- * @returns {object}
+ * @param {string|number} value - The string or number value to convert to children
+ * @returns {{props: object, children: Array<object>}} An object with empty props and text node children
  */
 export const StringProp = (value) => ({
     props: {},
@@ -52,8 +52,8 @@ export const StringProp = (value) => ({
 /**
  * This will set the array prop.
  *
- * @param {Array<any>} value
- * @returns {object}
+ * @param {Array<any>} value - The array of children
+ * @returns {{props: object, children: Array<any>}} An object with empty props and the children array
  */
 export const ArrayProp = (value) => ({
     props: {},
@@ -63,8 +63,8 @@ export const ArrayProp = (value) => ({
 /**
  * This will set the object prop.
  *
- * @param {Array<any>} args
- * @returns {object}
+ * @param {Array<any>} args - The arguments array where args[0] is props and args[1] is children
+ * @returns {{props: object, children: *}} An object with props and children extracted from args
  */
 export const ObjectProp = (args) => ({
     props: args[0] || {}, // this will set an empty object if no props are passed.

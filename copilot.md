@@ -22,14 +22,15 @@ Purpose: concise, project-specific guidance so AI agents are instantly productiv
 5. **DON'T forget `new` with Components** - Always: `new MyComponent()`, `new Component()`, never just `MyComponent()`
 6. **DON'T use `new` with Atoms** - Always: `Button()`, never `new Button()`. Atoms are functions, not classes
 7. **DON'T use `new` with Jot/Pod** - Call the returned class: `const MyJot = Jot({...}); new MyJot()` not `new Jot({})`
-8. **DON'T mix data initialization locations** - Use `setData()` for initial setup, not `beforeSetup` or constructor
-9. **DON'T bind without data** - `bind` directive requires `this.data` to be initialized via `setData()`
-10. **DON'T use wrong state methods** - State keys must be defined in `setupStates()` before using `increment`, `decrement`, `toggle`
-11. **DON'T forget Import function form** - Use `Import(() => import('./file.js'))` not `Import('./file.js')` for bundler support
-12. **DON'T use element.remove()** - Use `Html.removeElement(element)` or `Builder.removeNode(element)` for proper cleanup
-13. **DON'T access DOM before afterSetup** - `this.panel` and `this.elem` are only available after `afterSetup()` lifecycle hook
-14. **DON'T return arrays from render()** - Wrap multiple elements: `return { children: [elem1, elem2] }` not `return [elem1, elem2]`
-15. **DON'T use `await` in render()** - Load data in lifecycle hooks, render() must be synchronous
+8. **DON'T destructure Atom callback parameters** - Use `Atom((props, children) => {...})` NOT `Atom({width, image} => {...})`. Destructure inside the function body instead: `const {width, image} = props;`
+9. **DON'T mix data initialization locations** - Use `setData()` for initial setup, not `beforeSetup` or constructor
+10. **DON'T bind without data** - `bind` directive requires `this.data` to be initialized via `setData()`
+11. **DON'T use wrong state methods** - State keys must be defined in `setupStates()` before using `increment`, `decrement`, `toggle`
+12. **DON'T forget Import function form** - Use `Import(() => import('./file.js'))` not `Import('./file.js')` for bundler support
+13. **DON'T use element.remove()** - Use `Html.removeElement(element)` or `Builder.removeNode(element)` for proper cleanup
+14. **DON'T access DOM before afterSetup** - `this.panel` and `this.elem` are only available after `afterSetup()` lifecycle hook
+15. **DON'T return arrays from render()** - Wrap multiple elements: `return { children: [elem1, elem2] }` not `return [elem1, elem2]`
+16. **DON'T use `await` in render()** - Load data in lifecycle hooks, render() must be synchronous
 
 ## Authoring layouts (house rules)
 - **Shape**: `{ tag: 'div', class: 'name', children: [...] }`. Shorthands: `nest` → `children`; `text` creates text node; `html|innerHTML` sets raw HTML.
