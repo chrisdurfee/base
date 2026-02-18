@@ -61,6 +61,7 @@ export class HtmlHelper extends Html
 	 * @param {object} ele
 	 * @param {string} attr
 	 * @param {*} value
+	 * @param {object} [parent]
      * @returns {void}
 	 */
 	static addAttr(ele, attr, value, parent)

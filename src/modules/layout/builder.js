@@ -40,8 +40,8 @@ export class Builder
 	 * This will render a function/Unit/Component.
 	 *
 	 * @param {object|function} layout
-	 * @param {object} container
-	 * @param {object} [parent]
+	 * @param {?object} container
+	 * @param {?object} [parent]
 	 * @returns {*} The render result.
 	 */
 	static render(layout, container, parent)
@@ -68,8 +68,8 @@ export class Builder
 	 * This will build a JSON layout.
 	 *
 	 * @param {object} obj The JSON layout.
-	 * @param {object} [container] The parent receiving the layout.
-	 * @param {object} [parent] The component adding the layout.
+	 * @param {?object} [container] The parent receiving the layout.
+	 * @param {?object} [parent] The component adding the layout.
 	 * @returns {*} The render result.
 	 */
 	static build(obj, container, parent)

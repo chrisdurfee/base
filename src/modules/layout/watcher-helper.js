@@ -62,7 +62,7 @@ export const WatcherHelper =
 	 *
 	 * @protected
 	 * @param {string} string
-	 * @returns {(array|null)}
+	 * @returns {Array<string>|null}
 	 */
 	_getWatcherProps(string)
 	{
@@ -140,7 +140,7 @@ export const WatcherHelper =
 	 *
 	 * @protected
 	 * @param {object} ele
-	 * @param {(string|array)} data
+	 * @param {string|Array<any>} data
 	 * @param {string} string
 	 * @param {string} attr
 	 * @param {boolean} isArray
@@ -159,7 +159,7 @@ export const WatcherHelper =
 	 * This will get a watcher value.
 	 *
 	 * @private
-	 * @param {(string|object)} settings
+	 * @param {string|object} settings
 	 * @param {object} parent
 	 * @returns {Array<any>}
 	 */
@@ -196,11 +196,10 @@ export const WatcherHelper =
 	{
 		const values = [];
 
-		for (var i = 0, length = props.length; i < length; i++)
+		for (let i = 0, length = props.length; i < length; i++)
 		{
-			var watcherData = (isArray)? data[i] : data;
-			var value = watcherData.get(props[i]);
-			value = (typeof value !== 'undefined'? value : '');
+			const watcherData = (isArray)? data[i] : data;
+			const value = watcherData.get(props[i]) ?? '';
 			values.push(value);
 		}
 
@@ -257,7 +256,7 @@ export const WatcherHelper =
 	 *
 	 * @private
 	 * @param {object} ele
-	 * @param {(string|object)} settings
+	 * @param {string|object} settings
 	 * @param {object} parent
 	 * @returns {void}
 	 */
@@ -314,7 +313,7 @@ export const WatcherHelper =
 	 * This will get the watcher array settings.
 	 *
 	 * @param {string|object|array} settings
-	 * @param {string} [attribute=null]
+	 * @param {?string} [attribute=null]
 	 * @returns {object}
 	 */
 	getWatcherSettings(settings, attribute = null)
@@ -358,7 +357,7 @@ export const WatcherHelper =
 	 * This will setup a data watcher.
 	 *
 	 * @param {object} ele
-	 * @param {(string|object)} settings
+	 * @param {string|object} settings
 	 * @param {object} parent
 	 * @returns {void}
 	 */

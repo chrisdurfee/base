@@ -10,6 +10,7 @@
 		"outDir": "./dist",
 		"noEmit": false, // Ensures that files are emitted
 		"esModuleInterop": true,
+		"moduleResolution": "bundler", // Properly resolves .js imports to .d.ts files
 		"module": "ESNext", // Specifies the module system, adjust according to your project's module system
 		"target": "ESNext" // Set the target ECMAScript version according to your project's needs
 	},

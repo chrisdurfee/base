@@ -20,13 +20,13 @@ import { SHORTHAND_METHODS } from './shorthand-methods.js';
  */
 const modifyMethods = (proxy, component) =>
 {
-    Object.entries(proxy).forEach(([prop, value]) =>
-    {
-        const alias = SHORTHAND_METHODS[prop] || prop;
-        component.prototype[alias] = value;
-    });
+	Object.entries(proxy).forEach(([prop, value]) =>
+	{
+		const alias = SHORTHAND_METHODS[prop] || prop;
+		component.prototype[alias] = value;
+	});
 
-    return component;
+	return component;
 };
 
 /**
@@ -37,7 +37,7 @@ const modifyMethods = (proxy, component) =>
  */
 const extendBaseClass = (Base) =>
 {
-    return class extends Base {}
+	return class extends Base {}
 };
 
 /**
@@ -49,28 +49,28 @@ const extendBaseClass = (Base) =>
  */
 export const Pod = (callBack, extend = Component) =>
 {
-    if (!callBack)
-    {
-        return null;
-    }
+	if (!callBack)
+	{
+		return null;
+	}
 
-    const component = extendBaseClass(extend);
+	const component = extendBaseClass(extend);
 
-    /**
-     * This will call the callback function and pass the component
-     * to set up the component.
-     *
-     * The result is the render method.
-     */
-    const proxy = {};
-    const render = callBack(proxy);
+	/**
+	 * This will call the callback function and pass the component
+	 * to set up the component.
+	 *
+	 * The result is the render method.
+	 */
+	const proxy = {};
+	const render = callBack(proxy);
 
-    /**
-     * This will modify the methods to convert the shorthand
-     * methods to the full methods.
-     */
-    modifyMethods(proxy, component);
+	/**
+	 * This will modify the methods to convert the shorthand
+	 * methods to the full methods.
+	 */
+	modifyMethods(proxy, component);
 
-    component.prototype.render = render;
-    return component;
+	component.prototype.render = render;
+	return component;
 };

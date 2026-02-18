@@ -29,7 +29,7 @@ export class DataSource extends TwoWaySource
 		this.data = data;
 
 		/**
-		 * @type {string} prop
+		 * @type {?string} prop
 		 */
 		this.prop = prop;
 	}

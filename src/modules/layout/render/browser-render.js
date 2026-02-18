@@ -17,15 +17,20 @@ export class BrowserRender extends Render
 	 *
 	 * @override
 	 * @param {object} obj The JSON layout.
-	 * @param {object} [container] The parent receiving the layout.
-	 * @param {object} [parent] The component adding the layout.
+	 * @param {?object} [container] The parent receiving the layout.
+	 * @param {?object} [parent] The component adding the layout.
 	 * @returns {*} The doc Frag element.
 	 */
 	build(obj, container, parent)
 	{
 		const fragment = HtmlHelper.createDocFragment();
 		const elements = Array.isArray(obj) ? obj : [obj];
-		elements.forEach(element => this.buildElement(element, fragment, parent));
+
+		// Classic for loop - faster than forEach (no closure creation)
+		for (let i = 0, len = elements.length; i < len; i++)
+		{
+			this.buildElement(elements[i], fragment, parent);
+		}
 
 		if (container && typeof container === 'object')
 		{
@@ -90,13 +95,15 @@ export class BrowserRender extends Render
 
 		/* we want to recursively add the children to
 		the new element */
-		settings.children.forEach(child =>
+		const children = settings.children;
+		for (let i = 0, len = children.length; i < len; i++)
 		{
+			const child = children[i];
 			if (child !== null)
 			{
 				this.buildElement(child, ele, parent);
 			}
-		});
+		}
 
 		const directives = settings.directives;
 		if (directives && directives.length)
@@ -146,10 +153,10 @@ export class BrowserRender extends Render
 	 */
 	setDirectives(ele, directives, parent)
 	{
-		directives.forEach(directive =>
+		for (let i = 0, len = directives.length; i < len; i++)
 		{
-			this.handleDirective(ele, directive, parent);
-		});
+			this.handleDirective(ele, directives[i], parent);
+		}
 	}
 
 	/**

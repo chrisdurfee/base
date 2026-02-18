@@ -19,21 +19,23 @@ export const map = (ele, settings, parent) =>
 	const item = settings[1];
 	const children = [];
 
-	items.forEach((row, i) =>
+	// Classic for loop - faster than forEach in hot path
+	for (let i = 0, len = items.length; i < len; i++)
 	{
+		const row = items[i];
 		if (!row)
 		{
-			return;
+			continue;
 		}
 
 		const layout = item(row, i);
 		if (layout === null)
 		{
-			return;
+			continue;
 		}
 
 		children.push(layout);
-	});
+	}
 
 	Builder.build(children, ele, parent);
 };

@@ -39,9 +39,9 @@ export class Publisher
 		/* the path is a string equivalent of the javascript dot notation path
 		of the object being published. */
 		let path = '';
-		for (var i = 0; i < length; i++)
+		for (let i = 0; i < length; i++)
 		{
-			prop = props[i];
+			const prop = props[i];
 
 			/* we need to setup the object to go to the next level
 			of the data object before calling the next property. */
@@ -61,7 +61,7 @@ export class Publisher
 				path = prop;
 			}
 
-			var publish;
+			let publish;
 			if (i === end)
 			{
 				/* if the loop is on the last pass it only needs to publish
@@ -73,14 +73,14 @@ export class Publisher
 				/* we only want to publish the modified branches. we need to
 				get the next property in the props array and create a publish
 				object or array with the next property value. */
-				var nextProp = props[i + 1];
+				const nextProp = props[i + 1];
 				if (isNaN(nextProp) === false)
 				{
 					path += '[' + nextProp + ']';
 					continue;
 				}
 
-				var nextAttr = {};
+				const nextAttr = {};
 				nextAttr[nextProp] = obj[nextProp];
 				publish = nextAttr;
 			}

@@ -10,8 +10,8 @@ export class LocalData
 	/**
 	 * This will restore the data from local storage.
 	 *
-     * @static
-     * @param {string} key
+	 * @static
+	 * @param {string} key
 	 * @param {*} defaultValue
 	 * @returns {*}
 	 */
@@ -43,9 +43,9 @@ export class LocalData
 	 * This will store the data to the local stoage under
 	 * the storage key.
 	 *
-     * @static
-     * @param {string} key
-     * @param {*} data
+	 * @static
+	 * @param {string} key
+	 * @param {*} data
 	 * @returns {boolean}
 	 */
 	static store(key, data)
@@ -65,21 +65,21 @@ export class LocalData
 		return true;
 	}
 
-    /**
-     * This will remove the data from the local storage.
-     *
-     * @static
-     * @param {string} key
-     * @returns {boolean}
-     */
-    static remove(key)
-    {
-        if (!key)
-        {
-            return false;
-        }
+	/**
+	 * This will remove the data from the local storage.
+	 *
+	 * @static
+	 * @param {string} key
+	 * @returns {boolean}
+	 */
+	static remove(key)
+	{
+		if (!key)
+		{
+			return false;
+		}
 
-        localStorage.removeItem(key);
-        return true;
-    }
+		localStorage.removeItem(key);
+		return true;
+	}
 }

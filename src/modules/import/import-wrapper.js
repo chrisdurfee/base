@@ -44,7 +44,7 @@ const getPromise = (src) =>
  * will wrap the comment atom to pass route to the
  * imported layout.
  *
- * @type {typeof Component | null}
+ * @type {typeof Component}
  */
 export const ImportWrapper = Jot(
 {

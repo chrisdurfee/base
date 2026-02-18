@@ -6,12 +6,12 @@
  */
 export const SHORTHAND_METHODS =
 {
-    created: 'onCreated',
-    setStates: 'setupStates',
-    state: 'setupStates',
-    events: 'setupEvents',
-    before: 'beforeSetup',
-    render: 'render',
-    after: 'afterSetup',
-    destroy: 'beforeDestroy'
+	created: 'onCreated',
+	setStates: 'setupStates',
+	state: 'setupStates',
+	events: 'setupEvents',
+	before: 'beforeSetup',
+	render: 'render',
+	after: 'afterSetup',
+	destroy: 'beforeDestroy'
 };

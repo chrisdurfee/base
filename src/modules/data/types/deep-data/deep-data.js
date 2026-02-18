@@ -85,12 +85,11 @@ export class Data extends BasicData
 			return;
 		}
 
-		for (var prop in value)
+		const keys = Object.keys(value);
+		for (let i = 0, len = keys.length; i < len; i++)
 		{
-			if (Object.prototype.hasOwnProperty.call(value, prop))
-			{
-				this.link(data, attr + '.' + prop, prop);
-			}
+			const prop = keys[i];
+			this.link(data, attr + '.' + prop, prop);
 		}
 	}
 

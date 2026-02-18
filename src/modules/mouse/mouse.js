@@ -109,6 +109,7 @@ export class Mouse
 	 */
 	stop()
 	{
+		// @ts-ignore
 		Events.off('mousemove', this.obj, this.callBackFn, this.capture);
 	}
 }

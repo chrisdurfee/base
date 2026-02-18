@@ -140,10 +140,14 @@ export class Parser
 		this.setupChildren(obj);
 
 		let children = [];
-		var value, directive;
-		for (var key in obj)
+		let value, directive;
+		
+		// Use Object.keys for better performance (no iterator creation)
+		const keys = Object.keys(obj);
+		for (let i = 0, len = keys.length; i < len; i++)
 		{
-			if (!Objects.hasOwnProp(obj, key) || key === 'tag')
+			const key = keys[i];
+			if (key === 'tag')
 			{
 				continue;
 			}

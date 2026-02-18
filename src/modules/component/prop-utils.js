@@ -34,8 +34,8 @@ const setChildString = (value) =>
  * @returns {{props: object, children: Array}} An object with empty props and children
  */
 export const DefaultProps = () => ({
-    props: {},
-    children: []
+	props: {},
+	children: []
 });
 
 /**
@@ -45,8 +45,8 @@ export const DefaultProps = () => ({
  * @returns {{props: object, children: Array<object>}} An object with empty props and text node children
  */
 export const StringProp = (value) => ({
-    props: {},
-    children: setChildString(value)
+	props: {},
+	children: setChildString(value)
 });
 
 /**
@@ -56,8 +56,8 @@ export const StringProp = (value) => ({
  * @returns {{props: object, children: Array<any>}} An object with empty props and the children array
  */
 export const ArrayProp = (value) => ({
-    props: {},
-    children: value
+	props: {},
+	children: value
 });
 
 /**
@@ -67,6 +67,6 @@ export const ArrayProp = (value) => ({
  * @returns {{props: object, children: *}} An object with props and children extracted from args
  */
 export const ObjectProp = (args) => ({
-    props: args[0] || {}, // this will set an empty object if no props are passed.
-    children: prepareChildren(args[1])
+	props: args[0] || {}, // this will set an empty object if no props are passed.
+	children: prepareChildren(args[1])
 });

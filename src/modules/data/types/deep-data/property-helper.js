@@ -38,9 +38,9 @@ export class PropertyHelper
 		const length = props.length,
 		end = length - 1;
 
-		for (var i = 0; i < length; i++)
+		for (let i = 0; i < length; i++)
 		{
-			prop = props[i];
+			const prop = props[i];
 
 			/* this will add the value to the last prop */
 			if (i === end)
@@ -84,10 +84,10 @@ export class PropertyHelper
 		const length = props.length,
 		end = length - 1;
 
-		for (var i = 0; i < length; i++)
+		for (let i = 0; i < length; i++)
 		{
-			var prop = props[i];
-			var propValue = obj[prop];
+			const prop = props[i];
+			const propValue = obj[prop];
 			if (propValue === undefined)
 			{
 				break;
@@ -132,10 +132,10 @@ export class PropertyHelper
 		const length = props.length,
 		end = length - 1;
 
-		for (var i = 0; i < length; i++)
+		for (let i = 0; i < length; i++)
 		{
-			var prop = props[i];
-			var propValue = obj[prop] ?? undefined;
+			const prop = props[i];
+			const propValue = obj[prop] ?? undefined;
 			if (propValue === undefined)
 			{
 				break;
