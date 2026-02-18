@@ -38,6 +38,26 @@ export class DataPubSub
 		this.flushScheduled = false;
 
 		/**
+		 * Flag to track if currently flushing
+		 * @type {boolean}
+		 * @protected
+		 */
+		this.isFlushing = false;
+
+		/**
+		 * Counter for flush iterations (infinite loop detection)
+		 * @type {number}
+		 * @protected
+		 */
+		this.flushIterations = 0;
+
+		/**
+		 * Maximum flush iterations before warning
+		 * @type {number}
+		 */
+		this.maxFlushIterations = 100;
+
+		/**
 		 * Enable/disable batching (useful for testing)
 		 * @type {boolean}
 		 */
@@ -75,6 +95,8 @@ export class DataPubSub
 		this.callBacks.clear();
 		this.updateQueue.clear();
 		this.flushScheduled = false;
+		this.isFlushing = false;
+		this.flushIterations = 0;
 		lastToken = -1;
 	}
 
@@ -160,11 +182,19 @@ export class DataPubSub
 	/**
 	 * Schedule a flush in a microtask.
 	 * Ensures only one flush is scheduled at a time.
+	 * If currently flushing, updates are queued and will be processed after current flush.
 	 *
 	 * @returns {void}
 	 */
 	scheduleFlush()
 	{
+		// If already flushing, don't schedule new microtask
+		// The current flush will handle queued updates
+		if (this.isFlushing)
+		{
+			return;
+		}
+
 		if (this.flushScheduled)
 		{
 			return;
@@ -180,6 +210,8 @@ export class DataPubSub
 	/**
 	 * Flush all queued updates.
 	 * Deduplicates updates (only last update per msg is applied).
+	 * Handles recursive publishes by re-flushing until queue is empty.
+	 * Detects infinite loops and breaks after maxFlushIterations.
 	 *
 	 * @returns {void}
 	 */
@@ -188,18 +220,43 @@ export class DataPubSub
 		if (this.updateQueue.size === 0)
 		{
 			this.flushScheduled = false;
+			this.isFlushing = false;
+			this.flushIterations = 0;
+			return;
+		}
+
+		// Set flushing flag to prevent recursive scheduling
+		this.isFlushing = true;
+		this.flushScheduled = false;
+
+		// Infinite loop detection
+		this.flushIterations++;
+		if (this.flushIterations > this.maxFlushIterations)
+		{
+			console.error(
+				'[DataPubSub] Infinite loop detected! Flush iterations exceeded',
+				this.maxFlushIterations,
+				'- Breaking to prevent memory exhaustion.'
+			);
+			console.error('[DataPubSub] Queue size:', this.updateQueue.size);
+			console.error('[DataPubSub] Queued messages:', Array.from(this.updateQueue.keys()));
+
+			// Clear queue and reset to prevent further damage
+			this.updateQueue.clear();
+			this.flushScheduled = false;
+			this.isFlushing = false;
+			this.flushIterations = 0;
 			return;
 		}
 
 		if (this.debugMode)
 		{
-			console.log('[DataPubSub] Flushing', this.updateQueue.size, 'updates');
+			console.log('[DataPubSub] Flushing', this.updateQueue.size, 'updates (iteration', this.flushIterations + ')');
 		}
 
 		// Copy queue and clear it
 		const updates = new Map(this.updateQueue);
 		this.updateQueue.clear();
-		this.flushScheduled = false;
 
 		// Process all updates
 		for (const [msg, args] of updates)
@@ -209,7 +266,23 @@ export class DataPubSub
 
 		if (this.debugMode)
 		{
-			console.log('[DataPubSub] Flush complete');
+			console.log('[DataPubSub] Flush complete (iteration', this.flushIterations + ')');
+		}
+
+		// If new updates were queued during processing, flush again
+		if (this.updateQueue.size > 0)
+		{
+			if (this.debugMode)
+			{
+				console.log('[DataPubSub] New updates queued during flush, re-flushing...');
+			}
+			this.flush(); // Recursive flush
+		}
+		else
+		{
+			// All done, reset flags
+			this.isFlushing = false;
+			this.flushIterations = 0;
 		}
 	}
 

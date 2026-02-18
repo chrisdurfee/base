@@ -10,6 +10,12 @@ import { DataUtils as utils } from './data-utils.js';
 export class Publisher
 {
 	/**
+	 * Depth limit for nested object publishing to prevent infinite recursion
+	 * @type {number}
+	 */
+	static MAX_DEPTH = 50;
+
+	/**
 	 * This will publish deep data.
 	 *
      * @param {object} obj
@@ -95,14 +101,16 @@ export class Publisher
 	 * @param {string} pathString
 	 * @param {*} obj
      * @param {function} callBack
+	 * @param {?WeakSet} [seen] - Set of seen objects to detect circular refs
+	 * @param {number} [depth] - Current recursion depth
 	 * @returns {void}
 	 */
-	static publish(pathString, obj, callBack)
+	static publish(pathString, obj, callBack, seen = null, depth = 0)
 	{
-        /**
-         * This will publish the data path to get the
-         * root attr before publishing deeper.
-         */
+		/**
+		 * This will publish the data path to get the
+		 * root attr before publishing deeper.
+		 */
 		pathString = pathString || "";
 		callBack(pathString, obj);
 
@@ -111,13 +119,36 @@ export class Publisher
 			return;
 		}
 
-		if (Array.isArray(obj))
+		// Initialize seen set on first call
+		if (seen === null)
 		{
-			this.publishArray(pathString, obj, callBack);
-            return;
+			seen = new WeakSet();
 		}
 
-        this.publishObject(pathString, obj, callBack);
+		// Detect circular reference
+		if (seen.has(obj))
+		{
+			console.warn('[Publisher] Circular reference detected at path:', pathString);
+			return;
+		}
+
+		// Depth limit to prevent infinite recursion
+		if (depth >= this.MAX_DEPTH)
+		{
+			console.warn('[Publisher] Max depth exceeded at path:', pathString, '- stopping recursion');
+			return;
+		}
+
+		// Mark this object as seen
+		seen.add(obj);
+
+		if (Array.isArray(obj))
+		{
+			this.publishArray(pathString, obj, callBack, seen, depth);
+			return;
+		}
+
+		this.publishObject(pathString, obj, callBack, seen, depth);
 	}
 
     /**
@@ -127,17 +158,19 @@ export class Publisher
      * @param {string} pathString
      * @param {Array<any>} obj
      * @param {function} callBack
+     * @param {WeakSet} seen - Set of seen objects
+     * @param {number} depth - Current recursion depth
      * @returns {void}
      */
-    static publishArray(pathString, obj, callBack)
+    static publishArray(pathString, obj, callBack, seen, depth)
     {
         let subPath, value;
         const length = obj.length;
-        for (var i = 0; i < length; i++)
+        for (let i = 0; i < length; i++)
         {
             value = obj[i];
             subPath = pathString + '[' + i + ']';
-            this._checkPublish(subPath, value, callBack);
+            this._checkPublish(subPath, value, callBack, seen, depth);
         }
     }
 
@@ -148,21 +181,20 @@ export class Publisher
      * @param {string} pathString
      * @param {object} obj
      * @param {function} callBack
+     * @param {WeakSet} seen - Set of seen objects
+     * @param {number} depth - Current recursion depth
      * @returns {void}
      */
-    static publishObject(pathString, obj, callBack)
+    static publishObject(pathString, obj, callBack, seen, depth)
     {
         let subPath, value;
-        for (var prop in obj)
+        const keys = Object.keys(obj);
+        for (let i = 0; i < keys.length; i++)
         {
-            if (!Object.prototype.hasOwnProperty.call(obj, prop))
-            {
-                continue;
-            }
-
+            const prop = keys[i];
             value = obj[prop];
             subPath = pathString + '.' + prop;
-            this._checkPublish(subPath, value, callBack);
+            this._checkPublish(subPath, value, callBack, seen, depth);
         }
     }
 
@@ -174,9 +206,11 @@ export class Publisher
 	 * @param {string} subPath
 	 * @param {*} val
      * @param {function} callBack
+     * @param {WeakSet} seen - Set of seen objects
+     * @param {number} depth - Current recursion depth
 	 * @returns {void}
 	 */
-	static _checkPublish(subPath, val, callBack)
+	static _checkPublish(subPath, val, callBack, seen, depth)
 	{
 		if (!val || typeof val !== 'object')
 		{
@@ -184,6 +218,6 @@ export class Publisher
             return;
 		}
 
-        this.publish(subPath, val, callBack);
+        this.publish(subPath, val, callBack, seen, depth + 1);
 	}
 }
