@@ -278,6 +278,22 @@ export class Component extends Unit
 	}
 
 	/**
+	 * Sets a callback to be called when the component's data is flushed.
+	 *
+	 * @param {function} callBack
+	 * @return {void}
+	 */
+	onFlush(callBack)
+	{
+		// @ts-ignore
+		const data = this.data ?? this?.context?.data ?? null;
+		if (data)
+		{
+			data.onFlush(callBack);
+		}
+	}
+
+	/**
 	 * This will set the event helper.
 	 *
 	 * @returns {void}

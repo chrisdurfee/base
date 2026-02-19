@@ -68,6 +68,20 @@ export class DataPubSub
 		 * @type {boolean}
 		 */
 		this.debugMode = false;
+
+		/**
+		 * Promises waiting for flush completion
+		 * @type {Array<Function>}
+		 * @protected
+		 */
+		this.flushCompleteResolvers = [];
+
+		/**
+		 * Callbacks to execute after next flush
+		 * @type {Array<Function>}
+		 * @protected
+		 */
+		this.flushCallbacks = [];
 	}
 
 	/**
@@ -163,6 +177,7 @@ export class DataPubSub
 		// If batching disabled, publish immediately
 		if (!this.batchingEnabled)
 		{
+			// @ts-ignore
 			this.publishImmediate(msg, ...args);
 			return;
 		}
@@ -222,8 +237,10 @@ export class DataPubSub
 			this.flushScheduled = false;
 			this.isFlushing = false;
 			this.flushIterations = 0;
+			this._resolveFlushComplete();
 			return;
 		}
+
 
 		// Set flushing flag to prevent recursive scheduling
 		this.isFlushing = true;
@@ -245,6 +262,7 @@ export class DataPubSub
 			this.updateQueue.clear();
 			this.flushScheduled = false;
 			this.isFlushing = false;
+			this._resolveFlushComplete();
 			this.flushIterations = 0;
 			return;
 		}
@@ -261,6 +279,7 @@ export class DataPubSub
 		// Process all updates
 		for (const [msg, args] of updates)
 		{
+			// @ts-ignore
 			this.publishImmediate(msg, ...args);
 		}
 
@@ -282,7 +301,94 @@ export class DataPubSub
 		{
 			// All done, reset flags
 			this.isFlushing = false;
-			this.flushIterations = 0;
+			this._resolveFlushComplete();
+		}
+	}
+
+	/**
+	 * Resolve all pending flush completion promises and execute callbacks.
+	 *
+	 * @private
+	 * @returns {void}
+	 */
+	_resolveFlushComplete()
+	{
+		// Resolve promises
+		if (this.flushCompleteResolvers.length > 0)
+		{
+			const resolvers = this.flushCompleteResolvers;
+			this.flushCompleteResolvers = [];
+			for (let i = 0; i < resolvers.length; i++)
+			{
+				resolvers[i]();
+			}
+		}
+
+		// Execute and clear callbacks
+		if (this.flushCallbacks.length > 0)
+		{
+			const callbacks = this.flushCallbacks;
+			this.flushCallbacks = [];
+			for (let i = 0; i < callbacks.length; i++)
+			{
+				callbacks[i]();
+			}
+		}
+	}
+
+	/**
+	 * Returns a promise that resolves when the next flush cycle completes.
+	 * Useful for waiting until batched DOM updates are applied.
+	 *
+	 * @returns {Promise<void>}
+	 */
+	nextFlush()
+	{
+		return new Promise((resolve) =>
+		{
+			this.flushCompleteResolvers.push(resolve);
+
+			// If no flush is scheduled, resolve immediately
+			if (!this.flushScheduled && !this.isFlushing)
+			{
+				queueMicrotask(() => resolve());
+			}
+		});
+	}
+
+	/**
+	 * Register a callback to execute after the next flush cycle completes.
+	 * Callback is automatically removed after execution (one-time use).
+	 * Useful for waiting until batched DOM updates are applied.
+	 *
+	 * @param {Function} callback - Function to execute after next flush
+	 * @returns {void}
+	 */
+	onFlush(callback)
+	{
+		if (typeof callback !== 'function')
+		{
+			console.warn('[DataPubSub] onFlush requires a function callback');
+			return;
+		}
+
+		this.flushCallbacks.push(callback);
+
+		// If no flush is scheduled, execute immediately
+		if (!this.flushScheduled && !this.isFlushing)
+		{
+			queueMicrotask(() =>
+			{
+				if (this.flushCallbacks.length > 0)
+				{
+					const callbacks = this.flushCallbacks;
+					this.flushCallbacks = [];
+					for (let i = 0; i < callbacks.length; i++)
+					{
+						callbacks[i]();
+					}
+				}
+			});
 		}
 	}
 
@@ -294,6 +400,7 @@ export class DataPubSub
 	 */
 	flushSync()
 	{
+		// @ts-ignore
 		this.flush();
 	}
 

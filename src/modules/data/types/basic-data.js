@@ -121,6 +121,17 @@ export class BasicData
 	}
 
 	/**
+	 * This will setup a flush callback.
+	 *
+	 * @param {function} callBack
+	 * @returns {void}
+	 */
+	onFlush(callBack)
+	{
+		this.eventSub.onFlush(callBack);
+	}
+
+	/**
 	 * This will get the data id.
 	 *
 	 * @returns {string}
