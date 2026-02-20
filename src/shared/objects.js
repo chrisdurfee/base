@@ -1,6 +1,13 @@
 import { Types } from "./types.js";
 
 /**
+ * Cached prototype method references to avoid prototype chain lookups on every call.
+ * @private
+ */
+const _toString = Object.prototype.toString;
+const _hasOwn = Object.prototype.hasOwnProperty;
+
+/**
  * Objects
  *
  * Contains methods for working with objects.
@@ -36,13 +43,13 @@ export const Objects =
 			return false;
 		}
 
-		Object.keys(sourceObj).forEach((key) =>
+		for (const key in sourceObj)
 		{
-			if (!this.hasOwnProp(targetObj, key))
+			if (_hasOwn.call(sourceObj, key) && !_hasOwn.call(targetObj, key))
 			{
 				targetObj[key] = sourceObj[key];
 			}
-		});
+		}
 
 		return targetObj;
 	},
@@ -113,7 +120,7 @@ export const Objects =
 	 */
 	hasOwnProp(obj, prop)
 	{
-		return Object.prototype.hasOwnProperty.call(obj, prop);
+		return _hasOwn.call(obj, prop);
 	},
 
 	/**
@@ -124,7 +131,7 @@ export const Objects =
 	 */
 	isPlainObject(obj)
 	{
-		return !!obj && Object.prototype.toString.call(obj) === "[object Object]";
+		return !!obj && _toString.call(obj) === "[object Object]";
 	},
 
 	/**

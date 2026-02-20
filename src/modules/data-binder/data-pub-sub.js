@@ -52,10 +52,12 @@ export class DataPubSub
 		this.flushIterations = 0;
 
 		/**
-		 * Maximum flush iterations before warning
+		 * Maximum flush iterations before warning.
+		 * Set high enough to handle deep reactive cascades in large apps
+		 * (e.g. route change → multiple dependent data objects updating in sequence).
 		 * @type {number}
 		 */
-		this.maxFlushIterations = 100;
+		this.maxFlushIterations = 2000;
 
 		/**
 		 * Enable/disable batching (useful for testing)

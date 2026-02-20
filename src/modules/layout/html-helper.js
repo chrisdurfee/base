@@ -109,7 +109,7 @@ export class HtmlHelper extends Html
 			return;
 		}
 
-		if (attr.substring(4, 1) === '-')
+		if (attr.substring(4, 5) === '-')
 		{
 			// this will handle data and aria attributes
 			Dom.setAttr(ele, attr, value);

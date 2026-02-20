@@ -8,6 +8,15 @@ import { setupAttrSettings } from './model/attrs.js';
 let dataNumber = 0;
 
 /**
+ * Module-level cache for event message strings.
+ * Avoids building `attr + ':change'` / `attr + ':delete'` strings on every data change.
+ * Since property names repeat constantly, hit rate is near 100% after warm-up.
+ *
+ * @type {Map<string, {change: string, delete: string}>}
+ */
+const eventMessageCache = new Map();
+
+/**
  * EVENT
  *
  * This will hold the event strings for the data object.
@@ -36,7 +45,13 @@ export const EVENT =
  */
 export const createEventMessage = (attr, event) =>
 {
-	return `${attr}:${event}`;
+	let entry = eventMessageCache.get(attr);
+	if (!entry)
+	{
+		entry = { change: `${attr}:change`, delete: `${attr}:delete` };
+		eventMessageCache.set(attr, entry);
+	}
+	return event === 'change' ? entry.change : entry.delete;
 };
 
 /**
@@ -271,14 +286,16 @@ export class BasicData
 		}
 
 		const [items, committer, stopMerge] = args;
-		Object.entries(items).forEach(([attr, value]) =>
+		const keys = Object.keys(items);
+		for (let i = 0; i < keys.length; i++)
 		{
-			if (typeof value === 'function')
+			const attr = keys[i];
+			const value = items[attr];
+			if (typeof value !== 'function')
 			{
-				return;
+				this._setAttr(attr, value, committer, stopMerge);
 			}
-			this._setAttr(attr, value, committer, stopMerge);
-		});
+		}
 
 		return this;
 	}

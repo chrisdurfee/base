@@ -33,16 +33,16 @@ export class DataBinder
 		this.attr = 'bindId';
 
 		/**
-		 * @type {Array<any>} blockedKeys
+		 * @type {Set<number>} blockedKeys
 		 * @protected
 		 */
-		this.blockedKeys = [
+		this.blockedKeys = new Set([
 			20, //caps lock
 			37, //arrows
 			38,
 			39,
 			40
-		];
+		]);
 
 		/**
 		 * @type {object} connections
@@ -88,16 +88,13 @@ export class DataBinder
 		let bindProp = prop,
 		bindAttr = null;
 
-		if (prop.indexOf(':') !== -1)
+		const colonIdx = prop.indexOf(':');
+		if (colonIdx !== -1)
 		{
 			/* this will setup the custom attr if the prop
 			has specified one. */
-			const parts = prop.split(':');
-			if (parts.length > 1)
-			{
-				bindProp = parts[1];
-				bindAttr = parts[0];
-			}
+			bindAttr = prop.substring(0, colonIdx);
+			bindProp = prop.substring(colonIdx + 1);
 		}
 
 		/**
@@ -202,11 +199,6 @@ export class DataBinder
 	setBindId(element)
 	{
 		const id = 'db-' + this.idCount++;
-
-		if (element.dataset)
-		{
-			element.dataset[this.attr] = id;
-		}
 		element[this.attr] = id;
 		return id;
 	}
@@ -350,7 +342,7 @@ export class DataBinder
 
 		/* this will check to block ctrl, shift or alt +
 		buttons */
-		return (this.blockedKeys.indexOf(evt.keyCode) !== -1);
+		return (this.blockedKeys.has(evt.keyCode));
 	}
 
 	/**

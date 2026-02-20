@@ -1,4 +1,3 @@
-import { Objects } from '../../../shared/objects.js';
 import { normalizeAttr } from '../../html/html.js';
 import { Directives } from '../directives/directives.js';
 import { WatcherHelper } from '../watcher-helper.js';
@@ -141,7 +140,7 @@ export class Parser
 
 		let children = [];
 		let value, directive;
-		
+
 		// Use Object.keys for better performance (no iterator creation)
 		const keys = Object.keys(obj);
 		for (let i = 0, len = keys.length; i < len; i++)
@@ -165,7 +164,17 @@ export class Parser
 			 */
 			if (key === 'children')
 			{
-				children = Array.isArray(value) ? children.concat(value) : children.concat([value]);
+				if (Array.isArray(value))
+				{
+					for (let ci = 0; ci < value.length; ci++)
+					{
+						children.push(value[ci]);
+					}
+				}
+				else
+				{
+					children.push(value);
+				}
 				continue;
 			}
 
@@ -215,9 +224,11 @@ export class Parser
 					// @ts-ignore
 					callback.call(this, e, parent);
 				};
+
 				// @ts-ignore - Add originalCallback for event cleanup tracking
 				wrapper.originalCallback = callback;
-				value = wrapper;
+				attr.push(Attribute(key, wrapper));
+				continue;
 			}
 
 			/**

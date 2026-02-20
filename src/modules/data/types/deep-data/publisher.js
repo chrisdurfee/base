@@ -1,6 +1,13 @@
 import { DataUtils as utils } from './data-utils.js';
 
 /**
+ * Module-level WeakSet reused across publish calls to avoid
+ * allocating a new WeakSet on every published object.
+ * @type {WeakSet|null}
+ */
+let _seen = null;
+
+/**
  * Publisher
  *
  * This will contain methods for publishing data.
@@ -119,16 +126,25 @@ export class Publisher
 			return;
 		}
 
-		// Initialize seen set on first call
-		if (seen === null)
+		// On top-level call, reuse module-level WeakSet to avoid heap allocation
+		const isTopLevel = (seen === null);
+		if (isTopLevel)
 		{
-			seen = new WeakSet();
+			if (!_seen)
+			{
+				_seen = new WeakSet();
+			}
+			seen = _seen;
 		}
+
+		// seen is guaranteed non-null at this point; guard satisfies TS flow analysis
+		if (!seen) { return; }
 
 		// Detect circular reference
 		if (seen.has(obj))
 		{
 			console.warn('[Publisher] Circular reference detected at path:', pathString);
+			if (isTopLevel) { _seen = null; }
 			return;
 		}
 
@@ -136,6 +152,7 @@ export class Publisher
 		if (depth >= this.MAX_DEPTH)
 		{
 			console.warn('[Publisher] Max depth exceeded at path:', pathString, '- stopping recursion');
+			if (isTopLevel) { _seen = null; }
 			return;
 		}
 
@@ -145,10 +162,17 @@ export class Publisher
 		if (Array.isArray(obj))
 		{
 			this.publishArray(pathString, obj, callBack, seen, depth);
-			return;
+		}
+		else
+		{
+			this.publishObject(pathString, obj, callBack, seen, depth);
 		}
 
-		this.publishObject(pathString, obj, callBack, seen, depth);
+		// Clear module-level WeakSet after top-level call completes
+		if (isTopLevel)
+		{
+			_seen = null;
+		}
 	}
 
     /**
@@ -164,12 +188,11 @@ export class Publisher
      */
     static publishArray(pathString, obj, callBack, seen, depth)
     {
-        let subPath, value;
         const length = obj.length;
         for (let i = 0; i < length; i++)
         {
-            value = obj[i];
-            subPath = pathString + '[' + i + ']';
+            const value = obj[i];
+            const subPath = `${pathString}[${i}]`;
             this._checkPublish(subPath, value, callBack, seen, depth);
         }
     }
@@ -187,13 +210,14 @@ export class Publisher
      */
     static publishObject(pathString, obj, callBack, seen, depth)
     {
-        let subPath, value;
-        const keys = Object.keys(obj);
-        for (let i = 0; i < keys.length; i++)
+        for (const prop in obj)
         {
-            const prop = keys[i];
-            value = obj[prop];
-            subPath = pathString + '.' + prop;
+            if (!Object.prototype.hasOwnProperty.call(obj, prop))
+            {
+                continue;
+            }
+            const value = obj[prop];
+            const subPath = `${pathString}.${prop}`;
             this._checkPublish(subPath, value, callBack, seen, depth);
         }
     }

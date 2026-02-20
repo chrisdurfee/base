@@ -115,7 +115,7 @@ export class ElementSource extends TwoWaySource
 		this.addSetMethod(element, this.attr);
 
 		/**
-		 * @type {function} filter
+		 * @type {Function|null} filter
 		 * @private
 		 */
 		this.filter = (typeof filter === 'string')? this.setupFilter(filter) : filter;
@@ -131,7 +131,7 @@ export class ElementSource extends TwoWaySource
 	 */
 	addSetMethod(element, attr)
 	{
-		if (attr.substring(4, 1) === '-')
+		if (attr.charAt(4) === '-')
 		{
 			this.setValue = SetAttr;
 			this.getValue = GetAttr;
@@ -267,7 +267,7 @@ export class ElementSource extends TwoWaySource
 		super.unsubscribe();
 		this.element = {};
 		this.attr = '';
-		this.filter = () => {};
+		this.filter = null;
 		this.setValue = null;
 		this.getValue = null;
 	}

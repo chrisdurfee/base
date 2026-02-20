@@ -14,16 +14,7 @@ class LRUCache
 
 	get(key)
 	{
-		if (!this.cache.has(key))
-		{
-			return undefined;
-		}
-
-		// Move to end (most recently used)
-		const value = this.cache.get(key);
-		this.cache.delete(key);
-		this.cache.set(key, value);
-		return value;
+		return this.cache.get(key);
 	}
 
 	set(key, value)

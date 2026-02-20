@@ -1,6 +1,6 @@
 {
 	"name": "@base-framework/base",
-	"version": "3.6.8",
+	"version": "3.6.11",
 	"description": "This is a javascript framework.",
 	"main": "./dist/base.js",
 	"type": "module",
@@ -37,6 +37,7 @@
 	"exports": {
 		"./package.json": "./package.json",
 		".": {
+			"types": "./dist/types/base.d.ts",
 			"import": "./dist/base.js",
 			"require": "./dist/base.js"
 		}

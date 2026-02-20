@@ -13,6 +13,14 @@ import { HtmlHelper } from './html-helper.js';
 const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
 
 /**
+ * Module-level cache for parsed watcher prop arrays.
+ * The same watcher string (e.g. '[[count]]') across many elements is parsed once.
+ *
+ * @type {Map<string, Array<string>|null>}
+ */
+const _watcherPropsCache = new Map();
+
+/**
  * WatcherHelper
  *
  * This helper creates watcher callBacks, parses watcher strings
@@ -66,13 +74,16 @@ export const WatcherHelper =
 	 */
 	_getWatcherProps(string)
 	{
-		const matches = string.match(WATCHER_PATTERN);
-		if (!matches)
+		const cached = _watcherPropsCache.get(string);
+		if (cached !== undefined)
 		{
-			return null;
-		};
+			return cached;
+		}
 
-		return matches.map(match => match.slice(2, -2)); // Trim `[[` and `]]`
+		const matches = string.match(WATCHER_PATTERN);
+		const result = matches ? matches.map(match => match.slice(2, -2)) : null;
+		_watcherPropsCache.set(string, result);
+		return result;
 	},
 
 	/**
@@ -216,7 +227,7 @@ export const WatcherHelper =
 	 * @param {boolean} isDataArray
 	 * @returns {function}
 	 */
-	getCallBack(settings, ele, data, string, isDataArray)
+	getCallBack(settings, ele, data, string, isDataArray, props)
 	{
 		/**
 		 * This will get the attribute to update.
@@ -231,15 +242,15 @@ export const WatcherHelper =
 		const overrideCallBack = settings.callBack;
 		if (typeof overrideCallBack === 'function')
 		{
-			const props = string.match(WATCHER_PATTERN) || [];
-			const isMultiProp = (props && props.length > 1);
+			const watcherProps = props || string.match(WATCHER_PATTERN) || [];
+			const isMultiProp = (watcherProps.length > 1);
 
 			return (value, committer) =>
 			{
 				/**
 				 * This will get the watcher values to pass to the callBack.
 				 */
-				value = (isMultiProp !== true)? value : this.getPropValues(data, props, isDataArray);
+				value = (isMultiProp !== true)? value : this.getPropValues(data, watcherProps, isDataArray);
 				const result = overrideCallBack(value, ele, committer);
 				if (typeof result !== 'undefined')
 				{
@@ -282,30 +293,27 @@ export const WatcherHelper =
 		isDataArray = Array.isArray(data);
 
 		/**
-		 * This will set up the watcher callBack.
-		 *
-		 * @type {function} callBack
+		 * This will get the props to watch and set up the watcher callBack.
 		 */
-		const callBack = this.getCallBack(settings, ele, data, string, isDataArray),
-
-		/**
-		 * This will get the props to watch.
-		 *
-		 * @type {Array<any>} props
-		 */
-		props = this._getWatcherProps(string);
+		const props = this._getWatcherProps(string);
+		const callBack = this.getCallBack(settings, ele, data, string, isDataArray, props);
 
 		/**
 		 * This will add the watcher for each prop.
 		 */
-		for (var i = 0, length = props.length; i < length; i++)
+		if (!isDataArray)
 		{
-			/**
-			 * This will set the coreect data object for the watcher
-			 * based on the isDataArray flag.
-			 */
-			var watcherData = (isDataArray)? data[i] : data;
-			this.addWatcher(ele, watcherData, props[i], callBack);
+			for (let i = 0, length = props.length; i < length; i++)
+			{
+				this.addWatcher(ele, data, props[i], callBack);
+			}
+		}
+		else
+		{
+			for (let i = 0, length = props.length; i < length; i++)
+			{
+				this.addWatcher(ele, data[i], props[i], callBack);
+			}
 		}
 	},
 

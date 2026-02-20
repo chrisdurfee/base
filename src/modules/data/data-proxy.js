@@ -1,4 +1,3 @@
-import { Objects } from "../../shared/objects.js";
 
 /**
  * WeakMap-based cache for proxy instances.
@@ -60,6 +59,13 @@ export function invalidateProxyCache(target)
 }
 
 /**
+ * Fast check for whether a string prop is a numeric array index.
+ * Avoids Number() coercion on every proxy get.
+ * @type {RegExp}
+ */
+const DIGIT_PATTERN = /^\d+$/;
+
+/**
  * This will get hte path of the prop.
  *
  * @param {string} path
@@ -68,14 +74,12 @@ export function invalidateProxyCache(target)
  */
 function getNewPath(path, prop)
 {
-	const isNan = isNaN(Number(prop));
-	const propPath = isNan ? prop : `[${prop}]`;
+	const isIndex = DIGIT_PATTERN.test(prop);
 	if (path === '')
 	{
-		return propPath;
+		return isIndex ? `[${prop}]` : prop;
 	}
-
-	return isNan ?`${path}.${propPath}` : `${path}${propPath}`;
+	return isIndex ? `${path}[${prop}]` : `${path}.${prop}`;
 }
 
 /**
@@ -118,7 +122,7 @@ function createHandler(data, path = '', dataRoot = '')
 			value = Reflect.get(dataTarget, prop, receiver);
 
 			// Return the value directly if it's not an object
-			if (Objects.isPlainObject(value) || Array.isArray(value))
+			if (value !== null && typeof value === 'object')
 			{
 				// Create a new handler for nested properties
 				const newPath = getNewPath(path, prop);
