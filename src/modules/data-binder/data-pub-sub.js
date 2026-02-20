@@ -318,7 +318,8 @@ export class DataPubSub
 		{
 			const resolvers = this.flushCompleteResolvers;
 			this.flushCompleteResolvers = [];
-			for (let i = 0; i < resolvers.length; i++)
+			const length = resolvers.length;
+			for (let i = 0; i < length; i++)
 			{
 				resolvers[i]();
 			}
@@ -329,7 +330,8 @@ export class DataPubSub
 		{
 			const callbacks = this.flushCallbacks;
 			this.flushCallbacks = [];
-			for (let i = 0; i < callbacks.length; i++)
+			const length = callbacks.length;
+			for (let i = 0; i < length; i++)
 			{
 				callbacks[i]();
 			}
@@ -383,7 +385,8 @@ export class DataPubSub
 				{
 					const callbacks = this.flushCallbacks;
 					this.flushCallbacks = [];
-					for (let i = 0; i < callbacks.length; i++)
+					const length = callbacks.length;
+					for (let i = 0; i < length; i++)
 					{
 						callbacks[i]();
 					}
