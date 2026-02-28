@@ -59,13 +59,6 @@ export function invalidateProxyCache(target)
 }
 
 /**
- * Fast check for whether a string prop is a numeric array index.
- * Avoids Number() coercion on every proxy get.
- * @type {RegExp}
- */
-const DIGIT_PATTERN = /^\d+$/;
-
-/**
  * This will get hte path of the prop.
  *
  * @param {string} path
@@ -74,12 +67,14 @@ const DIGIT_PATTERN = /^\d+$/;
  */
 function getNewPath(path, prop)
 {
-	const isIndex = DIGIT_PATTERN.test(prop);
+	const isNan = isNaN(Number(prop));
+	const propPath = isNan ? prop : `[${prop}]`;
 	if (path === '')
 	{
-		return isIndex ? `[${prop}]` : prop;
+		return propPath;
 	}
-	return isIndex ? `${path}[${prop}]` : `${path}.${prop}`;
+
+	return isNan ?`${path}.${propPath}` : `${path}${propPath}`;
 }
 
 /**
