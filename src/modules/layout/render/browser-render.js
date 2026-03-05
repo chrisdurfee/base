@@ -24,12 +24,19 @@ export class BrowserRender extends Render
 	build(obj, container, parent)
 	{
 		const fragment = HtmlHelper.createDocFragment();
-		const elements = Array.isArray(obj) ? obj : [obj];
 
-		// Classic for loop - faster than forEach (no closure creation)
-		for (let i = 0, len = elements.length; i < len; i++)
+		/* Avoid allocating a single-element wrapper array in the common case
+		 * where `obj` is a plain layout object rather than an array. */
+		if (Array.isArray(obj))
 		{
-			this.buildElement(elements[i], fragment, parent);
+			for (let i = 0, len = obj.length; i < len; i++)
+			{
+				this.buildElement(obj[i], fragment, parent);
+			}
+		}
+		else
+		{
+			this.buildElement(obj, fragment, parent);
 		}
 
 		if (container && typeof container === 'object')
@@ -124,7 +131,11 @@ export class BrowserRender extends Render
 	createTempComponent(obj, container, parent)
 	{
 		const props = {
+			cache: obj.cache,
 			setData: () => obj.data,
+
+			// spread any custom methods defined on the layout object
+			...(obj.methods || {}),
 			render()
 			{
 				return {...obj, data: null, state: null};

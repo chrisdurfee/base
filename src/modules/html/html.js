@@ -296,21 +296,17 @@ export class Html
 
 		/* we want to do a recursive remove child
 		removal */
-		const children = ele.childNodes;
-		if (children)
+		const childNodes = ele.childNodes;
+		if (childNodes && childNodes.length > 0)
 		{
-			const length = children.length - 1;
-			for (var i = length; i >= 0; i--)
+			/* Snapshot the live NodeList into a static array to avoid
+			invalidation during iteration and to enable fast indexed access. */
+			const children = Array.from(childNodes);
+			for (let i = children.length - 1; i >= 0; i--)
 			{
-				var child = children[i];
-				if (!child)
-				{
-					continue;
-				}
-
 				/* this will remove the child element data
 				before the parent is removed */
-				this.removeElementData(child);
+				this.removeElementData(children[i]);
 			}
 		}
 
@@ -382,13 +378,13 @@ export class Html
 			return this;
 		}
 
-		const children = container.childNodes;
-		for (var child in children)
+		/* Snapshot the live NodeList into a static array.
+		 * for..in on a NodeList is implementation-defined and slow;
+		 * Array.from gives us a safe, indexed, static copy. */
+		const children = Array.from(container.childNodes);
+		for (let i = 0, len = children.length; i < len; i++)
 		{
-			if (Object.prototype.hasOwnProperty.call(children, child))
-			{
-				this.removeElementData(children[child]);
-			}
+			this.removeElementData(children[i]);
 		}
 
 		container.innerHTML = '';

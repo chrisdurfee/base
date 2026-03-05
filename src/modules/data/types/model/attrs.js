@@ -1,4 +1,3 @@
-import { Objects } from "../../../../shared/objects.js";
 import { Types } from "../../../../shared/types.js";
 
 /**
@@ -15,14 +14,20 @@ export const setupAttrSettings = (settings = {}) =>
 		return attributes;
 	}
 
-	const clonedSettings = Objects.clone(settings);
-	Object.keys(clonedSettings).forEach(prop =>
+	/* Iterate the settings directly — no need to clone first since we're
+	 * constructing a new `attributes` object from each property value
+	 * and already skip functions. Cloning here was the source of
+	 * structuredClone failures when items (e.g. scoped for-directive rows)
+	 * contained function properties or non-serialisable values. */
+	const keys = Object.keys(settings);
+	for (let i = 0, len = keys.length; i < len; i++)
 	{
-		const settingValue = clonedSettings[prop];
-        if (typeof settingValue !== 'function')
+		const prop = keys[i];
+		const settingValue = settings[prop];
+		if (typeof settingValue !== 'function')
 		{
-            attributes[prop] = settingValue;
-        }
-	});
+			attributes[prop] = settingValue;
+		}
+	}
 	return attributes;
 };

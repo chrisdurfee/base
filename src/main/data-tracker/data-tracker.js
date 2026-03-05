@@ -2,6 +2,16 @@ import { TrackerTypes } from './tracker-types.js';
 import { Tracker } from './tracker.js';
 
 /**
+ * External WeakMap for tracking IDs.
+ * Storing IDs as expando properties on DOM elements causes V8 hidden-class
+ * changes that de-optimise all subsequent property accesses on those nodes.
+ * A WeakMap stores the association externally with no impact on the object.
+ *
+ * @type {WeakMap<object, string>}
+ */
+const _idMap = new WeakMap();
+
+/**
  * DataTracker
  *
  * This will add data tracking for objects. The DataTracker is
@@ -68,7 +78,13 @@ export class DataTracker
 			return '';
 		}
 
-		return obj.trackingId || (obj.trackingId = `dt${this.trackingCount++}`);
+		let id = _idMap.get(obj);
+		if (!id)
+		{
+			id = `dt${this.trackingCount++}`;
+			_idMap.set(obj, id);
+		}
+		return id;
 	}
 
 	/**
@@ -96,7 +112,7 @@ export class DataTracker
 	 */
 	static get(obj, type)
 	{
-		const id = obj.trackingId;
+		const id = _idMap.get(obj);
 		const tracker = this.trackers.get(id);
 		if (!tracker)
 		{
@@ -172,7 +188,7 @@ export class DataTracker
 	 */
 	static remove(obj, type)
 	{
-		const id = obj.trackingId;
+		const id = _idMap.get(obj);
 		if (!id || !this.trackers.has(id))
 		{
 			return;
@@ -187,7 +203,7 @@ export class DataTracker
 		{
 			tracker.remove();
 			this.trackers.delete(id);
-			delete obj.trackingId;
+			_idMap.delete(obj);
 			return;
 		}
 
@@ -199,7 +215,7 @@ export class DataTracker
 		if (this.isEmpty(tracker.types))
 		{
 			this.trackers.delete(id);
-			delete obj.trackingId;
+			_idMap.delete(obj);
 		}
 	}
 }

@@ -112,7 +112,9 @@ export const WatcherHelper =
 				ele.required = (Boolean(value) !== false);
 				break;
 			case 'src':
-				if (ele.tagName.toLowerCase() === 'img')
+				/* tagName is always uppercase in HTML documents —
+				 * compare directly to avoid allocating a lowercase string. */
+				if (ele.tagName === 'IMG')
 				{
 					ele.src = (value && (value.indexOf('.') !== -1 || value.indexOf('blob:') !== -1))? value : '';
 					break;
@@ -136,12 +138,13 @@ export const WatcherHelper =
 	replaceParams(string, data, isArray = false)
 	{
 		let count = 0;
-		return string.replace(WATCHER_PATTERN, function()
+		/* Use named parameters instead of `arguments` so V8 can optimise
+		 * the inner function — `arguments` forces an allocation every call. */
+		return string.replace(WATCHER_PATTERN, function(match, _group1, key)
 		{
 			const watcherData = (isArray)? data[count] : data;
 			count++;
-
-			const result = watcherData.get(arguments[2]);
+			const result = watcherData.get(key);
 			return ((typeof result !== 'undefined' && result !== null)? result : '');
 		});
 	},

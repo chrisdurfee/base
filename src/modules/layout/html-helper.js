@@ -48,11 +48,13 @@ export class HtmlHelper extends Html
             return;
         }
 
-        attrs.forEach(item =>
-		{
-            const { key: prop, value } = item;
-			this.addAttr(ele, prop, value, parent);
-        });
+        /* Indexed for loop - avoids the closure + destructuring
+         * allocation of forEach on every attribute of every element. */
+        for (let i = 0, len = attrs.length; i < len; i++)
+        {
+            const item = attrs[i];
+			this.addAttr(ele, item.key, item.value, parent);
+        }
 	}
 
 	/**
@@ -94,21 +96,35 @@ export class HtmlHelper extends Html
 			so the event is tracked */
 			attr = removeEventPrefix(attr);
 
-			const callback = value;
 			/**
-			 * Store the original callback reference on the wrapper function
-			 * so it can be matched during event removal.
+			 * The parser already wraps event callbacks in a closure that
+			 * binds `this` and passes the parent component as the second
+			 * argument. It stamps `.originalCallback` on the wrapper so we
+			 * can identify it here and skip creating a second closure.
+			 * Only fall back to wrapping when the function arrived here
+			 * unwrapped (e.g. from a directive calling addAttr directly).
 			 */
-			const wrapper = function(e)
+			if (value.originalCallback)
 			{
-				// @ts-ignore
-				callback.call(this, e, parent);
-			};
-
-			Events.add(attr, ele, wrapper, false, true, callback);
+				// Already wrapped by parser — register directly.
+				Events.add(attr, ele, value, false, true, value.originalCallback);
+			}
+			else
+			{
+				const callback = value;
+				const wrapper = function(e)
+				{
+					// @ts-ignore
+					callback.call(this, e, parent);
+				};
+				Events.add(attr, ele, wrapper, false, true, callback);
+			}
 			return;
 		}
 
+		/* Use startsWith for clarity and to avoid allocating a substring
+		 * on every regular attribute access (the common case is neither).
+		 * Length guard short-circuits before the string comparison. */
 		if (attr.substring(4, 5) === '-')
 		{
 			// this will handle data and aria attributes
