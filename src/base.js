@@ -9,6 +9,13 @@ import { Pod } from './modules/component/pod.js';
 import { Unit } from './modules/component/unit.js';
 import { dataBinder } from './modules/data-binder/data-binder.js';
 import { Data, Model, SimpleData } from './modules/data/data.js';
+
+/**
+ * Type representing a model subclass constructor returned by Model.extend().
+ * Use this to annotate parameters that receive a model created via Model.extend().
+ *
+ * @typedef {import('./modules/data/types/model/model.js').ModelClass} ModelClass
+ */
 import { DateTime } from "./modules/date/date-time.js";
 import { Html } from './modules/html/html.js';
 import { Import } from './modules/import/import.js';

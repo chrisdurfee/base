@@ -62,6 +62,16 @@ const getXhr = (settings) =>
 let modelTypeNumber = 0;
 
 /**
+ * Represents a Model subclass constructor returned by {@link Model.extend}.
+ *
+ * Extends the Model instance interface so all instance methods (`get`, `set`,
+ * etc.) are directly visible when this type is used as a parameter annotation,
+ * while the construct signature keeps `new VehicleTaxonomyModel()` valid.
+ *
+ * @typedef {Model & { new(settings?: object): Model, extend(settings?: object): ModelClass, prototype: Model }} ModelClass
+ */
+
+/**
  * The Model class extends Data to provide structure
  * for connecting to a remote service.
  *
@@ -114,9 +124,13 @@ export class Model extends Data
 	/**
 	 * Creates a new subclass of the current Model and returns its constructor.
 	 *
+	 * The returned value can be used as a type annotation for model instances.
+	 * TypeScript will resolve it to `ModelClass` which extends `Model` directly,
+	 * so all instance methods (`get`, `set`, etc.) are visible on typed parameters.
+	 *
 	 * @static
 	 * @param {object} [settings={}] - Configuration for the extended model.
-	 * @returns {typeof Model} The extended model class (subclass of Model).
+	 * @returns {ModelClass} The extended model class (subclass of Model).
 	 */
 	static extend(settings = {})
 	{
@@ -155,6 +169,7 @@ export class Model extends Data
 		Object.assign(ExtendedModel.prototype, settings);
 		ExtendedModel.prototype.service = service;
 
+		// @ts-ignore - ExtendedModel is a constructor that satisfies ModelClass at runtime
 		return ExtendedModel;
 	}
 }
