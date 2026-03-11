@@ -87,8 +87,8 @@ const parseArgs = (args) =>
  * An Atom is a reusable layout function that accepts flexible arguments (props, children, or both)
  * and returns a layout object. The callback receives two separate parameters: props and children.
  *
- * @param {function(any, *): object} callBack - Callback function that receives (props, children) as separate parameters and returns a layout object
- * @returns {function(...*): object} A function that accepts flexible arguments and returns a layout object
+ * @param {function(any, any): any} callBack - Callback function that receives (props, children) as separate parameters and returns a layout object
+ * @returns {function(...any): any} A function that accepts flexible arguments and returns a layout object
  *
  * @example
  * // CORRECT: Two separate parameters
