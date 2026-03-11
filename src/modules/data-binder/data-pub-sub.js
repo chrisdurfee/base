@@ -274,9 +274,12 @@ export class DataPubSub
 			console.log('[DataPubSub] Flushing', this.updateQueue.size, 'updates (iteration', this.flushIterations + ')');
 		}
 
-		// Copy queue and clear it
-		const updates = new Map(this.updateQueue);
-		this.updateQueue.clear();
+		/* Swap active queue — O(1) reference swap instead of O(n) Map copy.
+		 * The old map becomes `updates` for processing while a fresh empty
+		 * Map begins collecting any publishes that fire during processing.
+		 * Isolation guarantee is identical to the copy approach. */
+		const updates = this.updateQueue;
+		this.updateQueue = new Map();
 
 		// Process all updates
 		for (const [msg, args] of updates)

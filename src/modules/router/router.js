@@ -1,5 +1,4 @@
 import { Events } from '../../main/events/events.js';
-import { Dom } from '../../shared/dom.js';
 import { Data } from '../data/data.js';
 import { HistoryController } from './history/history-controller.js';
 import { Route } from './routes/route.js';
@@ -405,22 +404,11 @@ export class Router
 	 * This will get the parent element link.
 	 *
 	 * @param {HTMLElement} ele
-	 * @returns {HTMLElement|boolean}
+	 * @returns {HTMLElement|null}
 	 */
 	getParentLink(ele)
 	{
-		let target = ele.parentNode;
-		while (target !== null)
-		{
-			if (target.nodeName.toLowerCase() === 'a')
-			{
-				// @ts-ignore
-				return target;
-			}
-
-			target = target.parentNode;
-		}
-		return false;
+		return ele.closest('a');
 	}
 
 	/**
@@ -436,30 +424,20 @@ export class Router
 			return true;
 		}
 
-		let target = evt.target;
 		// @ts-ignore
-		if (target?.nodeName.toLowerCase() !== 'a')
-		{
-			/* this will check to get the parent to check
-			if the child is contained in a link */
-			// @ts-ignore
-			target = this.getParentLink(target);
-			// @ts-ignore
-			if (target === false)
-			{
-				return true;
-			}
-		}
-
-		// @ts-ignore
-		if (target.target === '_blank' || Dom.data(target, 'cancel-route'))
+		const target = evt.target.closest('a');
+		if (!target)
 		{
 			return true;
 		}
 
-		// @ts-ignore
+		if (target.target === '_blank' || target.dataset.cancelRoute)
+		{
+			return true;
+		}
+
 		const href = target.getAttribute('href');
-		if (typeof href !== 'undefined')
+		if (href !== null)
 		{
 			const baseUri = this.baseURI,
 			path = (baseUri !== '/')? href.replace(baseUri, '') : href;
@@ -610,7 +588,7 @@ export class Router
 	checkSwitches(path)
 	{
 		const switches = this.switches;
-		
+
 		// Classic for...of loop for Map values
 		for (const group of switches.values())
 		{

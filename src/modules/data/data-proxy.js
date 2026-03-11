@@ -11,6 +11,16 @@
 const proxyCache = new WeakMap();
 
 /**
+ * Per-target cache for bound method references.
+ * Every access to a method through the proxy (e.g. data.set) would
+ * otherwise call value.bind(target) and allocate a new function object.
+ * This cache makes subsequent accesses a Map lookup (~10ns) instead.
+ *
+ * @type {WeakMap<object, Map<string, Function>>}
+ */
+const _boundMethodCache = new WeakMap();
+
+/**
  * Get or create a cached proxy for a target object at a specific path.
  *
  * @param {object} target - The object to proxy
@@ -106,7 +116,21 @@ function createHandler(data, path = '', dataRoot = '')
 			{
 				if (typeof value === 'function')
 				{
-					return value.bind(target);
+					/* Cache bound methods per target to avoid allocating a new
+					 * bound function on every method access (e.g. data.set, data.get). */
+					let methodCache = _boundMethodCache.get(target);
+					if (!methodCache)
+					{
+						methodCache = new Map();
+						_boundMethodCache.set(target, methodCache);
+					}
+
+					const cached = methodCache.get(prop);
+					if (cached) return cached;
+
+					const bound = value.bind(target);
+					methodCache.set(prop, bound);
+					return bound;
 				}
 
 				return value;
@@ -114,7 +138,9 @@ function createHandler(data, path = '', dataRoot = '')
 
 			// Access the property within the dataRoot
 			const dataTarget = target[dataRoot] || target;
-			value = Reflect.get(dataTarget, prop, receiver);
+			/* Direct bracket access is faster than Reflect.get for plain data
+			 * objects where we do not need the receiver binding. */
+			value = dataTarget[prop];
 
 			// Return the value directly if it's not an object
 			if (value !== null && typeof value === 'object')

@@ -1,11 +1,18 @@
 import { DataUtils as utils } from './data-utils.js';
 
 /**
- * Module-level WeakSet reused across publish calls to avoid
- * allocating a new WeakSet on every published object.
- * @type {WeakSet|null}
+ * Module-level Set reused across publish calls to detect circular references.
+ * Using a persistent Set (cleared before each top-level call) avoids
+ * allocating a new WeakSet on every data mutation.
+ *
+ * `Set` is used instead of `WeakSet` because Set has `clear()`,
+ * allowing the same instance to be reused without GC pressure.
+ * Strong references are held only for the duration of one publish cycle,
+ * then released via `clear()`.
+ *
+ * @type {Set<object>}
  */
-let _seen = null;
+const _seen = new Set();
 
 /**
  * Publisher
@@ -126,14 +133,13 @@ export class Publisher
 			return;
 		}
 
-		// On top-level call, reuse module-level WeakSet to avoid heap allocation
+		// On top-level call, reuse module-level Set to avoid heap allocation
 		const isTopLevel = (seen === null);
 		if (isTopLevel)
 		{
-			if (!_seen)
-			{
-				_seen = new WeakSet();
-			}
+			/* Clear at the START of each top-level call (not the end) so the
+			 * same Set instance is safely reused without GC pressure. */
+			_seen.clear();
 			seen = _seen;
 		}
 
@@ -144,7 +150,6 @@ export class Publisher
 		if (seen.has(obj))
 		{
 			console.warn('[Publisher] Circular reference detected at path:', pathString);
-			if (isTopLevel) { _seen = null; }
 			return;
 		}
 
@@ -152,7 +157,6 @@ export class Publisher
 		if (depth >= this.MAX_DEPTH)
 		{
 			console.warn('[Publisher] Max depth exceeded at path:', pathString, '- stopping recursion');
-			if (isTopLevel) { _seen = null; }
 			return;
 		}
 
@@ -166,12 +170,6 @@ export class Publisher
 		else
 		{
 			this.publishObject(pathString, obj, callBack, seen, depth);
-		}
-
-		// Clear module-level WeakSet after top-level call completes
-		if (isTopLevel)
-		{
-			_seen = null;
 		}
 	}
 
@@ -192,7 +190,7 @@ export class Publisher
         for (let i = 0; i < length; i++)
         {
             const value = obj[i];
-            const subPath = `${pathString}[${i}]`;
+            const subPath = pathString + '[' + i + ']';
             this._checkPublish(subPath, value, callBack, seen, depth);
         }
     }
@@ -210,14 +208,17 @@ export class Publisher
      */
     static publishObject(pathString, obj, callBack, seen, depth)
     {
-        for (const prop in obj)
+        /* Object.keys() + indexed loop is faster than for..in + hasOwnProperty.call
+         * for plain objects: no prototype chain traversal and single allocation
+         * that the engine can optimise away in the common path. */
+        const keys = Object.keys(obj);
+        for (let i = 0, len = keys.length; i < len; i++)
         {
-            if (!Object.prototype.hasOwnProperty.call(obj, prop))
-            {
-                continue;
-            }
+            const prop = keys[i];
             const value = obj[prop];
-            const subPath = `${pathString}.${prop}`;
+            /* String + concat is at least as fast as a template literal and avoids
+             * the tagged-template overhead on older JIT builds. */
+            const subPath = pathString + '.' + prop;
             this._checkPublish(subPath, value, callBack, seen, depth);
         }
     }
