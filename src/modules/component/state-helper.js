@@ -70,7 +70,7 @@ export class StateHelper
 	convertStates(action)
 	{
 		const actions = [];
-		for (var prop in action)
+		for (let prop in action)
 		{
 			if (!Object.prototype.hasOwnProperty.call(action, prop))
 			{
@@ -83,7 +83,7 @@ export class StateHelper
 				continue;
 			}
 
-			var targetId = null,
+			let targetId = null,
 			callBack = null,
 			state = action[prop];
 			if (state && typeof state === 'object')
@@ -113,23 +113,22 @@ export class StateHelper
 	 */
 	setupRemoteStates(remotes, actions)
 	{
-		let remote;
-		for (var i = 0, length = remotes.length; i < length; i++)
+		for (let i = 0, length = remotes.length; i < length; i++)
 		{
-			remote = remotes[i];
+			const remote = remotes[i];
 			if (!remote)
 			{
 				continue;
 			}
 
-			for (var prop in remote)
+			for (let prop in remote)
 			{
 				if (!Object.prototype.hasOwnProperty.call(remote, prop) || prop === 'id')
 				{
 					continue;
 				}
 
-				var callBack = null,
+				let callBack = null,
 				value = remote[prop],
 				state = (value !== null)? value : undefined;
 				if (state && typeof state === 'object')
@@ -177,14 +176,18 @@ export class StateHelper
 			return;
 		}
 
-		for (var i = 0, length = actions.length; i < length; i++)
+		for (let i = 0, length = actions.length; i < length; i++)
 		{
-			var action = actions[i];
+			const action = actions[i];
 			if (action.token)
 			{
 				this.unbindRemoteState(state, action.token);
 			}
-			StateTracker.remove(action.targetId, action.action, action.token);
+
+			if (action.targetId)
+			{
+				StateTracker.remove(action.targetId, action.action, action.token);
+			}
 		}
 	}
 
@@ -204,9 +207,9 @@ export class StateHelper
 			return;
 		}
 
-		for (var i = 0, length = remotes.length; i < length; i++)
+		for (let i = 0, length = remotes.length; i < length; i++)
 		{
-			var action = remotes[i];
+			const action = remotes[i];
 			action.token = this.bindRemoteState(state, action.action, action.targetId);
 		}
 	}
@@ -249,9 +252,9 @@ export class StateHelper
 	{
 		const remotes = this.remoteStates;
 
-		for (var i = 0, length = actions.length; i < length; i++)
+		for (let i = 0, length = actions.length; i < length; i++)
 		{
-			var action = actions[i],
+			const action = actions[i],
 			token = this.addAction(state, action);
 
 			if (action.targetId)
@@ -259,11 +262,6 @@ export class StateHelper
 				action.token = token;
 				remotes.push(action);
 			}
-		}
-
-		if (remotes.length < 1)
-		{
-			this.remoteStates = [];
 		}
 	}
 
