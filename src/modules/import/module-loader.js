@@ -12,9 +12,10 @@ export class ModuleLoader
 	 *
 	 * @param {Promise} modulePromise
 	 * @param {function} callback
+	 * @param {function} [errorCallback]
 	 * @returns {Promise}
 	 */
-	static load(modulePromise, callback)
+	static load(modulePromise, callback, errorCallback)
 	{
 		return modulePromise.then(module =>
 		{
@@ -27,6 +28,11 @@ export class ModuleLoader
 		.catch(error =>
 		{
 			console.error('Error loading module:', error);
+
+			if (errorCallback)
+			{
+				errorCallback(error);
+			}
 		});
 	}
 }
