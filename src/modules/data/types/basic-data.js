@@ -147,6 +147,18 @@ export class BasicData
 	}
 
 	/**
+	 * This will flush any pending batched publishes immediately.
+	 * Useful for draining stale queued updates before setting up
+	 * new subscribers, preventing duplicate notifications.
+	 *
+	 * @returns {void}
+	 */
+	flushPending()
+	{
+		this.eventSub.flush();
+	}
+
+	/**
 	 * This will get the data id.
 	 *
 	 * @returns {string}
