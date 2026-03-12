@@ -18,23 +18,47 @@ const Comment = (props) => ({
 });
 
 /**
+ * Cache for import promises keyed by the original src (string or function
+ * reference). This ensures the same module is never fetched more than once
+ * even when the caller wraps the dynamic import in a new arrow function that
+ * is the same stable reference (e.g. from a route definition).
+ *
+ * @type {Map<unknown, Promise<unknown>>}
+ */
+const importCache = new Map();
+
+/**
  * This will get the promise from the src.
  *
- * @param {object|string} src
- * @returns {Promise}
+ * @param {unknown} src
+ * @returns {Promise<unknown>}
  */
 const getPromise = (src) =>
 {
-	const type = typeof src
+	if (importCache.has(src))
+	{
+		return /** @type {Promise<unknown>} */ (importCache.get(src));
+	}
+
+	const type = typeof src;
+	/** @type {Promise<unknown>} */
+	let promise;
 	if (type === 'string')
 	{
-		return import(src);
+		promise = import(/** @type {string} */ (src));
 	}
 	else if (type === 'function')
 	{
-		return src();
+		promise = (/** @type {() => Promise<unknown>} */ (src))();
 	}
-	return src;
+	else
+	{
+		// Already a Promise – no need to cache, it's a one-off value.
+		return /** @type {Promise<unknown>} */ (src);
+	}
+
+	importCache.set(src, promise);
+	return promise;
 };
 
 /**
@@ -125,8 +149,7 @@ export const ImportWrapper = Jot(
 	 */
 	loadAndRender(ele)
 	{
-		this.src = getPromise(this.src);
-		ModuleLoader.load(this.src, (module) =>
+		ModuleLoader.load(getPromise(this.src), (module) =>
 		{
 			this.loaded = true;
 
