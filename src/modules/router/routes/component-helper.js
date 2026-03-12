@@ -46,6 +46,18 @@ export class ComponentHelper
 	{
 		if (this.setup === false)
 		{
+			/**
+			 * Flush any pending batched publishes on the route data
+			 * before creating the component. This prevents stale
+			 * queued updates (from setParams) from firing after
+			 * the new component's watchers are set up, which would
+			 * cause duplicate callback invocations.
+			 */
+			if (this.route && typeof this.route.flushPending === 'function')
+			{
+				this.route.flushPending();
+			}
+
 			this.create();
 		}
 
