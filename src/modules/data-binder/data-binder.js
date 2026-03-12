@@ -250,11 +250,35 @@ export class DataBinder
 		const connection = new OneWayConnection();
 
 		/**
+		 * This will get the starting value of the data before subscribing
+		 * so we can guard against double-fire. If the data was set before
+		 * watch() is called, the batched microtask event is still pending.
+		 * Subscribing would cause the callback to fire twice: once
+		 * immediately below and once when the microtask flushes with the
+		 * same value. We skip that first subscription event when it matches
+		 * the value we are about to fire synchronously.
+		 */
+		const value = data.get(prop);
+		let skipFirstSameValue = true;
+		const guardedCallBack = (newValue) =>
+		{
+			if (skipFirstSameValue)
+			{
+				skipFirstSameValue = false;
+				if (newValue === value)
+				{
+					return;
+				}
+			}
+			callBack(newValue);
+		};
+
+		/**
 		 * This will setup the data source and subscribe
 		 * the element to the data.
 		 */
 		const source = connection.addSource(data);
-		source.subscribe(prop, callBack);
+		source.subscribe(prop, guardedCallBack);
 
 		// this will add the new connection to the connection tracker
 		const id = this.getBindId(element),
@@ -262,10 +286,8 @@ export class DataBinder
 		this.addConnection(id, attr, connection);
 
 		/**
-		 * This will get the starting value of the data and
-		 * call the callback if the value is defined.
+		 * This will call the callback with the starting value of the data.
 		 */
-		const value = data.get(prop);
 		callBack(value);
 		return this;
 	}
