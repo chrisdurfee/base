@@ -23,7 +23,10 @@ const Comment = (props) => ({
  * even when the caller wraps the dynamic import in a new arrow function that
  * is the same stable reference (e.g. from a route definition).
  *
- * @type {Map<unknown, Promise<unknown>>}
+ * Resolved promises are replaced with their module value so the Promise
+ * can be garbage-collected.
+ *
+ * @type {Map<unknown, Promise<unknown>|object>}
  */
 const importCache = new Map();
 
@@ -37,7 +40,13 @@ const getPromise = (src) =>
 {
 	if (importCache.has(src))
 	{
-		return /** @type {Promise<unknown>} */ (importCache.get(src));
+		const cached = importCache.get(src);
+		// If we stored the resolved module, wrap it in a resolved promise.
+		if (cached && typeof /** @type {*} */ (cached).then !== 'function')
+		{
+			return Promise.resolve(cached);
+		}
+		return /** @type {Promise<unknown>} */ (cached);
 	}
 
 	const type = typeof src;
@@ -56,6 +65,13 @@ const getPromise = (src) =>
 		// Already a Promise – no need to cache, it's a one-off value.
 		return /** @type {Promise<unknown>} */ (src);
 	}
+
+	// Replace the promise with the resolved module so the Promise object
+	// can be garbage-collected and lookups are synchronous on future hits.
+	promise.then((module) =>
+	{
+		importCache.set(src, module);
+	});
 
 	importCache.set(src, promise);
 	return promise;
@@ -85,9 +101,12 @@ export const ImportWrapper = Jot(
 		this.loaded = false;
 
 		/**
-		 * @type {boolean}
+		 * Generation counter incremented on each destroy to
+		 * invalidate in-flight load callbacks from a prior lifecycle.
+		 *
+		 * @type {number}
 		 */
-		this.blockRender = false;
+		this.generation = 0;
 	},
 
 	/**
@@ -149,19 +168,23 @@ export const ImportWrapper = Jot(
 	 */
 	loadAndRender(ele)
 	{
+		// Capture the current generation so the async callback can detect
+		// whether destroy() was called while the import was in-flight.
+		const gen = this.generation;
+
 		ModuleLoader.load(getPromise(this.src), (module) =>
 		{
-			this.loaded = true;
-
 			/**
-			 * We don't want to render if the render has been blocked
-			 * by the destroy method.
+			 * If the generation changed, this instance was destroyed
+			 * (and possibly re-created) while we were loading.
+			 * Discard the stale callback.
 			 */
-			if (this.blockRender === true)
+			if (gen !== this.generation)
 			{
-				this.blockRender = false;
 				return;
 			}
+
+			this.loaded = true;
 
 			const layout = this.layout || LayoutManager.process(module,
 			{
@@ -177,6 +200,15 @@ export const ImportWrapper = Jot(
 			 * before the module is destroyed.
 			 */
 			this.layoutRoot = LayoutManager.render(layout, ele, this.parent);
+		},
+		(error) =>
+		{
+			if (gen !== this.generation)
+			{
+				return;
+			}
+
+			this.loaded = false;
 		});
 	},
 
@@ -234,25 +266,22 @@ export const ImportWrapper = Jot(
 	 */
 	destroy()
 	{
+		// Bump generation so any in-flight load callback is discarded.
+		this.generation++;
+
 		if (!this.layoutRoot)
 		{
-			/**
-			 * The layout has been requested to load and now is called
-			 * destroy before the module has loaded.
-			 *
-			 * We will block the render and exit now.
-			 */
-			this.blockRender = true;
 			return;
 		}
 
-		this.blockRender = false;
 		Builder.removeNode(this.layoutRoot);
 
 		if (this.persist !== true)
 		{
 			this.layoutRoot = null;
 			this.layout = null;
+			this.loaded = false;
+			this.updateLayout = false;
 		}
 	}
 });
