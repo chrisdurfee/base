@@ -1,4 +1,5 @@
 import { Component } from '../../component/component.js';
+import { convertSettings } from '../../component/jot.js';
 import { Parser } from '../element/parser.js';
 import { HtmlHelper } from '../html-helper.js';
 import { Render } from './render.js';
@@ -130,12 +131,13 @@ export class BrowserRender extends Render
 	 */
 	createTempComponent(obj, container, parent)
 	{
-		const props = {
+		let props = {
 			cache: obj.cache,
 			setData: () => obj.data,
 
 			// spread any custom methods defined on the layout object
-			...(obj.methods || {}),
+			// this will convert any jot shorthand methods to regular methods
+			...convertSettings(obj.methods || {}, {}),
 			render()
 			{
 				return {...obj, data: null, state: null};

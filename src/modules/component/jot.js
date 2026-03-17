@@ -8,9 +8,32 @@ import { SHORTHAND_METHODS } from './shorthand-methods.js';
  * @param {object|function} value
  * @returns {function}
  */
-const getJotShorthandMethod = (value) =>
+const getJotShorthandMethod = (value, alias) =>
 {
-	return (typeof value === 'function')? value : () => value;
+	return (typeof value !== 'function' && alias === 'setupStates')? () => value : value;
+};
+
+/**
+ * Converts the jot settings to a component object.
+ *
+ * @param {object} settings
+ * @param {object} component
+ * @returns {object}
+ */
+export const convertSettings = (settings, component) =>
+{
+	if (!settings)
+	{
+		return component;
+	}
+
+	Object.entries(settings).forEach(([prop, value]) =>
+	{
+		const alias = SHORTHAND_METHODS[prop] || prop;
+		component[alias] = getJotShorthandMethod(value, alias);
+	});
+
+	return component;
 };
 
 /**
@@ -23,18 +46,7 @@ const getJotShorthandMethod = (value) =>
 const JotComponent = (settings) =>
 {
 	const component = {};
-	if (!settings)
-	{
-		return component;
-	}
-
-	Object.entries(settings).forEach(([prop, value]) =>
-	{
-		const alias = SHORTHAND_METHODS[prop] || prop;
-		component[alias] = getJotShorthandMethod(value);
-	});
-
-	return component;
+	return convertSettings(settings, component);
 };
 
 /**

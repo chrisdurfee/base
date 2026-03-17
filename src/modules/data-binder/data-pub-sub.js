@@ -244,11 +244,18 @@ export class DataPubSub
 		}
 
 
+		// Reset counter at the start of each NEW top-level flush cycle.
+		// Only recursive flushes (isFlushing already true) should accumulate.
+		if (!this.isFlushing)
+		{
+			this.flushIterations = 0;
+		}
+
 		// Set flushing flag to prevent recursive scheduling
 		this.isFlushing = true;
 		this.flushScheduled = false;
 
-		// Infinite loop detection
+		// Infinite loop detection (only within a single flush cycle)
 		this.flushIterations++;
 		if (this.flushIterations > this.maxFlushIterations)
 		{
@@ -281,32 +288,38 @@ export class DataPubSub
 		const updates = this.updateQueue;
 		this.updateQueue = new Map();
 
-		// Process all updates
-		for (const [msg, args] of updates)
+		try
 		{
-			// @ts-ignore
-			this.publishImmediate(msg, ...args);
+			// Process all updates
+			for (const [msg, args] of updates)
+			{
+				// @ts-ignore
+				this.publishImmediate(msg, ...args);
+			}
 		}
-
-		if (this.debugMode)
-		{
-			console.log('[DataPubSub] Flush complete (iteration', this.flushIterations + ')');
-		}
-
-		// If new updates were queued during processing, flush again
-		if (this.updateQueue.size > 0)
+		finally
 		{
 			if (this.debugMode)
 			{
-				console.log('[DataPubSub] New updates queued during flush, re-flushing...');
+				console.log('[DataPubSub] Flush complete (iteration', this.flushIterations + ')');
 			}
-			this.flush(); // Recursive flush
-		}
-		else
-		{
-			// All done, reset flags
-			this.isFlushing = false;
-			this._resolveFlushComplete();
+
+			// If new updates were queued during processing, flush again
+			if (this.updateQueue.size > 0)
+			{
+				if (this.debugMode)
+				{
+					console.log('[DataPubSub] New updates queued during flush, re-flushing...');
+				}
+				this.flush(); // Recursive flush
+			}
+			else
+			{
+				// All done, reset flags
+				this.isFlushing = false;
+				this.flushIterations = 0;
+				this._resolveFlushComplete();
+			}
 		}
 	}
 
@@ -416,6 +429,10 @@ export class DataPubSub
 	 * Publish a message immediately without batching.
 	 * This is the original synchronous publish logic.
 	 *
+	 * Individual subscriber errors are caught so one failing
+	 * callback cannot prevent other subscribers from receiving
+	 * updates or break the flush cycle.
+	 *
 	 * @param {string} msg
 	 * @param  {...any} args
 	 * @returns {void}
@@ -432,7 +449,14 @@ export class DataPubSub
 		{
 			if (callBack)
 			{
-				callBack.apply(this, args);
+				try
+				{
+					callBack.apply(this, args);
+				}
+				catch (error)
+				{
+					console.error('[DataPubSub] Subscriber error for "' + msg + '":', error);
+				}
 			}
 		}
 	}
