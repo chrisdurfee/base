@@ -111,6 +111,11 @@ export class Unit
 		this.unitType = null;
 
 		/**
+		 * @type {?string} _classId
+		 */
+		this._classId;
+
+		/**
 		 * @type {Array<any>} cached
 		 */
 		this.cached = [];
@@ -153,8 +158,7 @@ export class Unit
 	init()
 	{
 		this.id = 'cp-' + (unitNumber++);
-		// @ts-ignore
-		this.unitType = this.constructor.name.toLowerCase();
+		this.unitType = this._classId || this.constructor.name.toLowerCase();
 	}
 
 	/**

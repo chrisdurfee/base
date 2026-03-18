@@ -50,6 +50,11 @@ const JotComponent = (settings) =>
 };
 
 /**
+ * @type {number} jotTypeId
+ */
+let jotTypeId = 0;
+
+/**
  * This will create a class.
  *
  * @param {typeof Component} Base
@@ -60,6 +65,7 @@ const createClass = (Base, settings) =>
 {
 	class Child extends Base {}
 	Object.assign(Child.prototype, settings);
+	Child.prototype._classId = 'jot' + (jotTypeId++);
 	return Child;
 };
 

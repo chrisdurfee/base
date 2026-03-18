@@ -30,6 +30,11 @@ const modifyMethods = (proxy, component) =>
 };
 
 /**
+ * @type {number} podTypeId
+ */
+let podTypeId = 0;
+
+/**
  * This will create a class.
  *
  * @param {typeof Component} Base
@@ -37,7 +42,9 @@ const modifyMethods = (proxy, component) =>
  */
 const extendBaseClass = (Base) =>
 {
-	return class extends Base {}
+	const cls = class extends Base {};
+	cls.prototype._classId = 'pod' + (podTypeId++);
+	return cls;
 };
 
 /**
