@@ -250,6 +250,11 @@ export class Router
 		{
 			routes.splice(index, 1);
 		}
+
+		if (this.lastMatchedRoute === route)
+		{
+			this.lastMatchedRoute = null;
+		}
 	}
 
 	/**
@@ -476,6 +481,7 @@ export class Router
 		this.routes = [];
 		this.switches = new Map();
 		this.switchCount = 0;
+		this.lastMatchedRoute = null;
 
 		return this;
 	}
