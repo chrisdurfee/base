@@ -228,7 +228,7 @@ export class Router
 			{
 				const route = routes[i];
 				// @ts-ignore
-				if (route.id === id)
+				if (route.routeId === id)
 				{
 					return route;
 				}

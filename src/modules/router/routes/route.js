@@ -57,7 +57,7 @@ export class Route extends BasicData
 	setup()
 	{
 		this.stage = {};
-		this.id = null;
+		this.routeId = null;
 		this.uri = null;
 		this.uriQuery = null;
 		this.controller = null;
@@ -80,7 +80,7 @@ export class Route extends BasicData
 	 */
 	setupRoute(settings)
 	{
-		this.id = settings.id || 'bs-rte-' + routeCount++;
+		this.routeId = settings.id || 'bs-rte-' + routeCount++;
 
 		this.path = null;
 		this.referralPath = null;

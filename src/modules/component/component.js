@@ -99,6 +99,14 @@ export class Component extends Unit
 		this.state = persistedLayout.state;
 		this.stateHelper = persistedLayout.stateHelper;
 		this.persistedChildren = persistedLayout.persistedChildren;
+
+		// @ts-ignore
+		if (persistedLayout.context)
+		{
+			// @ts-ignore
+			this.context = persistedLayout.context;
+		}
+
 		this.id = persistedLayout.id;
 	}
 
