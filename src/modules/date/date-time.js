@@ -437,53 +437,53 @@ export const DateTime =
 			{
 				case milliseconds < -63072000000:
 					years = this.toYears(Math.abs(milliseconds));
-					timeFrame = 'in ' + years + ' years';
+					timeFrame = 'in ' + years + ' y';
 					break;
 				case milliseconds < -31536000000:
-					timeFrame = 'in a year';
+					timeFrame = 'in 1y';
 					break;
 				case milliseconds < -5184000000:
 					months = this.toMonths(Math.abs(milliseconds));
-					timeFrame = 'in ' + months + ' months';
+					timeFrame = 'in ' + months + 'mo';
 					break;
 				case milliseconds < -2592000000:
-					timeFrame = 'in a month';
+					timeFrame = 'in 1mo';
 					break;
 				case milliseconds < -1209600000:
 					days = this.toDays(Math.abs(milliseconds)),
 					weeks = Math.floor(days / 7);
-					timeFrame = 'in ' + weeks + ' weeks';
+					timeFrame = 'in ' + weeks + 'w';
 					break;
 				case milliseconds < -604800000:
-					timeFrame = 'in a week';
+					timeFrame = 'in 1w';
 					break;
 				case milliseconds < -172800000:
 					days = this.toDays(Math.abs(milliseconds));
-					timeFrame = 'in ' + (days) + ' days';
+					timeFrame = 'in ' + (days) + 'd';
 					break;
 				case milliseconds < -86400000:
 					timeFrame = 'tomorrow';
 					break;
 				case milliseconds < -7200000:
 					hours = this.toHours(Math.abs(milliseconds));
-					timeFrame = 'in ' + hours + ' hours';
+					timeFrame = 'in ' + hours + ' h';
 					break;
 				case milliseconds <= -3600000:
-					timeFrame = 'in an hour';
+					timeFrame = 'in 1h';
 					break;
 				case milliseconds < -120000:
 					minutes = this.toMinutes(Math.abs(milliseconds));
-					timeFrame = 'in ' + minutes + ' minutes';
+					timeFrame = 'in ' + minutes + 'm';
 					break;
 				case milliseconds < -60000:
-					timeFrame = 'in a minute';
+					timeFrame = 'in 1m';
 					break;
 				case milliseconds < -2000:
 					seconds = this.toSeconds(Math.abs(milliseconds));
-					timeFrame = 'in ' + seconds + ' seconds';
+					timeFrame = 'in ' + seconds + 's';
 					break;
 				case milliseconds < -1:
-					timeFrame = 'in 1 second';
+					timeFrame = 'in 1s';
 					break;
 				default:
 					timeFrame = 'now';
@@ -494,54 +494,54 @@ export const DateTime =
 			switch (true)
 			{
 				case milliseconds < 1000:
-					timeFrame = '1 second ago';
+					timeFrame = '1s ago';
 					break;
 				case milliseconds < 60000:
 					seconds = this.toSeconds(milliseconds);
-					timeFrame = seconds + ' seconds ago';
+					timeFrame = seconds + 's ago';
 					break;
 				case milliseconds < 120000:
-					timeFrame = '1 minute ago';
+					timeFrame = '1m ago';
 					break;
 				case milliseconds < 3600000:
 					minutes = this.toMinutes(milliseconds);
-					timeFrame = minutes + ' minutes ago';
+					timeFrame = minutes + 'm ago';
 					break;
 				case milliseconds < 7200000:
-					timeFrame = '1 hour ago';
+					timeFrame = '1h ago';
 					break;
 				case milliseconds < 86400000:
 					hours = this.toHours(milliseconds);
-					timeFrame = hours + ' hours ago';
+					timeFrame = hours + 'h ago';
 					break;
 				case milliseconds < 172800000:
 					timeFrame = 'yesterday';
 					break;
 				case milliseconds < 604800000:
 					days = this.toDays(milliseconds);
-					timeFrame = (days) + ' days ago';
+					timeFrame = (days) + 'd ago';
 					break;
 				case milliseconds < 1209600000:
-					timeFrame = 'a week ago';
+					timeFrame = '1w ago';
 					break;
 				case milliseconds < 2592000000:
 					days = this.toDays(milliseconds),
 					weeks = Math.floor(days / 7);
-					timeFrame = weeks + ' weeks ago';
+					timeFrame = weeks + 'w ago';
 					break;
 				case milliseconds < 5184000000:
-					timeFrame = 'a month ago';
+					timeFrame = '1mo ago';
 					break;
 				case milliseconds < 31536000000:
 					months = this.toMonths(milliseconds);
-					timeFrame = months + ' months ago';
+					timeFrame = months + 'mo ago';
 					break;
 				case milliseconds < 63072000000:
-					timeFrame = 'a year ago';
+					timeFrame = '1y ago';
 					break;
 				default:
 					years = this.toYears(milliseconds);
-					timeFrame = years + ' years ago';
+					timeFrame = years + 'y ago';
 			}
 		}
 
