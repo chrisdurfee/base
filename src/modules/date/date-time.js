@@ -24,6 +24,13 @@ export const DateTime =
 	 */
 	getDayName(day = new Date().getDay(), shortenName = false)
 	{
+		if (typeof Intl !== 'undefined')
+		{
+			// Jan 4, 2004 was a Sunday (weekday index 0)
+			const date = new Date(2004, 0, 4 + day);
+			return new Intl.DateTimeFormat(undefined, { weekday: shortenName ? 'short' : 'long' }).format(date);
+		}
+
 		const days = this.dayNames;
 		if (day > days.length)
 		{
@@ -56,9 +63,20 @@ export const DateTime =
 	convertDate(dateString, addYear = false)
 	{
 		dateString = (dateString)? dateString.replace(/\s/, 'T'): ''; //For safari
+		const date = new Date(dateString);
 
-		const date = new Date(dateString),
-		year = (addYear === true)? ' ' + date.getFullYear() : '';
+		if (typeof Intl !== 'undefined')
+		{
+			const options = { weekday: 'long', month: 'short', day: '2-digit' };
+			if (addYear)
+			{
+				options.year = 'numeric';
+			}
+			// @ts-ignore
+			return new Intl.DateTimeFormat(undefined, options).format(date);
+		}
+
+		const year = (addYear === true)? ' ' + date.getFullYear() : '';
 		return this.getDayName(date.getDay()) + ', ' + this.getMonthName(date.getMonth(), true) + ' ' + this.padNumber(date.getDate()) + year;
 	},
 
@@ -104,6 +122,16 @@ export const DateTime =
 	format(formatType, dateString)
 	{
 		const date = this.createDate(dateString);
+
+		if (formatType !== 'sql' && typeof Intl !== 'undefined')
+		{
+			return new Intl.DateTimeFormat(undefined, {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit'
+			}).format(date);
+		}
+
 		return this.renderDate(date.getFullYear(), date.getMonth() + 1, date.getDate(), formatType);
 	},
 
@@ -117,8 +145,17 @@ export const DateTime =
 	formatTime(dateString, format)
 	{
 		const date = this.createDate(dateString);
-		const formatType = (format === 24)? 'sql' : 'standard';
 
+		if (format !== 24 && typeof Intl !== 'undefined')
+		{
+			return new Intl.DateTimeFormat(undefined, {
+				hour: 'numeric',
+				minute: '2-digit',
+				hour12: true
+			}).format(date);
+		}
+
+		const formatType = (format === 24)? 'sql' : 'standard';
 		return this.renderTime(date.getHours(), date.getMinutes(), date.getSeconds(), formatType);
 	},
 
@@ -231,6 +268,12 @@ export const DateTime =
 	 */
 	getMonthName(month = new Date().getMonth(), shortenName = false)
 	{
+		if (typeof Intl !== 'undefined')
+		{
+			const date = new Date(2000, month, 1);
+			return new Intl.DateTimeFormat(undefined, { month: shortenName ? 'short' : 'long' }).format(date);
+		}
+
 		const months = this.monthNames;
 		if (month > months.length)
 		{
@@ -331,8 +374,28 @@ export const DateTime =
 		}
 
 		const date = this.getLocalDate(remoteData, remoteTimeZone);
-		const month = date.getMonth() + 1;
 
+		if (!sqlformat && typeof Intl !== 'undefined')
+		{
+			const options = {
+				hour: 'numeric',
+				minute: '2-digit',
+				second: '2-digit',
+				hour12: true
+			};
+
+			if (timeOnly === false)
+			{
+				options.year = 'numeric';
+				options.month = '2-digit';
+				options.day = '2-digit';
+			}
+
+			// @ts-ignore
+			return new Intl.DateTimeFormat(undefined, options).format(date);
+		}
+
+		const month = date.getMonth() + 1;
 		const format = (sqlformat) === true? 'sql' : 'standard';
 
 		let formated = '';

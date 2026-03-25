@@ -108,6 +108,49 @@ export class Component extends Unit
 		}
 
 		this.id = persistedLayout.id;
+		this._refreshData();
+	}
+
+	/**
+	 * This will refresh the persisted data with fresh
+	 * prop-derived values from setData().
+	 *
+	 * @protected
+	 * @returns {void}
+	 */
+	_refreshData()
+	{
+		const freshData = this.setData();
+		if (freshData && this.data)
+		{
+			this.data.set(freshData.stage);
+		}
+
+		this._refreshContextData();
+	}
+
+	/**
+	 * This will refresh the persisted context data with
+	 * fresh values from the parent context.
+	 *
+	 * @protected
+	 * @returns {void}
+	 */
+	_refreshContextData()
+	{
+		const context = this.context;
+		if (!context || !context.data)
+		{
+			return;
+		}
+
+		const parentContext = this.getParentContext();
+		if (!parentContext || !parentContext.data)
+		{
+			return;
+		}
+
+		context.data.set(parentContext.data.stage);
 	}
 
 	/**
