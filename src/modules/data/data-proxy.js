@@ -77,14 +77,16 @@ export function invalidateProxyCache(target)
  */
 function getNewPath(path, prop)
 {
-	const isNan = isNaN(Number(prop));
-	const propPath = isNan ? prop : `[${prop}]`;
+	/* Digit check (charCode 48='0' to 57='9') avoids
+	   isNaN(Number(prop)) which converts to a heap Number. */
+	const c = prop.charCodeAt(0);
+	const isIndex = c >= 48 && c <= 57;
 	if (path === '')
 	{
-		return propPath;
+		return isIndex ? '[' + prop + ']' : prop;
 	}
 
-	return isNan ?`${path}.${propPath}` : `${path}${propPath}`;
+	return isIndex ? path + '[' + prop + ']' : path + '.' + prop;
 }
 
 /**

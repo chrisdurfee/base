@@ -149,15 +149,17 @@ export class Parser
 	{
 		const attr = [],
 		directives = [],
-		tag = this.getTag(obj);
+		tag = obj.tag || 'div';
 
-		this.setButtonType(tag, obj, attr);
-		this.setupChildren(obj);
+		/* Inline button default type (avoids method call). */
+		if (tag === 'button')
+		{
+			attr.push(Attribute('type', obj.type || 'button'));
+		}
 
 		let children = [];
 		let value, directive;
 
-		// Use Object.keys for better performance (no iterator creation)
 		const keys = Object.keys(obj);
 		for (let i = 0, len = keys.length; i < len; i++)
 		{
@@ -174,11 +176,11 @@ export class Parser
 			}
 
 			/**
-			 * Handle children separately to prevent it from being
-			 * set as an attribute (which would fail since DOM elements
-			 * have a read-only children property).
+			 * Handle children and nest inline.
+			 * Avoids setupChildren() which used `delete obj.nest`
+			 * (delete triggers V8 hidden class transitions).
 			 */
-			if (key === 'children')
+			if (key === 'children' || key === 'nest')
 			{
 				if (Array.isArray(value))
 				{
@@ -248,19 +250,32 @@ export class Parser
 			}
 
 			/**
-			 * This will check if the value is a watcher.
+			 * Inline watcher check for strings.
+			 * At this point value is a string or number; includes()
+			 * only exists on strings so the type guard is required.
 			 */
-			if (WatcherHelper.isWatching(value))
+			if (type === 'string' && value.includes('[['))
 			{
 				this.setTextAsWatcher(directives, key, value);
 				continue;
 			}
 
 			/**
-			 * This will set the element text and html content.
+			 * Inline text/html content checks (avoids
+			 * setElementContent method call per attribute).
 			 */
-			if (this.setElementContent(key, value, attr, children))
+			if (key === 'text')
 			{
+				children.push({
+					tag: 'text',
+					textContent: value
+				});
+				continue;
+			}
+
+			if (key === 'html' || key === 'innerHTML')
+			{
+				attr.push(Attribute('innerHTML', value));
 				continue;
 			}
 

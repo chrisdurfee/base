@@ -43,7 +43,7 @@ export const forEach = (ele, settings, parent) =>
 		const children = [];
 		for (let i = 0, len = items.length; i < len; i++)
 		{
-			const scoped = (scopeData)? data.scope(`${prop}[${i}]`) : null;
+			const scoped = (scopeData)? data.scope(prop + '[' + i + ']') : null;
 			const layout = item(
 				items[i],
 				i,

@@ -1,4 +1,3 @@
-import { Dom } from "../../../../../base.js";
 import { DataTracker } from "../../../../../main/data-tracker/data-tracker.js";
 import { Events } from "../../../../../main/events/events.js";
 
@@ -41,7 +40,7 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 		// Check if element still exists before cleanup
 		if (ele)
 		{
-			Dom.removeClass(ele, className);
+			ele.classList.remove(className);
 		}
 
 		if (doneCallBack)
@@ -70,7 +69,7 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 			return;
 		}
 
-		Dom.addClass(ele, className);
+		ele.classList.add(className);
 
 		// Fallback timeout in case animationend doesn't fire
 		// Get animation duration from computed styles or use a safe maximum

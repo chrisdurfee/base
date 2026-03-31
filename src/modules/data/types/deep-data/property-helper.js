@@ -51,9 +51,9 @@ export class PropertyHelper
 
 			if (obj[prop] === undefined)
 			{
-				/* this will check to setup a new object
-				or an array if the prop is a number */
-				obj[prop] = isNaN(prop)? {} : [];
+				/* Digit check (charCode 48-57) replaces isNaN(prop). */
+				const c = prop.charCodeAt(0);
+				obj[prop] = (c < 48 || c > 57) ? {} : [];
 			}
 			obj = obj[prop];
 		}

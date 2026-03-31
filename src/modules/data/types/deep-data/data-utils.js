@@ -19,11 +19,8 @@ class LRUCache
 
 	set(key, value)
 	{
-		if (this.cache.has(key))
-		{
-			this.cache.delete(key);
-		}
-
+		/* delete() returns false if key doesn't exist, so no has() guard needed. */
+		this.cache.delete(key);
 		this.cache.set(key, value);
 
 		// Evict oldest if over limit

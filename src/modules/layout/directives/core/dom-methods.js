@@ -1,4 +1,3 @@
-import { Dom } from "../../../../shared/dom.js";
 import { dataBinder } from "../../../data-binder/data-binder.js";
 import { getBindAttr } from "../../../data-binder/sources/get-bind-attr.js";
 import { Html } from "../../../html/html.js";
@@ -111,16 +110,13 @@ const updateElement = (ele, callBack, prop, value, parent) =>
 	switch (typeof result)
 	{
 		case 'object':
-			/**
-			 * This will set the previous result if needed.
-			 */
-			rebuild(result, ele, parent);
+			Builder.rebuild(result, ele, parent);
 			break;
 		case 'string':
 			const attr = getBindAttr(ele);
 			if (attr !== 'textContent')
 			{
-				Dom.setAttr(ele, attr, result);
+				ele.setAttribute(attr, result);
 				break;
 			}
 
@@ -129,44 +125,24 @@ const updateElement = (ele, callBack, prop, value, parent) =>
 	}
 };
 
-/**
- * This will reset an element innerHTML and rebuild.
- *
- * @private
- * @param {object} layout
- * @param {object} ele
- * @param {object} parent
- * @returns {void}
- */
-const rebuild = (layout, ele, parent) =>
-{
-	Builder.rebuild(layout, ele, parent);
-};
-
-/**
- * This will add or remove a class from an element.
- *
- * @param {object} ele
- * @param {object} stateStyles
- * @param {*} newValue
- * @returns {void}
- */
 const addClass = (ele, stateStyles, newValue) =>
 {
-	for (const [prop, value] of Object.entries(stateStyles))
+	const keys = Object.keys(stateStyles);
+	for (let i = 0, len = keys.length; i < len; i++)
 	{
+		const prop = keys[i];
 		if (!prop)
 		{
 			continue;
 		}
 
-		if (value === newValue)
+		if (stateStyles[prop] === newValue)
 		{
-			Dom.addClass(ele, prop);
+			ele.classList.add(prop);
 		}
 		else
 		{
-			Dom.removeClass(ele, prop);
+			ele.classList.remove(prop);
 		}
 	}
 };

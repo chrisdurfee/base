@@ -38,15 +38,16 @@ export const addRoute = (ele, route, parent) =>
 
     if (Array.isArray(route))
     {
-        route.forEach((item) =>
+        for (let i = 0, len = route.length; i < len; i++)
         {
+            const item = route[i];
             if (!item)
             {
-                return;
+                continue;
             }
 
             setupRoute(ele, item, parent);
-        });
+        }
     }
     else
     {

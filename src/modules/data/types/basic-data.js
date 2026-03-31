@@ -288,24 +288,23 @@ export class BasicData
 	 * @param {object} data
 	 * @returns {object} this
 	 */
-	set(...args)
+	set(first, second, third)
 	{
-		if (typeof args[0] !== 'object')
+		if (typeof first !== 'object')
 		{
-			// @ts-ignore
-			this._setAttr(...args);
+			this._setAttr(first, second, third);
 			return this;
 		}
 
-		const [items, committer, stopMerge] = args;
-		const keys = Object.keys(items);
+		/* Bulk set: first=items, second=committer, third=stopMerge */
+		const keys = Object.keys(first);
 		for (let i = 0; i < keys.length; i++)
 		{
 			const attr = keys[i];
-			const value = items[attr];
+			const value = first[attr];
 			if (typeof value !== 'function')
 			{
-				this._setAttr(attr, value, committer, stopMerge);
+				this._setAttr(attr, value, second, third);
 			}
 		}
 

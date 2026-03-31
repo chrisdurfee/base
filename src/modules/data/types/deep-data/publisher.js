@@ -67,11 +67,12 @@ export class Publisher
 			of the data object before calling the next property. */
 			obj = obj[prop];
 
+			/* Digit check (charCode 48='0' to 57='9') replaces isNaN(prop). */
+			const c = prop.charCodeAt(0);
+
 			if (i > 0)
 			{
-				/* this will add the property to the path based on if its an
-				object property or an array. */
-				if (isNaN(prop))
+				if (c < 48 || c > 57)
 				{
 					path += '.' + prop;
 				}
@@ -84,17 +85,13 @@ export class Publisher
 			let publish;
 			if (i === end)
 			{
-				/* if the loop is on the last pass it only needs to publish
-				the val. */
 				publish = val;
 			}
 			else
 			{
-				/* we only want to publish the modified branches. we need to
-				get the next property in the props array and create a publish
-				object or array with the next property value. */
 				const nextProp = props[i + 1];
-				if (isNaN(nextProp) === false)
+				const nc = nextProp.charCodeAt(0);
+				if (nc >= 48 && nc <= 57)
 				{
 					path += '[' + nextProp + ']';
 					continue;

@@ -1,4 +1,3 @@
-import { Dom } from "../../../../../shared/dom.js";
 import { onSet } from "../reactive/on-set.js";
 import { onState } from "./on-state.js";
 
@@ -14,7 +13,7 @@ const onSetCallBack = (dataValue) =>
     {
         const [attr, value, addingString = 'active'] = dataValue;
         const text = (newValue === value)? addingString : "";
-        Dom.setData(ele, attr, text);
+        ele.dataset[attr] = text;
     };
 };
 
@@ -34,11 +33,12 @@ export const addDataSet = (ele, attribute, parent) =>
     }
 
     /**
-     * This will remove the last value from the attribute array
-     * to use as the data value.
+     * This will get the last value from the attribute array
+     * to use as the data value, and pass the rest as settings.
      */
-    const settings = [...attribute];
-    const dataValue = settings.pop();
+    const lastIndex = attribute.length - 1;
+    const dataValue = attribute[lastIndex];
+    const settings = attribute.slice(0, lastIndex);
 
     /**
      * This will add a callBack to to be used when the
@@ -64,11 +64,12 @@ export const addDataStateSet = (ele, attribute, parent) =>
     }
 
     /**
-     * This will remove the last value from the attribute array
-     * to use as the data value.
+     * This will get the last value from the attribute array
+     * to use as the data value, and pass the rest as settings.
      */
-    const settings = [...attribute];
-    const dataValue = settings.pop();
+    const lastIndex = attribute.length - 1;
+    const dataValue = attribute[lastIndex];
+    const settings = attribute.slice(0, lastIndex);
 
     /**
      * This will add a callBack to to be used when the

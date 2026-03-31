@@ -33,10 +33,14 @@ export const bind = (ele, bind, parent) =>
                 return;
             }
 
-            bind.unshift(dataSource);
+            data = dataSource;
+            prop = bind[0];
+            filter = bind[1];
         }
-
-        [data, prop, filter] = bind;
+        else
+        {
+            [data, prop, filter] = bind;
+        }
     }
 
     dataBinder.bind(ele, data, prop, filter);

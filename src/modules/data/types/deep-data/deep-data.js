@@ -281,8 +281,17 @@ export class Data extends BasicData
 	 */
 	_publish(attr, val, committer, event)
 	{
-		const callBack = (path, obj) => this._publishAttr(path, obj, committer, event);
-		Publisher.publish(attr, val, callBack);
+		this._pubCommitter = committer;
+		this._pubEvent = event;
+
+		/**
+		 * Lazy-init the cached callback on first use.
+		 * Avoids allocating a new arrow function on every call while
+		 * remaining safe when subclasses override setup() without super.
+		 */
+		// @ts-ignore
+		const cb = this._publishCb || (this._publishCb = (path, obj) => this._publishAttr(path, obj, this._pubCommitter, this._pubEvent));
+		Publisher.publish(attr, val, cb);
 	}
 
 	/**
@@ -361,12 +370,9 @@ export class Data extends BasicData
 	{
 		PropertyHelper.delete(obj, attr);
 
-		/**
-		 * This will only publish the delete event to the
-		 * local subscribers.
-		 */
-		const callBack = (path, obj) => this.publishLocalEvent(path, obj, committer, EVENT.DELETE);
-		Publisher.publish(attr, attr, callBack);
+		this._delCommitter = committer;
+		const cb = this._deleteCb || (this._deleteCb = (path, obj) => this.publishLocalEvent(path, obj, this._delCommitter, EVENT.DELETE));
+		Publisher.publish(attr, attr, cb);
 	}
 
 	/**

@@ -168,28 +168,26 @@ export class DataPubSub
 	 * In batching mode, updates are queued and flushed in a microtask.
 	 * Data operations remain synchronous; only DOM updates are batched.
 	 *
-	 * @overload
 	 * @param {string} msg
-	 * @param {string} value
+	 * @param {*} value
 	 * @param {object} [committer]
 	 * @returns {void}
 	 */
-	publish(msg, ...args)
+	publish(msg, value, committer)
 	{
 		// If batching disabled, publish immediately
 		if (!this.batchingEnabled)
 		{
-			// @ts-ignore
-			this.publishImmediate(msg, ...args);
+			this.publishImmediate(msg, value, committer);
 			return;
 		}
 
-		// Queue the update
-		this.updateQueue.set(msg, args);
+		// Queue the update (2-element array for dedup storage)
+		this.updateQueue.set(msg, [value, committer]);
 
 		if (this.debugMode)
 		{
-			console.log('[DataPubSub] Queued update:', msg, args);
+			console.log('[DataPubSub] Queued update:', msg, value);
 		}
 
 		// Schedule flush if not already scheduled
@@ -293,8 +291,7 @@ export class DataPubSub
 			// Process all updates
 			for (const [msg, args] of updates)
 			{
-				// @ts-ignore
-				this.publishImmediate(msg, ...args);
+				this.publishImmediate(msg, args[0], args[1]);
 			}
 		}
 		finally
@@ -434,10 +431,11 @@ export class DataPubSub
 	 * updates or break the flush cycle.
 	 *
 	 * @param {string} msg
-	 * @param  {...any} args
+	 * @param {*} value
+	 * @param {object} [committer]
 	 * @returns {void}
 	 */
-	publishImmediate(msg, ...args)
+	publishImmediate(msg, value, committer)
 	{
 		const subscribers = this.callBacks.get(msg);
 		if (!subscribers)
@@ -451,7 +449,7 @@ export class DataPubSub
 			{
 				try
 				{
-					callBack.apply(this, args);
+					callBack(value, committer);
 				}
 				catch (error)
 				{

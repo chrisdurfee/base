@@ -36,16 +36,17 @@ export const addSwitch = (ele, group, parent) =>
 	// 	return;
 	// }
 
-	group.forEach((item) =>
+	for (let i = 0, len = group.length; i < len; i++)
 	{
+		const item = group[i];
 		if (!item)
 		{
-			return;
+			continue;
 		}
 
 		item.container = ele;
 		item.parent = parent;
-	});
+	}
 
 	const id = router.addSwitch(group);
 	trackSwitch(ele, id);

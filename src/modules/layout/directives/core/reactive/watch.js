@@ -18,7 +18,7 @@ export const watch = (ele, watcher, parent) =>
 
     if (Array.isArray(watcher) && typeof watcher[0] !== 'string')
     {
-        for (var i = 0, length = watcher.length; i < length; i++)
+        for (let i = 0, length = watcher.length; i < length; i++)
         {
             WatcherHelper.setup(ele, watcher[i], parent);
         }

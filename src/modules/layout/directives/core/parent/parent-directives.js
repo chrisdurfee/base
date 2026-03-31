@@ -168,5 +168,5 @@ export const addEvent = (ele, event, parent) =>
         };
     }
 
-    parent.events.on(...event);
+    parent.events.on(event[0], event[1], event[2], event[3]);
 };
