@@ -1,14 +1,11 @@
 /**
  * This will create an attribute directive object.
  *
- * @param {string} attr
- * @param {object} directive
+ * @param {object} attr
+ * @param {function} directive
  * @returns {object}
  */
-export const AttributeDirective = (attr, directive) =>
-{
-	return {
-		attr,
-		directive
-	};
-};
+export const AttributeDirective = (attr, directive) => ({
+	attr,
+	directive
+});

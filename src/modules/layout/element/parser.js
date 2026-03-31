@@ -6,6 +6,22 @@ import { Attribute } from './attribute.js';
 import { Element } from './element.js';
 
 /**
+ * Cached reference to the 'watch' directive.
+ * Avoids a Map lookup on every watcher encountered during parsing.
+ *
+ * @type {function|null}
+ */
+let _watchDirective = null;
+
+/**
+ * Returns the cached watch directive, resolving it on first call.
+ *
+ * @returns {function}
+ */
+// @ts-ignore
+const getWatchDirective = () => (_watchDirective || (_watchDirective = Directives.get('watch')));
+
+/**
  * Parser
  *
  * This will parse JSON layouts.
@@ -99,7 +115,7 @@ export class Parser
 					 */
 					WatcherHelper.getWatcherSettings(value, normalizeAttr(key))
 				),
-				Directives.get('watch')
+				getWatchDirective()
 			)
 		);
 	}

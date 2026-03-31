@@ -183,7 +183,7 @@ export class BrowserRender extends Render
 	 */
 	handleDirective(ele, attrDirective, parent)
 	{
-		attrDirective.directive.callBack(ele, attrDirective.attr.value, parent);
+		attrDirective.directive(ele, attrDirective.attr.value, parent);
 	}
 
 	/**

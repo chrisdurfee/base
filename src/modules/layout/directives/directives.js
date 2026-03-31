@@ -1,21 +1,16 @@
-import { Directive } from './directive.js';
-
 /**
  * Directives
  *
- * This will hold all directives.
+ * This will hold all directives. Uses a Map for O(1)
+ * lookups on the hot path (parser calls get() for
+ * every key of every layout object).
  */
 export const Directives =
 {
     /**
-     * @type {Array<any>} keys
+     * @type {Map<string, function>} items
      */
-    keys: [],
-
-    /**
-     * @type {object} items
-     */
-    items: {},
+    items: new Map(),
 
     /**
      * This will add a directive.
@@ -26,9 +21,7 @@ export const Directives =
      */
     add(name, callBack)
     {
-        this.keys.push(name);
-        this.items[name] = Directive(name, callBack);
-
+        this.items.set(name, callBack);
         return this;
     },
 
@@ -36,20 +29,10 @@ export const Directives =
      * This will get a directive.
      *
      * @param {string} name
-     * @returns {object|null}
+     * @returns {function|null}
      */
     get(name)
     {
-        return this.items[name] || null;
-    },
-
-    /**
-     * This will get all directive names.
-     *
-     * @returns {Array<any>}
-     */
-    all()
-    {
-        return this.keys;
+        return this.items.get(name) ?? null;
     }
 };
