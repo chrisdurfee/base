@@ -22,7 +22,7 @@ const WatcherProp = (watch) => ({
  */
 const parseArgs = (args) =>
 {
-	if (!args)
+	if (args.length === 0)
 	{
 		return DefaultProps();
 	}
@@ -47,7 +47,7 @@ const parseArgs = (args) =>
 		/**
 		 * This will handle the child array.
 		 */
-		if (WatcherHelper.isWatching(first) === false)
+		if (!WatcherHelper.isWatching(first))
 		{
 			return ArrayProp(first);
 		}
@@ -66,7 +66,7 @@ const parseArgs = (args) =>
 		 * This will check if the first child is a watcher array
 		 * and set it as a watcher prop.
 		 */
-		if (WatcherHelper.isWatching(children) === true)
+		if (WatcherHelper.isWatching(children))
 		{
 			args[0] = (!Array.isArray(args[0]))? args[0] : {};
 			// @ts-ignore

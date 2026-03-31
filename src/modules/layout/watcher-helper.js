@@ -1,4 +1,3 @@
-import { Types } from '../../shared/types.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 import { getParentData } from './directives/core/reactive/get-parent-data.js';
 import { HtmlHelper } from './html-helper.js';
@@ -42,10 +41,13 @@ export const WatcherHelper =
 	{
 		/**
 		 * This will check if we are watching using an array.
+		 * Inlines the hasParams check to avoid a redundant typeof
+		 * on the first element.
 		 */
 		if (Array.isArray(value))
 		{
-			return typeof value[0] === 'string' && this.hasParams(value[0]);
+			const first = value[0];
+			return typeof first === 'string' && first.includes('[[');
 		}
 
 		/**
@@ -62,7 +64,7 @@ export const WatcherHelper =
 	 */
 	hasParams(string)
 	{
-		return Types.isString(string) && string.includes('[[');
+		return typeof string === 'string' && string.includes('[[');
 	},
 
 	/**
@@ -145,7 +147,7 @@ export const WatcherHelper =
 			const watcherData = (isArray)? data[count] : data;
 			count++;
 			const result = watcherData.get(key);
-			return ((typeof result !== 'undefined' && result !== null)? result : '');
+			return (result != null ? result : '');
 		});
 	},
 
@@ -245,7 +247,7 @@ export const WatcherHelper =
 		const overrideCallBack = settings.callBack;
 		if (typeof overrideCallBack === 'function')
 		{
-			const watcherProps = props || string.match(WATCHER_PATTERN) || [];
+			const watcherProps = props || this._getWatcherProps(string) || [];
 			const isMultiProp = (watcherProps.length > 1);
 
 			return (value, committer) =>

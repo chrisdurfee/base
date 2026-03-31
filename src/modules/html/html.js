@@ -1,30 +1,29 @@
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Events } from '../../main/events/events.js';
-import { Dom } from '../../shared/dom.js';
-import { Types } from '../../shared/types.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 
 /**
- * This is a look up object to normalize the attribute names.
+ * Map for normalizing attribute names to their DOM property
+ * equivalents. Map.get() is faster than plain-object lookup
+ * for repeated reads on a fixed key set.
  *
- * @type {object} NORMALIZED_NAMES
+ * @type {Map<string, string>}
  */
-const NORMALIZED_NAMES =
-{
-	class: 'className',
-	text: 'textContent',
-	for: 'htmlFor',
-	readonly: 'readOnly',
-	maxlength: 'maxLength',
-	cellspacing: 'cellSpacing',
-	rowspan: 'rowSpan',
-	colspan: 'colSpan',
-	tabindex: 'tabIndex',
-	celpadding: 'cellPadding',
-	useMap: 'useMap',
-	frameborder: 'frameBorder',
-	contenteditable: 'contentEditable'
-};
+const NORMALIZED_NAMES = new Map([
+	['class', 'className'],
+	['text', 'textContent'],
+	['for', 'htmlFor'],
+	['readonly', 'readOnly'],
+	['maxlength', 'maxLength'],
+	['cellspacing', 'cellSpacing'],
+	['rowspan', 'rowSpan'],
+	['colspan', 'colSpan'],
+	['tabindex', 'tabIndex'],
+	['celpadding', 'cellPadding'],
+	['useMap', 'useMap'],
+	['frameborder', 'frameBorder'],
+	['contenteditable', 'contentEditable']
+]);
 
 /**
  * This will get the javascript property name.
@@ -34,23 +33,31 @@ const NORMALIZED_NAMES =
  */
 export const normalizeAttr = (prop) =>
 {
-	return NORMALIZED_NAMES[prop] || prop;
+	return NORMALIZED_NAMES.get(prop) || prop;
 };
 
 /**
- * This will remove on from a property.
+ * This will remove "on" from a property.
  *
  * @param {string} prop
  * @returns {string}
  */
 export const removeEventPrefix = (prop) =>
 {
-	if (typeof prop === 'string' && prop.substring(0, 2) === 'on')
+	if (typeof prop === 'string' && prop.charCodeAt(0) === 111 /* o */ && prop.charCodeAt(1) === 110 /* n */)
 	{
 		return prop.substring(2);
 	}
 	return prop;
 };
+
+/**
+ * Pre-compiled regex for detecting HTML markup in strings.
+ * Hoisted to module level to avoid recompilation on every call.
+ *
+ * @type {RegExp}
+ */
+const HTML_PATTERN = /(?:<[a-z][\s\S]*>)/i;
 
 /**
  * Html
@@ -107,14 +114,19 @@ export class Html
 		from removing the value if set after the value is
 		added */
 		const type = attrs.type;
-		if (typeof type !== 'undefined')
+		if (type !== undefined)
 		{
-			Dom.setAttr(obj, 'type', type);
+			obj.setAttribute('type', type);
 		}
 
-		/* we want to add each attr to the obj */
-		for (const [prop, value] of Object.entries(attrs))
+		/* Object.keys + indexed for loop avoids the per-entry
+		array allocation that Object.entries() creates. */
+		const keys = Object.keys(attrs);
+		for (let i = 0, len = keys.length; i < len; i++)
 		{
+			const prop = keys[i];
+			const value = attrs[prop];
+
 			/* we want to check to add the attr settings
 			 by property name */
 			if (prop === 'innerHTML')
@@ -124,7 +136,7 @@ export class Html
 			else if (prop.indexOf('-') !== -1)
 			{
 				// this will handle data and aria attributes
-				Dom.setAttr(obj, prop, value);
+				obj.setAttribute(prop, value);
 			}
 			else
 			{
@@ -149,8 +161,7 @@ export class Html
 
 		/* we need to check if we are adding inner
 		html content or just a string */
-		const pattern = /(?:<[a-z][\s\S]*>)/i;
-		if (pattern.test(content))
+		if (HTML_PATTERN.test(content))
 		{
 			/* html */
 			obj.innerHTML = content;
@@ -261,12 +272,12 @@ export class Html
 	 */
 	static setupSelectOptions(selectElem, optionArray, defaultValue)
 	{
-		if (!Types.isObject(selectElem))
+		if (!selectElem || typeof selectElem !== 'object')
 		{
 			return false;
 		}
 
-		if (!Types.isArray(optionArray))
+		if (!Array.isArray(optionArray))
 		{
 			return false;
 		}
@@ -288,34 +299,36 @@ export class Html
 	/**
 	 * This will remove an elements data.
 	 *
+	 * Uses an iterative depth-first traversal instead of recursion
+	 * to avoid call-stack overhead on deep DOM trees.
+	 *
 	 * @param {object} ele
 	 */
 	static removeElementData(ele)
 	{
-		DataTracker.remove(ele);
+		/* Seed the stack with the root element. */
+		const stack = [ele];
 
-		/* we want to do a recursive remove child
-		removal */
-		const childNodes = ele.childNodes;
-		if (childNodes && childNodes.length > 0)
+		while (stack.length > 0)
 		{
-			/* Snapshot the live NodeList into a static array to avoid
-			invalidation during iteration and to enable fast indexed access. */
-			const children = Array.from(childNodes);
-			for (let i = children.length - 1; i >= 0; i--)
+			const node = stack.pop();
+
+			/* Push children first so they are processed before removal. */
+			const childNodes = node.childNodes;
+			if (childNodes && childNodes.length > 0)
 			{
-				/* this will remove the child element data
-				before the parent is removed */
-				this.removeElementData(children[i]);
+				for (let i = childNodes.length - 1; i >= 0; i--)
+				{
+					stack.push(childNodes[i]);
+				}
 			}
-		}
 
-		const bound = ele.bindId;
-		if (bound)
-		{
-			/* this will check to remove any data bindings
-			to the element */
-			dataBinder.unbind(ele);
+			DataTracker.remove(node);
+
+			if (node.bindId)
+			{
+				dataBinder.unbind(node);
+			}
 		}
 	}
 
@@ -373,21 +386,21 @@ export class Html
 	 */
 	static removeAll(container)
 	{
-		if (!Types.isObject(container))
+		if (!container || typeof container !== 'object')
 		{
 			return this;
 		}
 
-		/* Snapshot the live NodeList into a static array.
-		 * for..in on a NodeList is implementation-defined and slow;
-		 * Array.from gives us a safe, indexed, static copy. */
-		const children = Array.from(container.childNodes);
-		for (let i = 0, len = children.length; i < len; i++)
+		/* Walk children and clean data/bindings, then remove in one pass.
+		 * Using while + firstChild avoids both the Array.from snapshot
+		 * and the innerHTML clear, keeping a single traversal. */
+		let child;
+		while ((child = container.firstChild))
 		{
-			this.removeElementData(children[i]);
+			this.removeElementData(child);
+			container.removeChild(child);
 		}
 
-		container.innerHTML = '';
 		return this;
 	}
 
@@ -441,7 +454,7 @@ export class Html
 	 */
 	static clone(node, deepCopy = false)
 	{
-		if (!Types.isObject(node))
+		if (!node || typeof node !== 'object')
 		{
 			return false;
 		}

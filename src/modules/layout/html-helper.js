@@ -1,5 +1,4 @@
 import { Events } from "../../main/events/events.js";
-import { Dom } from '../../shared/dom.js';
 import { Html, normalizeAttr, removeEventPrefix } from '../html/html.js';
 
 /**
@@ -122,13 +121,12 @@ export class HtmlHelper extends Html
 			return;
 		}
 
-		/* Use startsWith for clarity and to avoid allocating a substring
-		 * on every regular attribute access (the common case is neither).
-		 * Length guard short-circuits before the string comparison. */
-		if (attr.substring(4, 5) === '-')
+		/* charCodeAt avoids the substring allocation.
+		 * data- and aria- attributes both have '-' at index 4. */
+		if (attr.charCodeAt(4) === 45 /* '-' */)
 		{
 			// this will handle data and aria attributes
-			Dom.setAttr(ele, attr, value);
+			ele.setAttribute(attr, value);
 			return;
 		}
 
