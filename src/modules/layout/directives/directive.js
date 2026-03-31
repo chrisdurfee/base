@@ -5,10 +5,7 @@
  * @param {function} callBack
  * @returns {object}
  */
-export const Directive = (name, callBack) =>
-{
-    return {
-        name,
-        callBack
-    };
-};
+export const Directive = (name, callBack) => ({
+    name,
+    callBack
+});

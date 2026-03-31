@@ -5,10 +5,7 @@
  * @param {*} value
  * @returns {object}
  */
-export const Attribute = (key, value) =>
-{
-    return {
-        key,
-        value
-    };
-};
+export const Attribute = (key, value) => ({
+    key,
+    value
+});

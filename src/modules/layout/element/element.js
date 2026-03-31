@@ -7,12 +7,9 @@
  * @param {Array<any>} children
  * @returns {object}
  */
-export const Element = (tag, attr, directives, children) =>
-{
-    return {
-        tag,
-        attr,
-        directives,
-        children,
-    };
-};
+export const Element = (tag, attr, directives, children) => ({
+    tag,
+    attr,
+    directives,
+    children,
+});
