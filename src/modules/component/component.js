@@ -1,4 +1,3 @@
-import { Objects } from '../../shared/objects.js';
 import { StateTracker } from '../state/state-tracker.js';
 import { EventHelper } from './event-helper.js';
 import { StateHelper } from './state-helper.js';
@@ -32,11 +31,13 @@ export class Component extends Unit
 	 * This will create a component.
 	 *
 	 * @constructor
-	 * @param {...any} args
+	 * @param {any} [first]
+	 * @param {*} [second]
+	 * @param {*} [third]
 	 */
-	constructor(...args)
+	constructor(first, second, third)
 	{
-		super(...args);
+		super(first, second, third);
 
 		/**
 		 * @param {boolean} isComponent
@@ -259,7 +260,7 @@ export class Component extends Unit
 		/* this will only setupa state manager if
 		we have states */
 		const states = this.setupStates();
-		if (Objects.isEmpty(states))
+		if (!states || Object.keys(states).length === 0)
 		{
 			return;
 		}

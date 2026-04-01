@@ -1,5 +1,17 @@
-import { Types } from '../../shared/types.js';
 import { Events } from './events.js';
+
+/**
+ * @type {Object<string, RegExp>} Hoisted regex map for event type detection.
+ */
+const EVENT_TYPE_MAP = {
+	'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+	'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+};
+
+/**
+ * @type {string[]} Keys of EVENT_TYPE_MAP, cached for iteration.
+ */
+const EVENT_TYPE_KEYS = Object.keys(EVENT_TYPE_MAP);
 
 /**
  * This will create an object that can be added to base to
@@ -42,10 +54,10 @@ export const EventMethods =
 		const events = this.events;
 		if (Array.isArray(event))
 		{
-			event.forEach((evt) =>
+			for (let i = 0, length = event.length; i < length; i++)
 			{
-				events.add(evt, obj, fn, capture);
-			});
+				events.add(event[i], obj, fn, capture);
+			}
 		}
 		else
 		{
@@ -68,10 +80,10 @@ export const EventMethods =
 		const events = this.events;
 		if (Array.isArray(event))
 		{
-			event.forEach((evt) =>
+			for (let i = 0, length = event.length; i < length; i++)
 			{
-				events.remove(evt, obj, fn, capture);
-			});
+				events.remove(event[i], obj, fn, capture);
+			}
 		}
 		else
 		{
@@ -137,7 +149,7 @@ export const EventMethods =
 	 */
 	createEvent(event, obj, options, params)
 	{
-		if (Types.isObject(obj) === false)
+		if (typeof obj !== 'object' || obj === null)
 		{
 			return false;
 		}
@@ -162,7 +174,7 @@ export const EventMethods =
 			relatedTarget: null
 		};
 
-		if (Types.isObject(options))
+		if (typeof options === 'object' && options !== null)
 		{
 			settings = Object.assign(settings, options);
 		}
@@ -180,21 +192,15 @@ export const EventMethods =
 	 */
 	_getEventType(event)
 	{
-		const eventTypes = {
-			'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
-			'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
-		};
-
-		let eventType = 'CustomEvent';
-		for (const [prop, value] of Object.entries(eventTypes))
+		for (let i = 0, length = EVENT_TYPE_KEYS.length; i < length; i++)
 		{
-			if (event.match(value))
+			const key = EVENT_TYPE_KEYS[i];
+			if (EVENT_TYPE_MAP[key].test(event))
 			{
-				eventType = prop;
-				break;
+				return key;
 			}
 		}
-		return eventType;
+		return 'CustomEvent';
 	},
 
 	/**
@@ -207,7 +213,7 @@ export const EventMethods =
 	 */
 	trigger(event, obj, params)
 	{
-		if (Types.isObject(obj) === false)
+		if (typeof obj !== 'object' || obj === null)
 		{
 			return this;
 		}

@@ -37,14 +37,11 @@ export class EventHelper
 			return;
 		}
 
-		events.forEach((event) =>
+		for (let i = 0; i < length; i++)
 		{
-			/**
-			 * @type {Array<any>} event
-			 */
-			// @ts-ignore
-			this.on(...event);
-		});
+			const event = events[i];
+			this.on(event[0], event[1], event[2], event[3]);
+		}
 	}
 
 	/**
@@ -83,7 +80,7 @@ export class EventHelper
 
 		let option,
 		events = this.events;
-		for (var i = 0, length = events.length; i < length; i++)
+		for (let i = 0, length = events.length; i < length; i++)
 		{
 			option = events[i];
 			// @ts-ignore
@@ -102,11 +99,12 @@ export class EventHelper
 	 */
 	set()
 	{
-		this.events.forEach((event) =>
+		const events = this.events;
+		for (let i = 0, len = events.length; i < len; i++)
 		{
-			// @ts-ignore
+			const event = events[i];
 			Events.on(event.event, event.obj, event.callBack, event.capture);
-		});
+		}
 	}
 
 	/**
@@ -116,11 +114,12 @@ export class EventHelper
 	 */
 	unset()
 	{
-		this.events.forEach((event) =>
+		const events = this.events;
+		for (let i = 0, len = events.length; i < len; i++)
 		{
-			// @ts-ignore
+			const event = events[i];
 			Events.off(event.event, event.obj, event.callBack, event.capture);
-		});
+		}
 	}
 
 	/**

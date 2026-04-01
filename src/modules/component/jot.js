@@ -27,11 +27,14 @@ export const convertSettings = (settings, component) =>
 		return component;
 	}
 
-	Object.entries(settings).forEach(([prop, value]) =>
+	const keys = Object.keys(settings);
+	for (let i = 0, len = keys.length; i < len; i++)
 	{
+		const prop = keys[i];
+		const value = settings[prop];
 		const alias = SHORTHAND_METHODS[prop] || prop;
 		component[alias] = getJotShorthandMethod(value, alias);
-	});
+	}
 
 	return component;
 };

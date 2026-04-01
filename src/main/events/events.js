@@ -1,4 +1,3 @@
-import { Types } from '../../shared/types.js';
 import { DataTracker } from '../data-tracker/data-tracker.js';
 
 /**
@@ -17,7 +16,7 @@ export const Events =
 	 */
 	getEvents(obj)
 	{
-		if (Types.isObject(obj) === false)
+		if (typeof obj !== 'object' || obj === null)
 		{
 			return [];
 		}
@@ -39,8 +38,6 @@ export const Events =
 	create(event, obj, fn, capture = false, swapped = false, originalFn = null)
 	{
 		/* we want to check if the swapped param was set */
-		swapped = (swapped === true);
-
 		return {
 			event,
 			obj,
@@ -64,7 +61,10 @@ export const Events =
 	{
 		if (Array.isArray(event))
 		{
-			event.forEach((evt) => this.add(evt, obj, fn, capture));
+			for (let i = 0, length = event.length; i < length; i++)
+			{
+				this.add(event[i], obj, fn, capture);
+			}
 		}
 		else
 		{
@@ -86,8 +86,10 @@ export const Events =
 	{
 		if (Array.isArray(event))
 		{
-			var evt;
-			event.forEach((evt) => this.remove(evt, obj, fn, capture));
+			for (let i = 0, length = event.length; i < length; i++)
+			{
+				this.remove(event[i], obj, fn, capture);
+			}
 		}
 		else
 		{
@@ -109,7 +111,7 @@ export const Events =
 	 */
 	add(event, obj, fn, capture = false, swapped = false, originalFn = null)
 	{
-		if (Types.isObject(obj) === false)
+		if (typeof obj !== 'object' || obj === null)
 		{
 			return this;
 		}
@@ -205,7 +207,7 @@ export const Events =
 	{
 		let listener,
 		swappable = this.isSwappable(eventObj.event);
-		for (var i = 0, maxLength = events.length; i < maxLength; i++)
+		for (let i = 0, maxLength = events.length; i < maxLength; i++)
 		{
 			listener = events[i];
 			if (listener.event !== eventObj.event || listener.obj !== eventObj.obj)
@@ -230,7 +232,7 @@ export const Events =
 	 */
 	removeEvents(obj)
 	{
-		if (Types.isObject(obj) === false)
+		if (typeof obj !== 'object' || obj === null)
 		{
 			return this;
 		}
@@ -241,15 +243,15 @@ export const Events =
 	},
 
 	/**
-	 * @type {Array<any>} swap The swappable events.
+	 * @type {Set<string>} swap The swappable events.
 	 */
-	swap: [
+	swap: new Set([
 		'DOMMouseScroll',
 		'wheel',
 		'mousewheel',
 		'mousemove',
 		'popstate'
-	],
+	]),
 
 	/**
 	 * This will a event type to the swappable array.
@@ -258,7 +260,7 @@ export const Events =
 	 */
 	addSwapped(type)
 	{
-		this.swap.push(type);
+		this.swap.add(type);
 	},
 
 	/**
@@ -269,7 +271,7 @@ export const Events =
 	 */
 	isSwappable(event)
 	{
-		return this.swap.includes(event);
+		return this.swap.has(event);
 	}
 };
 

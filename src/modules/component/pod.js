@@ -20,11 +20,14 @@ import { SHORTHAND_METHODS } from './shorthand-methods.js';
  */
 const modifyMethods = (proxy, component) =>
 {
-	Object.entries(proxy).forEach(([prop, value]) =>
+	const keys = Object.keys(proxy);
+	for (let i = 0, len = keys.length; i < len; i++)
 	{
+		const prop = keys[i];
+		const value = proxy[prop];
 		const alias = SHORTHAND_METHODS[prop] || prop;
 		component.prototype[alias] = value;
-	});
+	}
 
 	return component;
 };

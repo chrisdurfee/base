@@ -81,7 +81,7 @@ export class DataTracker
 		let id = _idMap.get(obj);
 		if (!id)
 		{
-			id = `dt${this.trackingCount++}`;
+			id = 'dt' + this.trackingCount++;
 			_idMap.set(obj, id);
 		}
 		return id;
@@ -155,11 +155,13 @@ export class DataTracker
 	 */
 	static find(id)
 	{
-		if (!this.trackers.has(id))
+		let tracker = this.trackers.get(id);
+		if (!tracker)
 		{
-			this.trackers.set(id, new Tracker());
+			tracker = new Tracker();
+			this.trackers.set(id, tracker);
 		}
-		return this.trackers.get(id);
+		return tracker;
 	}
 
 	/**
@@ -189,12 +191,16 @@ export class DataTracker
 	static remove(obj, type)
 	{
 		const id = _idMap.get(obj);
-		if (!id || !this.trackers.has(id))
+		if (!id)
 		{
 			return;
 		}
 
 		const tracker = this.trackers.get(id);
+		if (!tracker)
+		{
+			return;
+		}
 
 		/**
 		 * if no type is set then remove the whole tracker.

@@ -2,7 +2,6 @@ import { DataTracker } from '../../main/data-tracker/data-tracker.js';
 import { Data } from '../data/data.js';
 import { Html } from '../html/html.js';
 import { StateTarget } from '../state/state-target.js';
-import { parseArgs } from './parse-args.js';
 
 /**
  * This will register the component system to the data
@@ -66,9 +65,11 @@ export class Unit
 	 * This will create a unit.
 	 *
 	 * @constructor
-	 * @param {...any} args
+	 * @param {any} [first]
+	 * @param {*} [second]
+	 * @param {*} [third]
 	 */
-	constructor(...args)
+	constructor(first, second, third)
 	{
 		/**
 		 * @type {boolean} isUnit
@@ -125,7 +126,31 @@ export class Unit
 		/**
 		 * This will allow the unit to access optional args.
 		 */
-		const {props, children} = parseArgs(args);
+		let props, children;
+		if (first == null)
+		{
+			props = {};
+			children = [];
+		}
+		else
+		{
+			const firstType = typeof first;
+			if (firstType === 'string' || firstType === 'number')
+			{
+				props = {};
+				children = [{ tag: 'text', textContent: first }];
+			}
+			else if (Array.isArray(first))
+			{
+				props = {};
+				children = first;
+			}
+			else
+			{
+				props = first || {};
+				children = (typeof second === 'string') ? [{ tag: 'text', textContent: second }] : second;
+			}
+		}
 		this.setupProps(props);
 
 		/**
@@ -245,7 +270,7 @@ export class Unit
 			return;
 		}
 
-		for (var prop in props)
+		for (let prop in props)
 		{
 			if (Object.prototype.hasOwnProperty.call(props, prop))
 			{
@@ -533,7 +558,7 @@ export class Unit
 			return children;
 		}
 
-		for (var i = 0, length = items.length; i < length; i++)
+		for (let i = 0, length = items.length; i < length; i++)
 		{
 			const item = callBack(items[i], i);
 			children.push(item);
@@ -568,7 +593,7 @@ export class Unit
 		{
 			mainId += '-' + id;
 		}
-		return String(mainId);
+		return mainId;
 	}
 
 	/**
@@ -684,10 +709,11 @@ export class Unit
 		 * This will clear all cached element references
 		 * to prevent memory leaks.
 		 */
-		this.cached.forEach(propName =>
+		const cached = this.cached;
+		for (let i = 0, len = cached.length; i < len; i++)
 		{
-			this[propName] = null;
-		});
+			this[cached[i]] = null;
+		}
 		this.cached = [];
 
 		/**

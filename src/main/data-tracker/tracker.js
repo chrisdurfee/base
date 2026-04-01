@@ -34,11 +34,13 @@ export class Tracker
 	 */
 	add(addingType, data)
 	{
-		if (!this.types.has(addingType))
+		let arr = this.types.get(addingType);
+		if (!arr)
 		{
-			this.types.set(addingType, []);
+			arr = [];
+			this.types.set(addingType, arr);
 		}
-		this.types.get(addingType).push(data);
+		arr.push(data);
 	}
 
 	/**
@@ -62,22 +64,6 @@ export class Tracker
 	}
 
 	/**
-	 * This will call the callBack with the data.
-	 *
-	 * @private
-	 * @param {function} callBack
-	 * @param {*} data
-	 * @returns {void}
-	 */
-	removeByCallBack(callBack, data)
-	{
-		if (typeof callBack === 'function')
-		{
-			callBack(data);
-		}
-	}
-
-	/**
 	 * This will remove the data by type.
 	 *
 	 * @private
@@ -86,13 +72,8 @@ export class Tracker
 	 */
 	removeType(removingType)
 	{
-		if (!this.types.has(removingType))
-		{
-			return;
-		}
-
 		const typeData = this.types.get(removingType);
-		if (!typeData.length)
+		if (!typeData || !typeData.length)
 		{
 			return;
 		}
@@ -104,7 +85,7 @@ export class Tracker
 			return;
 		}
 
-		for (var i = 0, length = typeData.length; i < length; i++)
+		for (let i = 0, length = typeData.length; i < length; i++)
 		{
 			data = typeData[i];
 			if (!data)
@@ -115,7 +96,10 @@ export class Tracker
 			// this will stop any circular referrences
 			typeData[i] = null;
 
-			this.removeByCallBack(callBack, data);
+			if (typeof callBack === 'function')
+			{
+				callBack(data);
+			}
 		}
 		this.types.delete(removingType);
 	}
@@ -136,15 +120,16 @@ export class Tracker
 			return;
 		}
 
-		this.types.forEach((value, typeKey) =>
+		const keys = this.types.keys();
+		for (const typeKey of keys)
 		{
 			if (!typeKey)
 			{
-				return;
+				continue;
 			}
 
 			this.removeType(typeKey);
-		});
+		}
 
 		this.types.clear();
 	}
