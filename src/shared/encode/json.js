@@ -68,8 +68,9 @@ export const prepareUrl = (data, removeNewLines) =>
 		return data;
 	}
 
-	Object.entries(data).forEach(([prop, value]) =>
+	Object.keys(data).forEach((prop) =>
 	{
+		const value = data[prop];
 		if (value === null)
 		{
 			return;

@@ -15,10 +15,10 @@ export const getParamDefaults = (params) =>
 	 * @type {Record<string, any>} defaults
 	 */
 	const defaults = {};
-	params.forEach((param) =>
+	for (let i = 0, length = params.length; i < length; i++)
 	{
-		defaults[param] = null;
-	});
+		defaults[params[i]] = null;
+	}
 
 	return defaults;
 };
@@ -50,14 +50,14 @@ export const paramPattern = (uri) =>
 		return params;
 	}
 
-	matches.forEach((param) =>
+	for (let i = 0, length = matches.length; i < length; i++)
 	{
+		const param = matches[i];
 		if (param)
 		{
-			param = param.replace(':', '');
-			params.push(param);
+			params.push(param.replace(':', ''));
 		}
-	});
+	}
 
 	return params;
 };

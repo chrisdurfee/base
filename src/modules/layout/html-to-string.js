@@ -1,6 +1,12 @@
 import { removeEventPrefix } from '../html/html.js';
 
-const selfClosingTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source'];
+/**
+ * Set-based self-closing tag lookup for O(1) checks
+ * instead of Array.includes() linear scan.
+ *
+ * @type {Set<string>}
+ */
+const SELF_CLOSING_TAGS = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source']);
 
 /**
  * HtmlToString
@@ -15,6 +21,11 @@ export class HtmlToString
     /**
      * This will create a node string.
      *
+     * Single-pass over attrs array replaces the previous
+     * three-pass approach (getInnerContent + getInnerHtml +
+     * createAttributes), eliminating intermediate allocations
+     * and the unsafe splice-during-forEach pattern.
+     *
      * @param {string} tag
      * @param {Array<any>} attrs
      * @param {string} children
@@ -22,89 +33,57 @@ export class HtmlToString
      */
 	static create(tag, attrs = [], children = '')
     {
-        let innerContent = this.getInnerContent(attrs);
-        innerContent += this.getInnerHtml(attrs);
+        let innerContent = '';
+        let attrString = '';
 
-        const attrString = this.createAttributes(attrs);
-
-        if (selfClosingTags.includes(tag))
+        for (let i = 0, len = attrs.length; i < len; i++)
         {
-            return `<${tag} ${attrString} />`;
-        }
+            const item = attrs[i];
+            const key = item.key;
+            const value = item.value;
 
-        return `<${tag} ${attrString}>` + innerContent + children + `</${tag}>`;
-    }
-
-    /**
-     * This will get the inner content.
-     *
-     * @param {object} attrs
-     * @returns {string}
-     */
-    static getInnerContent(attrs)
-    {
-        let content = '';
-        attrs.forEach(({ key, value }, index) =>
-        {
-            if (key !== 'text' && key !== 'textContent')
+            if (key === 'text' || key === 'textContent')
             {
-                return '';
+                innerContent += value;
+                continue;
             }
 
-            attrs.splice(index, 1);
-            content += value;
-        });
-
-        return content;
-    }
-
-    /**
-     * This will get the inner html.
-     *
-     * @param {object} attrs
-     * @returns {string}
-     */
-    static getInnerHtml(attrs)
-    {
-        let content = '';
-        attrs.forEach(({ key, value }, index) =>
-        {
-            if (key !== 'html' && key !== 'innerHTML')
+            if (key === 'html' || key === 'innerHTML')
             {
-                return '';
+                innerContent += value;
+                continue;
             }
 
-            attrs.splice(index, 1);
-            content += value;
-        });
-
-        return content;
-    }
-
-    /**
-     * This will create a text node.
-     *
-     * @param {Array<any>} attrs
-     * @returns {string}
-     */
-    static createAttributes(attrs = [])
-    {
-        if (!attrs || attrs.length < 1)
-        {
-            return '';
-        }
-
-        return attrs
-            .map(attr => {
-                let { key, value } = attr;
-
-                if (typeof value === 'function')
+            if (typeof value === 'function')
+            {
+                const eventName = 'on' + removeEventPrefix(key);
+                if (attrString)
                 {
-                    key = 'on' + removeEventPrefix(key);
+                    attrString += ' ' + eventName + '="' + value + '"';
                 }
-                return `${key}="${value}"`;
-            })
-            .join(' ');
+                else
+                {
+                    attrString = eventName + '="' + value + '"';
+                }
+                continue;
+            }
+
+            if (attrString)
+            {
+                attrString += ' ' + key + '="' + value + '"';
+            }
+            else
+            {
+                attrString = key + '="' + value + '"';
+            }
+        }
+
+        if (SELF_CLOSING_TAGS.has(tag))
+        {
+            return '<' + tag + ' ' + attrString + ' />';
+        }
+
+        return '<' + tag + ' ' + attrString + '>' + innerContent + children + '</' + tag + '>';
     }
 
     /**
@@ -126,6 +105,6 @@ export class HtmlToString
      */
     static createComment(text)
     {
-        return `<!-- ${text} -->`;
+        return '<!-- ' + text + ' -->';
     }
 }

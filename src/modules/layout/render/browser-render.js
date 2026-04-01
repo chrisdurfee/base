@@ -114,7 +114,7 @@ export class BrowserRender extends Render
 		}
 
 		const directives = settings.directives;
-		if (directives && directives.length)
+		if (directives.length)
 		{
 			this.setDirectives(ele, directives, parentScope);
 		}
@@ -140,7 +140,7 @@ export class BrowserRender extends Render
 			...convertSettings(obj.methods || {}, {}),
 			render()
 			{
-				return {...obj, data: null, state: null};
+				return {...obj, data: null, state: null, methods: null};
 			}
 		};
 

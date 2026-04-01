@@ -23,7 +23,7 @@ export const Utils =
 		/**
 		 * Remove the first slash.
 		 */
-		if (uri.substring(0, 1) === '/')
+		if (uri[0] === '/')
 		{
 			uri = uri.substring(1);
 		}
@@ -31,7 +31,7 @@ export const Utils =
 		/**
 		 * Remove the last slash.
 		 */
-		if (uri.substring(-1) === '/')
+		if (uri[uri.length - 1] === '/')
 		{
 			uri = uri.substring(0, uri.length - 1);
 		}

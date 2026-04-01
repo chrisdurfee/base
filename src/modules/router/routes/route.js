@@ -297,17 +297,12 @@ export class Route extends BasicData
 		}
 
 		/**
-		 * This will remove the first match from the
-		 * the params.
-		 */
-		result.shift();
-		matched = result;
-
-		/**
 		 * This will get the uri params of the route
 		 * and if set will save them to the route.
+		 * We skip index 0 (the full match) and only use capture groups.
 		 */
-		this.setParams(result);
+		this.setParams(result, 1);
+		matched = result;
 		return matched;
 	}
 
@@ -326,7 +321,7 @@ export class Route extends BasicData
 	 *
 	 * @param {object} values
 	 */
-	setParams(values)
+	setParams(values, offset = 0)
 	{
 		if (!Array.isArray(values))
 		{
@@ -340,13 +335,14 @@ export class Route extends BasicData
 		}
 
 		const params = {};
-		keys.forEach((key, i) =>
+		for (let i = 0, length = keys.length; i < length; i++)
 		{
+			const key = keys[i];
 			if (typeof key !== 'undefined')
 			{
-				params[key] = values[i];
+				params[key] = values[i + offset];
 			}
-		});
+		}
 		this.set(params);
 	}
 

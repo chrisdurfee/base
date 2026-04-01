@@ -268,16 +268,17 @@ export class Router
 		const id = this.switchCount++;
 		const switchArray = this.getSwitchGroup(id);
 
-		group.forEach((item) =>
+		for (let i = 0, length = group.length; i < length; i++)
 		{
+			const item = group[i];
 			if (!item)
 			{
-				return;
+				continue;
 			}
 
 			const route = this.createRoute(item);
 			switchArray.push(route);
-		});
+		}
 
 		this.checkGroup(switchArray, this.getPath());
 		return id;
@@ -295,13 +296,14 @@ export class Router
 		const id = this.switchCount++;
 		const switchArray = this.getSwitchGroup(id);
 
-		group.forEach((item) =>
+		for (let i = 0, length = group.length; i < length; i++)
 		{
+			const item = group[i];
 			// @ts-ignore
 			const route = item.component.route;
 			route.resume(container);
 			switchArray.push(route);
-		});
+		}
 
 		this.checkGroup(switchArray, this.getPath());
 		return id;
@@ -614,7 +616,8 @@ export class Router
 	 */
 	checkGroup(group, path)
 	{
-		if (!group.length)
+		const length = group.length;
+		if (!length)
 		{
 			return;
 		}
@@ -623,7 +626,16 @@ export class Router
 		 * The last selected route should be checked first to
 		 * deactive it if it doesn't match the path.
 		 */
-		const lastSelected = group.find((route) => route.get('active'));
+		let lastSelected = null;
+		for (let i = 0; i < length; i++)
+		{
+			if (group[i].get('active'))
+			{
+				lastSelected = group[i];
+				break;
+			}
+		}
+
 		if (lastSelected)
 		{
 			/**
@@ -643,8 +655,9 @@ export class Router
 		 * subsequent routes and select the first route with a controller.
 		 */
 		let selected;
-		for (const route of group)
+		for (let i = 0; i < length; i++)
 		{
+			const route = group[i];
 			if (typeof route === 'undefined')
 			{
 				continue;

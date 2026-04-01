@@ -21,8 +21,17 @@ export class ServerRender extends Render
 	 */
 	build(obj, container, parent)
 	{
-		const elements = Array.isArray(obj) ? obj : [obj];
-		return elements.map(element => this.buildElement(element, parent)).join('');
+		if (Array.isArray(obj))
+		{
+			let result = '';
+			for (let i = 0, len = obj.length; i < len; i++)
+			{
+				result += this.buildElement(obj[i], parent);
+			}
+			return result;
+		}
+
+		return this.buildElement(obj, parent);
 	}
 
 	/**
@@ -74,9 +83,16 @@ export class ServerRender extends Render
 	{
 		const settings = Parser.parse(obj, parent);
 
-		const childrenHtml = settings.children
-			.map(child => (child !== null ? this.buildElement(child, parent) : ''))
-			.join('');
+		const children = settings.children;
+		let childrenHtml = '';
+		for (let i = 0, len = children.length; i < len; i++)
+		{
+			const child = children[i];
+			if (child !== null)
+			{
+				childrenHtml += this.buildElement(child, parent);
+			}
+		}
 
 		return this.createNode(settings, childrenHtml);
 	}

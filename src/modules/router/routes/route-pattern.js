@@ -1,10 +1,12 @@
 /**
- * Replaces all slashes in the URI.
- *
- * @param {string} uri - The URI to process.
- * @returns {string} - The processed URI.
+ * Pre-compiled regex patterns to avoid recompilation on each call.
+ * @private
  */
-const replaceSlashes = (uri) => uri.replace(/\//g, "/");
+const OPTIONAL_SLASH_RE = /(\/):[^/(]*?\?/g;
+const SLASH_RE = /\//g;
+const TRAILING_OPTIONAL_RE = /(\?\/+\*?)/g;
+const PARAM_RE = /(:[^/?&($]+)/g;
+const WILDCARD_RE = /(\*)/g;
 
 /**
  * Sets up optional slashes before the optional params.
@@ -14,7 +16,7 @@ const replaceSlashes = (uri) => uri.replace(/\//g, "/");
  */
 const setupOptionalSlashes = (uriQuery) =>
 {
-	return uriQuery.replace(/(\/):[^/(]*?\?/g, (str) => str.replace(/\//g, '(?:$|/)'));
+	return uriQuery.replace(OPTIONAL_SLASH_RE, (str) => str.replace(SLASH_RE, '(?:$|/)'));
 };
 
 /**
@@ -25,8 +27,8 @@ const setupOptionalSlashes = (uriQuery) =>
  */
 const setupOptionalParams = (uriQuery) =>
 {
-    uriQuery = uriQuery.replace(/(\?\/+\*?)/g, '?/*');
-    return uriQuery.replace(/(:[^/?&($]+)/g, (str) => (str.indexOf('.') < 0) ? '([^/|?]+)' : '([^/|?]+.*)');
+    uriQuery = uriQuery.replace(TRAILING_OPTIONAL_RE, '?/*');
+    return uriQuery.replace(PARAM_RE, (str) => (str.indexOf('.') < 0) ? '([^/|?]+)' : '([^/|?]+.*)');
 };
 
 /**
@@ -35,7 +37,7 @@ const setupOptionalParams = (uriQuery) =>
  * @param {string} uriQuery - The URI query to process.
  * @returns {string} - The processed URI query.
  */
-const setupWildcard = (uriQuery) => uriQuery.replace(/(\*)/g, '.*');
+const setupWildcard = (uriQuery) => uriQuery.replace(WILDCARD_RE, '.*');
 
 /**
  * Sets the string end if the wildcard is not set.
@@ -59,7 +61,7 @@ export const routePattern = (uri) =>
         return '';
     }
 
-    let uriQuery = replaceSlashes(uri);
+    let uriQuery = uri;
     uriQuery = setupOptionalSlashes(uriQuery);
     uriQuery = setupOptionalParams(uriQuery);
     uriQuery = setupWildcard(uriQuery);

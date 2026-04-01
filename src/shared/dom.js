@@ -1,6 +1,4 @@
-import { Arrays } from './arrays.js';
 import { Strings } from './strings.js';
-import { Types } from './types.js';
 
 /**
  * Dom
@@ -43,7 +41,7 @@ export class Dom
 		}
 
 		const obj = document.getElementsByName(name);
-		return (obj)? Arrays.toArray(obj) : false;
+		return (obj)? Array.from(obj) : false;
 	}
 
 	/**
@@ -77,7 +75,7 @@ export class Dom
 
 		/* if there is only one result just return the
 		first element in the node list */
-		return (elements.length === 1)? elements[0] : Arrays.toArray(elements);
+		return (elements.length === 1)? elements[0] : Array.from(elements);
 	}
 
 	/**
@@ -91,14 +89,14 @@ export class Dom
 	 */
 	static html(obj, html)
 	{
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return false;
 		}
 
 		/* we want to check if we are getting the
 		html or adding the html */
-		if (Types.isUndefined(html) === false)
+		if (typeof html !== 'undefined')
 		{
 			obj.innerHTML = html;
 			return this;
@@ -117,7 +115,7 @@ export class Dom
 	 */
 	static setCss(obj, property, value)
 	{
-		if (Types.isObject(obj) === false || Types.isUndefined(property))
+		if (!obj || typeof obj !== 'object' || typeof property === 'undefined')
 		{
 			return this;
 		}
@@ -197,7 +195,7 @@ export class Dom
 	 */
 	static removeAttr(obj, property)
 	{
-		if (Types.isObject(obj))
+		if (typeof obj === 'object' && obj !== null)
 		{
 			obj.removeAttribute(property);
 		}
@@ -239,7 +237,7 @@ export class Dom
 	 */
 	static attr(obj, property, value)
 	{
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return false;
 		}
@@ -336,7 +334,7 @@ export class Dom
 	 */
 	static data(obj, property, value)
 	{
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return false;
 		}
@@ -375,7 +373,7 @@ export class Dom
 	 */
 	static show(obj)
 	{
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return this;
 		}
@@ -397,7 +395,7 @@ export class Dom
 	 */
 	static hide(obj)
 	{
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return this;
 		}
@@ -422,7 +420,7 @@ export class Dom
 	 */
 	static toggle(obj)
 	{
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return this;
 		}
@@ -447,7 +445,7 @@ export class Dom
 	 */
 	static getSize(obj)
 	{
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return false;
 		}
@@ -467,7 +465,7 @@ export class Dom
 	static getWidth(obj)
 	{
 		/* we want to check if the object is not supplied */
-		return (Types.isObject(obj))? obj.offsetWidth : false;
+		return (typeof obj === 'object' && obj !== null)? obj.offsetWidth : false;
 	}
 
 	/**
@@ -479,7 +477,7 @@ export class Dom
 	static getHeight(obj)
 	{
 		/* we want to check if the object is not supplied */
-		return (Types.isObject(obj))? obj.offsetHeight : false;
+		return (typeof obj === 'object' && obj !== null)? obj.offsetHeight : false;
 	}
 
 	/**
@@ -504,7 +502,7 @@ export class Dom
 				break;
 		}
 
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return false;
 		}
@@ -613,7 +611,7 @@ export class Dom
 	{
 		const position = {x: 0, y: 0};
 
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return position;
 		}
@@ -641,7 +639,7 @@ export class Dom
 	 */
 	static addClass(obj, tmpClassName)
 	{
-		if (Types.isObject(obj) === false || tmpClassName === '')
+		if (!obj || typeof obj !== 'object' || tmpClassName === '')
 		{
 			return this;
 		}
@@ -651,9 +649,9 @@ export class Dom
 			/* we want to divide the string by spaces and
 			add any class listed */
 			const adding = tmpClassName.split(' ');
-			for (var i = 0, maxLength = adding.length; i < maxLength; i++)
+			for (let i = 0, maxLength = adding.length; i < maxLength; i++)
 			{
-				obj.classList.add(tmpClassName);
+				obj.classList.add(adding[i]);
 			}
 		}
 		return this;
@@ -668,7 +666,7 @@ export class Dom
 	 */
 	static removeClass(obj, tmpClassName)
 	{
-		if (Types.isObject(obj) === false || tmpClassName === '')
+		if (!obj || typeof obj !== 'object' || tmpClassName === '')
 		{
 			return this;
 		}
@@ -694,7 +692,7 @@ export class Dom
 	 */
 	static hasClass(obj, tmpClassName)
 	{
-		if (Types.isObject(obj) === false || tmpClassName === '')
+		if (!obj || typeof obj !== 'object' || tmpClassName === '')
 		{
 			return false;
 		}
@@ -711,7 +709,7 @@ export class Dom
 	 */
 	static toggleClass(obj, tmpClassName)
 	{
-		if (Types.isObject(obj) === false)
+		if (!obj || typeof obj !== 'object')
 		{
 			return this;
 		}

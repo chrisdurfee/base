@@ -1,5 +1,3 @@
-import { Types } from "./types.js";
-
 /**
  * Cached prototype method references to avoid prototype chain lookups on every call.
  * @private
@@ -38,7 +36,7 @@ export const Objects =
 	 */
 	extendObject(sourceObj, targetObj)
 	{
-		if (!Types.isObject(sourceObj) || !Types.isObject(targetObj))
+		if (!sourceObj || typeof sourceObj !== 'object' || !targetObj || typeof targetObj !== 'object')
 		{
 			return false;
 		}
@@ -64,7 +62,7 @@ export const Objects =
 	 */
 	clone(obj)
 	{
-		if (!obj || !Types.isObject(obj))
+		if (!obj || typeof obj !== 'object')
 		{
 			return {};
 		}
@@ -117,7 +115,7 @@ export const Objects =
 
 		/* we want to add any additional properties from the
 		target class to the new object */
-		for (var prop in target)
+		for (const prop in target)
 		{
 			obj[prop] = target[prop];
 		}
@@ -156,7 +154,7 @@ export const Objects =
 	 */
 	isEmpty(obj)
 	{
-		if (!Types.isObject(obj))
+		if (!obj || typeof obj !== 'object' || Array.isArray(obj))
 		{
 			return true;
 		}

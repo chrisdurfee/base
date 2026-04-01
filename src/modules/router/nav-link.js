@@ -22,7 +22,16 @@ const Watcher = (attr, value) => ({
  * @param {string} url
  * @returns {boolean}
  */
-const iSActive = (path, url) => new RegExp('^' + path + '($|#|/|\\.).*').test(url);
+const iSActive = (path, url) =>
+{
+	if (!url.startsWith(path))
+	{
+		return false;
+	}
+
+	const nextChar = url[path.length];
+	return (nextChar === undefined || nextChar === '/' || nextChar === '#' || nextChar === '.');
+};
 
 /**
  * NavLink
