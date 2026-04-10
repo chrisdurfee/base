@@ -59,8 +59,9 @@ export class Component extends Unit
 		/**
 		 * @type {boolean} _externalData - true when data is provided
 		 * externally (e.g. temp components from { data: localVar }).
+		 * Preserve the value if already set by setupProps() in super().
 		 */
-		this._externalData = false;
+		this._externalData = this._externalData ?? false;
 
 		this._setupData();
 	}
@@ -141,11 +142,36 @@ export class Component extends Unit
 		 * Temp components created by { data: localVar } in layouts
 		 * must use the fresh data instance so that closures in the
 		 * parent atom still reference the correct Data object.
+		 *
+		 * Persisted keys that don't exist in the fresh data are
+		 * copied over so that dynamically-added properties (e.g.
+		 * hasForum set by an async fetch) survive across resumes.
 		 */
 		if (this._externalData)
 		{
 			const freshData = this.setData();
-			this.data = freshData || persistedData;
+			if (freshData)
+			{
+				if (persistedData && persistedData.stage)
+				{
+					const fresh = freshData.stage;
+					const old = persistedData.stage;
+					for (const key in old)
+					{
+						if (Object.prototype.hasOwnProperty.call(old, key)
+							&& !Object.prototype.hasOwnProperty.call(fresh, key))
+						{
+							fresh[key] = old[key];
+						}
+					}
+				}
+
+				this.data = freshData;
+			}
+			else
+			{
+				this.data = persistedData;
+			}
 			return;
 		}
 
