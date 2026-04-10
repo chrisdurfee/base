@@ -133,6 +133,7 @@ export class BrowserRender extends Render
 	{
 		let props = {
 			cache: obj.cache,
+			_externalData: true,
 			setData: () => obj.data,
 
 			// spread any custom methods defined on the layout object

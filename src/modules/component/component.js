@@ -55,6 +55,13 @@ export class Component extends Unit
 		 * @type {string|null} stateTargetId // optional override of state id
 		 */
 		this.stateTargetId = null;
+
+		/**
+		 * @type {boolean} _externalData - true when data is provided
+		 * externally (e.g. temp components from { data: localVar }).
+		 */
+		this._externalData = false;
+
 		this._setupData();
 	}
 
@@ -96,7 +103,8 @@ export class Component extends Unit
 	 */
 	resumeScope(persistedLayout)
 	{
-		this.data = persistedLayout.data;
+		this._resumeData(persistedLayout.data);
+
 		this.state = persistedLayout.state;
 		this.stateHelper = persistedLayout.stateHelper;
 		this.persistedChildren = persistedLayout.persistedChildren;
@@ -109,7 +117,44 @@ export class Component extends Unit
 		}
 
 		this.id = persistedLayout.id;
-		this._refreshData();
+		this._refreshContextData();
+	}
+
+	/**
+	 * This will resume the data during persistence.
+	 *
+	 * For components with externally-provided data (temp components
+	 * created by { data: localVar } in layouts), we use the fresh
+	 * data instance from setData() so closure references stay valid.
+	 *
+	 * For regular components, the persisted data is the source of
+	 * truth — it holds accumulated state (list items, filters, etc.)
+	 * that should be preserved until the component fetches updates.
+	 *
+	 * @protected
+	 * @param {object|null} persistedData
+	 * @returns {void}
+	 */
+	_resumeData(persistedData)
+	{
+		/**
+		 * Temp components created by { data: localVar } in layouts
+		 * must use the fresh data instance so that closures in the
+		 * parent atom still reference the correct Data object.
+		 */
+		if (this._externalData)
+		{
+			const freshData = this.setData();
+			this.data = freshData || persistedData;
+			return;
+		}
+
+		/**
+		 * Regular components: persisted data is the source of truth.
+		 * Accumulated state (list items, loaded content, etc.) is
+		 * preserved and displayed immediately on resume.
+		 */
+		this.data = persistedData;
 	}
 
 	/**

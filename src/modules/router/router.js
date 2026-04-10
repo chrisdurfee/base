@@ -96,6 +96,8 @@ export class Router
 		// @ts-ignore
 		const uri = settings.uri || '*';
 		// @ts-ignore
+		settings.rawUri = uri;
+		// @ts-ignore
 		settings.baseUri = this.createURI(uri);
 
 		return new Route(settings, this.updateTitle.bind(this));
@@ -558,6 +560,12 @@ export class Router
 		path = path || this.getPath();
 		this.path = path;
 
+		/**
+		 * Reset scroll intent before checking routes.
+		 * Routes will set this during select().
+		 */
+		this.scrollIntent = null;
+
 		// Quick check: does last matched route still match?
 		if (this.lastMatchedRoute && this.check(this.lastMatchedRoute, path))
 		{
@@ -582,6 +590,7 @@ export class Router
 		}
 
 		this.checkSwitches(path);
+		this.applyScrollIntent();
 		this.updatePath();
 	}
 
@@ -756,9 +765,105 @@ export class Router
 		route.select();
 		this.updateTitle(route);
 
-		if (route.preventScroll !== true)
+		/**
+		 * Collect scroll intent. scrollTo takes highest priority,
+		 * then preventScroll, then default scroll-to-top.
+		 */
+		if (route.scrollTo)
+		{
+			this.scrollIntent = { type: 'target', selector: route.scrollTo };
+		}
+		else if (route.preventScroll !== true && !this.scrollIntent)
+		{
+			this.scrollIntent = { type: 'top' };
+		}
+	}
+
+	/**
+	 * This will apply the collected scroll intent after all
+	 * routes and switches have been processed.
+	 *
+	 * @returns {void}
+	 */
+	applyScrollIntent()
+	{
+		const intent = this.scrollIntent;
+		this.scrollIntent = null;
+
+		if (!intent)
+		{
+			return;
+		}
+
+		if (intent.type === 'target')
+		{
+			this.scrollToTarget(intent.selector);
+		}
+		else if (intent.type === 'top')
 		{
 			this.checkToScroll();
+		}
+	}
+
+	/**
+	 * This will scroll to a target element by CSS selector.
+	 * For sticky elements, it scrolls to the position where the
+	 * element reaches its stuck point (natural position minus CSS top).
+	 * If the user is above the target, no scrolling occurs.
+	 *
+	 * @param {string} selector
+	 * @returns {void}
+	 */
+	scrollToTarget(selector)
+	{
+		if (typeof selector !== 'string' || typeof document === 'undefined')
+		{
+			return;
+		}
+
+		const element = document.querySelector(selector);
+		if (!element)
+		{
+			return;
+		}
+
+		const style = window.getComputedStyle(element);
+		const isSticky = style.position === 'sticky';
+
+		let naturalTop;
+		if (isSticky)
+		{
+			/**
+			 * Temporarily remove sticky positioning to read the
+			 * element's true natural position in the document flow.
+			 * The browser won't repaint between the change and restore.
+			 */
+			const inlinePosition = /** @type {HTMLElement} */ (element).style.position;
+			/** @type {HTMLElement} */ (element).style.position = 'static';
+			const rect = element.getBoundingClientRect();
+			naturalTop = rect.top + window.scrollY;
+			/** @type {HTMLElement} */ (element).style.position = inlinePosition;
+		}
+		else
+		{
+			const rect = element.getBoundingClientRect();
+			naturalTop = rect.top + window.scrollY;
+		}
+
+		/**
+		 * For sticky elements, account for the CSS top offset so the
+		 * element sits at its stuck position after scrolling.
+		 */
+		const cssTop = isSticky ? (parseFloat(style.top) || 0) : 0;
+		const targetScroll = naturalTop - cssTop;
+
+		/**
+		 * Only scroll if the current position is below the target.
+		 * This keeps the cover header visible when the user is above the tabs.
+		 */
+		if (window.scrollY > targetScroll)
+		{
+			window.scrollTo(0, targetScroll);
 		}
 	}
 
