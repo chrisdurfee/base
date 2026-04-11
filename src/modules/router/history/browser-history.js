@@ -2,6 +2,55 @@ import { Events } from "../../../main/events/events.js";
 import { History } from "./history.js";
 
 /**
+ * Detect iOS Safari/PWA environment once at module load.
+ * iOS has a compositor bug where swipe-back navigation can leave
+ * the hit-test layer out of sync with the visual rendering.
+ *
+ * @returns {boolean}
+ */
+const isIOS = typeof navigator !== 'undefined'
+	&& /iPad|iPhone|iPod/.test(navigator.userAgent || '')
+	// @ts-ignore - MSStream exists only in IE/Edge legacy
+	&& !window.MSStream;
+
+/**
+ * Force iOS WebKit to rebuild its hit-test region tree.
+ *
+ * After popstate navigation (swipe-back) the compositor's cached
+ * scroll offset can get out of sync with the actual document
+ * scroll, causing touch targets to be misaligned. A scroll event
+ * or device rotation forces WebKit to recalculate. This function
+ * replicates that by re-applying the current scroll position and
+ * forcing a synchronous reflow after the DOM has settled.
+ *
+ * @returns {void}
+ */
+const forceHitTestUpdate = () =>
+{
+	if (!isIOS)
+	{
+		return;
+	}
+
+	/* Double-rAF so the route's DOM is fully rendered and
+	scroll position is committed. */
+	requestAnimationFrame(() => requestAnimationFrame(() =>
+	{
+		const x = window.scrollX;
+		const y = window.scrollY;
+
+		/* Re-apply the current scroll position. Even if the
+		values haven't changed, scrollTo triggers WebKit's
+		internal scroll handling which rebuilds hit-test
+		regions. Pair with a synchronous reflow read to ensure
+		the compositor acknowledges the geometry. */
+		window.scrollTo(0, y + 1);
+		void document.documentElement.offsetHeight;
+		window.scrollTo(x, y);
+	}));
+};
+
+/**
  * BrowserHistory
  *
  * This will setup the history controller.
@@ -18,6 +67,18 @@ export class BrowserHistory extends History
 	addEvent()
 	{
 		Events.on('popstate', window, this.callBack);
+
+		/**
+		 * Handle bfcache restoration on iOS. When a page is
+		 * restored from the back-forward cache the compositor
+		 * may need to be nudged.
+		 */
+		if (isIOS)
+		{
+			this.pageShowCallBack = this.onPageShow.bind(this);
+			Events.on('pageshow', window, this.pageShowCallBack);
+		}
+
 		return this;
 	}
 
@@ -29,7 +90,27 @@ export class BrowserHistory extends History
 	removeEvent()
 	{
 		Events.off('popstate', window, this.callBack);
+
+		if (this.pageShowCallBack)
+		{
+			Events.off('pageshow', window, this.pageShowCallBack);
+		}
+
 		return this;
+	}
+
+	/**
+	 * Handles the pageshow event for bfcache restoration.
+	 *
+	 * @param {PageTransitionEvent} evt
+	 * @returns {void}
+	 */
+	onPageShow(evt)
+	{
+		if (evt.persisted)
+		{
+			forceHitTestUpdate();
+		}
 	}
 
 	/**
@@ -59,6 +140,8 @@ export class BrowserHistory extends History
 		{
 			this.scrollTo(scrollPosition);
 		}
+
+		forceHitTestUpdate();
 	}
 
 	/**
@@ -96,6 +179,17 @@ export class BrowserHistory extends History
 		if (lastState && lastState.uri === uri)
 		{
 			return this;
+		}
+
+		/* Before pushing a new entry, snapshot the current scroll
+		position into the CURRENT state. Without this the leaving
+		page's scroll offset is lost and popstate (swipe-back)
+		restores the wrong position, which on iOS causes the
+		compositor hit-test layer to desync. */
+		if (!replace && lastState && lastState.location === this.locationId)
+		{
+			lastState.scrollPosition = this.getScrollPosition();
+			history.replaceState(lastState, '', window.location.href);
 		}
 
 		const stateObj = this.createState(uri, data);

@@ -176,11 +176,38 @@ export class Component extends Unit
 		}
 
 		/**
-		 * Regular components: persisted data is the source of truth.
-		 * Accumulated state (list items, loaded content, etc.) is
-		 * preserved and displayed immediately on resume.
+		 * Regular components: fresh data from setData() (already in
+		 * this.data via _setupData) provides a clean base reference.
+		 *
+		 * Non-null persisted values are merged in so accumulated
+		 * state (list items, loaded content, etc.) is preserved.
+		 *
+		 * Null/undefined persisted values (e.g. cleared by
+		 * beforeDestroy cleanup) are ignored, keeping the fresh
+		 * defaults so the component can re-fetch on resume.
 		 */
-		this.data = persistedData;
+		if (!this.data)
+		{
+			this.data = persistedData;
+			return;
+		}
+
+		if (persistedData && persistedData.stage)
+		{
+			const fresh = this.data.stage;
+			const old = persistedData.stage;
+			for (const key in old)
+			{
+				if (Object.prototype.hasOwnProperty.call(old, key))
+				{
+					const val = old[key];
+					if (val != null)
+					{
+						fresh[key] = val;
+					}
+				}
+			}
+		}
 	}
 
 	/**
