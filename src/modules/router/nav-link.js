@@ -89,6 +89,8 @@ export class NavLink extends Component
             nest: this.nest || this.children,
             // @ts-ignore
             dataStateSet: this.dataSet,
+            // @ts-ignore
+            'data-replace': this.replace ? 'true' : null,
             watch: watchers
         };
     }

@@ -451,7 +451,8 @@ export class Router
 			const baseUri = this.baseURI,
 			path = (baseUri !== '/')? href.replace(baseUri, '') : href;
 
-			this.navigate(path);
+			const replace = target.dataset.replace === 'true';
+			this.navigate(path, null, replace);
 
 			evt.preventDefault();
 			evt.stopPropagation();
