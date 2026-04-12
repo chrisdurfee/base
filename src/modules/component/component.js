@@ -179,8 +179,12 @@ export class Component extends Unit
 		 * Regular components: fresh data from setData() (already in
 		 * this.data via _setupData) provides a clean base reference.
 		 *
-		 * Non-null persisted values are merged in so accumulated
-		 * state (list items, loaded content, etc.) is preserved.
+		 * Non-null persisted values are merged via the reactive
+		 * set() API so the batched publish queue receives the
+		 * correct values. Direct stage mutation would leave stale
+		 * constructor values in the queue; the microtask flush
+		 * after render would then overwrite merged data with the
+		 * original (e.g. skeleton) values, causing a flash.
 		 *
 		 * Null/undefined persisted values (e.g. cleared by
 		 * beforeDestroy cleanup) are ignored, keeping the fresh
@@ -194,8 +198,8 @@ export class Component extends Unit
 
 		if (persistedData && persistedData.stage)
 		{
-			const fresh = this.data.stage;
 			const old = persistedData.stage;
+			const updates = {};
 			for (const key in old)
 			{
 				if (Object.prototype.hasOwnProperty.call(old, key))
@@ -203,9 +207,14 @@ export class Component extends Unit
 					const val = old[key];
 					if (val != null)
 					{
-						fresh[key] = val;
+						updates[key] = val;
 					}
 				}
+			}
+
+			if (Object.keys(updates).length > 0)
+			{
+				this.data.set(updates);
 			}
 		}
 	}
