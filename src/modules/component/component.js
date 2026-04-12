@@ -154,7 +154,6 @@ export class Component extends Unit
 			{
 				if (persistedData && persistedData.stage)
 				{
-					const fresh = freshData.stage;
 					const old = persistedData.stage;
 
 					/**
@@ -165,14 +164,25 @@ export class Component extends Unit
 					const retain = persistedData._retainState
 						|| freshData._retainState;
 
+					const updates = {};
 					for (const key in old)
 					{
 						if (Object.prototype.hasOwnProperty.call(old, key)
 							&& (retain
-								|| !Object.prototype.hasOwnProperty.call(fresh, key)))
+								|| !Object.prototype.hasOwnProperty.call(freshData.stage, key)))
 						{
-							fresh[key] = old[key];
+							updates[key] = old[key];
 						}
+					}
+
+					/**
+					 * Use the reactive set() API so merged values
+					 * overwrite stale constructor values that are
+					 * still pending in the batch publish queue.
+					 */
+					if (Object.keys(updates).length > 0)
+					{
+						freshData.set(updates);
 					}
 				}
 
