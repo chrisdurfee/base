@@ -13,7 +13,7 @@ export class HashHistory extends History
 	/**
 	 * This will add the events.
 	 *
-	 * @returns {object} a reference to the object.
+	 * @returns {this} a reference to the object.
 	 */
 	addEvent()
 	{
@@ -24,7 +24,7 @@ export class HashHistory extends History
 	/**
 	 * This will remove the events.
 	 *
-	 * @returns {object} a reference to the object.
+	 * @returns {this} a reference to the object.
 	 */
 	removeEvent()
 	{
@@ -49,7 +49,7 @@ export class HashHistory extends History
 	 * @param {string} uri
 	 * @param {object} data
 	 * @param {boolean} replace
-	 * @returns {object} a reference to the object.
+	 * @returns {this} a reference to the object.
 	 */
 	addState(uri, data, replace)
 	{

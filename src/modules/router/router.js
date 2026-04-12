@@ -152,7 +152,7 @@ export class Router
 	resume(route, container)
 	{
 		// @ts-ignore
-		route.resume(container);
+		route.resumeRoute(container);
 		this.addRoute(route);
 	}
 
@@ -303,7 +303,7 @@ export class Router
 			const item = group[i];
 			// @ts-ignore
 			const route = item.component.route;
-			route.resume(container);
+			route.resumeRoute(container);
 			switchArray.push(route);
 		}
 
@@ -348,7 +348,7 @@ export class Router
 	 * This will remove a route by uri.
 	 *
 	 * @param {string} uri
-	 * @returns {object} a reference to the router object.
+	 * @returns {this} a reference to the router object.
 	 */
 	remove(uri)
 	{
@@ -367,7 +367,7 @@ export class Router
 	 *
 	 * @param {string} [baseURI]
 	 * @param {string} [title]
-	 * @returns {object} a reference to the router object.
+	 * @returns {this} a reference to the router object.
 	 */
 	setup(baseURI, title)
 	{
@@ -463,7 +463,7 @@ export class Router
 	/**
 	 * This will reset the router.
 	 *
-	 * @returns {object} a reference to the router object.
+	 * @returns {this} a reference to the router object.
 	 */
 	reset()
 	{
@@ -494,7 +494,7 @@ export class Router
 	/**
 	 * This will check the active routes.
 	 *
-	 * @returns {object} a reference to the router object.
+	 * @returns {this} a reference to the router object.
 	 */
 	activate()
 	{
@@ -508,7 +508,7 @@ export class Router
 	 * @param {string} uri
 	 * @param {object|null} [data]
 	 * @param {boolean} [replace]
-	 * @returns {object} a reference to the router object.
+	 * @returns {this} a reference to the router object.
 	 */
 	navigate(uri, data, replace)
 	{
@@ -536,6 +536,7 @@ export class Router
 	 *
 	 * @protected
 	 * @param {object} route
+	 * @returns {this} a reference to the router object.
 	 */
 	updateTitle(route)
 	{
@@ -546,6 +547,7 @@ export class Router
 
 		const title = route.title;
 		document.title = setTitle(route, title, this.title);
+		return this;
 	}
 
 	/**

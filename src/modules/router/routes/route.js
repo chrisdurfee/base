@@ -371,7 +371,7 @@ export class Route extends BasicData
 	 * @param {object} container
 	 * @returns {void}
 	 */
-	resume(container)
+	resumeRoute(container)
 	{
 		const controller = this.controller;
 		if (controller)

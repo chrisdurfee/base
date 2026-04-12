@@ -123,7 +123,7 @@ export class Data extends BasicData
 	 *
 	 * @param {string} attr
 	 * @param {number} index
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	splice(attr, index)
 	{
@@ -138,7 +138,7 @@ export class Data extends BasicData
 	 *
 	 * @param {string} attr
 	 * @param {*} value
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	push(attr, value)
 	{
@@ -158,7 +158,7 @@ export class Data extends BasicData
 	 *
 	 * @param {string} attr
 	 * @param {Array<any>} values
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	concat(attr, values)
 	{
@@ -178,7 +178,7 @@ export class Data extends BasicData
 	 *
 	 * @param {string} attr
 	 * @param {*} value
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	unshift(attr, value)
 	{
@@ -260,7 +260,7 @@ export class Data extends BasicData
 	 * This will refresh the value.
 	 *
 	 * @param {string} attr
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	refresh(attr)
 	{

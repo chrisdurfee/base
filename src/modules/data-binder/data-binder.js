@@ -81,7 +81,7 @@ export class DataBinder
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {string|function} filter
-	 * @returns {object} an instance of the databinder.
+	 * @returns {this} an instance of the databinder.
 	 */
 	bind(element, data, prop, filter)
 	{
@@ -181,7 +181,7 @@ export class DataBinder
 	 * @param {string} id
 	 * @param {string} attr
 	 * @param {object} connection
-	 * @returns {object}
+	 * @returns {this}
 	 */
 	addConnection(id, attr, connection)
 	{
@@ -219,7 +219,7 @@ export class DataBinder
 	 * This will unbind the element.
 	 *
 	 * @param {object} element
-	 * @returns {object} an instance of the data binder.
+	 * @returns {this} an instance of the data binder.
 	 */
 	unbind(element)
 	{
@@ -238,7 +238,7 @@ export class DataBinder
 	 * @param {object} data
 	 * @param {string} prop
 	 * @param {function} callBack
-	 * @returns {object}
+	 * @returns {this}
 	 */
 	watch(element, data, prop, callBack)
 	{
@@ -298,7 +298,7 @@ export class DataBinder
 	 * @param {object} element
 	 * @param {object} data
 	 * @param {string} prop
-	 * @returns {object}
+	 * @returns {this}
 	 */
 	unwatch(element, data, prop)
 	{
@@ -322,7 +322,7 @@ export class DataBinder
 	 * @param {string} msg
 	 * @param {*} value
 	 * @param {object} committer
-	 * @returns {object} an instance of the data binder.
+	 * @returns {this} an instance of the data binder.
 	 */
 	publish(msg, value, committer)
 	{

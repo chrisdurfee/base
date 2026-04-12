@@ -44,7 +44,7 @@ class Base
 	 * this will augement the base framework with new functionality.
 	 *
 	 * @param {object} methods The new methods to add.
-	 * @returns {object} An instance of base.
+	 * @returns {this}
 	 */
 	augment(methods)
 	{

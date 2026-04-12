@@ -123,7 +123,7 @@ export class BasicData
 	 * Use this when accumulated state (filters, selections,
 	 * loaded content) should survive across route navigations.
 	 *
-	 * @returns {object} this (for chaining)
+	 * @returns {this}
 	 */
 	retainState()
 	{
@@ -311,7 +311,7 @@ export class BasicData
 	 *
 	 * @overload
 	 * @param {object} data
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	set(first, second, third)
 	{
@@ -371,13 +371,13 @@ export class BasicData
 	 * This will toggle a bool attribute.
 	 *
 	 * @param {string} attr
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	toggle(attr)
 	{
 		if (typeof attr === 'undefined')
 		{
-			return;
+			return this;
 		}
 
 		this.set(attr, !this.get(attr));
@@ -389,13 +389,13 @@ export class BasicData
 	 *
 	 * @param {string} attr
 	 * @param {number|null} value
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	increment(attr, value = null)
 	{
 		if (typeof attr === 'undefined')
 		{
-			return;
+			return this;
 		}
 
 		// this will ensure we have a number value
@@ -411,13 +411,13 @@ export class BasicData
 	 *
 	 * @param {string} attr
 	 * @param {number|null} value
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	decrement(attr, value = null)
 	{
 		if (typeof attr === 'undefined')
 		{
-			return;
+			return this;
 		}
 
 		// this will ensure we have a number value
@@ -432,13 +432,13 @@ export class BasicData
 	 * This will concat an attribute.
 	 *
 	 * @param {string} attr
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	concat(attr, value)
 	{
 		if (typeof attr === 'undefined')
 		{
-			return;
+			return this;
 		}
 
 		const currentValue = this.get(attr);
@@ -451,7 +451,7 @@ export class BasicData
 	 *
 	 * @param {string} key
 	 * @param {*} value
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	ifNull(key, value)
 	{
@@ -466,7 +466,7 @@ export class BasicData
 	 * This will set the data local storage key.
 	 *
 	 * @param {string} key
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	setKey(key)
 	{
@@ -478,7 +478,7 @@ export class BasicData
 	 * This will restore the data from local storage.
 	 *
 	 * @param {*} defaultValue
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	resume(defaultValue)
 	{
@@ -508,7 +508,7 @@ export class BasicData
 	 * This will delete a property value or the model data.
 	 *
 	 * @param {object|string|null} [attrName]
-	 * @returns {object} this
+	 * @returns {this}
 	 */
 	delete(attrName)
 	{

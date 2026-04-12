@@ -28,7 +28,7 @@ export class State extends SimpleData
 	 *
 	 * @param {string} action
 	 * @param {*} state
-	 * @returns {object} self
+	 * @returns {this}
 	 */
 	addAction(action, state)
 	{
@@ -58,7 +58,7 @@ export class State extends SimpleData
 	 *
 	 * @param {string} action
 	 * @param {string} [token]
-	 * @returns {object} self
+	 * @returns {this}
 	 */
 	removeAction(action, token)
 	{

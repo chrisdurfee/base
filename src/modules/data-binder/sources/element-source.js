@@ -127,7 +127,7 @@ export class ElementSource extends TwoWaySource
 	 * @private
 	 * @param {object} element
 	 * @param {string} attr
-	 * @returns {object}
+	 * @returns {this}
 	 */
 	addSetMethod(element, attr)
 	{
@@ -147,10 +147,10 @@ export class ElementSource extends TwoWaySource
 			{
 				case 'checkbox':
 					this.setValue = UpdateCheckboxAttr;
-					return;
+					return this;
 				case 'radio':
 					this.setValue = UpdateRadioAttr;
-					return;
+					return this;
 			}
 		}
 
@@ -199,7 +199,7 @@ export class ElementSource extends TwoWaySource
 	 * This will set a value on an element.
 	 *
 	 * @param {*} value
-	 * @returns {object}
+	 * @returns {this}
 	 */
 	set(value)
 	{
@@ -244,7 +244,7 @@ export class ElementSource extends TwoWaySource
 	 * @overload
 	 * @param {*} value
 	 * @param {object} committer
-	 * @returns {object}
+	 * @returns {this}
 	 */
 	// @ts-ignore
 	callBack(value, committer)

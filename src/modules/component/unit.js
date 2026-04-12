@@ -117,6 +117,11 @@ export class Unit
 		this._classId;
 
 		/**
+		 * @type {string} id
+		 */
+		this.id = '';
+
+		/**
 		 * @type {Array<any>} cached
 		 */
 		this.cached = [];
@@ -284,7 +289,7 @@ export class Unit
 	 * If the component is transparent, children see through
 	 * to the parent scope instead.
 	 *
-	 * @returns {object}
+	 * @returns {this}
 	 */
 	getChildScope()
 	{
