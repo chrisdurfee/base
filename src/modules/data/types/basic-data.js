@@ -80,6 +80,15 @@ export class BasicData
 		this.dirty = false;
 
 		/**
+		 * When true, the persist/resume system will prefer
+		 * persisted values over fresh defaults from setData().
+		 *
+		 * @type {boolean}
+		 * @default false
+		 */
+		this._retainState = false;
+
+		/**
 		 * @type {object} links
 		 * @default {}
 		 * @protected
@@ -104,6 +113,22 @@ export class BasicData
 
 		// @ts-ignore
 		return DataProxy(this);
+	}
+
+	/**
+	 * Marks this data source so the persist/resume system
+	 * keeps persisted values instead of overwriting them
+	 * with fresh defaults from setData().
+	 *
+	 * Use this when accumulated state (filters, selections,
+	 * loaded content) should survive across route navigations.
+	 *
+	 * @returns {object} this (for chaining)
+	 */
+	retainState()
+	{
+		this._retainState = true;
+		return this;
 	}
 
 	/**

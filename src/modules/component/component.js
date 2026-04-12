@@ -156,10 +156,20 @@ export class Component extends Unit
 				{
 					const fresh = freshData.stage;
 					const old = persistedData.stage;
+
+					/**
+					 * If retainState is set on either data source,
+					 * persisted values win for ALL keys. Otherwise
+					 * only copy keys that don't exist in fresh.
+					 */
+					const retain = persistedData._retainState
+						|| freshData._retainState;
+
 					for (const key in old)
 					{
 						if (Object.prototype.hasOwnProperty.call(old, key)
-							&& !Object.prototype.hasOwnProperty.call(fresh, key))
+							&& (retain
+								|| !Object.prototype.hasOwnProperty.call(fresh, key)))
 						{
 							fresh[key] = old[key];
 						}
@@ -191,6 +201,17 @@ export class Component extends Unit
 		 * defaults so the component can re-fetch on resume.
 		 */
 		if (!this.data)
+		{
+			this.data = persistedData;
+			return;
+		}
+
+		/**
+		 * If retainState is flagged, the persisted data is the
+		 * authoritative source — use it directly and discard
+		 * the fresh instance from setData().
+		 */
+		if (persistedData && persistedData._retainState)
 		{
 			this.data = persistedData;
 			return;
