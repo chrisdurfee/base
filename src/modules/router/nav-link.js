@@ -154,7 +154,8 @@ export class NavLink extends Component
                 }
 
                 const path = ele.pathname + ele.hash;
-				const selected = exact? (value === path) : (iSActive(ele.pathname, value));
+				const matchPath = ele.hash ? path : ele.pathname;
+				const selected = exact? (value === path) : (iSActive(matchPath, value));
                 this.update(selected);
             }
         });

@@ -193,6 +193,19 @@ export class BrowserHistory extends History
 		}
 
 		const stateObj = this.createState(uri, data);
+
+		/* For a new (push) entry the page has not been viewed yet,
+		so its scroll position must start at the top. createState
+		captures the *current* scroll which still belongs to the
+		page we are leaving. Override it to avoid restoring a
+		stale offset the next time this entry is popped. The real
+		scroll position will be snapshotted via replaceState when
+		the user navigates away from this new page. */
+		if (!replace)
+		{
+			stateObj.scrollPosition = { x: 0, y: 0 };
+		}
+
 		const method = (replace === false)? 'pushState' : 'replaceState';
 		// @ts-ignore
 		history[method](stateObj, null, uri);

@@ -111,8 +111,20 @@ export class BasicData
 		const attributes = setupAttrSettings(settings);
 		this.set(attributes);
 
+		/**
+		 * Store the proxy reference so that chainable methods
+		 * (e.g. retainState()) can return the proxy instead of
+		 * the raw target. Without this, method chaining like
+		 * `new Data({}).retainState()` would return the raw
+		 * object, breaking proxy-based property access.
+		 *
+		 * @type {Proxy}
+		 */
 		// @ts-ignore
-		return DataProxy(this);
+		const proxy = DataProxy(this);
+		this._proxy = proxy;
+		// @ts-ignore
+		return proxy;
 	}
 
 	/**
@@ -128,7 +140,8 @@ export class BasicData
 	retainState()
 	{
 		this._retainState = true;
-		return this;
+		// @ts-ignore
+		return this._proxy || this;
 	}
 
 	/**
