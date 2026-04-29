@@ -314,21 +314,19 @@ export class ModelService
 	}
 
 	/**
-	 * This will list rows of the model.
+	 * This will get all parameters for the model.
 	 *
-	 * @param {string} instanceParams
-	 * @param {function} callBack
-	 * @param {number} offset
-	 * @param {number} limit
-	 * @param {*} lastCursor
-	 * @param {*} since
-	 * @returns {XMLHttpRequest}
+	 * @param {number|null} offset
+	 * @param {number|null} limit
+	 * @param {string|null} lastCursor
+	 * @param {string|null} since
+	 * @returns {string}
 	 */
-	all(instanceParams, callBack, offset, limit, lastCursor = null, since = null)
+	getAllParams(offset, limit, lastCursor, since)
 	{
 		const data = this.model.get();
-		offset = !isNaN(offset)? offset : 0;
-		limit = !isNaN(limit)? limit : 50;
+		offset = !isNaN(Number(offset))? offset : 0;
+		limit = !isNaN(Number(limit))? limit : 50;
 		const search = data.search || '';
 
 		let filter = data.filter || '';
@@ -355,7 +353,7 @@ export class ModelService
 			groupBy = JSON.stringify(groupBy);
 		}
 
-		let params = '&filter=' + filter +
+		return '&filter=' + filter +
 			'&offset=' + offset +
 			'&limit=' + limit +
 			'&dates=' + dates +
@@ -364,7 +362,22 @@ export class ModelService
 			'&search=' + search +
 			'&lastCursor=' + ((typeof lastCursor !== 'undefined' && lastCursor !== null) ? lastCursor : '') +
 			'&since=' + ((typeof since !== 'undefined' && since !== null) ? since : '');
+	}
 
+	/**
+	 * This will list rows of the model.
+	 *
+	 * @param {string} instanceParams
+	 * @param {function} callBack
+	 * @param {number} offset
+	 * @param {number} limit
+	 * @param {*} lastCursor
+	 * @param {*} since
+	 * @returns {XMLHttpRequest}
+	 */
+	all(instanceParams, callBack, offset, limit, lastCursor = null, since = null)
+	{
+		let params = this.getAllParams(offset, limit, lastCursor, since);
 		return this._get('', params, instanceParams, callBack);
 	}
 

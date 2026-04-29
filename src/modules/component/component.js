@@ -159,7 +159,8 @@ export class Component extends Unit
 					/**
 					 * If retainState is set on either data source,
 					 * persisted values win for ALL keys. Otherwise
-					 * only copy keys that don't exist in fresh.
+					 * (including refreshState) only copy keys that
+					 * don't exist in fresh.
 					 */
 					const retain = persistedData._retainState
 						|| freshData._retainState;
@@ -230,16 +231,37 @@ export class Component extends Unit
 		if (persistedData && persistedData.stage)
 		{
 			const old = persistedData.stage;
+
+			/**
+			 * If refreshState is flagged on either data source,
+			 * fresh values from setData() are authoritative and
+			 * only persisted keys missing from fresh are copied
+			 * over (so async-added properties survive resumes).
+			 */
+			const refresh = persistedData._refreshState
+				|| this.data._refreshState;
+
 			const updates = {};
 			for (const key in old)
 			{
-				if (Object.prototype.hasOwnProperty.call(old, key))
+				if (!Object.prototype.hasOwnProperty.call(old, key))
 				{
-					const val = old[key];
-					if (val != null)
+					continue;
+				}
+
+				if (refresh)
+				{
+					if (!Object.prototype.hasOwnProperty.call(this.data.stage, key))
 					{
-						updates[key] = val;
+						updates[key] = old[key];
 					}
+					continue;
+				}
+
+				const val = old[key];
+				if (val != null)
+				{
+					updates[key] = val;
 				}
 			}
 

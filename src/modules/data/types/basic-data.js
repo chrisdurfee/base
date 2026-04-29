@@ -89,6 +89,17 @@ export class BasicData
 		this._retainState = false;
 
 		/**
+		 * When true, the persist/resume system treats the
+		 * fresh data from setData() as authoritative and
+		 * only copies persisted keys that are missing from
+		 * the fresh data.
+		 *
+		 * @type {boolean}
+		 * @default false
+		 */
+		this._refreshState = false;
+
+		/**
 		 * @type {object} links
 		 * @default {}
 		 * @protected
@@ -140,6 +151,26 @@ export class BasicData
 	retainState()
 	{
 		this._retainState = true;
+		// @ts-ignore
+		return this._proxy || this;
+	}
+
+	/**
+	 * Marks this data source so the persist/resume system
+	 * uses the fresh values from setData() as the source
+	 * of truth. Persisted keys missing from the fresh data
+	 * are still copied over so async-added properties
+	 * survive across resumes.
+	 *
+	 * Use this when setData() reads from props, the URL,
+	 * or other external sources that should override any
+	 * previously stored values.
+	 *
+	 * @returns {this}
+	 */
+	refreshState()
+	{
+		this._refreshState = true;
 		// @ts-ignore
 		return this._proxy || this;
 	}
