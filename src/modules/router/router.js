@@ -798,13 +798,35 @@ export class Router
 			return;
 		}
 
-		if (intent.type === 'target')
+		const apply = () =>
 		{
-			this.scrollToTarget(intent.selector);
+			if (intent.type === 'target')
+			{
+				this.scrollToTarget(intent.selector);
+			}
+			else if (intent.type === 'top')
+			{
+				this.checkToScroll();
+			}
+		};
+
+		/**
+		 * Defer to the next animation frame so route components
+		 * (including lazy-loaded switch routes) have a chance to
+		 * mount and the layout has settled before we measure the
+		 * target element's natural position. Measuring synchronously
+		 * during a route swap can return a stale element from the
+		 * outgoing route or an unsettled position, causing the
+		 * scroll-to gate to misfire and leaving the page at the
+		 * previous page's scroll offset.
+		 */
+		if (typeof requestAnimationFrame !== 'undefined')
+		{
+			requestAnimationFrame(apply);
 		}
-		else if (intent.type === 'top')
+		else
 		{
-			this.checkToScroll();
+			apply();
 		}
 	}
 
