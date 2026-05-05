@@ -1,4 +1,5 @@
 import { DataUtils as utils } from './data-utils.js';
+import { unwrapProxy } from '../../data-proxy.js';
 
 /**
  * Module-level Set reused across publish calls to detect circular references.
@@ -129,6 +130,15 @@ export class Publisher
 		{
 			return;
 		}
+
+		/**
+		 * Unwrap any DataProxy to its raw target before walking.
+		 * Iterating a proxy here would invoke the get trap on
+		 * every nested key and re-wrap each child in another
+		 * proxy, which dominated the resume/republish flame for
+		 * components with large nested data.
+		 */
+		obj = unwrapProxy(obj);
 
 		// On top-level call, reuse module-level Set to avoid heap allocation
 		const isTopLevel = (seen === null);

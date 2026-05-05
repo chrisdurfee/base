@@ -11,6 +11,37 @@
 const proxyCache = new WeakMap();
 
 /**
+ * Reverse lookup: proxy -> raw target.
+ *
+ * Lets internal hot paths (notably the deep Publisher) walk
+ * the underlying object directly instead of triggering the
+ * proxy get trap on every nested access. Without this, a
+ * single deep publish can re-allocate or re-look-up dozens
+ * of nested proxies per leaf.
+ *
+ * @type {WeakMap<object, object>}
+ */
+const _proxyTargets = new WeakMap();
+
+/**
+ * Return the underlying target object for a proxy created
+ * by this module, or the value itself if it is not one of
+ * our proxies. Safe to call with any value.
+ *
+ * @param {*} value
+ * @returns {*}
+ */
+export function unwrapProxy(value)
+{
+	if (!value || typeof value !== 'object')
+	{
+		return value;
+	}
+	const raw = _proxyTargets.get(value);
+	return raw !== undefined ? raw : value;
+}
+
+/**
  * Per-target cache for bound method references.
  * Every access to a method through the proxy (e.g. data.set) would
  * otherwise call value.bind(target) and allocate a new function object.
@@ -49,6 +80,7 @@ function getCachedProxy(target, data, path, dataRoot)
 	// Create new proxy and cache it
 	const proxy = new Proxy(target, createHandler(data, path, dataRoot));
 	targetCache.set(path, proxy);
+	_proxyTargets.set(proxy, target);
 
 	return proxy;
 }
@@ -190,4 +222,9 @@ function createHandler(data, path = '', dataRoot = '')
  * @returns {Proxy}
  */
 // @ts-ignore
-export const DataProxy = (data, root = 'stage') => new Proxy(data, createHandler(data, '', root));
+export const DataProxy = (data, root = 'stage') =>
+{
+	const proxy = new Proxy(data, createHandler(data, '', root));
+	_proxyTargets.set(proxy, data);
+	return proxy;
+};

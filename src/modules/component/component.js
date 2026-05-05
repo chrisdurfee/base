@@ -1,3 +1,4 @@
+import { Objects } from '../../shared/objects.js';
 import { StateTracker } from '../state/state-tracker.js';
 import { EventHelper } from './event-helper.js';
 import { StateHelper } from './state-helper.js';
@@ -166,24 +167,46 @@ export class Component extends Unit
 						|| freshData._retainState;
 
 					const updates = {};
+					const freshStage = freshData.stage;
 					for (const key in old)
 					{
-						if (Object.prototype.hasOwnProperty.call(old, key)
-							&& (retain
-								|| !Object.prototype.hasOwnProperty.call(freshData.stage, key)))
+						if (!Object.prototype.hasOwnProperty.call(old, key))
 						{
-							updates[key] = old[key];
+							continue;
 						}
+
+						if (!retain && Object.prototype.hasOwnProperty.call(freshStage, key))
+						{
+							continue;
+						}
+
+						const val = old[key];
+
+						/**
+						 * Reference-equality short-circuit: if the persisted
+						 * value is identical to what is already in the fresh
+						 * stage, skip it. Without this guard the deep publisher
+						 * walks the entire subtree on every resume, which can
+						 * dominate frame time for large nested data trees.
+						 */
+						if (val === freshStage[key])
+						{
+							continue;
+						}
+
+						updates[key] = val;
 					}
 
 					/**
-					 * Use the reactive set() API so merged values
-					 * overwrite stale constructor values that are
-					 * still pending in the batch publish queue.
+					 * Use the silent stage-write API: at resume time no
+					 * watchers are bound to this fresh data instance yet,
+					 * so triggering the deep publish cascade through set()
+					 * is wasted work. The new layout will read these values
+					 * via data.get() when its bindings attach.
 					 */
-					if (Object.keys(updates).length > 0)
+					if (!Objects.isEmpty(updates))
 					{
-						freshData.set(updates);
+						freshData._silentSet(updates);
 					}
 				}
 
@@ -242,6 +265,7 @@ export class Component extends Unit
 				|| this.data._refreshState;
 
 			const updates = {};
+			const currentStage = this.data.stage;
 			for (const key in old)
 			{
 				if (!Object.prototype.hasOwnProperty.call(old, key))
@@ -251,7 +275,7 @@ export class Component extends Unit
 
 				if (refresh)
 				{
-					if (!Object.prototype.hasOwnProperty.call(this.data.stage, key))
+					if (!Object.prototype.hasOwnProperty.call(currentStage, key))
 					{
 						updates[key] = old[key];
 					}
@@ -259,15 +283,37 @@ export class Component extends Unit
 				}
 
 				const val = old[key];
-				if (val != null)
+				if (val == null)
 				{
-					updates[key] = val;
+					continue;
 				}
+
+				/**
+				 * Reference-equality short-circuit: skip keys whose
+				 * value is already identical to what setData() just
+				 * produced. This avoids triggering Publisher.publish()
+				 * deep walks across unchanged subtrees on every resume
+				 * — the dominant cost when persisting components with
+				 * large nested data (e.g. list models).
+				 */
+				if (val === currentStage[key])
+				{
+					continue;
+				}
+
+				updates[key] = val;
 			}
 
-			if (Object.keys(updates).length > 0)
+			if (!Objects.isEmpty(updates))
 			{
-				this.data.set(updates);
+				/**
+				 * Silent direct write — see note in the _externalData
+				 * branch above. Avoids the Publisher.publish cascade
+				 * across nested subtrees during resume, which is the
+				 * single largest cost of route re-activation for
+				 * components with deep data trees.
+				 */
+				this.data._silentSet(updates);
 			}
 		}
 	}
@@ -311,7 +357,52 @@ export class Component extends Unit
 			return;
 		}
 
-		context.data.set(parentContext.data.stage);
+		/**
+		 * Diff against the current context stage and only push
+		 * keys whose value reference actually changed. Without
+		 * this guard every resume republishes the full parent
+		 * context tree, which cascades through Publisher.publish
+		 * across all nested keys.
+		 */
+		const parentStage = parentContext.data.stage;
+		const currentStage = context.data.stage;
+		let updates = null;
+		for (const key in parentStage)
+		{
+			if (!Object.prototype.hasOwnProperty.call(parentStage, key))
+			{
+				continue;
+			}
+
+			const val = parentStage[key];
+			if (val === currentStage[key])
+			{
+				continue;
+			}
+
+			if (updates === null)
+			{
+				updates = {};
+			}
+			updates[key] = val;
+		}
+
+		if (updates !== null)
+		{
+			/**
+			 * Silent write: context refresh during resume happens
+			 * before the new layout subscribes, so the deep publish
+			 * cascade has no listeners and is pure overhead.
+			 */
+			if (typeof context.data._silentSet === 'function')
+			{
+				context.data._silentSet(updates);
+			}
+			else
+			{
+				context.data.set(updates);
+			}
+		}
 	}
 
 	/**
@@ -420,7 +511,7 @@ export class Component extends Unit
 		/* this will only setupa state manager if
 		we have states */
 		const states = this.setupStates();
-		if (!states || Object.keys(states).length === 0)
+		if (Objects.isEmpty(states))
 		{
 			return;
 		}

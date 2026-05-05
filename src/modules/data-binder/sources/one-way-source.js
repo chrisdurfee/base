@@ -41,15 +41,56 @@ export class OneWaySource extends Source
 	}
 
 	/**
+	 * Subscribes to multiple messages on the same data source with a
+	 * shared callback. Used by `DataBinder.watchMany` to collapse
+	 * multi-property watchers (e.g. `'[[a]] - [[b]]'`) into a single
+	 * connection/source pair instead of N.
+	 *
+	 * @param {Array<string>} msgs
+	 * @param {function} callBack The shared callback. It receives
+	 *     `(value, committer, msg)` when invoked via the per-prop wrapper.
+	 * @returns {void}
+	 */
+	subscribeMany(msgs, callBack)
+	{
+		if (!this.data || typeof this.data.on !== 'function')
+		{
+			console.warn('OneWaySource: Cannot subscribeMany - data source is null or does not have an "on" method.', msgs, this.data);
+			return;
+		}
+
+		const len = msgs.length;
+		const subs = new Array(len);
+		for (let i = 0; i < len; i++)
+		{
+			const msg = msgs[i];
+			subs[i] = { msg, token: this.data.on(msg, callBack) };
+		}
+		this.subscriptions = subs;
+	}
+
+	/**
 	 * This will unsubscribe from the message.
 	 *
 	 * @returns {void}
 	 */
 	unsubscribe()
 	{
-		if (this.data && this.msg && this.token)
+		if (this.data)
 		{
-			this.data.off(this.msg, this.token);
+			const subs = this.subscriptions;
+			if (subs)
+			{
+				for (let i = 0, len = subs.length; i < len; i++)
+				{
+					this.data.off(subs[i].msg, subs[i].token);
+				}
+				this.subscriptions = null;
+			}
+			else if (this.msg && this.token)
+			{
+				this.data.off(this.msg, this.token);
+			}
 		}
 		this.data = null;
 		this.msg = null;

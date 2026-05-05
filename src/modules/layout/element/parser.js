@@ -160,10 +160,19 @@ export class Parser
 		let children = [];
 		let value, directive;
 
-		const keys = Object.keys(obj);
-		for (let i = 0, len = keys.length; i < len; i++)
+		/**
+		 * `for..in` over a plain layout object avoids the per-element
+		 * `Object.keys()` array allocation. The hasOwnProperty guard
+		 * keeps us safe against any inherited keys (Atoms can spread
+		 * props from objects with custom prototypes).
+		 */
+		for (const key in obj)
 		{
-			const key = keys[i];
+			if (!Object.prototype.hasOwnProperty.call(obj, key))
+			{
+				continue;
+			}
+
 			if (key === 'tag')
 			{
 				continue;

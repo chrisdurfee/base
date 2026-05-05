@@ -71,6 +71,33 @@ export class Data extends BasicData
 	}
 
 	/**
+	 * Bulk-write top-level keys directly into stage AND the
+	 * committed attributes mirror, without publishing.
+	 *
+	 * Override of {@link BasicData#_silentSet} so that DeepData's
+	 * dual-store invariant (stage + attributes) is preserved when
+	 * the persist/resume system seeds a fresh instance with
+	 * persisted values before any watchers exist.
+	 *
+	 * @override
+	 * @param {object} updates
+	 * @returns {void}
+	 */
+	_silentSet(updates)
+	{
+		const stage = this.stage;
+		const attributes = this.attributes;
+		const keys = Object.keys(updates);
+		for (let i = 0, len = keys.length; i < len; i++)
+		{
+			const key = keys[i];
+			const val = updates[key];
+			stage[key] = val;
+			attributes[key] = val;
+		}
+	}
+
+	/**
 	 * This will link a data attr object to another data object.
 	 *
 	 * @param {object} data

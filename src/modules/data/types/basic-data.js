@@ -381,6 +381,34 @@ export class BasicData
 	}
 
 	/**
+	 * Bulk-write top-level keys directly into stage WITHOUT
+	 * publishing to subscribers.
+	 *
+	 * Used by the persist/resume system: when a fresh component
+	 * instance is being seeded with persisted state, no watchers
+	 * have subscribed yet (the new layout has not been built),
+	 * so the deep `Publisher.publish` cascade fires into an empty
+	 * subscriber set. For large data trees that is the dominant
+	 * cost of resume.
+	 *
+	 * Subclasses (DeepData) may override to also keep their
+	 * committed-attribute mirror in sync.
+	 *
+	 * @param {object} updates
+	 * @returns {void}
+	 */
+	_silentSet(updates)
+	{
+		const stage = this.stage;
+		const keys = Object.keys(updates);
+		for (let i = 0, len = keys.length; i < len; i++)
+		{
+			const key = keys[i];
+			stage[key] = updates[key];
+		}
+	}
+
+	/**
 	 * This will get the model data.
 	 *
 	 * @protected

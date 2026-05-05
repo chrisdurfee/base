@@ -97,6 +97,54 @@ const getUpdateMethod = (ele, prop, callBack, parent) =>
 
 /**
  * This will setup a data watcher.
+/**
+ * Tracks elements we've already warned about so the dev
+ * console isn't spammed every time a watcher fires.
+ *
+ * @type {WeakSet<object>}
+ */
+const _rebuildWarnings = new WeakSet();
+
+/**
+ * Warn (once per element) when a watcher callback returns a
+ * Unit/Component instance. This is the destroy-and-rebuild
+ * pattern that scales O(tree size) per update and is the
+ * single most common cause of resume/republish lock-ups.
+ *
+ * Wrapping reactive markup in a Jot/Atom that swaps DOM is
+ * fine; instantiating a full Component on every change is
+ * almost never what the author intended.
+ *
+ * @param {object} result
+ * @param {string} prop
+ * @param {object} ele
+ * @returns {void}
+ */
+const warnIfRebuildingComponent = (result, prop, ele) =>
+{
+	if (!result || (!result.isUnit && !result.isComponent))
+	{
+		return;
+	}
+
+	if (_rebuildWarnings.has(ele))
+	{
+		return;
+	}
+	_rebuildWarnings.add(ele);
+
+	console.warn(
+		'[Watcher] Reactive callback for "' + prop + '" returned a Component/Unit instance. ' +
+		'The entire subtree will be destroyed and recreated on every change, which can ' +
+		'trigger expensive deep publishes during persistence/resume. Consider mounting ' +
+		'the component once and exposing a refresh()/update() method, or returning a ' +
+		'plain layout object instead.',
+		ele
+	);
+};
+
+/**
+ * This will setup a data watcher.
  *
  * @private
  * @param {object} ele
@@ -110,6 +158,7 @@ const updateElement = (ele, callBack, prop, value, parent) =>
 	switch (typeof result)
 	{
 		case 'object':
+			warnIfRebuildingComponent(result, prop, ele);
 			Builder.rebuild(result, ele, parent);
 			break;
 		case 'string':

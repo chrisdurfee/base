@@ -210,23 +210,22 @@ export class Unit
 	addPersistedChild(child)
 	{
 		const count = this.persistedCount++;
-		let token = ('pc' + count);
-
-		const keys = Object.keys(this.persistedChildren);
-		const key = keys[count];
+		/**
+		 * Tokens are assigned monotonically as `'pc' + count`, so the key
+		 * for slot `count` is computed directly. This avoids an O(N)
+		 * `Object.keys()` allocation per child (which made the original
+		 * implementation O(N^2) across a list).
+		 */
+		const token = 'pc' + count;
 
 		/**
 		 * Check to see if the child has a persisted state
 		 * and if so, resume the scope with the persisted state.
 		 */
-		const persistedChild = this.persistedChildren[key];
-		if (persistedChild)
+		const persistedChild = this.persistedChildren[token];
+		if (persistedChild && child.unitType === persistedChild.unitType)
 		{
-			if (child.unitType === persistedChild.unitType)
-			{
-				token = key;
-				child.resumeScope(persistedChild);
-			}
+			child.resumeScope(persistedChild);
 		}
 
 		child.persistToken = token;

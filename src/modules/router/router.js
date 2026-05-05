@@ -46,6 +46,22 @@ export class Router
 		this.lastMatchedRoute = null;
 
 		/**
+		 * Tracks the most recently applied scrollTo selector so we can
+		 * detect when navigation moves to a different scroll target
+		 * (a fresh page) versus staying within the same target group
+		 * (e.g. switching sibling tabs that share a sticky header).
+		 * @type {string|null}
+		 */
+		this.lastScrollTarget = null;
+
+		/**
+		 * Monotonic token used to cancel pending scroll-target waits
+		 * when a newer navigation begins.
+		 * @type {number}
+		 */
+		this.scrollWaitToken = 0;
+
+		/**
 		 * This will be used to access our history object.
 		 */
 		this.history = null;
@@ -569,6 +585,12 @@ export class Router
 		 */
 		this.scrollIntent = null;
 
+		/**
+		 * Invalidate any pending scroll-target wait from a previous
+		 * navigation so it doesn't fire after the new route mounts.
+		 */
+		this.scrollWaitToken++;
+
 		// Quick check: does last matched route still match?
 		if (this.lastMatchedRoute && this.check(this.lastMatchedRoute, path))
 		{
@@ -798,36 +820,35 @@ export class Router
 			return;
 		}
 
-		const apply = () =>
+		if (intent.type === 'top')
 		{
-			if (intent.type === 'target')
-			{
-				this.scrollToTarget(intent.selector);
-			}
-			else if (intent.type === 'top')
-			{
-				this.checkToScroll();
-			}
-		};
+			this.lastScrollTarget = null;
+			this.checkToScroll();
+			return;
+		}
+
+		if (intent.type !== 'target')
+		{
+			return;
+		}
 
 		/**
-		 * Defer to the next animation frame so route components
-		 * (including lazy-loaded switch routes) have a chance to
-		 * mount and the layout has settled before we measure the
-		 * target element's natural position. Measuring synchronously
-		 * during a route swap can return a stale element from the
-		 * outgoing route or an unsettled position, causing the
-		 * scroll-to gate to misfire and leaving the page at the
-		 * previous page's scroll offset.
+		 * If the scroll target selector is different from the last
+		 * applied one, the user is moving to a different "page" rather
+		 * than switching sibling routes that share a sticky header.
+		 * Reset to the top immediately so the new page doesn't inherit
+		 * the previous page's scroll offset, then snap to the sticky
+		 * position once the new content has actually mounted (which
+		 * may be async for lazy-imported routes).
 		 */
-		if (typeof requestAnimationFrame !== 'undefined')
+		const isFreshTarget = (this.lastScrollTarget !== intent.selector);
+		if (isFreshTarget)
 		{
-			requestAnimationFrame(apply);
+			this.checkToScroll();
 		}
-		else
-		{
-			apply();
-		}
+
+		this.lastScrollTarget = intent.selector;
+		this.scrollToTarget(intent.selector);
 	}
 
 	/**
@@ -846,50 +867,89 @@ export class Router
 			return;
 		}
 
-		const element = document.querySelector(selector);
-		if (!element)
+		const measureAndScroll = (element) =>
+		{
+			const style = window.getComputedStyle(element);
+			const isSticky = style.position === 'sticky';
+
+			let naturalTop;
+			if (isSticky)
+			{
+				/**
+				 * Temporarily remove sticky positioning to read the
+				 * element's true natural position in the document flow.
+				 * The browser won't repaint between the change and restore.
+				 */
+				const inlinePosition = /** @type {HTMLElement} */ (element).style.position;
+				/** @type {HTMLElement} */ (element).style.position = 'static';
+				const rect = element.getBoundingClientRect();
+				naturalTop = rect.top + window.scrollY;
+				/** @type {HTMLElement} */ (element).style.position = inlinePosition;
+			}
+			else
+			{
+				const rect = element.getBoundingClientRect();
+				naturalTop = rect.top + window.scrollY;
+			}
+
+			/**
+			 * For sticky elements, account for the CSS top offset so the
+			 * element sits at its stuck position after scrolling.
+			 */
+			const cssTop = isSticky ? (parseFloat(style.top) || 0) : 0;
+			const targetScroll = naturalTop - cssTop;
+
+			/**
+			 * Only scroll if the current position is below the target.
+			 * This keeps the cover header visible when the user is above the tabs.
+			 */
+			if (window.scrollY > targetScroll)
+			{
+				window.scrollTo(0, targetScroll);
+			}
+		};
+
+		/**
+		 * Lazy-imported routes mount their DOM asynchronously, so the
+		 * sticky target may not exist yet when we first try to find it.
+		 * Poll on animation frames for a short window before giving up.
+		 */
+		const existing = document.querySelector(selector);
+		if (existing)
+		{
+			measureAndScroll(existing);
+			return;
+		}
+
+		if (typeof requestAnimationFrame === 'undefined')
 		{
 			return;
 		}
 
-		const style = window.getComputedStyle(element);
-		const isSticky = style.position === 'sticky';
-
-		let naturalTop;
-		if (isSticky)
+		const token = ++this.scrollWaitToken;
+		const maxFrames = 30;
+		let frames = 0;
+		const tryFind = () =>
 		{
-			/**
-			 * Temporarily remove sticky positioning to read the
-			 * element's true natural position in the document flow.
-			 * The browser won't repaint between the change and restore.
-			 */
-			const inlinePosition = /** @type {HTMLElement} */ (element).style.position;
-			/** @type {HTMLElement} */ (element).style.position = 'static';
-			const rect = element.getBoundingClientRect();
-			naturalTop = rect.top + window.scrollY;
-			/** @type {HTMLElement} */ (element).style.position = inlinePosition;
-		}
-		else
-		{
-			const rect = element.getBoundingClientRect();
-			naturalTop = rect.top + window.scrollY;
-		}
+			// A newer scroll intent has superseded this one; abort.
+			if (token !== this.scrollWaitToken)
+			{
+				return;
+			}
 
-		/**
-		 * For sticky elements, account for the CSS top offset so the
-		 * element sits at its stuck position after scrolling.
-		 */
-		const cssTop = isSticky ? (parseFloat(style.top) || 0) : 0;
-		const targetScroll = naturalTop - cssTop;
+			const el = document.querySelector(selector);
+			if (el)
+			{
+				measureAndScroll(el);
+				return;
+			}
 
-		/**
-		 * Only scroll if the current position is below the target.
-		 * This keeps the cover header visible when the user is above the tabs.
-		 */
-		if (window.scrollY > targetScroll)
-		{
-			window.scrollTo(0, targetScroll);
-		}
+			if (++frames < maxFrames)
+			{
+				requestAnimationFrame(tryFind);
+			}
+		};
+		requestAnimationFrame(tryFind);
 	}
 
 	/**

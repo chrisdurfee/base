@@ -293,6 +293,108 @@ export class DataBinder
 	}
 
 	/**
+	 * Sets up a one-way watcher across multiple properties on the same
+	 * data source, sharing a single connection, source, and outer
+	 * callback. Used by `WatcherHelper.addDataWatcher` to avoid
+	 * allocating one `OneWayConnection` + `OneWaySource` per property
+	 * for multi-token watchers like `'[[a]] - [[b]]'`.
+	 *
+	 * The shared `callBack` is invoked once during setup (matches the
+	 * per-prop `watch()` behaviour for the first prop) and then on each
+	 * subsequent change to any watched prop. Per-prop guards skip the
+	 * first batched event when its value matches the value read at
+	 * setup time, mirroring the double-fire guard in `watch()`.
+	 *
+	 * @param {object} element
+	 * @param {object} data
+	 * @param {Array<string>} props
+	 * @param {function} callBack
+	 * @returns {this}
+	 */
+	watchMany(element, data, props, callBack)
+	{
+		if (Types.isObject(element) === false)
+		{
+			return this;
+		}
+
+		const len = props ? props.length : 0;
+		if (len === 0)
+		{
+			return this;
+		}
+
+		/* Single-prop fast path delegates to watch() so the existing
+		 * guarded-callback semantics are preserved exactly. */
+		if (len === 1)
+		{
+			return this.watch(element, data, props[0], callBack);
+		}
+
+		const connection = new OneWayConnection();
+		const source = connection.addSource(data);
+
+		/* Capture initial values so we can skip the first batched
+		 * event per prop when it matches (avoids the double-fire that
+		 * watch() guards against). */
+		const initials = new Array(len);
+		const skip = new Array(len);
+		for (let i = 0; i < len; i++)
+		{
+			initials[i] = data.get(props[i]);
+			skip[i] = true;
+		}
+
+		/* Build per-prop guard wrappers that share the outer callBack.
+		 * Closures are tiny; the savings come from one Connection,
+		 * one Source, and one connection-tracker entry instead of N. */
+		const wrappers = new Array(len);
+		for (let i = 0; i < len; i++)
+		{
+			const idx = i;
+			const initial = initials[i];
+			wrappers[i] = (newValue) =>
+			{
+				if (skip[idx])
+				{
+					skip[idx] = false;
+					if (newValue === initial)
+					{
+						return;
+					}
+				}
+				callBack(newValue);
+			};
+		}
+
+		/* Subscribe each msg with its own wrapper, but stored under a
+		 * single source so unsubscribe tears them all down together. */
+		if (typeof data.on !== 'function')
+		{
+			console.warn('DataBinder.watchMany: data source has no "on" method.', data);
+			return this;
+		}
+
+		const subs = new Array(len);
+		for (let i = 0; i < len; i++)
+		{
+			subs[i] = { msg: props[i], token: data.on(props[i], wrappers[i]) };
+		}
+		source.subscriptions = subs;
+
+		const id = this.getBindId(element);
+		const attr = data.getDataId() + ':' + props.join(',');
+		this.addConnection(id, attr, connection);
+
+		/* Fire once with the first prop value. The WatcherHelper
+		 * multi-prop callBack re-reads all values via getPropValues,
+		 * so a single invocation produces the same DOM as the prior
+		 * N-invocation behaviour from chained watch() calls. */
+		callBack(initials[0]);
+		return this;
+	}
+
+	/**
 	 * This will remove a watcher from an element.
 	 *
 	 * @param {object} element

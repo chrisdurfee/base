@@ -308,9 +308,17 @@ export const WatcherHelper =
 		 */
 		if (!isDataArray)
 		{
-			for (let i = 0, length = props.length; i < length; i++)
+			/* Multi-prop watchers (e.g. '[[a]] - [[b]]') collapse into
+			 * a single OneWayConnection/OneWaySource via watchMany.
+			 * Single-prop case still uses watch() for identical
+			 * guard semantics. */
+			if (props.length > 1)
 			{
-				this.addWatcher(ele, data, props[i], callBack);
+				dataBinder.watchMany(ele, data, props, callBack);
+			}
+			else
+			{
+				this.addWatcher(ele, data, props[0], callBack);
 			}
 		}
 		else
