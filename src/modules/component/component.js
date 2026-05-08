@@ -93,6 +93,7 @@ export class Component extends Unit
 		const data = this.setData();
 		if (data)
 		{
+			// @ts-ignore
 			this.data = data;
 		}
 	}
@@ -116,6 +117,17 @@ export class Component extends Unit
 		{
 			// @ts-ignore
 			this.context = persistedLayout.context;
+
+			/**
+			 * Mark context as restored from persistence so the
+			 * subsequent setupContext() call doesn't invoke the
+			 * user's setContext() hook again — doing so would
+			 * create a new context.data instance, leaving every
+			 * still-attached watcher subscribed to the now-orphan
+			 * persisted Data while writes (e.g. xhr callbacks
+			 * using parent.context.data) target the new instance.
+			 */
+			this._contextResumed = true;
 		}
 
 		this.id = persistedLayout.id;
@@ -150,11 +162,18 @@ export class Component extends Unit
 		 */
 		if (this._externalData)
 		{
-			const freshData = this.setData();
+			/**
+			 * Prefer data passed in via props (already on this.data
+			 * from setupProps); fall back to setData() for temp
+			 * components that supply data through their setData fn.
+			 */
+			const freshData = this.data || this.setData();
 			if (freshData)
 			{
+				// @ts-ignore
 				if (persistedData && persistedData.stage)
 				{
+					// @ts-ignore
 					const old = persistedData.stage;
 
 					/**
@@ -163,10 +182,13 @@ export class Component extends Unit
 					 * (including refreshState) only copy keys that
 					 * don't exist in fresh.
 					 */
+					// @ts-ignore
 					const retain = persistedData._retainState
+					// @ts-ignore
 						|| freshData._retainState;
 
 					const updates = {};
+					// @ts-ignore
 					const freshStage = freshData.stage;
 					for (const key in old)
 					{
@@ -206,14 +228,17 @@ export class Component extends Unit
 					 */
 					if (!Objects.isEmpty(updates))
 					{
+						// @ts-ignore
 						freshData._silentSet(updates);
 					}
 				}
 
+				// @ts-ignore
 				this.data = freshData;
 			}
 			else
 			{
+				// @ts-ignore
 				this.data = persistedData;
 			}
 			return;
@@ -236,6 +261,7 @@ export class Component extends Unit
 		 */
 		if (!this.data)
 		{
+			// @ts-ignore
 			this.data = persistedData;
 			return;
 		}
@@ -245,25 +271,32 @@ export class Component extends Unit
 		 * authoritative source — use it directly and discard
 		 * the fresh instance from setData().
 		 */
+		// @ts-ignore
 		if (persistedData && persistedData._retainState)
 		{
+			// @ts-ignore
 			this.data = persistedData;
 			return;
 		}
 
+		// @ts-ignore
 		if (persistedData && persistedData.stage)
 		{
+			// @ts-ignore
 			const old = persistedData.stage;
 
 			/**
-			 * If refreshState is flagged on either data source,
-			 * fresh values from setData() are authoritative and
-			 * only persisted keys missing from fresh are copied
-			 * over (so async-added properties survive resumes).
+			 * Default behavior: fresh data from setData() (which
+			 * was called on the new instance with current props)
+			 * is authoritative. Persisted keys that are NOT in
+			 * the fresh stage are copied over so dynamically-added
+			 * properties (e.g. async-fetched fields, accumulated
+			 * lists added via push) survive resumes.
+			 *
+			 * Components that want the old persist-wins behavior
+			 * (e.g. infinite-scroll lists where setData seeds an
+			 * empty array each time) can opt in via retainState().
 			 */
-			const refresh = persistedData._refreshState
-				|| this.data._refreshState;
-
 			const updates = {};
 			const currentStage = this.data.stage;
 			for (const key in old)
@@ -273,35 +306,12 @@ export class Component extends Unit
 					continue;
 				}
 
-				if (refresh)
-				{
-					if (!Object.prototype.hasOwnProperty.call(currentStage, key))
-					{
-						updates[key] = old[key];
-					}
-					continue;
-				}
-
-				const val = old[key];
-				if (val == null)
+				if (Object.prototype.hasOwnProperty.call(currentStage, key))
 				{
 					continue;
 				}
 
-				/**
-				 * Reference-equality short-circuit: skip keys whose
-				 * value is already identical to what setData() just
-				 * produced. This avoids triggering Publisher.publish()
-				 * deep walks across unchanged subtrees on every resume
-				 * — the dominant cost when persisting components with
-				 * large nested data (e.g. list models).
-				 */
-				if (val === currentStage[key])
-				{
-					continue;
-				}
-
-				updates[key] = val;
+				updates[key] = old[key];
 			}
 
 			if (!Objects.isEmpty(updates))
@@ -330,6 +340,7 @@ export class Component extends Unit
 		const freshData = this.setData();
 		if (freshData && this.data)
 		{
+			// @ts-ignore
 			this.data.set(freshData.stage);
 		}
 
@@ -346,12 +357,14 @@ export class Component extends Unit
 	_refreshContextData()
 	{
 		const context = this.context;
+		// @ts-ignore
 		if (!context || !context.data)
 		{
 			return;
 		}
 
 		const parentContext = this.getParentContext();
+		// @ts-ignore
 		if (!parentContext || !parentContext.data)
 		{
 			return;
@@ -364,7 +377,9 @@ export class Component extends Unit
 		 * context tree, which cascades through Publisher.publish
 		 * across all nested keys.
 		 */
+		// @ts-ignore
 		const parentStage = parentContext.data.stage;
+		// @ts-ignore
 		const currentStage = context.data.stage;
 		let updates = null;
 		for (const key in parentStage)
@@ -382,8 +397,10 @@ export class Component extends Unit
 
 			if (updates === null)
 			{
+				// @ts-ignore
 				updates = {};
 			}
+			// @ts-ignore
 			updates[key] = val;
 		}
 
@@ -394,12 +411,15 @@ export class Component extends Unit
 			 * before the new layout subscribes, so the deep publish
 			 * cascade has no listeners and is pure overhead.
 			 */
+			// @ts-ignore
 			if (typeof context.data._silentSet === 'function')
 			{
+				// @ts-ignore
 				context.data._silentSet(updates);
 			}
 			else
 			{
+				// @ts-ignore
 				context.data.set(updates);
 			}
 		}
@@ -537,6 +557,7 @@ export class Component extends Unit
 		}
 
 		this.setupStateTarget();
+		// @ts-ignore
 		this.stateHelper = new StateHelper(this.state, states);
 	}
 

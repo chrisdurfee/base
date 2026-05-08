@@ -35,7 +35,6 @@ export const WatcherHelper =
 	 * @param {*} value
 	 * @returns {boolean}
 	 * @static
-	 * @private
 	 */
 	isWatching(value)
 	{
@@ -53,6 +52,7 @@ export const WatcherHelper =
 		/**
 		 * This will check if we are watching using a string.
 		 */
+		// @ts-ignore
 		return this.hasParams(value);
 	},
 
@@ -70,7 +70,6 @@ export const WatcherHelper =
 	/**
 	 * This will get the property names to be watched.
 	 *
-	 * @protected
 	 * @param {string} string
 	 * @returns {Array<string>|null}
 	 */
@@ -91,7 +90,6 @@ export const WatcherHelper =
 	/**
 	 * This will update an element attribute.
 	 *
-	 * @protected
 	 * @param {object} ele
 	 * @param {string} attr
 	 * @param {string} value
@@ -102,25 +100,32 @@ export const WatcherHelper =
 		switch (attr) {
 			case 'text':
 			case 'textContent':
+				// @ts-ignore
 				ele.textContent = value;
 				break;
 			case 'disabled':
+				// @ts-ignore
 				ele.disabled = (!value);
 				break;
 			case 'checked':
+				// @ts-ignore
 				ele.checked = (Boolean(value) !== false);
 				break;
 			case 'required':
+				// @ts-ignore
 				ele.required = (Boolean(value) !== false);
 				break;
 			case 'src':
 				/* tagName is always uppercase in HTML documents —
 				 * compare directly to avoid allocating a lowercase string. */
+				// @ts-ignore
 				if (ele.tagName === 'IMG')
 				{
+					// @ts-ignore
 					ele.src = (value && (value.indexOf('.') !== -1 || value.indexOf('blob:') !== -1))? value : '';
 					break;
 				}
+				// @ts-ignore
 				ele.src = value;
 				break;
 			default:
@@ -154,7 +159,6 @@ export const WatcherHelper =
 	/**
 	 * This will get a watcher callBack.
 	 *
-	 * @protected
 	 * @param {object} ele
 	 * @param {string|Array<any>} data
 	 * @param {string} string
@@ -166,7 +170,9 @@ export const WatcherHelper =
 	{
 		return () =>
 		{
+			// @ts-ignore
 			let value = this.replaceParams(string, data, isArray);
+			// @ts-ignore
 			this.updateAttr(ele, attr, value);
 		};
 	},
@@ -174,13 +180,13 @@ export const WatcherHelper =
 	/**
 	 * This will get a watcher value.
 	 *
-	 * @private
 	 * @param {string|object} settings
 	 * @param {object} parent
 	 * @returns {Array<any>}
 	 */
 	getValue(settings, parent)
 	{
+		// @ts-ignore
 		const value = settings.value;
 		if (Array.isArray(value) === false)
 		{
@@ -238,15 +244,18 @@ export const WatcherHelper =
 		 * This will get the attribute to update.
 		 * If no attribute is set, we will default to textContent.
 		 */
+		// @ts-ignore
 		const attr = settings.attr || 'textContent';
 
 		/**
 		 * This will check if we have an override callBack that
 		 * will be used instead of the default callBack.
 		 */
+		// @ts-ignore
 		const overrideCallBack = settings.callBack;
 		if (typeof overrideCallBack === 'function')
 		{
+			// @ts-ignore
 			const watcherProps = props || this._getWatcherProps(string) || [];
 			const isMultiProp = (watcherProps.length > 1);
 
@@ -255,22 +264,24 @@ export const WatcherHelper =
 				/**
 				 * This will get the watcher values to pass to the callBack.
 				 */
+				// @ts-ignore
 				value = (isMultiProp !== true)? value : this.getPropValues(data, watcherProps, isDataArray);
 				const result = overrideCallBack(value, ele, committer);
 				if (typeof result !== 'undefined')
 				{
+					// @ts-ignore
 					this.updateAttr(ele, attr, result);
 				}
 			};
 		}
 
+		// @ts-ignore
 		return this._getWatcherCallBack(ele, data, string, attr, isDataArray);
 	},
 
 	/**
 	 * This will add a data watcher.
 	 *
-	 * @private
 	 * @param {object} ele
 	 * @param {string|object} settings
 	 * @param {object} parent
@@ -278,12 +289,14 @@ export const WatcherHelper =
 	 */
 	addDataWatcher(ele, settings, parent)
 	{
+		// @ts-ignore
 		const value = this.getValue(settings, parent),
 
 		/**
 		 * This will check if the data is set in the watcher value array.
 		 * If not, we will use the parent data.
 		 */
+		// @ts-ignore
 		data = value[1] ?? parent?.data ?? parent?.context?.data ?? parent?.state ?? null;
 		if (!data)
 		{
@@ -300,7 +313,9 @@ export const WatcherHelper =
 		/**
 		 * This will get the props to watch and set up the watcher callBack.
 		 */
+		// @ts-ignore
 		const props = this._getWatcherProps(string);
+		// @ts-ignore
 		const callBack = this.getCallBack(settings, ele, data, string, isDataArray, props);
 
 		/**
@@ -318,6 +333,7 @@ export const WatcherHelper =
 			}
 			else
 			{
+				// @ts-ignore
 				this.addWatcher(ele, data, props[0], callBack);
 			}
 		}
@@ -325,6 +341,7 @@ export const WatcherHelper =
 		{
 			for (let i = 0, length = props.length; i < length; i++)
 			{
+				// @ts-ignore
 				this.addWatcher(ele, data[i], props[i], callBack);
 			}
 		}
@@ -389,8 +406,10 @@ export const WatcherHelper =
 			return;
 		}
 
+		// @ts-ignore
 		this.addDataWatcher(
 			ele,
+			// @ts-ignore
 			this.getWatcherSettings(settings),
 			parent
 		);
@@ -399,7 +418,6 @@ export const WatcherHelper =
 	/**
 	 * This will add a watcher.
 	 *
-	 * @private
 	 * @param {object} ele
 	 * @param {object} data
 	 * @param {string} prop

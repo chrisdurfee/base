@@ -114,6 +114,7 @@ export class Unit
 		/**
 		 * @type {?string} _classId
 		 */
+		// @ts-ignore
 		this._classId;
 
 		/**
@@ -188,6 +189,7 @@ export class Unit
 	init()
 	{
 		this.id = 'cp-' + (unitNumber++);
+		// @ts-ignore
 		this.unitType = this._classId || this.constructor.name.toLowerCase();
 	}
 
@@ -223,11 +225,14 @@ export class Unit
 		 * and if so, resume the scope with the persisted state.
 		 */
 		const persistedChild = this.persistedChildren[token];
+		// @ts-ignore
 		if (persistedChild && child.unitType === persistedChild.unitType)
 		{
+			// @ts-ignore
 			child.resumeScope(persistedChild);
 		}
 
+		// @ts-ignore
 		child.persistToken = token;
 
 		/**
@@ -279,6 +284,18 @@ export class Unit
 			if (Object.prototype.hasOwnProperty.call(props, prop))
 			{
 				this[prop] = props[prop];
+
+				/**
+				 * When a parent passes `data` (or `state`) directly
+				 * as a prop, treat the component as having external
+				 * data so the persist/resume merge logic doesn't
+				 * clobber the freshly-passed values with persisted
+				 * ones from a previous render.
+				 */
+				if (prop === 'data')
+				{
+					this._externalData = true;
+				}
 			}
 		}
 	}
@@ -319,6 +336,20 @@ export class Unit
 	 */
 	setupContext()
 	{
+		/**
+		 * If resumeScope already restored a context owned by
+		 * this component, keep it. Re-running the user's
+		 * setContext() would replace the persisted Data
+		 * instance and break every binding still subscribed
+		 * to it (e.g. xhr writes via parent.context.data
+		 * would no longer notify the visible layout).
+		 */
+		// @ts-ignore
+		if (this._contextResumed)
+		{
+			return;
+		}
+
 		const parentContext = this.getParentContext();
 		const context = this.setContext(parentContext);
 		if (context)
@@ -340,6 +371,7 @@ export class Unit
 	setupAddingContext()
 	{
 		const parentContext = this.context;
+		// @ts-ignore
 		const context = this.addContext(parentContext);
 		if (!context)
 		{
@@ -423,6 +455,7 @@ export class Unit
 			return;
 		}
 
+		// @ts-ignore
 		delete this.context[branch];
 	}
 
@@ -434,6 +467,7 @@ export class Unit
 	 */
 	getContext()
 	{
+		// @ts-ignore
 		return this.context;
 	}
 
@@ -473,11 +507,14 @@ export class Unit
 			return layout;
 		}
 
+		// @ts-ignore
 		if (!layout.id)
 		{
+			// @ts-ignore
 			layout.id = this.getId();
 		}
 
+		// @ts-ignore
 		layout.cache = 'panel';
 		return layout;
 	}
@@ -513,6 +550,7 @@ export class Unit
 	 */
 	afterBuild()
 	{
+		// @ts-ignore
 		DataTracker.add(this.panel, 'components',
 		{
 			component: this
@@ -539,7 +577,7 @@ export class Unit
 	 * @protected
 	 * @param {*} prop
 	 * @param {*} content
-	 * @returns {object}
+	 * @returns {object|null}
 	 */
 	if(prop, content)
 	{

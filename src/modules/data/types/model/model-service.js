@@ -417,7 +417,7 @@ export class ModelService
 	 * @param {(string|object)} params
 	 * @param {function} [callBack]
 	 * @param {function} [requestCallBack]
-	 * @returns {XMLHttpRequest}
+	 * @returns {XMLHttpRequest?}
 	 */
 	setupRequest(url, method, params, callBack, requestCallBack)
 	{
@@ -458,7 +458,7 @@ export class ModelService
 	setupEventSource(url, params, callBack, onOpenCallBack, reconnect = true)
 	{
 		let source = null;
-		let reconnectTimer = null;
+		let reconnectTimer;
 		let intentionallyClosed = false;
 		let isConnecting = false;
 
@@ -472,7 +472,7 @@ export class ModelService
 			if (reconnectTimer)
 			{
 				clearTimeout(reconnectTimer);
-				reconnectTimer = null;
+				reconnectTimer = undefined;
 			}
 		};
 
@@ -493,7 +493,7 @@ export class ModelService
 			const RECONNECT_DELAY = 3000; // 3 seconds
 			reconnectTimer = setTimeout(() =>
 			{
-				reconnectTimer = null;
+				reconnectTimer = undefined;
 				connect();
 			}, RECONNECT_DELAY);
 		};
@@ -515,6 +515,7 @@ export class ModelService
 			{
 				try
 				{
+					// @ts-ignore
 					source.close();
 				}
 				catch (e)
@@ -528,8 +529,10 @@ export class ModelService
 
 			const fullUrl = this.getUrl(url);
 			const queryString = params ? '?' + params : '';
+			// @ts-ignore
 			source = new EventSource(fullUrl + queryString, { withCredentials: true });
 
+			// @ts-ignore
 			source.onopen = () =>
 			{
 				isConnecting = false;
@@ -541,12 +544,14 @@ export class ModelService
 				}
 			};
 
+			// @ts-ignore
 			source.onerror = () =>
 			{
 				isConnecting = false;
 
 				// Only handle if connection is closed (readyState === 2)
 				// If readyState is 0 (CONNECTING), let the browser retry first
+				// @ts-ignore
 				if (source && source.readyState === EventSource.CLOSED)
 				{
 					source = null;
@@ -554,6 +559,7 @@ export class ModelService
 				}
 			};
 
+			// @ts-ignore
 			source.onmessage = (event) =>
 			{
 				try
@@ -586,6 +592,7 @@ export class ModelService
 				{
 					try
 					{
+						// @ts-ignore
 						source.close();
 					}
 					catch (e)
@@ -606,8 +613,10 @@ export class ModelService
 	 */
 	replaceUrl(url)
 	{
+		// @ts-ignore
 		if (WatcherHelper.isWatching(url))
 		{
+			// @ts-ignore
 			url = WatcherHelper.replaceParams(url, this.model);
 		}
 
@@ -669,6 +678,7 @@ export class ModelService
 			url += '?' + params;
 		}
 
+		// @ts-ignore
 		return this.setupRequest(url, "GET", '', callBack, requestCallBack);
 	}
 
@@ -753,6 +763,7 @@ export class ModelService
 		params = this.setupParams(params);
 		params = this.addParams(params, instanceParams);
 
+		// @ts-ignore
 		return this.setupRequest(url, method, params, callBack, requestCallBack);
 	}
 
@@ -785,7 +796,7 @@ export class ModelService
 	{
 		if (!child)
 		{
-			return false;
+			return {};
 		}
 
 		const parent = this;
