@@ -256,7 +256,6 @@ export class BasicData
 	 */
 	on(attrName, callBack)
 	{
-		// @ts-ignore
 		const message = createEventMessage(attrName, EVENT.CHANGE);
 		const token = this.eventSub.on(message, callBack);
 		return token;
@@ -271,7 +270,6 @@ export class BasicData
 	 */
 	off(attrName, token)
 	{
-		// @ts-ignore
 		const message = createEventMessage(attrName, EVENT.CHANGE);
 		this.eventSub.off(message, token);
 	}
@@ -298,7 +296,6 @@ export class BasicData
 
 		/* this will publish the data to the data binder
 		to update any ui elements that are subscribed */
-		// @ts-ignore
 		this._publish(attr, val, committer, EVENT.CHANGE);
 	}
 
@@ -318,7 +315,6 @@ export class BasicData
 		 * This will publish the event to the event sub.
 		 */
 		const message = createEventMessage(attr, event);
-		// @ts-ignore
 		this.eventSub.publish(message, val, committer);
 	}
 
@@ -440,7 +436,6 @@ export class BasicData
 		 * This will pulish the delete event to the event sub only. This will
 		 * not publish the delete event to the data binder.
 		 */
-		// @ts-ignore
 		this.publishLocalEvent(attr, null, committer, EVENT.DELETE);
 	}
 
@@ -640,10 +635,8 @@ export class BasicData
 	link(data, attr, alias)
 	{
 		// this will get the data source attrs if sending a whole data object
-		// @ts-ignore
 		if (arguments.length === 1 && data.isData === true)
 		{
-			// @ts-ignore
 			attr = data.get();
 		}
 
@@ -672,14 +665,12 @@ export class BasicData
 	remoteLink(data, attr, alias)
 	{
 		const childAttr = alias || attr;
-		// @ts-ignore
 		const value = data.get(attr);
 		if (typeof value !== 'undefined' && this.get(attr) !== value)
 		{
 			this.set(attr, value);
 		}
 
-		// @ts-ignore
 		const token = data.on(attr, (propValue, committer) =>
 		{
 			if(committer === this)
@@ -699,11 +690,9 @@ export class BasicData
 				return false;
 			}
 
-			// @ts-ignore
 			data.set(attr, propValue, this);
 		});
 
-		// @ts-ignore
 		data.addLink(remoteToken, this);
 		return token;
 	}
@@ -717,7 +706,6 @@ export class BasicData
 	 */
 	addLink(token, data)
 	{
-		// @ts-ignore
 		this.links.set(token, data);
 	}
 
@@ -741,7 +729,6 @@ export class BasicData
 			return;
 		}
 
-		// @ts-ignore
 		links.forEach((data, token) =>
 		{
 			this.removeLink(token, false);
@@ -758,7 +745,6 @@ export class BasicData
 	 */
 	removeLink(token, removeFromLinks = true)
 	{
-		// @ts-ignore
 		const data = this.links.get(token);
 		if (data)
 		{
@@ -770,7 +756,6 @@ export class BasicData
 			return;
 		}
 
-		// @ts-ignore
 		this.links.delete(token);
 	}
 }
