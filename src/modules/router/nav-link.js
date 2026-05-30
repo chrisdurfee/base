@@ -30,7 +30,7 @@ const iSActive = (path, url) =>
 	}
 
 	const nextChar = url[path.length];
-	return (nextChar === undefined || nextChar === '/' || nextChar === '#' || nextChar === '.');
+	return (nextChar === undefined || nextChar === '/' || nextChar === '#' || nextChar === '.' || nextChar === '?');
 };
 
 /**
@@ -153,8 +153,8 @@ export class NavLink extends Component
                     return;
                 }
 
-                const path = ele.pathname + ele.hash;
-				const matchPath = ele.hash ? path : ele.pathname;
+                const path = ele.pathname + ele.search + ele.hash;
+				const matchPath = (ele.hash || ele.search) ? path : ele.pathname;
 				const selected = exact? (value === path) : (iSActive(matchPath, value));
                 this.update(selected);
             }

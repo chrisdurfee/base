@@ -1,8 +1,11 @@
 import { Objects } from '../../shared/objects.js';
 import { StateTracker } from '../state/state-tracker.js';
+import { DataResumeHelper } from './data-resume-helper.js';
 import { EventHelper } from './event-helper.js';
 import { StateHelper } from './state-helper.js';
 import { Unit } from './unit.js';
+
+/** @typedef {import('../data/data.js').Data} Data */
 
 /**
  * Component
@@ -70,7 +73,7 @@ export class Component extends Unit
 	/**
 	 * This will set the data.
 	 *
-	 * @returns {object|null}
+	 * @returns {Data|null}
 	 */
 	setData()
 	{
@@ -93,7 +96,6 @@ export class Component extends Unit
 		const data = this.setData();
 		if (data)
 		{
-			// @ts-ignore
 			this.data = data;
 		}
 	}
@@ -117,17 +119,6 @@ export class Component extends Unit
 		{
 			// @ts-ignore
 			this.context = persistedLayout.context;
-
-			/**
-			 * Mark context as restored from persistence so the
-			 * subsequent setupContext() call doesn't invoke the
-			 * user's setContext() hook again — doing so would
-			 * create a new context.data instance, leaving every
-			 * still-attached watcher subscribed to the now-orphan
-			 * persisted Data while writes (e.g. xhr callbacks
-			 * using parent.context.data) target the new instance.
-			 */
-			this._contextResumed = true;
 		}
 
 		this.id = persistedLayout.id;
@@ -137,195 +128,17 @@ export class Component extends Unit
 	/**
 	 * This will resume the data during persistence.
 	 *
-	 * For components with externally-provided data (temp components
-	 * created by { data: localVar } in layouts), we use the fresh
-	 * data instance from setData() so closure references stay valid.
-	 *
-	 * For regular components, the persisted data is the source of
-	 * truth — it holds accumulated state (list items, filters, etc.)
-	 * that should be preserved until the component fetches updates.
+	 * Delegates to DataResumeHelper which owns the fresh-vs-persisted
+	 * reconciliation, retain/refresh-state policy, silent stage writes,
+	 * and stale-publish queue draining.
 	 *
 	 * @protected
-	 * @param {object|null} persistedData
+	 * @param {Data|null} persistedData
 	 * @returns {void}
 	 */
 	_resumeData(persistedData)
 	{
-		/**
-		 * Temp components created by { data: localVar } in layouts
-		 * must use the fresh data instance so that closures in the
-		 * parent atom still reference the correct Data object.
-		 *
-		 * Persisted keys that don't exist in the fresh data are
-		 * copied over so that dynamically-added properties (e.g.
-		 * hasForum set by an async fetch) survive across resumes.
-		 */
-		if (this._externalData)
-		{
-			/**
-			 * Prefer data passed in via props (already on this.data
-			 * from setupProps); fall back to setData() for temp
-			 * components that supply data through their setData fn.
-			 */
-			const freshData = this.data || this.setData();
-			if (freshData)
-			{
-				// @ts-ignore
-				if (persistedData && persistedData.stage)
-				{
-					// @ts-ignore
-					const old = persistedData.stage;
-
-					/**
-					 * If retainState is set on either data source,
-					 * persisted values win for ALL keys. Otherwise
-					 * (including refreshState) only copy keys that
-					 * don't exist in fresh.
-					 */
-					// @ts-ignore
-					const retain = persistedData._retainState
-					// @ts-ignore
-						|| freshData._retainState;
-
-					const updates = {};
-					// @ts-ignore
-					const freshStage = freshData.stage;
-					for (const key in old)
-					{
-						if (!Object.prototype.hasOwnProperty.call(old, key))
-						{
-							continue;
-						}
-
-						if (!retain && Object.prototype.hasOwnProperty.call(freshStage, key))
-						{
-							continue;
-						}
-
-						const val = old[key];
-
-						/**
-						 * Reference-equality short-circuit: if the persisted
-						 * value is identical to what is already in the fresh
-						 * stage, skip it. Without this guard the deep publisher
-						 * walks the entire subtree on every resume, which can
-						 * dominate frame time for large nested data trees.
-						 */
-						if (val === freshStage[key])
-						{
-							continue;
-						}
-
-						updates[key] = val;
-					}
-
-					/**
-					 * Use the silent stage-write API: at resume time no
-					 * watchers are bound to this fresh data instance yet,
-					 * so triggering the deep publish cascade through set()
-					 * is wasted work. The new layout will read these values
-					 * via data.get() when its bindings attach.
-					 */
-					if (!Objects.isEmpty(updates))
-					{
-						// @ts-ignore
-						freshData._silentSet(updates);
-					}
-				}
-
-				// @ts-ignore
-				this.data = freshData;
-			}
-			else
-			{
-				// @ts-ignore
-				this.data = persistedData;
-			}
-			return;
-		}
-
-		/**
-		 * Regular components: fresh data from setData() (already in
-		 * this.data via _setupData) provides a clean base reference.
-		 *
-		 * Non-null persisted values are merged via the reactive
-		 * set() API so the batched publish queue receives the
-		 * correct values. Direct stage mutation would leave stale
-		 * constructor values in the queue; the microtask flush
-		 * after render would then overwrite merged data with the
-		 * original (e.g. skeleton) values, causing a flash.
-		 *
-		 * Null/undefined persisted values (e.g. cleared by
-		 * beforeDestroy cleanup) are ignored, keeping the fresh
-		 * defaults so the component can re-fetch on resume.
-		 */
-		if (!this.data)
-		{
-			// @ts-ignore
-			this.data = persistedData;
-			return;
-		}
-
-		/**
-		 * If retainState is flagged, the persisted data is the
-		 * authoritative source — use it directly and discard
-		 * the fresh instance from setData().
-		 */
-		// @ts-ignore
-		if (persistedData && persistedData._retainState)
-		{
-			// @ts-ignore
-			this.data = persistedData;
-			return;
-		}
-
-		// @ts-ignore
-		if (persistedData && persistedData.stage)
-		{
-			// @ts-ignore
-			const old = persistedData.stage;
-
-			/**
-			 * Default behavior: fresh data from setData() (which
-			 * was called on the new instance with current props)
-			 * is authoritative. Persisted keys that are NOT in
-			 * the fresh stage are copied over so dynamically-added
-			 * properties (e.g. async-fetched fields, accumulated
-			 * lists added via push) survive resumes.
-			 *
-			 * Components that want the old persist-wins behavior
-			 * (e.g. infinite-scroll lists where setData seeds an
-			 * empty array each time) can opt in via retainState().
-			 */
-			const updates = {};
-			const currentStage = this.data.stage;
-			for (const key in old)
-			{
-				if (!Object.prototype.hasOwnProperty.call(old, key))
-				{
-					continue;
-				}
-
-				if (Object.prototype.hasOwnProperty.call(currentStage, key))
-				{
-					continue;
-				}
-
-				updates[key] = old[key];
-			}
-
-			if (!Objects.isEmpty(updates))
-			{
-				/**
-				 * Silent direct write — see note in the _externalData
-				 * branch above. Avoids the Publisher.publish cascade
-				 * across nested subtrees during resume, which is the
-				 * single largest cost of route re-activation for
-				 * components with deep data trees.
-				 */
-				this.data._silentSet(updates);
-			}
-		}
+		DataResumeHelper.resume(this, persistedData);
 	}
 
 	/**
@@ -337,14 +150,7 @@ export class Component extends Unit
 	 */
 	_refreshData()
 	{
-		const freshData = this.setData();
-		if (freshData && this.data)
-		{
-			// @ts-ignore
-			this.data.set(freshData.stage);
-		}
-
-		this._refreshContextData();
+		DataResumeHelper.refresh(this);
 	}
 
 	/**
@@ -356,73 +162,7 @@ export class Component extends Unit
 	 */
 	_refreshContextData()
 	{
-		const context = this.context;
-		// @ts-ignore
-		if (!context || !context.data)
-		{
-			return;
-		}
-
-		const parentContext = this.getParentContext();
-		// @ts-ignore
-		if (!parentContext || !parentContext.data)
-		{
-			return;
-		}
-
-		/**
-		 * Diff against the current context stage and only push
-		 * keys whose value reference actually changed. Without
-		 * this guard every resume republishes the full parent
-		 * context tree, which cascades through Publisher.publish
-		 * across all nested keys.
-		 */
-		// @ts-ignore
-		const parentStage = parentContext.data.stage;
-		// @ts-ignore
-		const currentStage = context.data.stage;
-		let updates = null;
-		for (const key in parentStage)
-		{
-			if (!Object.prototype.hasOwnProperty.call(parentStage, key))
-			{
-				continue;
-			}
-
-			const val = parentStage[key];
-			if (val === currentStage[key])
-			{
-				continue;
-			}
-
-			if (updates === null)
-			{
-				// @ts-ignore
-				updates = {};
-			}
-			// @ts-ignore
-			updates[key] = val;
-		}
-
-		if (updates !== null)
-		{
-			/**
-			 * Silent write: context refresh during resume happens
-			 * before the new layout subscribes, so the deep publish
-			 * cascade has no listeners and is pure overhead.
-			 */
-			// @ts-ignore
-			if (typeof context.data._silentSet === 'function')
-			{
-				// @ts-ignore
-				context.data._silentSet(updates);
-			}
-			else
-			{
-				// @ts-ignore
-				context.data.set(updates);
-			}
-		}
+		DataResumeHelper.refreshContext(this);
 	}
 
 	/**
@@ -557,8 +297,7 @@ export class Component extends Unit
 		}
 
 		this.setupStateTarget();
-		// @ts-ignore
-		this.stateHelper = new StateHelper(this.state, states);
+		this.stateHelper = new StateHelper(this.state ?? {}, states);
 	}
 
 	/**
