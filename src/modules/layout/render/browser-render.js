@@ -133,6 +133,7 @@ export class BrowserRender extends Render
 	{
 		let props = {
 			cache: obj.cache,
+			key: obj.key,
 			_externalData: true,
 			setData: () => obj.data,
 
@@ -141,7 +142,7 @@ export class BrowserRender extends Render
 			...convertSettings(obj.methods || {}, {}),
 			render()
 			{
-				return {...obj, data: null, state: null, methods: null};
+				return {...obj, data: null, state: null, methods: null, key: null};
 			}
 		};
 

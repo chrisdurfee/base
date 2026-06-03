@@ -211,14 +211,27 @@ export class Unit
 	 */
 	addPersistedChild(child)
 	{
-		const count = this.persistedCount++;
 		/**
-		 * Tokens are assigned monotonically as `'pc' + count`, so the key
-		 * for slot `count` is computed directly. This avoids an O(N)
-		 * `Object.keys()` allocation per child (which made the original
-		 * implementation O(N^2) across a list).
+		 * A child may declare a stable `key` (e.g. `{ data, key: 'media' }`).
+		 * Positional tokens drift when a persisted parent is not destroyed
+		 * but a subtree is rebuilt in isolation (e.g. `UseParent`/`On`
+		 * partial rebuilds): each rebuild appends a new child and the
+		 * monotonic counter keeps climbing, so the same logical child gets
+		 * a different slot every time and never matches its persisted
+		 * predecessor. A stable key sidesteps the counter entirely so
+		 * resume works across those partial rebuilds.
 		 */
-		const token = 'pc' + count;
+		// @ts-ignore
+		const key = child.key;
+		const token = (key != null)
+			? 'pk:' + key
+			/**
+			 * Tokens are assigned monotonically as `'pc' + count`, so the key
+			 * for slot `count` is computed directly. This avoids an O(N)
+			 * `Object.keys()` allocation per child (which made the original
+			 * implementation O(N^2) across a list).
+			 */
+			: 'pc' + (this.persistedCount++);
 
 		/**
 		 * Check to see if the child has a persisted state

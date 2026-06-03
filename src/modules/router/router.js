@@ -46,13 +46,23 @@ export class Router
 		this.lastMatchedRoute = null;
 
 		/**
-		 * Tracks the most recently applied scrollTo selector so we can
-		 * detect when navigation moves to a different scroll target
-		 * (a fresh page) versus staying within the same target group
-		 * (e.g. switching sibling tabs that share a sticky header).
-		 * @type {string|null}
+		 * Identifier of the switch group that owned the most recently
+		 * applied scroll-target intent. When the next target intent
+		 * comes from the same group it is treated as a sibling-tab
+		 * switch (snap-to-sticky); when it comes from a different group
+		 * (or no group) it is treated as a fresh page navigation and
+		 * the page is reset to the top first.
+		 * @type {*}
 		 */
-		this.lastScrollTarget = null;
+		this.lastScrollGroup = null;
+
+		/**
+		 * Transient field set by `checkGroup` so `select` knows which
+		 * switch group is currently asking for selection. Cleared after
+		 * each group's iteration.
+		 * @type {*}
+		 */
+		this.currentGroupId = null;
 
 		/**
 		 * Monotonic token used to cancel pending scroll-target waits
@@ -298,7 +308,7 @@ export class Router
 			switchArray.push(route);
 		}
 
-		this.checkGroup(switchArray, this.getPath());
+		this.checkGroupForRegistration(id, switchArray);
 		return id;
 	}
 
@@ -323,8 +333,40 @@ export class Router
 			switchArray.push(route);
 		}
 
-		this.checkGroup(switchArray, this.getPath());
+		this.checkGroupForRegistration(id, switchArray);
 		return id;
+	}
+
+	/**
+	 * Runs `checkGroup` for a switch group that is being registered
+	 * mid-render (after `checkActiveRoutes` has already applied its
+	 * scroll intent). Any scroll intent produced here is consumed
+	 * silently — we only use it to seed `lastScrollGroup` so the
+	 * very first sibling-tab click on this page is recognized as a
+	 * sibling switch instead of being treated as fresh navigation.
+	 *
+	 * @protected
+	 * @param {*} id
+	 * @param {object[]} switchArray
+	 * @returns {void}
+	 */
+	checkGroupForRegistration(id, switchArray)
+	{
+		const previousIntent = this.scrollIntent;
+		const previousGroupId = this.currentGroupId;
+
+		this.scrollIntent = null;
+		this.currentGroupId = id;
+		this.checkGroup(switchArray, this.getPath());
+		this.currentGroupId = previousGroupId;
+
+		const seeded = this.scrollIntent;
+		if (seeded && seeded.type === 'target' && seeded.groupId !== null && seeded.groupId !== undefined)
+		{
+			this.lastScrollGroup = seeded.groupId;
+		}
+
+		this.scrollIntent = previousIntent;
 	}
 
 	/**
@@ -631,11 +673,13 @@ export class Router
 	{
 		const switches = this.switches;
 
-		// Classic for...of loop for Map values
-		for (const group of switches.values())
+		// Iterate entries so we can pass the group id through to select().
+		for (const [id, group] of switches.entries())
 		{
+			this.currentGroupId = id;
 			this.checkGroup(group, path);
 		}
+		this.currentGroupId = null;
 	}
 
 	/**
@@ -718,11 +762,14 @@ export class Router
 
 		/**
 		 * If no route matched the path, we select the first route in the group.
+		 * This fallback selection must not influence scroll behavior — the
+		 * path doesn't actually belong to this group's container, which is
+		 * likely about to be unmounted by navigation away from this page.
 		 */
 		const firstRoute = group[0];
 		if (!selected)
 		{
-			this.select(firstRoute);
+			this.select(firstRoute, true);
 		}
 	}
 
@@ -777,9 +824,12 @@ export class Router
 	 * This will select the route.
 	 *
 	 * @param {object} route
+	 * @param {boolean} [isFallback] - when true, this selection is a
+	 *   switch-group fallback (no route in the group actually matched
+	 *   the current path) and must not emit a scroll intent.
 	 * @returns {void}
 	 */
-	select(route)
+	select(route, isFallback)
 	{
 		if (!route)
 		{
@@ -790,13 +840,24 @@ export class Router
 		route.select();
 		this.updateTitle(route);
 
+		if (isFallback === true)
+		{
+			return;
+		}
+
 		/**
 		 * Collect scroll intent. scrollTo takes highest priority,
-		 * then preventScroll, then default scroll-to-top.
+		 * then preventScroll, then default scroll-to-top. The owning
+		 * group id (if any) is captured so applyScrollIntent can tell
+		 * sibling-tab switches apart from fresh page navigations.
 		 */
 		if (route.scrollTo)
 		{
-			this.scrollIntent = { type: 'target', selector: route.scrollTo };
+			this.scrollIntent = {
+				type: 'target',
+				selector: route.scrollTo,
+				groupId: this.currentGroupId
+			};
 		}
 		else if (route.preventScroll !== true && !this.scrollIntent)
 		{
@@ -822,8 +883,9 @@ export class Router
 
 		if (intent.type === 'top')
 		{
-			this.lastScrollTarget = null;
+			this.lastScrollGroup = null;
 			this.checkToScroll();
+			this.reassertScrollTop();
 			return;
 		}
 
@@ -833,22 +895,62 @@ export class Router
 		}
 
 		/**
-		 * If the scroll target selector is different from the last
-		 * applied one, the user is moving to a different "page" rather
-		 * than switching sibling routes that share a sticky header.
-		 * Reset to the top immediately so the new page doesn't inherit
-		 * the previous page's scroll offset, then snap to the sticky
-		 * position once the new content has actually mounted (which
-		 * may be async for lazy-imported routes).
+		 * Sibling-tab switching only happens when the scroll target
+		 * intent comes from the same switch group as the previous one.
+		 * Anything else (no group, or a different group) is a fresh
+		 * page navigation and must reset to the top so persisted
+		 * components don't restore the previous page's scroll offset.
 		 */
-		const isFreshTarget = (this.lastScrollTarget !== intent.selector);
-		if (isFreshTarget)
+		const hasGroup = (intent.groupId !== null && intent.groupId !== undefined);
+		const isSiblingSwitch = hasGroup && (this.lastScrollGroup === intent.groupId);
+
+		if (!isSiblingSwitch)
 		{
-			this.checkToScroll();
+			if (typeof window !== 'undefined')
+			{
+				window.scrollTo(0, 0);
+			}
+			this.reassertScrollTop();
 		}
 
-		this.lastScrollTarget = intent.selector;
-		this.scrollToTarget(intent.selector);
+		this.lastScrollGroup = hasGroup ? intent.groupId : null;
+
+		if (isSiblingSwitch)
+		{
+			this.scrollToTarget(intent.selector);
+		}
+	}
+
+	/**
+	 * Re-asserts window scroll position at the top on the next
+	 * animation frame. Route activation can asynchronously mount or
+	 * reattach persisted DOM after applyScrollIntent runs, which can
+	 * leave the viewport at the previous page's offset even though we
+	 * already called scrollTo(0, 0). Re-asserting after a frame ensures
+	 * the new page lands at the top.
+	 *
+	 * @returns {void}
+	 */
+	reassertScrollTop()
+	{
+		if (typeof window === 'undefined' || typeof requestAnimationFrame === 'undefined')
+		{
+			return;
+		}
+
+		const token = ++this.scrollWaitToken;
+		requestAnimationFrame(() =>
+		{
+			if (token !== this.scrollWaitToken)
+			{
+				return;
+			}
+
+			if (window.scrollY > 0 || window.pageYOffset > 0)
+			{
+				window.scrollTo(0, 0);
+			}
+		});
 	}
 
 	/**
