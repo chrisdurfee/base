@@ -78,6 +78,34 @@ const getPromise = (src) =>
 };
 
 /**
+ * This will get an already-resolved module synchronously from the cache.
+ *
+ * Returns the resolved module value when the src has finished loading on a
+ * previous pass, or null when nothing is cached yet or the cached value is
+ * still a pending promise.
+ *
+ * @param {unknown} src
+ * @returns {object|null}
+ */
+const getCachedModule = (src) =>
+{
+	if (!importCache.has(src))
+	{
+		return null;
+	}
+
+	const cached = importCache.get(src);
+	// A pending promise still has a then method; only resolved modules
+	// can be rendered synchronously.
+	if (cached && typeof /** @type {*} */ (cached).then === 'function')
+	{
+		return null;
+	}
+
+	return /** @type {object} */ (cached) || null;
+};
+
+/**
  * ImportWrapper
  *
  * This will create an import wrapper component that
@@ -172,6 +200,18 @@ export const ImportWrapper = Jot(
 		// whether destroy() was called while the import was in-flight.
 		const gen = this.generation;
 
+		/**
+		 * If the module has already been resolved on a previous pass we can
+		 * render it synchronously. This avoids a microtask gap where the
+		 * comment placeholder shows nothing before the layout appears.
+		 */
+		const cachedModule = getCachedModule(this.src);
+		if (cachedModule)
+		{
+			this.renderModule(ele, cachedModule);
+			return;
+		}
+
 		ModuleLoader.load(getPromise(this.src), (module) =>
 		{
 			/**
@@ -184,22 +224,7 @@ export const ImportWrapper = Jot(
 				return;
 			}
 
-			this.loaded = true;
-
-			const layout = this.layout || LayoutManager.process(module,
-			{
-				callback: this.callback,
-				route: this.route,
-				persist: this.persist
-			});
-
-			this.layout = layout;
-
-			/**
-			 * This will cache the layout root to be removed
-			 * before the module is destroyed.
-			 */
-			this.layoutRoot = LayoutManager.render(layout, ele, this.parent);
+			this.renderModule(ele, module);
 		},
 		(error) =>
 		{
@@ -210,6 +235,33 @@ export const ImportWrapper = Jot(
 
 			this.loaded = false;
 		});
+	},
+
+	/**
+	 * This will process and render the loaded module layout.
+	 *
+	 * @param {object} ele
+	 * @param {object} module
+	 * @returns {void}
+	 */
+	renderModule(ele, module)
+	{
+		this.loaded = true;
+
+		const layout = this.layout || LayoutManager.process(module,
+		{
+			callback: this.callback,
+			route: this.route,
+			persist: this.persist
+		});
+
+		this.layout = layout;
+
+		/**
+		 * This will cache the layout root to be removed
+		 * before the module is destroyed.
+		 */
+		this.layoutRoot = LayoutManager.render(layout, ele, this.parent);
 	},
 
 	/**
