@@ -468,6 +468,27 @@ npm install @base-framework/base
 import { base } from '@base-framework/base';
 ```
 
+### Modular (subpath) imports
+
+The package root (`@base-framework/base`) ships the full framework as a single
+file. For smaller bundles, you can import only the part you need from a
+subpath. Each subpath is code-split and tree-shakeable, so apps only download
+what they use:
+
+```javascript
+import { Ajax } from '@base-framework/base/ajax';       // ~8 KB
+import { Data, SimpleData, Model } from '@base-framework/base/data';
+import { DateTime } from '@base-framework/base/date';   // ~6 KB
+import { Html } from '@base-framework/base/html';
+import { Store, State } from '@base-framework/base/state';
+import { Component, Unit, Jot, Pod, Atom, Builder, Import } from '@base-framework/base/component';
+import { router, NavLink } from '@base-framework/base/router';
+```
+
+The `component` and `router` subpaths register the default directives
+(`bind`, `watch`, `map`, `for`, `route`, `switch`, ...) automatically, exactly
+like the package root does, so reactive layouts work the same way.
+
 ## Usage
 
 Create a new component:

@@ -1,9 +1,15 @@
 {
 	"name": "@base-framework/base",
-	"version": "3.7.81",
+	"version": "3.7.84",
 	"description": "This is a javascript framework.",
 	"main": "./dist/base.js",
 	"type": "module",
+	"sideEffects": [
+		"**/default-directives.js",
+		"./dist/base.js",
+		"./dist/modules/*.js",
+		"./dist/chunks/*.js"
+	],
 	"scripts": {
 		"build": "node ./esbuild.js && tsc",
 		"prepublishOnly": "node ./esbuild.js"
@@ -32,7 +38,8 @@
 		"package.json",
 		"readme.md",
 		"dist",
-		"copilot.md"
+		"copilot.md",
+		"!dist/**/*.map"
 	],
 	"exports": {
 		"./package.json": "./package.json",
@@ -40,6 +47,34 @@
 			"types": "./dist/types/base.d.ts",
 			"import": "./dist/base.js",
 			"require": "./dist/base.js"
+		},
+		"./component": {
+			"types": "./dist/types/entries/component.d.ts",
+			"import": "./dist/modules/component.js"
+		},
+		"./data": {
+			"types": "./dist/types/entries/data.d.ts",
+			"import": "./dist/modules/data.js"
+		},
+		"./router": {
+			"types": "./dist/types/entries/router.d.ts",
+			"import": "./dist/modules/router.js"
+		},
+		"./state": {
+			"types": "./dist/types/entries/state.d.ts",
+			"import": "./dist/modules/state.js"
+		},
+		"./ajax": {
+			"types": "./dist/types/entries/ajax.d.ts",
+			"import": "./dist/modules/ajax.js"
+		},
+		"./html": {
+			"types": "./dist/types/entries/html.d.ts",
+			"import": "./dist/modules/html.js"
+		},
+		"./date": {
+			"types": "./dist/types/entries/date.d.ts",
+			"import": "./dist/modules/date.js"
 		}
 	},
 	"homepage": "https://github.com/chrisdurfee/base#readme"

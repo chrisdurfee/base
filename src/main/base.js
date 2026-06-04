@@ -186,13 +186,3 @@ Base.prototype.extend = (function()
  * @global
  */
 export const base = new Base();
-
-/**
- * This will add the augmented methods to base.
- */
-base.augment({
-	...Objects,
-	...EventMethods,
-	...Types,
-	equals
-});

@@ -223,15 +223,44 @@ export class Unit
 		 */
 		// @ts-ignore
 		const key = child.key;
-		const token = (key != null)
-			? 'pk:' + key
+
+		/**
+		 * A `key` alone is not guaranteed to be unique among siblings: many
+		 * components reuse the same logical key (e.g. a list's row-identity
+		 * field `key: 'id'`), so multiple distinct sibling components of the
+		 * same `unitType` would otherwise collide on a single `pk:` token and
+		 * resume each other's scope (data, state and persisted children). The
+		 * `cache` name is the explicit, per-scope-unique slot a component is
+		 * stored under (see the render controller's `parent[cache] = child`),
+		 * so it is the most reliable stable identity. We prefer it, fall back
+		 * to `key`, and combine the two when both are present so same-key
+		 * siblings stay distinct while remaining stable across rebuilds.
+		 */
+		// @ts-ignore
+		const cache = child.cache;
+		let token;
+		if (cache != null && key != null)
+		{
+			token = 'pk:' + cache + ':' + key;
+		}
+		else if (cache != null)
+		{
+			token = 'pk:' + cache;
+		}
+		else if (key != null)
+		{
+			token = 'pk:' + key;
+		}
+		else
+		{
 			/**
 			 * Tokens are assigned monotonically as `'pc' + count`, so the key
 			 * for slot `count` is computed directly. This avoids an O(N)
 			 * `Object.keys()` allocation per child (which made the original
 			 * implementation O(N^2) across a list).
 			 */
-			: 'pc' + (this.persistedCount++);
+			token = 'pc' + (this.persistedCount++);
+		}
 
 		/**
 		 * Check to see if the child has a persisted state
