@@ -134,6 +134,15 @@ export class BrowserRender extends Render
 		let props = {
 			cache: obj.cache,
 			key: obj.key,
+			/**
+			 * Allow a layout to opt out of persistence with
+			 * `{ data, persist: false }`. setupComponent() checks
+			 * `component.persist !== false` before adding it as a
+			 * persisted child, so this keeps the temp component's
+			 * data fresh on every rebuild instead of resuming the
+			 * first-loaded values.
+			 */
+			persist: obj.persist,
 			_externalData: true,
 			setData: () => obj.data,
 
@@ -142,7 +151,7 @@ export class BrowserRender extends Render
 			...convertSettings(obj.methods || {}, {}),
 			render()
 			{
-				return {...obj, data: null, state: null, methods: null, key: null};
+				return {...obj, data: null, state: null, methods: null, key: null, persist: null};
 			}
 		};
 

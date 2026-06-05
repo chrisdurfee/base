@@ -117,8 +117,40 @@ export class Component extends Unit
 		// @ts-ignore
 		if (persistedLayout.context)
 		{
+			/**
+			 * Honor an opt-out on the context data. When the user's
+			 * setContext() data is flagged refreshState() (fresh is
+			 * authoritative) we must NOT keep the persisted context —
+			 * doing so would pin the first-loaded values (e.g. the
+			 * initial user) forever, since setupContext() would then
+			 * skip rebuilding a fresh context. Leaving this.context
+			 * unset lets setupContext() re-run setContext() so the
+			 * fresh instance wins. retainState() (or no flag) keeps
+			 * the persisted context as before.
+			 */
 			// @ts-ignore
-			this.context = persistedLayout.context;
+			const persistedContextData = persistedLayout.context.data;
+			const ignorePersist = persistedContextData
+				// @ts-ignore
+				&& persistedContextData._refreshState === true
+				// @ts-ignore
+				&& persistedContextData._retainState !== true;
+
+			if (!ignorePersist)
+			{
+				// @ts-ignore
+				this.context = persistedLayout.context;
+
+				/**
+				 * Mark the context as resumed so setupContext() keeps
+				 * this persisted instance instead of re-running the
+				 * user's setContext(), which would allocate a fresh
+				 * Data object and orphan every binding (watchers, xhr
+				 * writes) still subscribed to the persisted one.
+				 */
+				// @ts-ignore
+				this._contextResumed = true;
+			}
 		}
 
 		this.id = persistedLayout.id;
