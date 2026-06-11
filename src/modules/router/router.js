@@ -1016,18 +1016,30 @@ export class Router
 		 * sticky target may not exist yet when we first try to find it.
 		 * Poll on animation frames for a short window before giving up.
 		 */
-		const existing = document.querySelector(selector);
-		if (existing)
-		{
-			measureAndScroll(existing);
-			return;
-		}
-
 		if (typeof requestAnimationFrame === 'undefined')
 		{
+			/* No rAF (SSR/test environments): measure synchronously
+			 * if the target already exists. */
+			const existing = document.querySelector(selector);
+			if (existing)
+			{
+				measureAndScroll(existing);
+			}
 			return;
 		}
 
+		/**
+		 * Measurement is always deferred to the next animation frame,
+		 * even when the target already exists. Route activation has
+		 * just mutated the DOM, so reading getComputedStyle and
+		 * getBoundingClientRect here forces a full synchronous reflow
+		 * of the dirty tree mid-navigation (tens of ms on large pages,
+		 * far worse on older mobile devices). It would also measure
+		 * stale layout: the batched pub-sub flush applies watcher DOM
+		 * updates in a microtask after this call. One frame later the
+		 * flush has run and the read coincides with the frame's
+		 * natural layout pass.
+		 */
 		const token = ++this.scrollWaitToken;
 		const maxFrames = 30;
 		let frames = 0;
