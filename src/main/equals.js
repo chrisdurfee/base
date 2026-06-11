@@ -1,126 +1,99 @@
 /**
- * This will count the properties of an object.
+ * This will deeply compare two values.
  *
- * @param {object} obj
- * @returns {number}
- */
-const countProperty = (obj) =>
-{
-	let count = 0;
-	for (const property in obj)
-	{
-		if (!Object.prototype.hasOwnProperty.call(obj, property))
-		{
-			continue;
-		}
-
-		count++;
-
-		/**
-		 * We want to do a recursive count to get
-		 * any child properties.
-		 */
-		if (typeof obj[property] === 'object')
-		{
-			count += countProperty(obj[property]);
-		}
-	}
-	return count;
-};
-
-/**
- * This will validate if the object properties match another object.
+ * Handles primitives, NaN, null, Date, RegExp, arrays,
+ * plain objects, and circular references.
  *
- * @param {object} obj1
- * @param {object} obj2
+ * @param {*} value1
+ * @param {*} value2
+ * @param {WeakSet} visited
  * @returns {boolean}
  */
-const matchProperties = (obj1, obj2) =>
+const deepEqual = (value1, value2, visited) =>
 {
-	let matched = false;
-
-	if (typeof obj1 !== 'object' || typeof obj2 !== 'object')
+	if (value1 === value2)
 	{
-		return matched;
+		return true;
 	}
 
-	/**
-	 * We want to check each object1 property to the
-	 * object 2 property.
-	 */
-	for (const property in obj1)
-	{
-		if (!Object.prototype.hasOwnProperty.call(obj1, property))
-		{
-			continue;
-		}
-
-		/**
-		 * We want to check if the property is owned by the
-		 * object and that they have matching types.
-		 */
-		if (!Object.prototype.hasOwnProperty.call(obj2, property))
-		{
-			break;
-		}
-
-		const value1 = obj1[property];
-		const value2 = obj2[property];
-		if (typeof value1 !== typeof value2)
-		{
-			break;
-		}
-
-		/* we want to check if the type is an object */
-		if (typeof value1 === 'object')
-		{
-			/**
-			 * This will do a recursive check to the
-			 * child properties.
-			 */
-			matched = matchProperties(value1, value2);
-			if (matched !== true)
-			{
-				/* if a property did not match we can stop
-				the comparison */
-				break;
-			}
-		}
-		else
-		{
-			if (value1 === value2)
-			{
-				matched = true;
-			}
-			else
-			{
-				break;
-			}
-		}
-	}
-
-	return matched;
-};
-
-/**
- * This will compare if two objects match.
- *
- * @param {object} obj1
- * @param {object} obj2
- * @returns {boolean}
- */
-const compareObjects = (obj1, obj2) =>
-{
-	/* we want to check if they have the same number of
-	properties */
-	const option1Count = countProperty(obj1),
-	option2Count = countProperty(obj2);
-	if (option1Count !== option2Count)
+	const type1 = typeof value1;
+	if (type1 !== typeof value2)
 	{
 		return false;
 	}
 
-	return matchProperties(obj1, obj2);
+	/* NaN is the only value not equal to itself */
+	if (type1 === 'number')
+	{
+		return (Number.isNaN(value1) && Number.isNaN(value2));
+	}
+
+	if (type1 !== 'object' || value1 === null || value2 === null)
+	{
+		return false;
+	}
+
+	if (value1 instanceof Date)
+	{
+		return (value2 instanceof Date && value1.getTime() === value2.getTime());
+	}
+
+	if (value1 instanceof RegExp)
+	{
+		return (value2 instanceof RegExp && value1.source === value2.source && value1.flags === value2.flags);
+	}
+
+	const isArray1 = Array.isArray(value1);
+	if (isArray1 !== Array.isArray(value2))
+	{
+		return false;
+	}
+
+	/* guard against circular references */
+	if (visited.has(value1))
+	{
+		return true;
+	}
+	visited.add(value1);
+
+	if (isArray1)
+	{
+		const length = value1.length;
+		if (length !== value2.length)
+		{
+			return false;
+		}
+
+		for (let i = 0; i < length; i++)
+		{
+			if (!deepEqual(value1[i], value2[i], visited))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	const keys1 = Object.keys(value1);
+	if (keys1.length !== Object.keys(value2).length)
+	{
+		return false;
+	}
+
+	for (let i = 0, length = keys1.length; i < length; i++)
+	{
+		const key = keys1[i];
+		if (!Object.prototype.hasOwnProperty.call(value2, key))
+		{
+			return false;
+		}
+
+		if (!deepEqual(value1[key], value2[key], visited))
+		{
+			return false;
+		}
+	}
+	return true;
 };
 
 /**
@@ -132,21 +105,5 @@ const compareObjects = (obj1, obj2) =>
  */
 export const equals = (option1, option2) =>
 {
-	/* we want to check if there types match */
-	const option1Type = typeof option1,
-	option2Type = typeof option2;
-	if (option1Type !== option2Type)
-	{
-		return false;
-	}
-
-	/* we need to check if the options are objects
-	because we will want to match all the
-	properties */
-	if (option1Type === 'object')
-	{
-		return compareObjects(option1, option2);
-	}
-
-	return (option1 === option2);
+	return deepEqual(option1, option2, new WeakSet());
 };

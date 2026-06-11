@@ -68,17 +68,19 @@ export const prepareUrl = (data, removeNewLines) =>
 		return data;
 	}
 
-	Object.keys(data).forEach((prop) =>
+	/* clone so we don't mutate the caller's object */
+	const result = Array.isArray(data)? [...data] : {...data};
+	Object.keys(result).forEach((prop) =>
 	{
-		const value = data[prop];
+		const value = result[prop];
 		if (value === null)
 		{
 			return;
 		}
 
-		data[prop] = (typeof value === 'string') ? prepareUrl(value, removeNewLines) : sanitize(value, removeNewLines);
+		result[prop] = (typeof value === 'string') ? prepareUrl(value, removeNewLines) : sanitize(value, removeNewLines);
 	});
-	return data;
+	return result;
 };
 
 /**
@@ -89,7 +91,20 @@ export const prepareUrl = (data, removeNewLines) =>
  */
 export function decode(data)
 {
-	return (typeof data !== "undefined" && data.length > 0)? JSON.parse(data) : false;
+	if (typeof data === "undefined" || data.length < 1)
+	{
+		return false;
+	}
+
+	try
+	{
+		return JSON.parse(data);
+	}
+	catch (error)
+	{
+		console.warn('[Encode] Failed to parse JSON.', error);
+		return false;
+	}
 }
 
 /**

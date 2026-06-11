@@ -71,6 +71,16 @@ const getPromise = (src) =>
 	promise.then((module) =>
 	{
 		importCache.set(src, module);
+	})
+	.catch(() =>
+	{
+		/**
+		 * Remove rejected promises from the cache so a later
+		 * attempt (e.g. retry after a failed chunk fetch following
+		 * a deploy) can re-request the module instead of being
+		 * stuck with a cached rejection forever.
+		 */
+		importCache.delete(src);
 	});
 
 	importCache.set(src, promise);
@@ -127,6 +137,13 @@ export const ImportWrapper = Jot(
 		 * @type {boolean}
 		 */
 		this.loaded = false;
+
+		/**
+		 * Root node of the rendered error fallback layout.
+		 *
+		 * @type {object|null}
+		 */
+		this.errorRoot = null;
 
 		/**
 		 * Generation counter incremented on each destroy to
@@ -234,7 +251,76 @@ export const ImportWrapper = Jot(
 			}
 
 			this.loaded = false;
+			this.renderError(ele, error);
 		});
+	},
+
+	/**
+	 * This will render the error fallback layout when the
+	 * module fails to load (e.g. chunk 404 after a deploy).
+	 *
+	 * The user can supply a custom layout via the `fallback`
+	 * prop. A function fallback receives the error and a retry
+	 * callback: `fallback: (error, retry) => ({ ... })`.
+	 *
+	 * @param {object} ele
+	 * @param {*} error
+	 * @returns {void}
+	 */
+	renderError(ele, error)
+	{
+		const retry = () => this.retry(ele);
+		const fallback = this.fallback;
+
+		const layout = (typeof fallback === 'function')
+			? fallback(error, retry)
+			: fallback ||
+			{
+				class: 'base-import-error',
+				children: [
+					{ tag: 'span', text: 'Failed to load content.' },
+					{
+						tag: 'button',
+						type: 'button',
+						text: 'Retry',
+						click: retry
+					}
+				]
+			};
+
+		if (!layout)
+		{
+			return;
+		}
+
+		this.errorRoot = LayoutManager.render(layout, ele, this.parent);
+	},
+
+	/**
+	 * This will remove the error fallback and retry the
+	 * module import.
+	 *
+	 * @param {object} ele
+	 * @returns {void}
+	 */
+	retry(ele)
+	{
+		this.removeErrorLayout();
+		this.loadAndRender(ele);
+	},
+
+	/**
+	 * This will remove the error fallback layout.
+	 *
+	 * @returns {void}
+	 */
+	removeErrorLayout()
+	{
+		if (this.errorRoot)
+		{
+			Builder.removeNode(this.errorRoot);
+			this.errorRoot = null;
+		}
 	},
 
 	/**
@@ -320,6 +406,8 @@ export const ImportWrapper = Jot(
 	{
 		// Bump generation so any in-flight load callback is discarded.
 		this.generation++;
+
+		this.removeErrorLayout();
 
 		if (!this.layoutRoot)
 		{

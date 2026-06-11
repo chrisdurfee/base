@@ -329,39 +329,59 @@ export class ModelService
 		limit = !isNaN(Number(limit))? limit : 50;
 		const search = data.search || '';
 
+		/**
+		 * This will safely stringify a param object. Circular
+		 * references would otherwise throw and kill the request.
+		 *
+		 * @param {*} value
+		 * @returns {string}
+		 */
+		const safeStringify = (value) =>
+		{
+			try
+			{
+				return JSON.stringify(value);
+			}
+			catch (error)
+			{
+				console.error('[ModelService] Failed to serialize request param.', error);
+				return '';
+			}
+		};
+
 		let filter = data.filter || '';
 		if (typeof filter === 'object')
 		{
-			filter = JSON.stringify(filter);
+			filter = safeStringify(filter);
 		}
 
 		let dates = data.dates || '';
 		if (typeof dates === 'object')
 		{
-			dates = JSON.stringify(dates);
+			dates = safeStringify(dates);
 		}
 
 		let orderBy = data.orderBy || '';
 		if (typeof orderBy === 'object')
 		{
-			orderBy = JSON.stringify(orderBy);
+			orderBy = safeStringify(orderBy);
 		}
 
 		let groupBy = data.groupBy || '';
 		if (Array.isArray(groupBy))
 		{
-			groupBy = JSON.stringify(groupBy);
+			groupBy = safeStringify(groupBy);
 		}
 
-		return '&filter=' + filter +
+		return '&filter=' + encodeURIComponent(filter) +
 			'&offset=' + offset +
 			'&limit=' + limit +
-			'&dates=' + dates +
-			'&orderBy=' + orderBy +
-			'&groupBy=' + groupBy +
-			'&search=' + search +
-			'&lastCursor=' + ((typeof lastCursor !== 'undefined' && lastCursor !== null) ? lastCursor : '') +
-			'&since=' + ((typeof since !== 'undefined' && since !== null) ? since : '');
+			'&dates=' + encodeURIComponent(dates) +
+			'&orderBy=' + encodeURIComponent(orderBy) +
+			'&groupBy=' + encodeURIComponent(groupBy) +
+			'&search=' + encodeURIComponent(search) +
+			'&lastCursor=' + ((typeof lastCursor !== 'undefined' && lastCursor !== null) ? encodeURIComponent(lastCursor) : '') +
+			'&since=' + ((typeof since !== 'undefined' && since !== null) ? encodeURIComponent(since) : '');
 	}
 
 	/**

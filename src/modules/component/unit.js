@@ -821,7 +821,19 @@ export class Unit
 	{
 		this.persistedCount = 0;
 		this.rendered = false;
-		this.beforeDestroy();
+
+		/**
+		 * A user error in beforeDestroy must not prevent the
+		 * framework cleanup below from running.
+		 */
+		try
+		{
+			this.beforeDestroy();
+		}
+		catch (error)
+		{
+			console.error('Error in beforeDestroy:', error);
+		}
 
 		/**
 		 * This will unlink the data to prevent memory leaks.

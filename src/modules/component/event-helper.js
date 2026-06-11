@@ -84,7 +84,7 @@ export class EventHelper
 		{
 			option = events[i];
 			// @ts-ignore
-			if (option.event === event && option.obj === obj)
+			if (option.event === event && option.obj === obj && option.callBack === callBack && option.capture === capture)
 			{
 				events.splice(i, 1);
 				break;

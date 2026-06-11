@@ -1,5 +1,3 @@
-import { removeEventPrefix } from '../html/html.js';
-
 /**
  * Set-based self-closing tag lookup for O(1) checks
  * instead of Array.includes() linear scan.
@@ -7,6 +5,36 @@ import { removeEventPrefix } from '../html/html.js';
  * @type {Set<string>}
  */
 const SELF_CLOSING_TAGS = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source']);
+
+/**
+ * Pre-compiled pattern that checks if escaping is needed
+ * before paying the cost of multiple replace calls.
+ *
+ * @type {RegExp}
+ */
+const ESCAPE_TEST = /[&<>"]/;
+
+/**
+ * This will escape a value for safe use in html
+ * text content and attribute values.
+ *
+ * @param {*} value
+ * @returns {string}
+ */
+const escapeHtml = (value) =>
+{
+	const str = (typeof value === 'string')? value : String(value);
+	if (!ESCAPE_TEST.test(str))
+	{
+		return str;
+	}
+
+	return str
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;');
+};
 
 /**
  * HtmlToString
@@ -44,37 +72,33 @@ export class HtmlToString
 
             if (key === 'text' || key === 'textContent')
             {
-                innerContent += value;
+                innerContent += escapeHtml(value);
                 continue;
             }
 
             if (key === 'html' || key === 'innerHTML')
             {
+                /* html is developer opt-in raw content and
+                is intentionally not escaped */
                 innerContent += value;
                 continue;
             }
 
+            /* event handlers are client-side only and should
+            never be serialized into the markup */
             if (typeof value === 'function')
             {
-                const eventName = 'on' + removeEventPrefix(key);
-                if (attrString)
-                {
-                    attrString += ' ' + eventName + '="' + value + '"';
-                }
-                else
-                {
-                    attrString = eventName + '="' + value + '"';
-                }
                 continue;
             }
 
+            const attr = key + '="' + escapeHtml(value) + '"';
             if (attrString)
             {
-                attrString += ' ' + key + '="' + value + '"';
+                attrString += ' ' + attr;
             }
             else
             {
-                attrString = key + '="' + value + '"';
+                attrString = attr;
             }
         }
 
@@ -94,7 +118,7 @@ export class HtmlToString
      */
     static createText(text)
     {
-        return text;
+        return escapeHtml(text);
     }
 
     /**

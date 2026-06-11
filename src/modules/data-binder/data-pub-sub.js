@@ -1,4 +1,6 @@
-let lastToken = -1;
+/* Tokens start at 1 so they are always truthy — sources use
+ * `if (this.token)` guards before unsubscribing. */
+let lastToken = 0;
 
 /**
  * DataPubSub
@@ -14,14 +16,27 @@ export class DataPubSub
 	 * This will create a data pub sub.
 	 *
 	 * @constructor
+	 * @param {boolean} [indexPrefixes=false] Maintain an index of
+	 * subscribed messages grouped by their `prefix:` segment. Used by
+	 * the data binder so deep data can publish only to subscribed
+	 * paths instead of walking every node of a value.
 	 */
-	constructor()
+	constructor(indexPrefixes = false)
 	{
 		/**
 		 * @type {Map} callBacks
 		 * @protected
 		 */
 		this.callBacks = new Map();
+
+		/**
+		 * Index of subscribed messages keyed by message prefix
+		 * (substring through the first ':'). Null when disabled.
+		 *
+		 * @type {Map<string, Set<string>>|null}
+		 * @protected
+		 */
+		this.prefixIndex = indexPrefixes ? new Map() : null;
 
 		/**
 		 * Queue for batching publish calls
@@ -109,33 +124,128 @@ export class DataPubSub
 	reset()
 	{
 		this.callBacks.clear();
+		this.prefixIndex?.clear();
 		this.updateQueue.clear();
 		this.flushScheduled = false;
 		this.isFlushing = false;
 		this.flushIterations = 0;
-		lastToken = -1;
+		lastToken = 0;
 	}
 
 	/**
 	 * This will add a subscriber.
 	 *
+	 * Tokens are numbers — string conversion was allocating a new
+	 * string per watcher during page builds. Tokens are opaque to
+	 * callers and only round-trip back into off().
+	 *
 	 * @param {string} msg
 	 * @param {function} callBack
-	 * @returns {string} The subscriber token.
+	 * @returns {number} The subscriber token.
 	 */
 	on(msg, callBack)
 	{
-		const token = (++lastToken).toString();
-		this.get(msg).set(token, callBack);
+		const token = ++lastToken;
+
+		/* Inlined get-or-create avoids the has/set/get triple lookup
+		 * of get() on the hot build path. */
+		let subscribers = this.callBacks.get(msg);
+		if (!subscribers)
+		{
+			subscribers = new Map();
+			this.callBacks.set(msg, subscribers);
+
+			if (this.prefixIndex)
+			{
+				this._indexMessage(msg);
+			}
+		}
+		subscribers.set(token, callBack);
 
 		return token;
+	}
+
+	/**
+	 * This will add a message to the prefix index.
+	 *
+	 * @protected
+	 * @param {string} msg
+	 * @returns {void}
+	 */
+	_indexMessage(msg)
+	{
+		const idx = msg.indexOf(':');
+		if (idx === -1)
+		{
+			return;
+		}
+
+		const prefix = msg.substring(0, idx + 1);
+		let msgs = this.prefixIndex.get(prefix);
+		if (!msgs)
+		{
+			msgs = new Set();
+			this.prefixIndex.set(prefix, msgs);
+		}
+		msgs.add(msg);
+	}
+
+	/**
+	 * This will remove a message from the prefix index.
+	 *
+	 * @protected
+	 * @param {string} msg
+	 * @returns {void}
+	 */
+	_unindexMessage(msg)
+	{
+		const idx = msg.indexOf(':');
+		if (idx === -1)
+		{
+			return;
+		}
+
+		const prefix = msg.substring(0, idx + 1);
+		const msgs = this.prefixIndex.get(prefix);
+		if (msgs)
+		{
+			msgs.delete(msg);
+			if (msgs.size === 0)
+			{
+				this.prefixIndex.delete(prefix);
+			}
+		}
+	}
+
+	/**
+	 * This will get the subscribed messages for a prefix
+	 * (e.g. 'dt-3:'). Returns null when prefix indexing is
+	 * disabled or no messages are subscribed.
+	 *
+	 * @param {string} prefix
+	 * @returns {Set<string>|null}
+	 */
+	getPrefixMessages(prefix)
+	{
+		return (this.prefixIndex && this.prefixIndex.get(prefix)) || null;
+	}
+
+	/**
+	 * This will get the subscribed message keys. Used by deep data
+	 * to publish only to subscribed paths.
+	 *
+	 * @returns {IterableIterator<string>}
+	 */
+	getMessages()
+	{
+		return this.callBacks.keys();
 	}
 
 	/**
 	 * This will remove a subscriber.
 	 *
 	 * @param {string} msg
-	 * @param {string} token
+	 * @param {number} token
 	 * @returns {void}
 	 */
 	off(msg, token)
@@ -143,11 +253,15 @@ export class DataPubSub
 		const subscribers = this.callBacks.get(msg);
 		if (subscribers)
 		{
-			token = String(token);
 			subscribers.delete(token);
 			if (subscribers.size === 0)
 			{
 				this.callBacks.delete(msg);
+
+				if (this.prefixIndex)
+				{
+					this._unindexMessage(msg);
+				}
 			}
 		}
 	}
@@ -161,6 +275,11 @@ export class DataPubSub
 	remove(msg)
 	{
 		this.callBacks.delete(msg);
+
+		if (this.prefixIndex)
+		{
+			this._unindexMessage(msg);
+		}
 	}
 
 	/**
@@ -179,6 +298,25 @@ export class DataPubSub
 		if (!this.batchingEnabled)
 		{
 			this.publishImmediate(msg, value, committer);
+			return;
+		}
+
+		/**
+		 * Fast path: skip queueing when nothing is listening.
+		 *
+		 * Deep data publishes every leaf path of large objects and
+		 * arrays; most of those paths have no subscribers. The legacy
+		 * synchronous path (publishImmediate) returned early for them,
+		 * but queueing them first allocates an array per call and
+		 * churns the flush loop, which dominated route-change profiles
+		 * on big pages.
+		 *
+		 * Subscribers that attach after publish read the current value
+		 * at attach time (see dataBinder.watch), so dropping unwatched
+		 * messages loses no information.
+		 */
+		if (!this.callBacks.has(msg))
+		{
 			return;
 		}
 

@@ -24,6 +24,11 @@ export class PropertyHelper
 		deep nested data */
 		if (!utils.hasDeepData(attr))
 		{
+			if (!utils.isSafeAttr(attr))
+			{
+				return;
+			}
+
 			obj[attr] = val;
 			return;
 		}
@@ -71,6 +76,11 @@ export class PropertyHelper
 	{
 		if (!utils.hasDeepData(attr))
 		{
+			if (!utils.isSafeAttr(attr))
+			{
+				return;
+			}
+
 			delete obj[attr];
 			return;
 		}
@@ -97,7 +107,11 @@ export class PropertyHelper
 			{
 				if (Array.isArray(obj))
 				{
-					obj.splice(Number(prop), 1);
+					const index = Number(prop);
+					if (Number.isInteger(index) && index >= 0 && index < obj.length)
+					{
+						obj.splice(index, 1);
+					}
 					break;
 				}
 

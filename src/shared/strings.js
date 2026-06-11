@@ -49,7 +49,23 @@ export class Strings
 		{
 			/* we want to save the key and the
 			value to the objURL */
-			objURL[b] = (decode !== false)? decodeURIComponent(d) : d;
+			const value = (d === undefined)? '' : d;
+			if (decode !== false)
+			{
+				try
+				{
+					objURL[b] = decodeURIComponent(value);
+				}
+				catch (e)
+				{
+					/* malformed percent-encoding; keep the raw value */
+					objURL[b] = value;
+				}
+			}
+			else
+			{
+				objURL[b] = value;
+			}
 		});
 
 		return objURL;

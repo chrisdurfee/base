@@ -188,10 +188,12 @@ export class ElementSource extends TwoWaySource
 	 */
 	setupFilter(filter)
 	{
-		const pattern = /(\[\[[^\]]+\]\])/;
+		const pattern = /\[\[[^\]]+\]\]/;
 		return (value) =>
 		{
-			return filter.replace(pattern, value);
+			/* a function replacer prevents $-sequences in the
+			value from being interpreted */
+			return filter.replace(pattern, () => value);
 		};
 	}
 

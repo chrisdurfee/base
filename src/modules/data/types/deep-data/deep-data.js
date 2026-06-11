@@ -299,6 +299,13 @@ export class Data extends BasicData
 	/**
 	 * This will publish an update to the data binder.
 	 *
+	 * Subscriber-driven: instead of walking every node of the new
+	 * value (O(nodes) path-string allocations and publishes per set),
+	 * this publishes the set attribute itself and then only the
+	 * deeper paths that something is actually subscribed to
+	 * (O(subscribers)). Large array/object sets on older devices
+	 * were dominated by the old full-tree walk.
+	 *
 	 * @protected
 	 * @param {string} attr
 	 * @param {*} val
@@ -308,17 +315,76 @@ export class Data extends BasicData
 	 */
 	_publish(attr, val, committer, event)
 	{
-		this._pubCommitter = committer;
-		this._pubEvent = event;
+		/**
+		 * This will publish the set attribute to both channels.
+		 */
+		this._publishAttr(attr, val, committer, event);
 
 		/**
-		 * Lazy-init the cached callback on first use.
-		 * Avoids allocating a new arrow function on every call while
-		 * remaining safe when subclasses override setup() without super.
+		 * Scalars have no nested paths to publish.
 		 */
-		// @ts-ignore
-		const cb = this._publishCb || (this._publishCb = (path, obj) => this._publishAttr(path, obj, this._pubCommitter, this._pubEvent));
-		Publisher.publish(attr, val, cb);
+		if (!val || typeof val !== 'object')
+		{
+			return;
+		}
+
+		const attrLen = attr.length;
+
+		/**
+		 * This will publish to local one-way subscribers (watchers)
+		 * on paths nested under the set attribute. Messages are
+		 * 'path:event' strings; matching is done on the raw message
+		 * to avoid slicing non-matches.
+		 */
+		const eventSuffix = (event === EVENT.CHANGE) ? ':change' : (':' + event);
+		const suffixLen = eventSuffix.length;
+		const minLen = attrLen + suffixLen;
+
+		for (const msg of this.eventSub.getMessages())
+		{
+			if (msg.length <= minLen || !msg.endsWith(eventSuffix) || !msg.startsWith(attr))
+			{
+				continue;
+			}
+
+			/* Boundary check: '.' (46) or '[' (91) ensures 'items'
+			 * matches 'items[0].name' but not 'itemsTotal'. */
+			const c = msg.charCodeAt(attrLen);
+			if (c !== 46 && c !== 91)
+			{
+				continue;
+			}
+
+			const path = msg.slice(0, msg.length - suffixLen);
+			this._publishAttr(path, this.get(path), committer, event);
+		}
+
+		/**
+		 * This will publish to two-way bound paths registered in the
+		 * data binder under this data's id prefix.
+		 */
+		const msgs = dataBinder.getPrefixMessages(this._dataId);
+		if (msgs)
+		{
+			const idLen = this._dataId.length;
+			for (const msg of msgs)
+			{
+				const pathLen = msg.length - idLen;
+				if (pathLen <= attrLen || !msg.startsWith(attr, idLen))
+				{
+					continue;
+				}
+
+				const c = msg.charCodeAt(idLen + attrLen);
+				if (c !== 46 && c !== 91)
+				{
+					continue;
+				}
+
+				const path = msg.slice(idLen);
+				dataBinder.publish(msg, this.get(path), committer);
+			}
+		}
 	}
 
 	/**

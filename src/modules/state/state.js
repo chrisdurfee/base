@@ -57,7 +57,7 @@ export class State extends SimpleData
 	 * whole action is removed.
 	 *
 	 * @param {string} action
-	 * @param {string} [token]
+	 * @param {number} [token]
 	 * @returns {this}
 	 */
 	removeAction(action, token)

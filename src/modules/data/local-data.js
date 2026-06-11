@@ -22,21 +22,23 @@ export class LocalData
 			return null;
 		}
 
-		let data;
 		const value = localStorage.getItem(key);
 		if (value === null)
 		{
-			if (defaultValue)
-			{
-				data = defaultValue;
-			}
-		}
-		else
-		{
-			data = JSON.parse(value);
+			return (defaultValue !== undefined)? defaultValue : undefined;
 		}
 
-		return data;
+		try
+		{
+			const parsed = JSON.parse(value);
+			return (parsed === null && defaultValue !== undefined)? defaultValue : parsed;
+		}
+		catch (error)
+		{
+			console.warn('[LocalData] Failed to parse stored value for key "' + key + '". Removing corrupted entry.', error);
+			localStorage.removeItem(key);
+			return (defaultValue !== undefined)? defaultValue : undefined;
+		}
 	}
 
 	/**
@@ -60,9 +62,17 @@ export class LocalData
 			return false;
 		}
 
-		const value = JSON.stringify(data);
-		localStorage.setItem(key, value);
-		return true;
+		try
+		{
+			const value = JSON.stringify(data);
+			localStorage.setItem(key, value);
+			return true;
+		}
+		catch (error)
+		{
+			console.error('[LocalData] Failed to store data for key "' + key + '".', error);
+			return false;
+		}
 	}
 
 	/**

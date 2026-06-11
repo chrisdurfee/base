@@ -252,7 +252,7 @@ export class BasicData
 	 *
 	 * @param {string} attrName
 	 * @param {function} callBack
-	 * @returns {string} The subscription token.
+	 * @returns {number} The subscription token.
 	 */
 	on(attrName, callBack)
 	{
@@ -265,7 +265,7 @@ export class BasicData
 	 * This will unbind from a one way bind.
 	 *
 	 * @param {string} attrName
-	 * @param {string} token
+	 * @param {number} token
 	 * @returns {void}
 	 */
 	off(attrName, token)
@@ -537,12 +537,18 @@ export class BasicData
 	/**
 	 * This will set the data local storage key.
 	 *
+	 * An optional version can be passed to scope the stored
+	 * data to a release. Bumping the version after a deploy
+	 * that changes the stored data shape prevents resuming
+	 * stale, incompatible structures.
+	 *
 	 * @param {string} key
+	 * @param {string|number} [version]
 	 * @returns {this}
 	 */
-	setKey(key)
+	setKey(key, version)
 	{
-		this.key = key;
+		this.key = (version !== undefined && version !== null)? key + ':v' + version : key;
 		return this;
 	}
 

@@ -345,7 +345,7 @@ export class Component extends Unit
 		 * component has been resumed or the state helper is
 		 * missing.
 		 */
-		if (!this.stateHelper || this.stateResumed == true)
+		if (!this.stateHelper || this.stateResumed === true)
 		{
 			return;
 		}
@@ -472,7 +472,20 @@ export class Component extends Unit
 	{
 		this.persistedCount = 0;
 		this.rendered = false;
-		this.beforeDestroy();
+
+		/**
+		 * A user error in beforeDestroy must not prevent the
+		 * framework cleanup below from running.
+		 */
+		try
+		{
+			this.beforeDestroy();
+		}
+		catch (error)
+		{
+			console.error('Error in beforeDestroy:', error);
+		}
+
 		this.removeEvents();
 		this.removeStates();
 		this.removeContext();

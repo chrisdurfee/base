@@ -99,12 +99,18 @@ export class StateTracker
 	 */
 	static removeAction(targetId, action, token)
 	{
-		if (!token)
+		if (token)
 		{
+			this.off(targetId, action, token);
 			return;
 		}
 
-		this.off(targetId, action, token);
+		/* no token removes the whole action from the target */
+		const target = this.getTarget(targetId);
+		if (target && action)
+		{
+			target.removeAction(action);
+		}
 	}
 
 	/**
@@ -113,7 +119,7 @@ export class StateTracker
 	 * @param {string} targetId
 	 * @param {string} action
 	 * @param {function} callBack
-	 * @returns {?string}
+	 * @returns {?number}
 	 */
 	static on(targetId, action, callBack)
 	{

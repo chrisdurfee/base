@@ -54,7 +54,7 @@ export class DataBinder
 		 * @type {object} pubSub
 		 * @protected
 		 */
-		this.pubSub = new DataPubSub();
+		this.pubSub = new DataPubSub(true);
 
 		/**
 		 * @type {number} idCount
@@ -430,6 +430,19 @@ export class DataBinder
 	{
 		this.pubSub.publish(msg, value, committer);
 		return this;
+	}
+
+	/**
+	 * This will get the subscribed messages for a data id prefix
+	 * (e.g. 'dt-3:'). Used by deep data to publish only to bound
+	 * paths instead of walking every node of a value.
+	 *
+	 * @param {string} prefix
+	 * @returns {Set<string>|null}
+	 */
+	getPrefixMessages(prefix)
+	{
+		return this.pubSub.getPrefixMessages(prefix);
 	}
 
 	/**

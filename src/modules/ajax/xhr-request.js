@@ -90,7 +90,7 @@ export class XhrRequest
 		{
 			if (Object.prototype.hasOwnProperty.call(object, prop))
 			{
-				params.push(prop + '=' + encodeURIComponent(object[prop]));
+				params.push(encodeURIComponent(prop) + '=' + encodeURIComponent(object[prop]));
 			}
 		}
 		return params.join('&');
@@ -150,11 +150,9 @@ export class XhrRequest
 		}
 		else if (paramsType === 'object')
 		{
-			/* we don't want to modify the original object
-			so we need to clone the object before extending */
-			params = Objects.clone(params);
-
-			params = Object.assign(addingParams, params);
+			/* we merge into a new object so the request params
+			win without mutating the shared fixedParams object */
+			params = Object.assign({}, addingParams, params);
 			params = this.objectToString(params);
 		}
 		return params;
@@ -327,6 +325,21 @@ export class XhrRequest
 		switch (type)
 		{
 			case 'load':
+			{
+				/* the load event fires for every completed response
+				including http errors. route error statuses to the
+				failed callback so apps can handle them. */
+				const status = xhr?.status ?? 0;
+				if (status >= 400)
+				{
+					if (typeof settings.failed === 'function')
+					{
+						settings.failed(false, this.xhr);
+					}
+					removeEvents();
+					break;
+				}
+
 				if (typeof settings.completed === 'function')
 				{
 					let response = this.getResponseData();
@@ -334,6 +347,7 @@ export class XhrRequest
 				}
 				removeEvents();
 				break;
+			}
 			case 'error':
 				if (typeof settings.failed === 'function')
 				{

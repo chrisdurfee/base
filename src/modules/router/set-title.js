@@ -14,6 +14,14 @@ const toTitleCase = (str) =>
 };
 
 /**
+ * This will escape regex special characters in a string.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
  * This will replace any params in the string.
  *
  * @param {string} str
@@ -32,8 +40,10 @@ const replaceParams = (str, route) =>
     {
         if (Object.prototype.hasOwnProperty.call(params, key))
         {
-            const pattern = new RegExp(':' + key, 'gi');
-            str = str.replace(pattern, params[key]);
+            const pattern = new RegExp(':' + escapeRegex(key), 'gi');
+            /* a function replacer prevents $-sequences in the
+            param value from being interpreted */
+            str = str.replace(pattern, () => params[key]);
         }
     }
 
