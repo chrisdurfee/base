@@ -466,11 +466,16 @@ export class Route extends BasicData
 		let matched = false;
 
 		/**
-		 * We want to check to use the supplied uri or get the
-		 * current uri if not setup.
+		 * The query string and hash are never part of the route
+		 * pattern, so they are always stripped before matching.
+		 * Exact-end patterns (e.g. `^/app/$`) would otherwise fail
+		 * on paths like `/app/?utm=x` or `/app/#section`, which
+		 * breaks popstate re-matching of history entries that
+		 * carry a query or hash. Required query/hash conditions
+		 * are still validated by matchConditions below.
 		 */
 		// @ts-ignore
-		const pathToMatch = this.hasConditions ? getPathOnly(path) : path;
+		const pathToMatch = getPathOnly(path);
 		const uriQuery = this.uriQuery || /$^/;
 		const result = pathToMatch.match(uriQuery);
 		if (result === null)

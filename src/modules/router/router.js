@@ -212,7 +212,20 @@ export class Router
 	createURI(uri)
 	{
 		const baseUri = this.getBasePath();
-		return (baseUri + Utils.removeSlashes(uri));
+		let path = Utils.removeSlashes(uri);
+
+		/**
+		 * Relative same-directory references ('.', './') must resolve
+		 * to the base path itself. Without this, the stored history
+		 * state uri becomes "<base>." which will not match exact-end
+		 * route patterns when re-checked on popstate.
+		 */
+		path = path.replace(/^(?:\.\/)+/, '');
+		if (path === '.')
+		{
+			path = '';
+		}
+		return (baseUri + path);
 	}
 
 	/**
