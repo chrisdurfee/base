@@ -313,13 +313,20 @@ export class Html
 		{
 			const node = stack.pop();
 
-			/* Push children first so they are processed before removal. */
+			/* Push children first so they are processed before removal.
+			 * Text nodes (nodeType 3) are skipped: the framework never
+			 * attaches directives, events, bindings or tracker data to
+			 * them, and they often make up half the nodes in a subtree. */
 			const childNodes = node.childNodes;
 			if (childNodes && childNodes.length > 0)
 			{
 				for (let i = childNodes.length - 1; i >= 0; i--)
 				{
-					stack.push(childNodes[i]);
+					const child = childNodes[i];
+					if (child.nodeType !== 3)
+					{
+						stack.push(child);
+					}
 				}
 			}
 

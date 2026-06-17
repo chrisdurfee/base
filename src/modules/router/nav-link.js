@@ -144,6 +144,17 @@ export class NavLink extends Component
             watchers.push(Watcher('text', text));
         }
 
+        /**
+         * Anchor pathname/search/hash getters re-parse the href URL
+         * on every access, and this callback runs for every NavLink
+         * on every navigation. The computed paths are cached keyed
+         * on the raw href attribute so repeat navigations only pay
+         * for one getAttribute call per link.
+         */
+        let cachedHref = null,
+        cachedExactPath = '',
+        cachedMatchPath = '';
+
         watchers.push({
             value: ['[[path]]', data],
             callBack: (value, ele) =>
@@ -153,9 +164,17 @@ export class NavLink extends Component
                     return;
                 }
 
-                const path = ele.pathname + ele.search + ele.hash;
-				const matchPath = (ele.hash || ele.search) ? path : ele.pathname;
-				const selected = exact? (value === path) : (iSActive(matchPath, value));
+                const href = ele.getAttribute('href');
+                if (href !== cachedHref)
+                {
+                    cachedHref = href;
+
+                    const path = ele.pathname + ele.search + ele.hash;
+                    cachedExactPath = path;
+                    cachedMatchPath = (ele.hash || ele.search) ? path : ele.pathname;
+                }
+
+                const selected = exact? (value === cachedExactPath) : (iSActive(cachedMatchPath, value));
                 this.update(selected);
             }
         });

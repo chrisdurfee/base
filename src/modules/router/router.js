@@ -727,16 +727,23 @@ export class Router
 			}
 		}
 
+		let lastSelectedMatched = false;
 		if (lastSelected)
 		{
 			/**
 			 * If the last selected route matches the path, we select it.
-			 * Otherwise, we deactivate it.
+			 * Otherwise, we deactivate it. The result is kept so the
+			 * main loop below doesn't re-run the route regex (match()
+			 * already staged the params on this first call).
 			 */
 			const matched = lastSelected.match(path);
 			if (matched === false)
 			{
 				lastSelected.deactivate();
+			}
+			else
+			{
+				lastSelectedMatched = true;
 			}
 		}
 
@@ -762,7 +769,7 @@ export class Router
 				continue;
 			}
 
-			const matched = route.match(path);
+			const matched = (route === lastSelected)? lastSelectedMatched : route.match(path);
 			if (matched !== false && selected === undefined)
 			{
 				if (route.controller)

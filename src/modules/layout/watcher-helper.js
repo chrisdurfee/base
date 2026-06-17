@@ -168,6 +168,27 @@ export const WatcherHelper =
 	 */
 	_getWatcherCallBack(ele, data, string, attr, isArray)
 	{
+		/**
+		 * Fast path: the string is a single watcher param with no
+		 * static text (e.g. '[[count]]'), which is the most common
+		 * watcher form. This skips the per-update regex replace and
+		 * reads the value directly. String() preserves the exact
+		 * coercion semantics of String.prototype.replace.
+		 */
+		// @ts-ignore
+		const props = this._getWatcherProps(string);
+		if (props && props.length === 1 && string.length === props[0].length + 4)
+		{
+			const key = props[0];
+			const watcherData = (isArray)? data[0] : data;
+			return () =>
+			{
+				const result = watcherData.get(key);
+				// @ts-ignore
+				this.updateAttr(ele, attr, (result != null)? String(result) : '');
+			};
+		}
+
 		return () =>
 		{
 			// @ts-ignore
