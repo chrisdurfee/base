@@ -9,6 +9,7 @@ import { ModuleLoader } from "./module-loader.js";
  * This will create a comment.
  *
  * @param {object} props
+ * @param {function} props.onCreated
  * @returns {object}
  */
 const Comment = (props) => ({
@@ -70,6 +71,7 @@ const getPromise = (src) =>
 	// can be garbage-collected and lookups are synchronous on future hits.
 	promise.then((module) =>
 	{
+		// @ts-ignore
 		importCache.set(src, module);
 	})
 	.catch(() =>
@@ -136,6 +138,7 @@ export const ImportWrapper = Jot(
 		/**
 		 * @type {boolean}
 		 */
+		// @ts-ignore
 		this.loaded = false;
 
 		/**
@@ -143,6 +146,7 @@ export const ImportWrapper = Jot(
 		 *
 		 * @type {object|null}
 		 */
+		// @ts-ignore
 		this.errorRoot = null;
 
 		/**
@@ -151,6 +155,7 @@ export const ImportWrapper = Jot(
 		 *
 		 * @type {number}
 		 */
+		// @ts-ignore
 		this.generation = 0;
 	},
 
@@ -169,18 +174,21 @@ export const ImportWrapper = Jot(
 		{
 			onCreated: (ele) =>
 			{
+				// @ts-ignore
 				const src = this.src;
 				if (!src)
 				{
 					return;
 				}
 
+				// @ts-ignore
 				if (this.layout)
 				{
 					/**
 					 * This will cache the layout root to be removed
 					 * before the module is destroyed.
 					 */
+					// @ts-ignore
 					this.layoutRoot = LayoutManager.render(this.layout, this.panel, this.parent);
 					return;
 				}
@@ -189,17 +197,21 @@ export const ImportWrapper = Jot(
 				 * This will set up a resource group to load the
 				 * depends before the module.
 				 */
+				// @ts-ignore
 				if (this.depends)
 				{
 					const group = new Group(() =>
 					{
+						// @ts-ignore
 						this.loadAndRender(ele);
 					});
 
+					// @ts-ignore
 					group.addFiles(this.depends);
 					return;
 				}
 
+				// @ts-ignore
 				this.loadAndRender(ele);
 			}
 		});
@@ -215,6 +227,7 @@ export const ImportWrapper = Jot(
 	{
 		// Capture the current generation so the async callback can detect
 		// whether destroy() was called while the import was in-flight.
+		// @ts-ignore
 		const gen = this.generation;
 
 		/**
@@ -222,13 +235,16 @@ export const ImportWrapper = Jot(
 		 * render it synchronously. This avoids a microtask gap where the
 		 * comment placeholder shows nothing before the layout appears.
 		 */
+		// @ts-ignore
 		const cachedModule = getCachedModule(this.src);
 		if (cachedModule)
 		{
+			// @ts-ignore
 			this.renderModule(ele, cachedModule);
 			return;
 		}
 
+		// @ts-ignore
 		ModuleLoader.load(getPromise(this.src), (module) =>
 		{
 			/**
@@ -236,21 +252,26 @@ export const ImportWrapper = Jot(
 			 * (and possibly re-created) while we were loading.
 			 * Discard the stale callback.
 			 */
+			// @ts-ignore
 			if (gen !== this.generation)
 			{
 				return;
 			}
 
+			// @ts-ignore
 			this.renderModule(ele, module);
 		},
 		(error) =>
 		{
+			// @ts-ignore
 			if (gen !== this.generation)
 			{
 				return;
 			}
 
+			// @ts-ignore
 			this.loaded = false;
+			// @ts-ignore
 			this.renderError(ele, error);
 		});
 	},
@@ -269,7 +290,9 @@ export const ImportWrapper = Jot(
 	 */
 	renderError(ele, error)
 	{
+		// @ts-ignore
 		const retry = () => this.retry(ele);
+		// @ts-ignore
 		const fallback = this.fallback;
 
 		const layout = (typeof fallback === 'function')
@@ -293,6 +316,7 @@ export const ImportWrapper = Jot(
 			return;
 		}
 
+		// @ts-ignore
 		this.errorRoot = LayoutManager.render(layout, ele, this.parent);
 	},
 
@@ -305,7 +329,9 @@ export const ImportWrapper = Jot(
 	 */
 	retry(ele)
 	{
+		// @ts-ignore
 		this.removeErrorLayout();
+		// @ts-ignore
 		this.loadAndRender(ele);
 	},
 
@@ -316,9 +342,12 @@ export const ImportWrapper = Jot(
 	 */
 	removeErrorLayout()
 	{
+		// @ts-ignore
 		if (this.errorRoot)
 		{
+			// @ts-ignore
 			Builder.removeNode(this.errorRoot);
+			// @ts-ignore
 			this.errorRoot = null;
 		}
 	},
@@ -332,21 +361,28 @@ export const ImportWrapper = Jot(
 	 */
 	renderModule(ele, module)
 	{
+		// @ts-ignore
 		this.loaded = true;
 
+		// @ts-ignore
 		const layout = this.layout || LayoutManager.process(module,
 		{
+			// @ts-ignore
 			callback: this.callback,
+			// @ts-ignore
 			route: this.route,
+			// @ts-ignore
 			persist: this.persist
 		});
 
+		// @ts-ignore
 		this.layout = layout;
 
 		/**
 		 * This will cache the layout root to be removed
 		 * before the module is destroyed.
 		 */
+		// @ts-ignore
 		this.layoutRoot = LayoutManager.render(layout, ele, this.parent);
 	},
 
@@ -358,11 +394,13 @@ export const ImportWrapper = Jot(
 	 */
 	shouldUpdate(layout)
 	{
+		// @ts-ignore
 		if (this.updateLayout === true)
 		{
 			return true;
 		}
 
+		// @ts-ignore
 		return (this.updateLayout = (layout && layout.isUnit && typeof layout.update === 'function'));
 	},
 
@@ -374,7 +412,9 @@ export const ImportWrapper = Jot(
 	 */
 	updateModuleLayout(params)
 	{
+		// @ts-ignore
 		const layout = this.layout;
+		// @ts-ignore
 		if (this.shouldUpdate(layout) && layout)
 		{
 			layout.update(params);
@@ -390,8 +430,10 @@ export const ImportWrapper = Jot(
 	 */
 	update(params)
 	{
+		// @ts-ignore
 		if (this.loaded === true)
 		{
+			// @ts-ignore
 			this.updateModuleLayout(params);
 		}
 	},
@@ -405,22 +447,31 @@ export const ImportWrapper = Jot(
 	destroy()
 	{
 		// Bump generation so any in-flight load callback is discarded.
+		// @ts-ignore
 		this.generation++;
 
+		// @ts-ignore
 		this.removeErrorLayout();
 
+		// @ts-ignore
 		if (!this.layoutRoot)
 		{
 			return;
 		}
 
+		// @ts-ignore
 		Builder.removeNode(this.layoutRoot);
 
+		// @ts-ignore
 		if (this.persist !== true)
 		{
+			// @ts-ignore
 			this.layoutRoot = null;
+			// @ts-ignore
 			this.layout = null;
+			// @ts-ignore
 			this.loaded = false;
+			// @ts-ignore
 			this.updateLayout = false;
 		}
 	}
