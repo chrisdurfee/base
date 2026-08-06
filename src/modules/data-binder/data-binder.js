@@ -265,7 +265,12 @@ export class DataBinder
 			if (skipFirstSameValue)
 			{
 				skipFirstSameValue = false;
-				if (newValue === value)
+
+				/* Only skip primitives: arrays/objects mutated in place
+				 * (push/splice/refresh) are reference-equal to the value
+				 * read at watch time, but are genuine updates that must
+				 * not be swallowed. */
+				if (newValue === value && (newValue === null || typeof newValue !== 'object'))
 				{
 					return;
 				}
@@ -358,7 +363,9 @@ export class DataBinder
 				if (skip[idx])
 				{
 					skip[idx] = false;
-					if (newValue === initial)
+
+					/* Primitive-only skip — see watch(). */
+					if (newValue === initial && (newValue === null || typeof newValue !== 'object'))
 					{
 						return;
 					}

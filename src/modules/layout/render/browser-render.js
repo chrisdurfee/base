@@ -5,6 +5,34 @@ import { HtmlHelper } from '../html-helper.js';
 import { Render } from './render.js';
 
 /**
+ * This will check if a layout object is a plain static text node
+ * (only `tag` and `textContent` keys, no watcher params). These are
+ * created by the parser for every `text` property, so they make up a
+ * large share of layout objects; rendering them directly skips a full
+ * Parser.parse (attr/directive/children arrays + element object).
+ *
+ * @param {object} obj
+ * @returns {boolean}
+ */
+const isStaticTextNode = (obj) =>
+{
+	for (const key in obj)
+	{
+		if (key !== 'tag' && key !== 'textContent')
+		{
+			return false;
+		}
+	}
+
+	const text = obj.textContent;
+	if (typeof text === 'string')
+	{
+		return (text.indexOf('[[') === -1);
+	}
+	return (typeof text !== 'object');
+};
+
+/**
  * BrowserRender
  *
  * This will redner the layout in the browser.
@@ -83,6 +111,16 @@ export class BrowserRender extends Render
 	 */
 	createElement(obj, container, parent)
 	{
+		/* Static text fast path — skips parse and parent scope
+		 * resolution. Falls through to the normal path for watcher
+		 * text or text nodes carrying extra keys (e.g. directives). */
+		if (obj.tag === 'text' && isStaticTextNode(obj))
+		{
+			const text = obj.textContent;
+			HtmlHelper.createText((text == null)? '' : text, container);
+			return;
+		}
+
 		const parentScope = parent?.getChildScope();
 
 		/**

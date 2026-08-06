@@ -132,15 +132,6 @@ const warnIfRebuildingComponent = (result, prop, ele) =>
 		return;
 	}
 	_rebuildWarnings.add(ele);
-
-	console.warn(
-		'[Watcher] Reactive callback for "' + prop + '" returned a Component/Unit instance. ' +
-		'The entire subtree will be destroyed and recreated on every change, which can ' +
-		'trigger expensive deep publishes during persistence/resume. Consider mounting ' +
-		'the component once and exposing a refresh()/update() method, or returning a ' +
-		'plain layout object instead.',
-		ele
-	);
 };
 
 /**

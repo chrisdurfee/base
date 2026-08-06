@@ -336,6 +336,13 @@ export const WatcherHelper =
 		 */
 		// @ts-ignore
 		const props = this._getWatcherProps(string);
+		if (!props)
+		{
+			/* No '[[prop]]' params in the string — nothing to watch.
+			 * Guards a crash when the watch directive is given a
+			 * plain string. */
+			return;
+		}
 		// @ts-ignore
 		const callBack = this.getCallBack(settings, ele, data, string, isDataArray, props);
 
