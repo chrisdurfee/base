@@ -586,6 +586,13 @@ export class Router
 		uri = this.createURI(uri);
 		// @ts-ignore
 		this.history.addState(uri, data, replace);
+		/**
+		 * Publish the path before activating routes so NavLinks and
+		 * underline tabs paint the new selection immediately. Switch
+		 * panels still tear down / import after this, which can take
+		 * a frame or more on large hub boards.
+		 */
+		this.updatePath();
 		this.activate();
 
 		return this;
@@ -635,6 +642,13 @@ export class Router
 		this.path = path;
 
 		/**
+		 * Publish the path before matching routes/switches so the
+		 * active tab underline updates on the same turn as the click,
+		 * not after a large panel is destroyed.
+		 */
+		this.updatePath();
+
+		/**
 		 * Reset scroll intent before checking routes.
 		 * Routes will set this during select().
 		 */
@@ -671,7 +685,6 @@ export class Router
 
 		this.checkSwitches(path);
 		this.applyScrollIntent();
-		this.updatePath();
 	}
 
 	/**
@@ -731,26 +744,18 @@ export class Router
 		if (lastSelected)
 		{
 			/**
-			 * If the last selected route matches the path, we select it.
-			 * Otherwise, we deactivate it. The result is kept so the
-			 * main loop below doesn't re-run the route regex (match()
-			 * already staged the params on this first call).
+			 * Keep the match result so the main loop below doesn't
+			 * re-run the route regex (match() already staged params).
+			 * Do not deactivate yet: start the incoming panel first
+			 * so a large outgoing board does not block the import.
 			 */
-			const matched = lastSelected.match(path);
-			if (matched === false)
-			{
-				lastSelected.deactivate();
-			}
-			else
-			{
-				lastSelectedMatched = true;
-			}
+			lastSelectedMatched = lastSelected.match(path) !== false;
 		}
 
 		/**
-		 * We will check each route in the group to see if it matches the path. If a route
-		 * matches the path, we select it. If a route has a controller, we deactivate all
-		 * subsequent routes and select the first route with a controller.
+		 * Find the first matching route with a controller. Selection
+		 * happens after the scan so we can attach the new panel
+		 * before tearing down the old one.
 		 */
 		let selected;
 		for (let i = 0; i < length; i++)
@@ -761,22 +766,10 @@ export class Router
 				continue;
 			}
 
-			// If we have already found a matching route, and it has a controller,
-			// we deactivate subsequent routes.
-			if (selected)
-			{
-				route.deactivate();
-				continue;
-			}
-
 			const matched = (route === lastSelected)? lastSelectedMatched : route.match(path);
-			if (matched !== false && selected === undefined)
+			if (matched !== false && selected === undefined && route.controller)
 			{
-				if (route.controller)
-				{
-					selected = route;
-					this.select(route);
-				}
+				selected = route;
 			}
 		}
 
@@ -786,10 +779,29 @@ export class Router
 		 * path doesn't actually belong to this group's container, which is
 		 * likely about to be unmounted by navigation away from this page.
 		 */
-		const firstRoute = group[0];
 		if (!selected)
 		{
-			this.select(firstRoute, true);
+			if (lastSelected && lastSelected !== group[0])
+			{
+				lastSelected.deactivate();
+			}
+			this.select(group[0], true);
+			return;
+		}
+
+		this.select(selected);
+		if (lastSelected && lastSelected !== selected)
+		{
+			lastSelected.deactivate();
+		}
+
+		for (let i = 0; i < length; i++)
+		{
+			const route = group[i];
+			if (route && route !== selected && route !== lastSelected)
+			{
+				route.deactivate();
+			}
 		}
 	}
 
