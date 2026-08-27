@@ -1,3 +1,4 @@
+import { LRUCache } from '../../shared/lru-cache.js';
 import { dataBinder } from '../data-binder/data-binder.js';
 import { getParentData } from './directives/core/reactive/get-parent-data.js';
 import { HtmlHelper } from './html-helper.js';
@@ -15,9 +16,12 @@ const WATCHER_PATTERN = /(\[\[(.*?(?:\[\d+\])?)\]\])/g;
  * Module-level cache for parsed watcher prop arrays.
  * The same watcher string (e.g. '[[count]]') across many elements is parsed once.
  *
- * @type {Map<string, Array<string>|null>}
+ * Watcher strings are authored, so the key space is normally small,
+ * but interpolated strings built per row make it unbounded.
+ *
+ * @type {LRUCache}
  */
-const _watcherPropsCache = new Map();
+const _watcherPropsCache = new LRUCache(1000);
 
 /**
  * WatcherHelper

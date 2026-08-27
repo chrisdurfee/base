@@ -106,7 +106,7 @@ describe('DataUtils segment LRU cache', () =>
 	 * insertion order (FIFO) rather than recency (LRU), and a hot path read
 	 * on every set can still be evicted.
 	 */
-	it.fails('get() promotes a key so eviction is LRU and not FIFO', () =>
+	it('get() promotes a key so eviction is LRU and not FIFO', () =>
 	{
 		const cache = new LRUCache(3);
 		cache.set('a', 1);

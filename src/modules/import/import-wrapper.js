@@ -1,3 +1,4 @@
+import { LRUCache } from "../../shared/lru-cache.js";
 import { Component } from "../component/component.js";
 import { Jot } from "../component/jot.js";
 import { Builder } from '../layout/builder.js';
@@ -27,9 +28,13 @@ const Comment = (props) => ({
  * Resolved promises are replaced with their module value so the Promise
  * can be garbage-collected.
  *
- * @type {Map<unknown, Promise<unknown>|object>}
+ * Bounded because src keys can be per-render arrow functions. Evicting
+ * a resolved entry only costs a re-import, which the engine's own
+ * module registry answers immediately.
+ *
+ * @type {LRUCache}
  */
-const importCache = new Map();
+const importCache = new LRUCache(100);
 
 /**
  * This will get the promise from the src.

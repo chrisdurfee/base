@@ -1,41 +1,4 @@
-/**
- * Simple LRU Cache implementation for caching parsed path segments.
- * Caches up to 1000 most recently used paths (~50KB memory overhead).
- *
- * @class
- */
-class LRUCache
-{
-	constructor(maxSize = 1000)
-	{
-		this.cache = new Map();
-		this.maxSize = maxSize;
-	}
-
-	get(key)
-	{
-		return this.cache.get(key);
-	}
-
-	set(key, value)
-	{
-		/* delete() returns false if key doesn't exist, so no has() guard needed. */
-		this.cache.delete(key);
-		this.cache.set(key, value);
-
-		// Evict oldest if over limit
-		if (this.cache.size > this.maxSize)
-		{
-			const firstKey = this.cache.keys().next().value;
-			this.cache.delete(firstKey);
-		}
-	}
-
-	clear()
-	{
-		this.cache.clear();
-	}
-}
+import { LRUCache } from '../../../../shared/lru-cache.js';
 
 /**
  * Property names that allow prototype pollution and must
@@ -46,18 +9,61 @@ class LRUCache
 const DANGEROUS_SEGMENTS = new Set(['__proto__', 'prototype', 'constructor']);
 
 /**
+ * This will split a data path into its segments.
+ *
+ * Paths are dot separated property names with optional bracketed
+ * array indexes, e.g. 'a.b[2].c'. A scanner is smaller and faster
+ * than a regex here, and unlike the pattern it replaced it actually
+ * understands brackets.
+ *
+ * @param {string} str
+ * @returns {Array<string>|null}
+ */
+const parseSegments = (str) =>
+{
+	const segments = [];
+	const length = str.length;
+	let start = 0;
+
+	for (let i = 0; i < length; i++)
+	{
+		const c = str[i];
+		if (c !== '.' && c !== '[' && c !== ']')
+		{
+			continue;
+		}
+
+		if (i > start)
+		{
+			segments.push(str.substring(start, i));
+		}
+		start = i + 1;
+	}
+
+	if (length > start)
+	{
+		segments.push(str.substring(start));
+	}
+
+	return (segments.length > 0)? segments : null;
+};
+
+/**
  * This is a utility class for data.
  */
 export const DataUtils =
 {
-    /**
-     * @type {RegExp} deepDataPattern
-     */
+	/**
+	 * @deprecated Unused since getSegments stopped parsing with a
+	 * regex. Kept because it is a published property of DataUtils.
+	 *
+	 * @type {RegExp} deepDataPattern
+	 */
 	deepDataPattern: /(\w+)|(?:\[(\d)\))/g,
 
 	/**
 	 * LRU cache for parsed path segments.
-	 * Provides 50-70% faster path operations by avoiding repeated regex parsing.
+	 * Provides 50-70% faster path operations by avoiding repeated parsing.
 	 *
 	 * @type {LRUCache}
 	 */
@@ -103,8 +109,7 @@ export const DataUtils =
 		}
 
 		// Parse and cache
-		const pattern = this.deepDataPattern;
-		segments = str.match(pattern);
+		segments = parseSegments(str);
 
 		/* block prototype pollution through deep paths
 		e.g. 'user.__proto__.isAdmin' */

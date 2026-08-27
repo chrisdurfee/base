@@ -1,3 +1,4 @@
+import { LRUCache } from '../../../shared/lru-cache.js';
 import { dataBinder } from '../../data-binder/data-binder.js';
 import { DataPubSub } from '../../data-binder/data-pub-sub.js';
 import { DataProxy } from '../data-proxy.js';
@@ -11,9 +12,13 @@ let dataNumber = 0;
  * Avoids building `attr + ':change'` / `attr + ':delete'` strings on every data change.
  * Since property names repeat constantly, hit rate is near 100% after warm-up.
  *
- * @type {Map<string, {change: string, delete: string}>}
+ * Deep paths ('items[0].name') are attrs too, so the key space grows
+ * with the data, not with the source. The bound keeps a long lived
+ * page from retaining a message entry per row it ever rendered.
+ *
+ * @type {LRUCache}
  */
-const eventMessageCache = new Map();
+const eventMessageCache = new LRUCache(2000);
 
 /**
  * EVENT
