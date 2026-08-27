@@ -11,3 +11,10 @@ dist/
 *.code-workspace
 Dockerfile
 docker-compose.yml
+
+# Throwaway measurement harnesses and the variant source snapshots they
+# load to run A/B comparisons. The baselines that are meant to be kept are
+# bench-baseline.json and size-baseline.json, both tracked at the root.
+.bench-phase0.js
+perf-*.mjs
+tmp/
