@@ -173,7 +173,7 @@ export class StateTracker
 	 *
 	 * @param {string} targetId
 	 * @param {string} action
-	 * @param {string} [token]
+	 * @param {number} [token]
 	 * @returns {void}
 	 */
 	static removeAction(targetId, action, token)
@@ -215,7 +215,7 @@ export class StateTracker
 	 *
 	 * @param {string} targetId
 	 * @param {string} action
-	 * @param {string} token
+	 * @param {number} token
 	 * @returns {void}
 	 */
 	static off(targetId, action, token)
@@ -228,7 +228,7 @@ export class StateTracker
 	 *
 	 * @param {string} targetId
 	 * @param {string} [action]
-	 * @param {string} [token]
+	 * @param {number} [token]
 	 * @returns {void}
 	 */
 	static remove(targetId, action, token)
