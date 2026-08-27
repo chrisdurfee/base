@@ -1,5 +1,5 @@
 {
-	"generatedAt": "2026-08-27T21:59:32.012Z",
+	"generatedAt": "2026-08-27T22:40:49.555Z",
 	"compression": {
 		"gzipLevel": 9,
 		"brotliQuality": 11
@@ -9,43 +9,15 @@
 			"entryPoint": "src/base.js",
 			"entryFile": "dist/base.js",
 			"chunkCount": 0,
-			"raw": 99908,
-			"gzip": 30975,
-			"brotli": 27460,
+			"raw": 100076,
+			"gzip": 31017,
+			"brotli": 27491,
 			"files": [
 				{
 					"file": "dist/base.js",
-					"raw": 99908,
-					"gzip": 30975,
-					"brotli": 27460
-				}
-			]
-		},
-		"core": {
-			"entryPoint": "src/entries/core.js",
-			"entryFile": "dist/modules/core.js",
-			"chunkCount": 2,
-			"raw": 4500,
-			"gzip": 1942,
-			"brotli": 1753,
-			"files": [
-				{
-					"file": "dist/modules/core.js",
-					"raw": 200,
-					"gzip": 171,
-					"brotli": 136
-				},
-				{
-					"file": "dist/chunks/chunk-UUKPCQ2Y.js",
-					"raw": 4077,
-					"gzip": 1573,
-					"brotli": 1441
-				},
-				{
-					"file": "dist/chunks/chunk-DWOYCZYJ.js",
-					"raw": 223,
-					"gzip": 198,
-					"brotli": 176
+					"raw": 100076,
+					"gzip": 31017,
+					"brotli": 27491
 				}
 			]
 		},
@@ -53,15 +25,15 @@
 			"entryPoint": "src/entries/ajax.js",
 			"entryFile": "dist/modules/ajax.js",
 			"chunkCount": 4,
-			"raw": 9826,
-			"gzip": 4194,
-			"brotli": 3739,
+			"raw": 9836,
+			"gzip": 4197,
+			"brotli": 3733,
 			"files": [
 				{
 					"file": "dist/modules/ajax.js",
-					"raw": 4432,
-					"gzip": 1791,
-					"brotli": 1588
+					"raw": 4437,
+					"gzip": 1794,
+					"brotli": 1584
 				},
 				{
 					"file": "dist/chunks/chunk-MNKLSGJQ.js",
@@ -76,10 +48,10 @@
 					"brotli": 403
 				},
 				{
-					"file": "dist/chunks/chunk-UUKPCQ2Y.js",
-					"raw": 4077,
+					"file": "dist/chunks/chunk-TDLN57VY.js",
+					"raw": 4082,
 					"gzip": 1573,
-					"brotli": 1441
+					"brotli": 1439
 				},
 				{
 					"file": "dist/chunks/chunk-DWOYCZYJ.js",
@@ -93,33 +65,33 @@
 			"entryPoint": "src/entries/html.js",
 			"entryFile": "dist/modules/html.js",
 			"chunkCount": 4,
-			"raw": 22518,
-			"gzip": 7761,
-			"brotli": 6976,
+			"raw": 22523,
+			"gzip": 7755,
+			"brotli": 6953,
 			"files": [
 				{
 					"file": "dist/modules/html.js",
 					"raw": 208,
-					"gzip": 146,
-					"brotli": 119
+					"gzip": 144,
+					"brotli": 117
 				},
 				{
-					"file": "dist/chunks/chunk-R4IESGDW.js",
+					"file": "dist/chunks/chunk-TFVBKZUB.js",
 					"raw": 2523,
-					"gzip": 1191,
-					"brotli": 1065
+					"gzip": 1189,
+					"brotli": 1054
 				},
 				{
-					"file": "dist/chunks/chunk-5CCRCJVT.js",
+					"file": "dist/chunks/chunk-T3WI7GCT.js",
 					"raw": 15487,
-					"gzip": 4653,
-					"brotli": 4175
+					"gzip": 4651,
+					"brotli": 4167
 				},
 				{
-					"file": "dist/chunks/chunk-UUKPCQ2Y.js",
-					"raw": 4077,
+					"file": "dist/chunks/chunk-TDLN57VY.js",
+					"raw": 4082,
 					"gzip": 1573,
-					"brotli": 1441
+					"brotli": 1439
 				},
 				{
 					"file": "dist/chunks/chunk-DWOYCZYJ.js",
@@ -155,15 +127,15 @@
 			"entryPoint": "src/entries/data.js",
 			"entryFile": "dist/modules/data.js",
 			"chunkCount": 9,
-			"raw": 44333,
-			"gzip": 16796,
-			"brotli": 15106,
+			"raw": 44491,
+			"gzip": 16839,
+			"brotli": 15101,
 			"files": [
 				{
 					"file": "dist/modules/data.js",
-					"raw": 6404,
-					"gzip": 2539,
-					"brotli": 2260
+					"raw": 6557,
+					"gzip": 2588,
+					"brotli": 2297
 				},
 				{
 					"file": "dist/chunks/chunk-MNKLSGJQ.js",
@@ -172,16 +144,16 @@
 					"brotli": 131
 				},
 				{
-					"file": "dist/chunks/chunk-EMXN4M44.js",
+					"file": "dist/chunks/chunk-QXTQMPCM.js",
 					"raw": 5293,
-					"gzip": 2116,
-					"brotli": 1920
+					"gzip": 2117,
+					"brotli": 1913
 				},
 				{
-					"file": "dist/chunks/chunk-4AWX4Y66.js",
+					"file": "dist/chunks/chunk-GNJZ6CEA.js",
 					"raw": 3414,
-					"gzip": 1548,
-					"brotli": 1379
+					"gzip": 1547,
+					"brotli": 1370
 				},
 				{
 					"file": "dist/chunks/chunk-W37VRHGC.js",
@@ -190,28 +162,28 @@
 					"brotli": 403
 				},
 				{
-					"file": "dist/chunks/chunk-R4IESGDW.js",
+					"file": "dist/chunks/chunk-TFVBKZUB.js",
 					"raw": 2523,
-					"gzip": 1191,
-					"brotli": 1065
+					"gzip": 1189,
+					"brotli": 1054
 				},
 				{
-					"file": "dist/chunks/chunk-TEYOFSIW.js",
+					"file": "dist/chunks/chunk-KRDITJSA.js",
 					"raw": 5818,
-					"gzip": 2346,
-					"brotli": 2156
+					"gzip": 2344,
+					"brotli": 2151
 				},
 				{
-					"file": "dist/chunks/chunk-5CCRCJVT.js",
+					"file": "dist/chunks/chunk-T3WI7GCT.js",
 					"raw": 15487,
-					"gzip": 4653,
-					"brotli": 4175
+					"gzip": 4651,
+					"brotli": 4167
 				},
 				{
-					"file": "dist/chunks/chunk-UUKPCQ2Y.js",
-					"raw": 4077,
+					"file": "dist/chunks/chunk-TDLN57VY.js",
+					"raw": 4082,
 					"gzip": 1573,
-					"brotli": 1441
+					"brotli": 1439
 				},
 				{
 					"file": "dist/chunks/chunk-DWOYCZYJ.js",
@@ -225,39 +197,39 @@
 			"entryPoint": "src/entries/state.js",
 			"entryFile": "dist/modules/state.js",
 			"chunkCount": 5,
-			"raw": 27468,
-			"gzip": 9556,
-			"brotli": 8639,
+			"raw": 27473,
+			"gzip": 9550,
+			"brotli": 8625,
 			"files": [
 				{
 					"file": "dist/modules/state.js",
 					"raw": 264,
-					"gzip": 168,
-					"brotli": 136
+					"gzip": 167,
+					"brotli": 137
 				},
 				{
-					"file": "dist/chunks/chunk-HT3JMSQ7.js",
+					"file": "dist/chunks/chunk-VRFEYZE5.js",
 					"raw": 1599,
-					"gzip": 618,
+					"gzip": 617,
 					"brotli": 555
 				},
 				{
-					"file": "dist/chunks/chunk-TEYOFSIW.js",
+					"file": "dist/chunks/chunk-KRDITJSA.js",
 					"raw": 5818,
-					"gzip": 2346,
-					"brotli": 2156
+					"gzip": 2344,
+					"brotli": 2151
 				},
 				{
-					"file": "dist/chunks/chunk-5CCRCJVT.js",
+					"file": "dist/chunks/chunk-T3WI7GCT.js",
 					"raw": 15487,
-					"gzip": 4653,
-					"brotli": 4175
+					"gzip": 4651,
+					"brotli": 4167
 				},
 				{
-					"file": "dist/chunks/chunk-UUKPCQ2Y.js",
-					"raw": 4077,
+					"file": "dist/chunks/chunk-TDLN57VY.js",
+					"raw": 4082,
 					"gzip": 1573,
-					"brotli": 1441
+					"brotli": 1439
 				},
 				{
 					"file": "dist/chunks/chunk-DWOYCZYJ.js",
@@ -271,27 +243,27 @@
 			"entryPoint": "src/entries/component.js",
 			"entryFile": "dist/modules/component.js",
 			"chunkCount": 9,
-			"raw": 60650,
-			"gzip": 21942,
-			"brotli": 19829,
+			"raw": 60655,
+			"gzip": 21927,
+			"brotli": 19781,
 			"files": [
 				{
 					"file": "dist/modules/component.js",
 					"raw": 6698,
-					"gzip": 2805,
-					"brotli": 2544
+					"gzip": 2803,
+					"brotli": 2547
 				},
 				{
-					"file": "dist/chunks/chunk-32372ZGO.js",
+					"file": "dist/chunks/chunk-KSCSAQ6S.js",
 					"raw": 19881,
-					"gzip": 6540,
-					"brotli": 5935
+					"gzip": 6535,
+					"brotli": 5919
 				},
 				{
-					"file": "dist/chunks/chunk-4AWX4Y66.js",
+					"file": "dist/chunks/chunk-GNJZ6CEA.js",
 					"raw": 3414,
-					"gzip": 1548,
-					"brotli": 1379
+					"gzip": 1547,
+					"brotli": 1370
 				},
 				{
 					"file": "dist/chunks/chunk-W37VRHGC.js",
@@ -300,34 +272,34 @@
 					"brotli": 403
 				},
 				{
-					"file": "dist/chunks/chunk-R4IESGDW.js",
+					"file": "dist/chunks/chunk-TFVBKZUB.js",
 					"raw": 2523,
-					"gzip": 1191,
-					"brotli": 1065
+					"gzip": 1189,
+					"brotli": 1054
 				},
 				{
-					"file": "dist/chunks/chunk-HT3JMSQ7.js",
+					"file": "dist/chunks/chunk-VRFEYZE5.js",
 					"raw": 1599,
-					"gzip": 618,
+					"gzip": 617,
 					"brotli": 555
 				},
 				{
-					"file": "dist/chunks/chunk-TEYOFSIW.js",
+					"file": "dist/chunks/chunk-KRDITJSA.js",
 					"raw": 5818,
-					"gzip": 2346,
-					"brotli": 2156
+					"gzip": 2344,
+					"brotli": 2151
 				},
 				{
-					"file": "dist/chunks/chunk-5CCRCJVT.js",
+					"file": "dist/chunks/chunk-T3WI7GCT.js",
 					"raw": 15487,
-					"gzip": 4653,
-					"brotli": 4175
+					"gzip": 4651,
+					"brotli": 4167
 				},
 				{
-					"file": "dist/chunks/chunk-UUKPCQ2Y.js",
-					"raw": 4077,
+					"file": "dist/chunks/chunk-TDLN57VY.js",
+					"raw": 4082,
 					"gzip": 1573,
-					"brotli": 1441
+					"brotli": 1439
 				},
 				{
 					"file": "dist/chunks/chunk-DWOYCZYJ.js",
@@ -341,33 +313,33 @@
 			"entryPoint": "src/entries/router.js",
 			"entryFile": "dist/modules/router.js",
 			"chunkCount": 10,
-			"raw": 77059,
-			"gzip": 27410,
-			"brotli": 24753,
+			"raw": 77064,
+			"gzip": 27395,
+			"brotli": 24697,
 			"files": [
 				{
 					"file": "dist/modules/router.js",
 					"raw": 17814,
-					"gzip": 6157,
-					"brotli": 5548
+					"gzip": 6154,
+					"brotli": 5550
 				},
 				{
-					"file": "dist/chunks/chunk-EMXN4M44.js",
+					"file": "dist/chunks/chunk-QXTQMPCM.js",
 					"raw": 5293,
-					"gzip": 2116,
-					"brotli": 1920
+					"gzip": 2117,
+					"brotli": 1913
 				},
 				{
-					"file": "dist/chunks/chunk-32372ZGO.js",
+					"file": "dist/chunks/chunk-KSCSAQ6S.js",
 					"raw": 19881,
-					"gzip": 6540,
-					"brotli": 5935
+					"gzip": 6535,
+					"brotli": 5919
 				},
 				{
-					"file": "dist/chunks/chunk-4AWX4Y66.js",
+					"file": "dist/chunks/chunk-GNJZ6CEA.js",
 					"raw": 3414,
-					"gzip": 1548,
-					"brotli": 1379
+					"gzip": 1547,
+					"brotli": 1370
 				},
 				{
 					"file": "dist/chunks/chunk-W37VRHGC.js",
@@ -376,34 +348,34 @@
 					"brotli": 403
 				},
 				{
-					"file": "dist/chunks/chunk-R4IESGDW.js",
+					"file": "dist/chunks/chunk-TFVBKZUB.js",
 					"raw": 2523,
-					"gzip": 1191,
-					"brotli": 1065
+					"gzip": 1189,
+					"brotli": 1054
 				},
 				{
-					"file": "dist/chunks/chunk-HT3JMSQ7.js",
+					"file": "dist/chunks/chunk-VRFEYZE5.js",
 					"raw": 1599,
-					"gzip": 618,
+					"gzip": 617,
 					"brotli": 555
 				},
 				{
-					"file": "dist/chunks/chunk-TEYOFSIW.js",
+					"file": "dist/chunks/chunk-KRDITJSA.js",
 					"raw": 5818,
-					"gzip": 2346,
-					"brotli": 2156
+					"gzip": 2344,
+					"brotli": 2151
 				},
 				{
-					"file": "dist/chunks/chunk-5CCRCJVT.js",
+					"file": "dist/chunks/chunk-T3WI7GCT.js",
 					"raw": 15487,
-					"gzip": 4653,
-					"brotli": 4175
+					"gzip": 4651,
+					"brotli": 4167
 				},
 				{
-					"file": "dist/chunks/chunk-UUKPCQ2Y.js",
-					"raw": 4077,
+					"file": "dist/chunks/chunk-TDLN57VY.js",
+					"raw": 4082,
 					"gzip": 1573,
-					"brotli": 1441
+					"brotli": 1439
 				},
 				{
 					"file": "dist/chunks/chunk-DWOYCZYJ.js",
@@ -415,9 +387,9 @@
 		}
 	},
 	"distinctLiveOutputs": {
-		"fileCount": 20,
-		"raw": 201408,
-		"gzip": 68243,
-		"brotli": 60991
+		"fileCount": 19,
+		"raw": 201539,
+		"gzip": 68146,
+		"brotli": 60865
 	}
 }
