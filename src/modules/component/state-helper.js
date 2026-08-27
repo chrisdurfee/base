@@ -273,7 +273,7 @@ export class StateHelper
 	 * @param {object} target
 	 * @param {string} actionEvent
 	 * @param {string} remoteTargetId
-	 * @returns {string}
+	 * @returns {number} The link token.
 	 */
 	bindRemoteState(target, actionEvent, remoteTargetId)
 	{
@@ -285,7 +285,7 @@ export class StateHelper
 	 * This will unbind a remote state.
 	 *
 	 * @param {object} target
-	 * @param {string} token
+	 * @param {number} token
 	 * @return {void}
 	 */
 	unbindRemoteState(target, token)
@@ -323,7 +323,7 @@ export class StateHelper
 	 *
 	 * @param {object} target
 	 * @param {object} action
-	 * @returns {string|null}
+	 * @returns {number|null}
 	 */
 	addAction(target, action)
 	{
