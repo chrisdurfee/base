@@ -1,5 +1,5 @@
 import { Component } from './component.js';
-import { SHORTHAND_METHODS } from './shorthand-methods.js';
+import { getShorthandMethod, SHORTHAND_METHODS } from './shorthand-methods.js';
 
 /**
  * Pods
@@ -26,7 +26,7 @@ const modifyMethods = (proxy, component) =>
 		const prop = keys[i];
 		const value = proxy[prop];
 		const alias = SHORTHAND_METHODS[prop] || prop;
-		component.prototype[alias] = value;
+		component.prototype[alias] = getShorthandMethod(value, alias);
 	}
 
 	return component;

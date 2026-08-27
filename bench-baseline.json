@@ -1,5 +1,5 @@
 {
-	"generatedAt": "2026-08-27T20:34:30.314Z",
+	"generatedAt": "2026-08-27T21:17:32.419Z",
 	"environment": {
 		"env": "jsdom",
 		"quick": false,
@@ -11,105 +11,105 @@
 	"results": {
 		"deepData.set.hotCache": {
 			"samples": 15,
-			"minMs": 5.631,
-			"medianMs": 6.264,
-			"p95Ms": 8.636,
-			"maxMs": 10.191,
-			"meanMs": 6.896
+			"minMs": 10.276,
+			"medianMs": 14.548,
+			"p95Ms": 19.28,
+			"maxMs": 22.612,
+			"meanMs": 14.529
 		},
 		"deepData.set.coldCache": {
 			"samples": 15,
-			"minMs": 42.616,
-			"medianMs": 46.663,
-			"p95Ms": 81.314,
-			"maxMs": 86.291,
-			"meanMs": 55.783
+			"minMs": 104.337,
+			"medianMs": 197.577,
+			"p95Ms": 487.263,
+			"maxMs": 899.547,
+			"meanMs": 250.338
 		},
 		"deepData.get.hotCache": {
 			"samples": 15,
-			"minMs": 1.531,
-			"medianMs": 1.666,
-			"p95Ms": 2.763,
-			"maxMs": 2.812,
-			"meanMs": 1.978
+			"minMs": 2.909,
+			"medianMs": 3.594,
+			"p95Ms": 6.189,
+			"maxMs": 6.354,
+			"meanMs": 3.97
 		},
 		"deepData.get.coldCache": {
 			"samples": 15,
-			"minMs": 7.527,
-			"medianMs": 9.028,
-			"p95Ms": 27.133,
-			"maxMs": 31.492,
-			"meanMs": 11.541
+			"minMs": 15.002,
+			"medianMs": 16.472,
+			"p95Ms": 66.684,
+			"maxMs": 86.721,
+			"meanMs": 24.243
 		},
 		"publish.fanOut.sameProp": {
 			"samples": 15,
-			"minMs": 14.183,
-			"medianMs": 15.474,
-			"p95Ms": 16.038,
-			"maxMs": 16.14,
-			"meanMs": 15.369
+			"minMs": 0.685,
+			"medianMs": 1.237,
+			"p95Ms": 9.34,
+			"maxMs": 17.211,
+			"meanMs": 2.538
 		},
 		"publish.fanOut.nestedPaths": {
 			"samples": 8,
-			"minMs": 1.14,
-			"medianMs": 13.349,
-			"p95Ms": 14.382,
-			"maxMs": 14.523,
-			"meanMs": 11.752
+			"minMs": 4.878,
+			"medianMs": 10.37,
+			"p95Ms": 16.057,
+			"maxMs": 17.183,
+			"meanMs": 10.089
 		},
 		"list.build.1000Rows": {
 			"samples": 5,
-			"minMs": 35.925,
-			"medianMs": 45.91,
-			"p95Ms": 50.74,
-			"maxMs": 51.781,
-			"meanMs": 44.399
+			"minMs": 75.013,
+			"medianMs": 112.988,
+			"p95Ms": 213.421,
+			"maxMs": 214.644,
+			"meanMs": 140.761
 		},
 		"list.update.1000Rows": {
 			"samples": 50,
-			"minMs": 79.651,
-			"medianMs": 136.824,
-			"p95Ms": 232.188,
-			"maxMs": 314.457,
-			"meanMs": 148.163
+			"minMs": 88.525,
+			"medianMs": 128.42,
+			"p95Ms": 211.019,
+			"maxMs": 243.285,
+			"meanMs": 135.45
 		},
 		"list.subscriberLeak": {
 			"rows": 1000,
 			"updates": 50,
 			"subscribersAtMount": 2001,
-			"subscribersAfterUpdates": 102001,
-			"totalGrowth": 100000,
-			"growthPerUpdate": 2000,
-			"growthPerUpdatePerRow": 2,
-			"firstUpdateGrowth": 2000,
-			"lastUpdateGrowth": 2000,
-			"unbounded": true,
+			"subscribersAfterUpdates": 2001,
+			"totalGrowth": 0,
+			"growthPerUpdate": 0,
+			"growthPerUpdatePerRow": 0,
+			"firstUpdateGrowth": 0,
+			"lastUpdateGrowth": 0,
+			"unbounded": false,
 			"note": "Steady-state re-rendering should return to subscribersAtMount. Any positive totalGrowth is the for-directive scope leak."
 		},
 		"router.navigate.cacheMiss.200Routes": {
 			"samples": 100,
-			"minMs": 0.183,
-			"medianMs": 0.271,
-			"p95Ms": 0.851,
-			"maxMs": 1.19,
-			"meanMs": 0.345
+			"minMs": 0.4,
+			"medianMs": 0.67,
+			"p95Ms": 1.626,
+			"maxMs": 2.601,
+			"meanMs": 0.833
 		},
 		"router.navigate.cacheHit.200Routes": {
 			"samples": 100,
-			"minMs": 0.005,
-			"medianMs": 0.014,
-			"p95Ms": 0.038,
-			"maxMs": 0.192,
-			"meanMs": 0.019
+			"minMs": 0.008,
+			"medianMs": 0.011,
+			"p95Ms": 0.036,
+			"maxMs": 0.139,
+			"meanMs": 0.017
 		},
 		"memory.listMountUnmount": {
 			"gcForced": true,
 			"cycles": 20,
 			"rowsPerCycle": 1000,
-			"heapUsedBeforeBytes": 52245192,
-			"heapUsedAfterBytes": 67927704,
-			"heapDeltaBytes": 15682512,
-			"heapDeltaPerCycleBytes": 784126,
+			"heapUsedBeforeBytes": 41511808,
+			"heapUsedAfterBytes": 41827896,
+			"heapDeltaBytes": 316088,
+			"heapDeltaPerCycleBytes": 15804,
 			"note": "Measured around a forced GC. A retained delta indicates mount/unmount does not release."
 		}
 	}

@@ -149,6 +149,33 @@ describe('DataPubSub microtask batching', () =>
 		expect(unrelated.length).toBe(loops);
 	});
 
+	/**
+	 * The re-entrancy bookkeeping the breaker relies on marks messages
+	 * that re-publish themselves. A wide fan-out publishes the same
+	 * message on every flush without being re-entrant, so this pins
+	 * that none of those deliveries get classified as a cascade and
+	 * dropped.
+	 */
+	it('delivers a wide fan-out to every subscriber on each flush', async () =>
+	{
+		const FAN_OUT = 500;
+		const ITERATIONS = 5;
+
+		let delivered = 0;
+		for (let i = 0; i < FAN_OUT; i++)
+		{
+			pubSub.on('value', () => delivered++);
+		}
+
+		for (let i = 0; i < ITERATIONS; i++)
+		{
+			pubSub.publish('value', i);
+			await flush();
+		}
+
+		expect(delivered).toBe(FAN_OUT * ITERATIONS);
+	});
+
 	it('the circuit breaker stops the runaway cascade and resets the flush state', async () =>
 	{
 		const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});

@@ -764,7 +764,6 @@ export class Unit
 	_remove()
 	{
 		this.prepareDestroy();
-		this.removeContext();
 
 		const panel = this.panel;
 		if (panel)
@@ -836,9 +835,22 @@ export class Unit
 		}
 
 		/**
-		 * This will unlink the data to prevent memory leaks.
+		 * Context is removed here rather than in _remove() so units
+		 * torn down by the data tracker (DOM removal) release their
+		 * branch too, and so it happens exactly once.
 		 */
-		if (this.data && typeof this.data.unlink === 'function')
+		this.removeContext();
+
+		/**
+		 * This will unlink the data to prevent memory leaks.
+		 *
+		 * A persisting unit keeps its links: resumeScope restores the
+		 * data instance without re-running the setup that created
+		 * them, so unlinking here would leave the resumed unit with
+		 * data that no longer tracks its remote sources. When the
+		 * remote side is destroyed it releases both directions.
+		 */
+		if (this.data && this.persist !== true && typeof this.data.unlink === 'function')
 		{
 			this.data.unlink();
 		}

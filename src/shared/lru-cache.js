@@ -1,13 +1,21 @@
 /**
  * LRUCache
  *
- * A bounded cache with least-recently-used eviction, used to keep
- * the module level parse/lookup caches from growing for the life of
- * the page.
+ * A bounded cache with recency aware eviction, used to keep the module
+ * level parse/lookup caches from growing for the life of the page.
  *
- * Recency is the Map's own insertion order: re-inserting a key moves
- * it to the end, so the first key returned by the iterator is always
- * the least recently used one.
+ * Recency is tracked with a second chance (CLOCK) flag rather than by
+ * re-inserting keys into the Map. A read marks the entry it returns, and
+ * eviction walks the oldest entries, clearing the flag of anything read
+ * since the last eviction and taking the first entry that was not. That
+ * keeps a key that is still in use from being dropped while leaving
+ * reads free of Map mutation, which matters because these caches sit on
+ * paths that run per publish and per render.
+ *
+ * Eviction removes a batch rather than a single entry so the Map key
+ * iterator is allocated once per batch instead of once per write. Writes
+ * that miss are the common case on a page rendering new rows, and the
+ * per-write iterator was the dominant cost of the bound.
  *
  * @class
  */
@@ -22,7 +30,7 @@ export class LRUCache
 	constructor(maxSize = 1000)
 	{
 		/**
-		 * @type {Map<*, *>} cache
+		 * @type {Map<*, {value: *, used: boolean}>} cache
 		 * @protected
 		 */
 		this.cache = new Map();
@@ -33,47 +41,36 @@ export class LRUCache
 		this.maxSize = maxSize;
 
 		/**
-		 * The most recently used key. Reads of the hottest key are by
-		 * far the common case, and comparing against this avoids the
-		 * delete/set pair that promotion would otherwise cost.
+		 * The number of entries dropped by one eviction. Caches too
+		 * small to batch fall back to one, which is also what keeps a
+		 * cache of two or three entries behaving exactly.
 		 *
-		 * @type {*} lastKey
+		 * @type {number} evictCount
 		 * @protected
 		 */
-		this.lastKey = undefined;
+		this.evictCount = (maxSize >= 8)? (maxSize >> 3) : 1;
 	}
 
 	/**
-	 * This will get a value and promote the key to most recently
-	 * used.
+	 * This will get a value and mark the key as recently used.
 	 *
 	 * @param {*} key
 	 * @returns {*} The value or undefined when not cached.
 	 */
 	get(key)
 	{
-		const cache = this.cache;
-		const value = cache.get(key);
-
-		/* Cached values may legitimately be undefined or null, so a
-		 * miss has to be confirmed with has(). */
-		if (value === undefined && !cache.has(key))
+		const entry = this.cache.get(key);
+		if (entry === undefined)
 		{
 			return undefined;
 		}
 
-		if (key !== this.lastKey)
-		{
-			cache.delete(key);
-			cache.set(key, value);
-			this.lastKey = key;
-		}
-
-		return value;
+		entry.used = true;
+		return entry.value;
 	}
 
 	/**
-	 * This will check if a key is cached without promoting it.
+	 * This will check if a key is cached without marking it used.
 	 *
 	 * @param {*} key
 	 * @returns {boolean}
@@ -84,8 +81,8 @@ export class LRUCache
 	}
 
 	/**
-	 * This will add a value and promote the key to most recently
-	 * used, evicting the least recently used key when over capacity.
+	 * This will add a value, evicting a batch of the least recently
+	 * used keys when the write goes over capacity.
 	 *
 	 * @param {*} key
 	 * @param {*} value
@@ -94,17 +91,54 @@ export class LRUCache
 	set(key, value)
 	{
 		const cache = this.cache;
+		const entry = cache.get(key);
+		if (entry !== undefined)
+		{
+			entry.value = value;
+			entry.used = true;
+			return;
+		}
 
-		/* delete() returns false if key doesn't exist, so no has() guard needed. */
-		cache.delete(key);
-		cache.set(key, value);
-		this.lastKey = key;
+		cache.set(key, { value, used: false });
 
-		// Evict oldest if over limit
 		if (cache.size > this.maxSize)
 		{
-			const firstKey = cache.keys().next().value;
-			cache.delete(firstKey);
+			this.evict();
+		}
+	}
+
+	/**
+	 * This will drop entries from the oldest end until the cache has
+	 * room for the next batch of writes.
+	 *
+	 * @protected
+	 * @returns {void}
+	 */
+	evict()
+	{
+		const cache = this.cache;
+		const target = this.maxSize - this.evictCount + 1;
+
+		/* The first pass gives every entry read since the last
+		 * eviction its second chance and clears the flag, so a second
+		 * pass always reaches the target. */
+		for (let pass = 0; pass < 2 && cache.size > target; pass++)
+		{
+			const keys = cache.keys();
+			let examined = cache.size;
+
+			while (examined-- > 0 && cache.size > target)
+			{
+				const key = keys.next().value;
+				const entry = cache.get(key);
+				if (entry !== undefined && entry.used)
+				{
+					entry.used = false;
+					continue;
+				}
+
+				cache.delete(key);
+			}
 		}
 	}
 
@@ -117,11 +151,6 @@ export class LRUCache
 	delete(key)
 	{
 		this.cache.delete(key);
-
-		if (key === this.lastKey)
-		{
-			this.lastKey = undefined;
-		}
 	}
 
 	/**
@@ -132,6 +161,5 @@ export class LRUCache
 	clear()
 	{
 		this.cache.clear();
-		this.lastKey = undefined;
 	}
 }

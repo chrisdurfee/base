@@ -150,7 +150,8 @@ export const Objects =
 	 * Checks if an object is empty.
 	 *
 	 * @param {object} obj - The object to check.
-	 * @returns {boolean} True if the object has no own properties.
+	 * @returns {boolean} True if the object holds no entries. Maps and
+	 * Sets are measured by size, everything else by own properties.
 	 */
 	isEmpty(obj)
 	{
@@ -161,10 +162,8 @@ export const Objects =
 
 		/* Map and Set hold their entries internally, so an own-key
 		 * walk reports every one of them as empty. */
-		// @ts-ignore
 		if (obj instanceof Map || obj instanceof Set)
 		{
-			// @ts-ignore
 			return (obj.size === 0);
 		}
 

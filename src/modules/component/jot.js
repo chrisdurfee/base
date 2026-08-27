@@ -1,17 +1,5 @@
 import { Component } from './component.js';
-import { SHORTHAND_METHODS } from './shorthand-methods.js';
-
-/**
- * This will get the jot method by value. If the method is an
- * object, it will be nested in a function.
- *
- * @param {object|function} value
- * @returns {function}
- */
-const getJotShorthandMethod = (value, alias) =>
-{
-	return (typeof value !== 'function' && alias === 'setupStates')? () => value : value;
-};
+import { getShorthandMethod, SHORTHAND_METHODS } from './shorthand-methods.js';
 
 /**
  * Converts the jot settings to a component object.
@@ -33,7 +21,7 @@ export const convertSettings = (settings, component) =>
 		const prop = keys[i];
 		const value = settings[prop];
 		const alias = SHORTHAND_METHODS[prop] || prop;
-		component[alias] = getJotShorthandMethod(value, alias);
+		component[alias] = getShorthandMethod(value, alias);
 	}
 
 	return component;

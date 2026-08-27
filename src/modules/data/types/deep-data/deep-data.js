@@ -463,9 +463,18 @@ export class Data extends BasicData
 	{
 		PropertyHelper.delete(obj, attr);
 
+		/**
+		 * Deletes go to both channels. Publishing to the event sub
+		 * alone left every element bound through the data binder
+		 * rendering a value the data no longer holds.
+		 *
+		 * The published value is null rather than the path string the
+		 * walk used to hand out, to match what BasicData sends for a
+		 * delete and to keep bound elements from showing the path.
+		 */
 		this._delCommitter = committer;
-		const cb = this._deleteCb || (this._deleteCb = (path, obj) => this.publishLocalEvent(path, obj, this._delCommitter, EVENT.DELETE));
-		Publisher.publish(attr, attr, cb);
+		const cb = this._deleteCb || (this._deleteCb = (path) => this._publishAttr(path, null, this._delCommitter, EVENT.DELETE));
+		Publisher.publish(attr, null, cb);
 	}
 
 	/**

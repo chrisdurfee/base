@@ -207,8 +207,23 @@ function createHandler(data, path = '', dataRoot = '')
 				return true;
 			}
 
+			const dataTarget = target[dataRoot] || target;
+			const previous = dataTarget[prop];
+
 			const newPath = getNewPath(path, prop);
 			data.set(newPath, value);
+
+			/**
+			 * A replaced object keeps its cached proxies, and those
+			 * proxies are bound to the path they were created for. If
+			 * the detached object is reattached somewhere else, the
+			 * cache would hand back a proxy that writes to the old
+			 * path, so the entry is dropped here.
+			 */
+			if (previous !== value && previous !== null && typeof previous === 'object')
+			{
+				invalidateProxyCache(previous);
+			}
 
 			return true;
 		}
