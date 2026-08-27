@@ -122,6 +122,33 @@ export class Model extends Data
 	}
 
 	/**
+	 * The service class this model talks to its remote endpoint through.
+	 *
+	 * This is an accessor pair rather than a `Model.prototype.service`
+	 * assignment below the class body because a top level property
+	 * mutation is a side effect no bundler can prove is safe to drop, and
+	 * it pinned `ModelService`, and the whole `Model` class with it, into
+	 * every bundle that touched the data entry even when the consumer
+	 * never used a model. The setter keeps plain assignment working, both
+	 * for `extend` and for anyone shadowing the service on an instance.
+	 *
+	 * @type {typeof ModelService}
+	 */
+	get service()
+	{
+		return ModelService;
+	}
+
+	set service(value)
+	{
+		Object.defineProperty(this, 'service', {
+			value,
+			writable: true,
+			configurable: true
+		});
+	}
+
+	/**
 	 * Creates a new subclass of the current Model and returns its constructor.
 	 *
 	 * The returned value can be used as a type annotation for model instances.
@@ -167,11 +194,15 @@ export class Model extends Data
 		}
 
 		Object.assign(ExtendedModel.prototype, settings);
-		ExtendedModel.prototype.service = service;
+
+		// @ts-ignore - shadows the inherited accessor with an own data property, which the checker cannot model
+		Object.defineProperty(ExtendedModel.prototype, 'service', {
+			value: service,
+			writable: true,
+			configurable: true
+		});
 
 		// @ts-ignore - ExtendedModel is a constructor that satisfies ModelClass at runtime
 		return ExtendedModel;
 	}
 }
-
-Model.prototype.service = ModelService;
