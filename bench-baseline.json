@@ -1,0 +1,116 @@
+{
+	"generatedAt": "2026-08-27T20:34:30.314Z",
+	"environment": {
+		"env": "jsdom",
+		"quick": false,
+		"node": "v24.11.0",
+		"platform": "win32",
+		"arch": "x64",
+		"gcExposed": true
+	},
+	"results": {
+		"deepData.set.hotCache": {
+			"samples": 15,
+			"minMs": 5.631,
+			"medianMs": 6.264,
+			"p95Ms": 8.636,
+			"maxMs": 10.191,
+			"meanMs": 6.896
+		},
+		"deepData.set.coldCache": {
+			"samples": 15,
+			"minMs": 42.616,
+			"medianMs": 46.663,
+			"p95Ms": 81.314,
+			"maxMs": 86.291,
+			"meanMs": 55.783
+		},
+		"deepData.get.hotCache": {
+			"samples": 15,
+			"minMs": 1.531,
+			"medianMs": 1.666,
+			"p95Ms": 2.763,
+			"maxMs": 2.812,
+			"meanMs": 1.978
+		},
+		"deepData.get.coldCache": {
+			"samples": 15,
+			"minMs": 7.527,
+			"medianMs": 9.028,
+			"p95Ms": 27.133,
+			"maxMs": 31.492,
+			"meanMs": 11.541
+		},
+		"publish.fanOut.sameProp": {
+			"samples": 15,
+			"minMs": 14.183,
+			"medianMs": 15.474,
+			"p95Ms": 16.038,
+			"maxMs": 16.14,
+			"meanMs": 15.369
+		},
+		"publish.fanOut.nestedPaths": {
+			"samples": 8,
+			"minMs": 1.14,
+			"medianMs": 13.349,
+			"p95Ms": 14.382,
+			"maxMs": 14.523,
+			"meanMs": 11.752
+		},
+		"list.build.1000Rows": {
+			"samples": 5,
+			"minMs": 35.925,
+			"medianMs": 45.91,
+			"p95Ms": 50.74,
+			"maxMs": 51.781,
+			"meanMs": 44.399
+		},
+		"list.update.1000Rows": {
+			"samples": 50,
+			"minMs": 79.651,
+			"medianMs": 136.824,
+			"p95Ms": 232.188,
+			"maxMs": 314.457,
+			"meanMs": 148.163
+		},
+		"list.subscriberLeak": {
+			"rows": 1000,
+			"updates": 50,
+			"subscribersAtMount": 2001,
+			"subscribersAfterUpdates": 102001,
+			"totalGrowth": 100000,
+			"growthPerUpdate": 2000,
+			"growthPerUpdatePerRow": 2,
+			"firstUpdateGrowth": 2000,
+			"lastUpdateGrowth": 2000,
+			"unbounded": true,
+			"note": "Steady-state re-rendering should return to subscribersAtMount. Any positive totalGrowth is the for-directive scope leak."
+		},
+		"router.navigate.cacheMiss.200Routes": {
+			"samples": 100,
+			"minMs": 0.183,
+			"medianMs": 0.271,
+			"p95Ms": 0.851,
+			"maxMs": 1.19,
+			"meanMs": 0.345
+		},
+		"router.navigate.cacheHit.200Routes": {
+			"samples": 100,
+			"minMs": 0.005,
+			"medianMs": 0.014,
+			"p95Ms": 0.038,
+			"maxMs": 0.192,
+			"meanMs": 0.019
+		},
+		"memory.listMountUnmount": {
+			"gcForced": true,
+			"cycles": 20,
+			"rowsPerCycle": 1000,
+			"heapUsedBeforeBytes": 52245192,
+			"heapUsedAfterBytes": 67927704,
+			"heapDeltaBytes": 15682512,
+			"heapDeltaPerCycleBytes": 784126,
+			"note": "Measured around a forced GC. A retained delta indicates mount/unmount does not release."
+		}
+	}
+}

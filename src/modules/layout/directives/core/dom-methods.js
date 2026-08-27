@@ -149,6 +149,15 @@ const updateElement = (ele, callBack, prop, value, parent) =>
 	switch (typeof result)
 	{
 		case 'object':
+			/* `typeof null` is 'object', and returning null is how a
+			 * watcher callBack says it has nothing to render. Falling
+			 * through would rebuild the element from null, which wipes
+			 * whatever it already holds. */
+			if (result === null)
+			{
+				break;
+			}
+
 			warnIfRebuildingComponent(result, prop, ele);
 			Builder.rebuild(result, ele, parent);
 			break;

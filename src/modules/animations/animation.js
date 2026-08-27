@@ -48,6 +48,25 @@ export class Animation
     }
 
     /**
+     * Step every movement of the animation.
+     *
+     * @param {number} delta - The eased progress of the animation (0-1).
+     * @returns {void}
+     */
+    step(delta)
+    {
+        const movements = this.movements;
+        for (let i = 0, length = movements.length; i < length; i++)
+        {
+            const movement = movements[i];
+            if (movement)
+            {
+                movement.step(delta);
+            }
+        }
+    }
+
+    /**
      * Setup the movements for the animation.
      *
      * @param {Object} settings - The settings for the animation.

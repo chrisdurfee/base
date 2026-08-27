@@ -92,7 +92,7 @@ describe('for directive scoped row data', () =>
 	 * anyway — see tests/defects/data-link.test.js), so every re-render
 	 * adds another full set of subscribers to the parent source.
 	 */
-	it.fails('re-rendering the list does not grow the parent data subscriber count', async () =>
+	it('re-rendering the list does not grow the parent data subscriber count', async () =>
 	{
 		const container = createContainer();
 		const list = new ScopedList();
@@ -126,7 +126,7 @@ describe('for directive scoped row data', () =>
 	 * (src/modules/data/types/basic-data.js:702), so the parent's links
 	 * map also grows once per row per render.
 	 */
-	it.fails('re-rendering the list does not grow the parent data links map', async () =>
+	it('re-rendering the list does not grow the parent data links map', async () =>
 	{
 		const container = createContainer();
 		const list = new ScopedList();
@@ -143,9 +143,10 @@ describe('for directive scoped row data', () =>
 			data.set('items', createRows(3, generation));
 			await flush();
 		}
+		const after = data.links.size;
 
 		list.destroy();
 
-		expect(data.links.size).toBe(baseline);
+		expect(after).toBe(baseline);
 	});
 });

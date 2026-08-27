@@ -52,7 +52,7 @@ describe('history uri normalization', () =>
 	 * (src/modules/router/history/browser-history.js:136) passes, so hash
 	 * routing can never match anything but a wildcard route.
 	 */
-	it.fails('hash history passes a pathname style uri to the router', () =>
+	it('hash history passes a pathname style uri to the router', () =>
 	{
 		const { router, received } = createRouterStub();
 		const history = new HashHistory(router);

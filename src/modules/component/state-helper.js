@@ -23,6 +23,15 @@ export class StateHelper
 		 */
 		this.remoteStates = [];
 
+		/**
+		 * Actions that registered a callBack on the local target.
+		 * The subscription token has to be kept or the callBack can
+		 * never be released.
+		 *
+		 * @type {Array<any>} callBackStates
+		 */
+		this.callBackStates = [];
+
 		const actions = this.convertStates(states);
 		this.addStatesToTarget(state, actions);
 	}
@@ -56,7 +65,8 @@ export class StateHelper
 			state,
 			callBack,
 			targetId,
-			token: null
+			token: null,
+			callBackToken: null
 		};
 	}
 
@@ -163,6 +173,34 @@ export class StateHelper
 	}
 
 	/**
+	 * This will release the action callBacks registered on the
+	 * local target.
+	 *
+	 * @param {object} state
+	 * @returns {void}
+	 */
+	removeLocalStates(state)
+	{
+		const states = this.callBackStates;
+		if (!states)
+		{
+			return;
+		}
+
+		for (let i = 0, length = states.length; i < length; i++)
+		{
+			const action = states[i];
+			if (!action.callBackToken)
+			{
+				continue;
+			}
+
+			state.off(action.action, action.callBackToken);
+			action.callBackToken = null;
+		}
+	}
+
+	/**
 	 * This will remove the actions.
 	 *
 	 * @param {object} state
@@ -200,6 +238,21 @@ export class StateHelper
 	restore(state)
 	{
 		StateTracker.restore(state.id, state);
+
+		/**
+		 * The target was reset when the component was destroyed, so
+		 * the local callBacks have to be re-subscribed here or a
+		 * resumed component silently stops reacting to its states.
+		 */
+		const callBacks = this.callBackStates;
+		if (callBacks)
+		{
+			for (let i = 0, length = callBacks.length; i < length; i++)
+			{
+				const action = callBacks[i];
+				action.callBackToken = state.on(action.action, action.callBack);
+			}
+		}
 
 		const remotes = this.remoteStates;
 		if (!remotes)
@@ -292,7 +345,8 @@ export class StateHelper
 		const callBack = action.callBack;
 		if (typeof callBack === 'function')
 		{
-			target.on(actionEvent, callBack);
+			action.callBackToken = target.on(actionEvent, callBack);
+			this.callBackStates.push(action);
 		}
 
 		return token || null;

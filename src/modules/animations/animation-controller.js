@@ -170,8 +170,11 @@ export class AnimationController
 
 		let delta = this.delta(progress);
 
-		// @ts-ignore
-		this.animation.step(delta);
+		const animation = this.animation;
+		if (animation)
+		{
+			animation.step(delta);
+		}
 
 		/* if the progress is 1 the animation is complete */
 		if(progress >= 1)

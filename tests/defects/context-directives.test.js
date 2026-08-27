@@ -70,7 +70,7 @@ describe('addContext directive', () =>
 	 * adds the branch and returns, so the branch outlives the element that
 	 * created it and keeps its value (and anything it closes over) alive.
 	 */
-	it.fails('removes the branch when the element that added it is destroyed', () =>
+	it('removes the branch when the element that added it is destroyed', () =>
 	{
 		const container = createContainer();
 		const host = new ContextHost();

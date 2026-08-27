@@ -1,0 +1,293 @@
+{
+	"generatedAt": "2026-08-27T20:36:43.657Z",
+	"compression": {
+		"gzipLevel": 9,
+		"brotliQuality": 11
+	},
+	"entries": {
+		"root": {
+			"entryPoint": "src/base.js",
+			"entryFile": "dist/base.js",
+			"chunkCount": 0,
+			"raw": 96385,
+			"gzip": 29763,
+			"brotli": 26450,
+			"files": [
+				{
+					"file": "dist/base.js",
+					"raw": 96385,
+					"gzip": 29763,
+					"brotli": 26450
+				}
+			]
+		},
+		"ajax": {
+			"entryPoint": "src/entries/ajax.js",
+			"entryFile": "dist/modules/ajax.js",
+			"chunkCount": 2,
+			"raw": 9320,
+			"gzip": 3697,
+			"brotli": 3301,
+			"files": [
+				{
+					"file": "dist/modules/ajax.js",
+					"raw": 159,
+					"gzip": 144,
+					"brotli": 113
+				},
+				{
+					"file": "dist/chunks/chunk-PDIOOIMW.js",
+					"raw": 5124,
+					"gzip": 2019,
+					"brotli": 1788
+				},
+				{
+					"file": "dist/chunks/chunk-R5DHGQZV.js",
+					"raw": 4037,
+					"gzip": 1534,
+					"brotli": 1400
+				}
+			]
+		},
+		"html": {
+			"entryPoint": "src/entries/html.js",
+			"entryFile": "dist/modules/html.js",
+			"chunkCount": 2,
+			"raw": 21455,
+			"gzip": 7046,
+			"brotli": 6340,
+			"files": [
+				{
+					"file": "dist/modules/html.js",
+					"raw": 136,
+					"gzip": 126,
+					"brotli": 104
+				},
+				{
+					"file": "dist/chunks/chunk-NMWVJDVT.js",
+					"raw": 17282,
+					"gzip": 5386,
+					"brotli": 4836
+				},
+				{
+					"file": "dist/chunks/chunk-R5DHGQZV.js",
+					"raw": 4037,
+					"gzip": 1534,
+					"brotli": 1400
+				}
+			]
+		},
+		"date": {
+			"entryPoint": "src/entries/date.js",
+			"entryFile": "dist/modules/date.js",
+			"chunkCount": 0,
+			"raw": 6035,
+			"gzip": 2049,
+			"brotli": 1832,
+			"files": [
+				{
+					"file": "dist/modules/date.js",
+					"raw": 6035,
+					"gzip": 2049,
+					"brotli": 1832
+				}
+			]
+		},
+		"data": {
+			"entryPoint": "src/entries/data.js",
+			"entryFile": "dist/modules/data.js",
+			"chunkCount": 4,
+			"raw": 45910,
+			"gzip": 15935,
+			"brotli": 14318,
+			"files": [
+				{
+					"file": "dist/modules/data.js",
+					"raw": 249,
+					"gzip": 175,
+					"brotli": 142
+				},
+				{
+					"file": "dist/chunks/chunk-WGCUX2GL.js",
+					"raw": 19218,
+					"gzip": 6821,
+					"brotli": 6152
+				},
+				{
+					"file": "dist/chunks/chunk-PDIOOIMW.js",
+					"raw": 5124,
+					"gzip": 2019,
+					"brotli": 1788
+				},
+				{
+					"file": "dist/chunks/chunk-NMWVJDVT.js",
+					"raw": 17282,
+					"gzip": 5386,
+					"brotli": 4836
+				},
+				{
+					"file": "dist/chunks/chunk-R5DHGQZV.js",
+					"raw": 4037,
+					"gzip": 1534,
+					"brotli": 1400
+				}
+			]
+		},
+		"state": {
+			"entryPoint": "src/entries/state.js",
+			"entryFile": "dist/modules/state.js",
+			"chunkCount": 5,
+			"raw": 47069,
+			"gzip": 16416,
+			"brotli": 14756,
+			"files": [
+				{
+					"file": "dist/modules/state.js",
+					"raw": 264,
+					"gzip": 167,
+					"brotli": 136
+				},
+				{
+					"file": "dist/chunks/chunk-IAPRMNTT.js",
+					"raw": 1144,
+					"gzip": 489,
+					"brotli": 444
+				},
+				{
+					"file": "dist/chunks/chunk-WGCUX2GL.js",
+					"raw": 19218,
+					"gzip": 6821,
+					"brotli": 6152
+				},
+				{
+					"file": "dist/chunks/chunk-PDIOOIMW.js",
+					"raw": 5124,
+					"gzip": 2019,
+					"brotli": 1788
+				},
+				{
+					"file": "dist/chunks/chunk-NMWVJDVT.js",
+					"raw": 17282,
+					"gzip": 5386,
+					"brotli": 4836
+				},
+				{
+					"file": "dist/chunks/chunk-R5DHGQZV.js",
+					"raw": 4037,
+					"gzip": 1534,
+					"brotli": 1400
+				}
+			]
+		},
+		"component": {
+			"entryPoint": "src/entries/component.js",
+			"entryFile": "dist/modules/component.js",
+			"chunkCount": 6,
+			"raw": 89211,
+			"gzip": 30196,
+			"brotli": 27273,
+			"files": [
+				{
+					"file": "dist/modules/component.js",
+					"raw": 1290,
+					"gzip": 700,
+					"brotli": 634
+				},
+				{
+					"file": "dist/chunks/chunk-L4273GAO.js",
+					"raw": 41116,
+					"gzip": 13247,
+					"brotli": 12019
+				},
+				{
+					"file": "dist/chunks/chunk-IAPRMNTT.js",
+					"raw": 1144,
+					"gzip": 489,
+					"brotli": 444
+				},
+				{
+					"file": "dist/chunks/chunk-WGCUX2GL.js",
+					"raw": 19218,
+					"gzip": 6821,
+					"brotli": 6152
+				},
+				{
+					"file": "dist/chunks/chunk-PDIOOIMW.js",
+					"raw": 5124,
+					"gzip": 2019,
+					"brotli": 1788
+				},
+				{
+					"file": "dist/chunks/chunk-NMWVJDVT.js",
+					"raw": 17282,
+					"gzip": 5386,
+					"brotli": 4836
+				},
+				{
+					"file": "dist/chunks/chunk-R5DHGQZV.js",
+					"raw": 4037,
+					"gzip": 1534,
+					"brotli": 1400
+				}
+			]
+		},
+		"router": {
+			"entryPoint": "src/entries/router.js",
+			"entryFile": "dist/modules/router.js",
+			"chunkCount": 6,
+			"raw": 88244,
+			"gzip": 29688,
+			"brotli": 26801,
+			"files": [
+				{
+					"file": "dist/modules/router.js",
+					"raw": 323,
+					"gzip": 192,
+					"brotli": 162
+				},
+				{
+					"file": "dist/chunks/chunk-L4273GAO.js",
+					"raw": 41116,
+					"gzip": 13247,
+					"brotli": 12019
+				},
+				{
+					"file": "dist/chunks/chunk-IAPRMNTT.js",
+					"raw": 1144,
+					"gzip": 489,
+					"brotli": 444
+				},
+				{
+					"file": "dist/chunks/chunk-WGCUX2GL.js",
+					"raw": 19218,
+					"gzip": 6821,
+					"brotli": 6152
+				},
+				{
+					"file": "dist/chunks/chunk-PDIOOIMW.js",
+					"raw": 5124,
+					"gzip": 2019,
+					"brotli": 1788
+				},
+				{
+					"file": "dist/chunks/chunk-NMWVJDVT.js",
+					"raw": 17282,
+					"gzip": 5386,
+					"brotli": 4836
+				},
+				{
+					"file": "dist/chunks/chunk-R5DHGQZV.js",
+					"raw": 4037,
+					"gzip": 1534,
+					"brotli": 1400
+				}
+			]
+		}
+	},
+	"distinctLiveOutputs": {
+		"fileCount": 14,
+		"raw": 192762,
+		"gzip": 62812,
+		"brotli": 56212
+	}
+}

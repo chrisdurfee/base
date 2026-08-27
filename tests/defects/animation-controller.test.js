@@ -66,7 +66,7 @@ describe('AnimationController frame stepping', () =>
 	 * (src/modules/animations/movement.js:129). Every frame therefore
 	 * throws a TypeError, so animations never run.
 	 */
-	it.fails('Animation exposes step() so the controller can drive a frame', () =>
+	it('Animation exposes step() so the controller can drive a frame', () =>
 	{
 		expect(typeof Animation.prototype.step).toBe('function');
 	});
@@ -74,7 +74,7 @@ describe('AnimationController frame stepping', () =>
 	/**
 	 * DEFECT: same root cause — src/modules/animations/animation-controller.js:174.
 	 */
-	it.fails('animate() steps the animation without throwing', () =>
+	it('animate() steps the animation without throwing', () =>
 	{
 		const element = document.createElement('div');
 		const controller = createIdleController(element);

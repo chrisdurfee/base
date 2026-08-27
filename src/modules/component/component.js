@@ -232,7 +232,7 @@ export class Component extends Unit
 	setupStateTarget(id)
 	{
 		const targetId = id || this.stateTargetId || this.id;
-		this.state = StateTracker.getTarget(String(targetId));
+		this.state = StateTracker.attach(String(targetId));
 	}
 
 	/**
@@ -296,7 +296,10 @@ export class Component extends Unit
 		if (state)
 		{
 			this.stateResumed = true;
-			this.stateHelper.restore(state);
+
+			/* A state can be handed in through props before any
+			state helper exists, leaving nothing to restore. */
+			this.stateHelper?.restore(state);
 			return;
 		}
 
@@ -367,8 +370,19 @@ export class Component extends Unit
 			return;
 		}
 
-		this.stateHelper.removeRemoteStates(state);
-		state.remove();
+		const stateHelper = this.stateHelper;
+		if (stateHelper)
+		{
+			stateHelper.removeRemoteStates(state);
+			stateHelper.removeLocalStates(state);
+		}
+
+		/**
+		 * Detaching resets and drops the target once the last owner
+		 * lets go, so a target shared through a stateTargetId
+		 * override survives while another component still holds it.
+		 */
+		StateTracker.detach(String(state.id));
 		this.stateResumed = false;
 	}
 

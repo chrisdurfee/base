@@ -1,4 +1,3 @@
-import { Objects } from '../../../shared/objects.js';
 import { dataBinder } from '../../data-binder/data-binder.js';
 import { DataPubSub } from '../../data-binder/data-pub-sub.js';
 import { DataProxy } from '../data-proxy.js';
@@ -100,8 +99,9 @@ export class BasicData
 		this._refreshState = false;
 
 		/**
-		 * @type {object} links
-		 * @default {}
+		 * Link records keyed by subscription token.
+		 *
+		 * @type {Map<string, {data: object, attr: string|undefined, pair: string|undefined}>} links
 		 * @protected
 		 */
 		this.links = new Map();
@@ -238,13 +238,15 @@ export class BasicData
 	}
 
 	/**
-	 * This is a placeholder.
+	 * This will release every subscription and link the data
+	 * source holds.
 	 *
 	 * @returns {void}
 	 */
 	remove()
 	{
-
+		this.unlink();
+		this.eventSub.reset();
 	}
 
 	/**
@@ -687,8 +689,6 @@ export class BasicData
 			this.set(childAttr, propValue, data);
 		});
 
-		this.addLink(token, data);
-
 		const remoteToken = this.on(childAttr, (propValue, committer) =>
 		{
 			if (committer === data)
@@ -699,20 +699,33 @@ export class BasicData
 			data.set(attr, propValue, this);
 		});
 
-		data.addLink(remoteToken, this);
+		/**
+		 * Both sides record the attr they subscribed on plus the
+		 * paired token, so releasing either direction can tear down
+		 * the whole link instead of leaving the other side holding a
+		 * subscription and a reference back.
+		 */
+		this.addLink(token, data, attr, remoteToken);
+		data.addLink(remoteToken, this, childAttr, token);
 		return token;
 	}
 
 	/**
-	 * This will add a link token to the links array.
+	 * This will add a link token to the links map.
+	 *
+	 * The attr name is what makes the link removable: subscriptions
+	 * are registered per attr message, so a record without one can
+	 * only be forgotten, not unsubscribed.
 	 *
 	 * @param {string} token
 	 * @param {object} data
+	 * @param {string} [attr]
+	 * @param {string} [pair] The token of the opposite direction.
 	 * @returns {void}
 	 */
-	addLink(token, data)
+	addLink(token, data, attr, pair)
 	{
-		this.links.set(token, data);
+		this.links.set(token, { data, attr, pair });
 	}
 
 	/**
@@ -730,16 +743,16 @@ export class BasicData
 		}
 
 		const links = this.links;
-		if (Objects.isEmpty(links))
+		if (links.size === 0)
 		{
 			return;
 		}
 
-		links.forEach((data, token) =>
+		links.forEach((link, linkToken) =>
 		{
-			this.removeLink(token, false);
+			this.removeLink(linkToken, false);
 		});
-		this.links = new Map();
+		links.clear();
 	}
 
 	/**
@@ -751,10 +764,34 @@ export class BasicData
 	 */
 	removeLink(token, removeFromLinks = true)
 	{
-		const data = this.links.get(token);
-		if (data)
+		const link = this.links.get(token);
+		if (link)
 		{
-			data.off(token);
+			const data = link.data;
+			if (link.attr)
+			{
+				data.off(link.attr, token);
+			}
+
+			/**
+			 * The opposite direction is dropped here as well. Without
+			 * it the other source keeps both the callBack and a link
+			 * record pointing back at this source.
+			 */
+			const pair = link.pair;
+			const pairLinks = pair && data.links;
+			if (pairLinks)
+			{
+				const pairLink = pairLinks.get(pair);
+				if (pairLink)
+				{
+					pairLinks.delete(pair);
+					if (pairLink.attr)
+					{
+						this.off(pairLink.attr, pair);
+					}
+				}
+			}
 		}
 
 		if (removeFromLinks === false)

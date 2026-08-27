@@ -1,4 +1,5 @@
 import { Events } from "../../../main/events/events.js";
+import { Utils } from "../utils.js";
 import { History } from "./history.js";
 
 /**
@@ -40,7 +41,7 @@ export class HashHistory extends History
 	check(evt)
 	{
 		// @ts-ignore
-		this.router.checkActiveRoutes(evt.newURL);
+		this.router.checkActiveRoutes(Utils.getHashUri(evt.newURL));
 	}
 
 	/**

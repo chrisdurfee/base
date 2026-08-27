@@ -37,5 +37,26 @@ export const Utils =
 		}
 
 		return uri;
+	},
+
+	/**
+	 * This will get the pathname style uri from a hash url.
+	 *
+	 * The hashchange event reports absolute urls, but route patterns
+	 * are anchored against the uri that `Router.getPath()` produces
+	 * for hash routing, which is the hash without its '#'.
+	 *
+	 * @param {string} url
+	 * @returns {string}
+	 */
+	getHashUri(url)
+	{
+		if (typeof url !== 'string')
+		{
+			return '';
+		}
+
+		const index = url.indexOf('#');
+		return (index === -1)? '' : url.substring(index + 1);
 	}
 };

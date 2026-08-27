@@ -99,6 +99,34 @@ export class DataPubSub
 		 * @protected
 		 */
 		this.flushCallbacks = [];
+
+		/**
+		 * The message currently being delivered, used to spot a
+		 * subscriber that re-publishes its own message.
+		 *
+		 * @type {string|null}
+		 * @protected
+		 */
+		this.deliveringMessage = null;
+
+		/**
+		 * Messages whose own subscribers re-published them during the
+		 * current flush cycle. Allocated only when it happens.
+		 *
+		 * @type {Set<string>|null}
+		 * @protected
+		 */
+		this.reentrantMessages = null;
+
+		/**
+		 * When true, publishes are dropped instead of queued. Set
+		 * while the flush breaker drains the surviving updates so the
+		 * runaway cascade cannot restart.
+		 *
+		 * @type {boolean}
+		 * @protected
+		 */
+		this.suppressQueue = false;
 	}
 
 	/**
@@ -129,7 +157,7 @@ export class DataPubSub
 		this.flushScheduled = false;
 		this.isFlushing = false;
 		this.flushIterations = 0;
-		lastToken = 0;
+		this.reentrantMessages = null;
 	}
 
 	/**
@@ -301,6 +329,19 @@ export class DataPubSub
 			return;
 		}
 
+		if (this.suppressQueue)
+		{
+			return;
+		}
+
+		/* A subscriber re-publishing the message it is receiving is
+		 * what turns a flush into a cascade, so those messages are
+		 * recorded here for the flush breaker to drop. */
+		if (msg === this.deliveringMessage)
+		{
+			(this.reentrantMessages ??= new Set()).add(msg);
+		}
+
 		/**
 		 * Fast path: skip queueing when nothing is listening.
 		 *
@@ -385,6 +426,7 @@ export class DataPubSub
 		if (!this.isFlushing)
 		{
 			this.flushIterations = 0;
+			this.reentrantMessages = null;
 		}
 
 		// Set flushing flag to prevent recursive scheduling
@@ -403,8 +445,8 @@ export class DataPubSub
 			console.error('[DataPubSub] Queue size:', this.updateQueue.size);
 			console.error('[DataPubSub] Queued messages:', Array.from(this.updateQueue.keys()));
 
-			// Clear queue and reset to prevent further damage
-			this.updateQueue.clear();
+			// Stop the cascade and reset to prevent further damage
+			this._breakCascade();
 			this.flushScheduled = false;
 			this.isFlushing = false;
 			this._resolveFlushComplete();
@@ -455,6 +497,45 @@ export class DataPubSub
 				this.flushIterations = 0;
 				this._resolveFlushComplete();
 			}
+		}
+	}
+
+	/**
+	 * Stop a runaway cascade without discarding the updates that
+	 * were only queued alongside it.
+	 *
+	 * Dropping the whole queue loses the last value of every
+	 * unrelated message. Only the self-republishing messages are
+	 * dropped; the rest are delivered once with queueing suppressed,
+	 * which guarantees the loop cannot restart.
+	 *
+	 * @protected
+	 * @returns {void}
+	 */
+	_breakCascade()
+	{
+		const updates = this.updateQueue;
+		this.updateQueue = new Map();
+
+		const reentrant = this.reentrantMessages;
+		this.suppressQueue = true;
+		try
+		{
+			for (const [msg, args] of updates)
+			{
+				if (reentrant && reentrant.has(msg))
+				{
+					continue;
+				}
+
+				this.publishImmediate(msg, args[0], args[1]);
+			}
+		}
+		finally
+		{
+			this.suppressQueue = false;
+			this.reentrantMessages = null;
+			this.updateQueue.clear();
 		}
 	}
 
@@ -581,6 +662,11 @@ export class DataPubSub
 			return;
 		}
 
+		/* Nested deliveries are possible when batching is disabled,
+		 * so the previous message is restored rather than cleared. */
+		const previous = this.deliveringMessage;
+		this.deliveringMessage = msg;
+
 		for (const callBack of subscribers.values())
 		{
 			if (callBack)
@@ -595,5 +681,7 @@ export class DataPubSub
 				}
 			}
 		}
+
+		this.deliveringMessage = previous;
 	}
 }

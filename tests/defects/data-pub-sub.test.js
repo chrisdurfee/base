@@ -126,7 +126,7 @@ describe('DataPubSub microtask batching', () =>
 	 * updates for messages that have nothing to do with the runaway
 	 * cascade, so unrelated subscribers never receive their last value.
 	 */
-	it.fails('the circuit breaker does not silently drop unrelated queued updates', async () =>
+	it('the circuit breaker does not silently drop unrelated queued updates', async () =>
 	{
 		vi.spyOn(console, 'error').mockImplementation(() => {});
 

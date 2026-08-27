@@ -59,7 +59,7 @@ describe('state teardown', () =>
 	 * (src/modules/component/component.js:362) calls `state.remove()` and
 	 * releases nothing.
 	 */
-	it.fails('State.remove() releases the action subscribers', () =>
+	it('State.remove() releases the action subscribers', () =>
 	{
 		const target = new StateTarget('spec-target');
 		target.addAction('open', false);
@@ -78,7 +78,7 @@ describe('state teardown', () =>
 	 * never calls `StateTracker.remove()`, so every mounted component
 	 * leaves a permanent entry behind.
 	 */
-	it.fails('StateTracker.targets does not grow with every mount/destroy cycle', () =>
+	it('StateTracker.targets does not grow with every mount/destroy cycle', () =>
 	{
 		const container = createContainer();
 		const cycles = 200;
@@ -110,7 +110,7 @@ describe('state teardown', () =>
 	 * never be unsubscribed. Combined with the `remove()` placeholder above,
 	 * the callback stays registered on the state target forever.
 	 */
-	it.fails('destroying a component releases its local state action callbacks', () =>
+	it('destroying a component releases its local state action callbacks', () =>
 	{
 		const container = createContainer();
 		const widget = new StatefulWidget();

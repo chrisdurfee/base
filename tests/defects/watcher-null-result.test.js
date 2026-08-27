@@ -101,7 +101,7 @@ describe('watcher callback returning null', () =>
 	 * `Builder.rebuild(null, ele, parent)`. `rebuild` calls `removeAll`
 	 * first, which wipes every child of the element.
 	 */
-	it.fails('leaves static children intact when the callback returns null on mount', () =>
+	it('leaves static children intact when the callback returns null on mount', () =>
 	{
 		const container = createContainer();
 		const host = new NullOnMount();
@@ -116,7 +116,7 @@ describe('watcher callback returning null', () =>
 	/**
 	 * DEFECT: same root cause — src/modules/layout/directives/core/dom-methods.js:151.
 	 */
-	it.fails('leaves previously built content intact when the callback returns null on update', async () =>
+	it('leaves previously built content intact when the callback returns null on update', async () =>
 	{
 		const container = createContainer();
 		const host = new NullOnUpdate();

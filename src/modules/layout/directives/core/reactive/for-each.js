@@ -1,6 +1,42 @@
+import { DataTracker } from "../../../../../main/data-tracker/data-tracker.js";
 import { dataBinder } from "../../../../data-binder/data-binder.js";
 import { Builder } from "../../../builder.js";
 import { getParentData } from './get-parent-data.js';
+
+/**
+ * This will release every scoped row data source and empty the
+ * list so the same record can be reused by the next render.
+ *
+ * @param {Array<object>} scopes
+ * @returns {void}
+ */
+const releaseScopes = (scopes) =>
+{
+	for (let i = 0, len = scopes.length; i < len; i++)
+	{
+		const scoped = scopes[i];
+		if (scoped)
+		{
+			scoped.remove();
+		}
+	}
+	scopes.length = 0;
+};
+
+/**
+ * This will register the scoped row data with the data tracker so
+ * the links back to the parent source are released when the host
+ * element is destroyed.
+ */
+DataTracker.addType('forScopes', (data) =>
+{
+	if (!data)
+	{
+		return false;
+	}
+
+	releaseScopes(data.scopes);
+});
 
 /**
  * This will watch a data attr and update the
@@ -39,9 +75,26 @@ export const forEach = (ele, settings, parent) =>
 
 	const scopeData = (scope !== false);
 	const pathPrefix = prop + '[';
+
+	/**
+	 * The scoped row sources of the current render are held in one
+	 * tracked record. Every re-render releases the previous set, and
+	 * the tracker releases the last set when the element goes away.
+	 */
+	const tracked = (scopeData)? { scopes: [] } : null;
+	if (tracked)
+	{
+		DataTracker.add(ele, 'forScopes', tracked);
+	}
+
 	dataBinder.watch(ele, data, prop, (items) =>
 	{
 		Builder.removeAll(ele);
+		if (tracked)
+		{
+			releaseScopes(tracked.scopes);
+		}
+
 		if (!items || items.length < 1)
 		{
 			return;
@@ -55,6 +108,11 @@ export const forEach = (ele, settings, parent) =>
 			 * `false` as the scope flag to skip it when the row
 			 * callBack does not use scoped data. */
 			const scoped = (scopeData)? data.scope(pathPrefix + i + ']') : null;
+			if (scoped && tracked)
+			{
+				tracked.scopes.push(scoped);
+			}
+
 			const layout = item(
 				items[i],
 				i,

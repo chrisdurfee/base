@@ -88,7 +88,14 @@ export const addContext = (ele, callBack, parent) =>
         return;
     }
 
-    parent.addContextBranch(childContext[0], childContext[1]);
+    const branchName = childContext[0];
+    if (!branchName)
+    {
+        return;
+    }
+
+    parent.addContextBranch(branchName, childContext[1]);
+    trackContext(ele, branchName, parent);
 }
 
 /**

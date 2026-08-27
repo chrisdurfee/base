@@ -159,6 +159,15 @@ export const Objects =
 			return true;
 		}
 
+		/* Map and Set hold their entries internally, so an own-key
+		 * walk reports every one of them as empty. */
+		// @ts-ignore
+		if (obj instanceof Map || obj instanceof Set)
+		{
+			// @ts-ignore
+			return (obj.size === 0);
+		}
+
 		/* for..in with early return avoids allocating a keys array
 		 * just to check its length, which Object.keys() would require. */
 		for (const _ in obj)

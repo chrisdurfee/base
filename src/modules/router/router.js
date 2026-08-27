@@ -296,6 +296,17 @@ export class Router
 		{
 			this.lastMatchedRoute = null;
 		}
+
+		/**
+		 * Dropping the route from the table does not release the
+		 * component it created, so deactivate as reset() does.
+		 */
+		// @ts-ignore
+		if (route && typeof route.deactivate === 'function')
+		{
+			// @ts-ignore
+			route.deactivate();
+		}
 	}
 
 	/**
@@ -1178,6 +1189,18 @@ export class Router
 		if (typeof this.callBackLink === 'function')
 		{
 			Events.off('click', document, this.callBackLink);
+		}
+
+		/**
+		 * The history controller owns the popstate/hashchange (and on
+		 * iOS pageshow) listeners. Those hold the router, and through
+		 * it every route and route component, for the life of the
+		 * page unless they are removed here.
+		 */
+		const history = this.history;
+		if (history && typeof history.removeEvent === 'function')
+		{
+			history.removeEvent();
 		}
 	}
 

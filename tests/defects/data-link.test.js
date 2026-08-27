@@ -38,7 +38,7 @@ describe('BasicData link teardown', () =>
 	 * keys with `for..in`, which finds nothing on a Map, so it always
 	 * returns true and `unlink()` returns before removing anything.
 	 */
-	it.fails('unlink() removes every remote subscription', async () =>
+	it('unlink() removes every remote subscription', async () =>
 	{
 		const { local, remote } = createLinkedPair();
 
@@ -54,7 +54,7 @@ describe('BasicData link teardown', () =>
 	 * DEFECT: same root cause as above — `unlink()` returns early, so the
 	 * links map is never drained (src/modules/data/types/basic-data.js:733).
 	 */
-	it.fails('unlink() empties the links map', () =>
+	it('unlink() empties the links map', () =>
 	{
 		const { local } = createLinkedPair();
 
@@ -70,7 +70,7 @@ describe('BasicData link teardown', () =>
 	 * attribute name, so a bogus `'<token>:change'` message is unsubscribed
 	 * and the real subscription survives.
 	 */
-	it.fails('unlink(token) removes the single subscription for that token', async () =>
+	it('unlink(token) removes the single subscription for that token', async () =>
 	{
 		const { local, remote, token } = createLinkedPair();
 
@@ -86,7 +86,7 @@ describe('BasicData link teardown', () =>
 	 * DEFECT: `removeLink()` unsubscribes the wrong message, so the remote
 	 * keeps the callback registered (src/modules/data/types/basic-data.js:757).
 	 */
-	it.fails('unlink(token) releases the subscriber on the remote source', () =>
+	it('unlink(token) releases the subscriber on the remote source', () =>
 	{
 		const { local, remote, token } = createLinkedPair();
 		const before = countSubscribers(remote);
