@@ -106,7 +106,11 @@ export class BasicData
 		/**
 		 * Link records keyed by subscription token.
 		 *
-		 * @type {Map<string, {data: object, attr: string|undefined, pair: string|undefined}>} links
+		 * Tokens are the numbers handed out by the event sub, so both
+		 * sides of a link pair must key and read this map with a
+		 * number. A stringified token would delete nothing.
+		 *
+		 * @type {Map<number, {data: object, attr: string, pair: number}>} links
 		 * @protected
 		 */
 		this.links = new Map();
@@ -643,7 +647,7 @@ export class BasicData
 	 * @param {object} data
 	 * @param {string|object} attr
 	 * @param {string} alias
-	 * @returns {string|array}
+	 * @returns {number|Array<number>}
 	 */
 	link(data, attr, alias)
 	{
@@ -673,7 +677,7 @@ export class BasicData
 	 * @param {object} data
 	 * @param {string} attr
 	 * @param {string} [alias]
-	 * @returns {string}
+	 * @returns {number} The subscription token.
 	 */
 	remoteLink(data, attr, alias)
 	{
@@ -722,10 +726,10 @@ export class BasicData
 	 * are registered per attr message, so a record without one can
 	 * only be forgotten, not unsubscribed.
 	 *
-	 * @param {string} token
+	 * @param {number} token
 	 * @param {object} data
 	 * @param {string} [attr]
-	 * @param {string} [pair] The token of the opposite direction.
+	 * @param {number} [pair] The token of the opposite direction.
 	 * @returns {void}
 	 */
 	addLink(token, data, attr, pair)
@@ -736,7 +740,7 @@ export class BasicData
 	/**
 	 * This will remove a link or all links if no token is provided.
 	 *
-	 * @param {string|null} [token=null]
+	 * @param {number|null} [token=null]
 	 * @returns {void}
 	 */
 	unlink(token)
@@ -763,7 +767,7 @@ export class BasicData
 	/**
 	 * This will remove the linked subscription.
 	 *
-	 * @param {string} token
+	 * @param {number} token
 	 * @param {boolean} [removeFromLinks=true]
 	 * @returns {void}
 	 */
