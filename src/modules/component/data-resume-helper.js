@@ -39,6 +39,44 @@ export class DataResumeHelper
 	}
 
 	/**
+	 * Release the data links an instance is still holding when the
+	 * resume replaces it, or when it is being carried into a new
+	 * mount.
+	 *
+	 * A persisting unit keeps its links through teardown
+	 * (`Unit.prepareDestroy`) because resume restores its data
+	 * instead of rebuilding it. Resume is where that debt is paid:
+	 *  - the instance that loses the fresh-vs-persisted decision is
+	 *    dropped on the floor, so every subscription it opened on a
+	 *    remote source (and the remote's paired record pointing back
+	 *    at it) would stay live for the life of the page, one more
+	 *    per mount/destroy cycle;
+	 *  - the instance that wins carries links minted by the previous
+	 *    mount, and `initialize()` re-runs `beforeSetup` immediately
+	 *    after this, so those links are about to be minted a second
+	 *    time on the same source.
+	 *
+	 * Only links are released. The stage is untouched, so the
+	 * resumed values survive, and the setup that created the links
+	 * runs again before the layout is built.
+	 *
+	 * @protected
+	 * @param {Data|null|undefined} data
+	 * @param {Data|null|undefined} [keep] The surviving instance,
+	 * skipped when both sides of the decision are the same object.
+	 * @returns {void}
+	 */
+	static _releaseLinks(data, keep)
+	{
+		if (!data || data === keep || typeof data.unlink !== 'function')
+		{
+			return;
+		}
+
+		data.unlink();
+	}
+
+	/**
 	 * Refresh the host component's data with fresh prop-derived
 	 * values from setData(), then refresh context data from parent.
 	 *
@@ -149,9 +187,18 @@ export class DataResumeHelper
 		const freshData = component.setData();
 		if (!freshData)
 		{
+			/**
+			 * The persisted instance survives here, and external data
+			 * belongs to an outer scope: it can be a `scope()` result
+			 * whose link to its parent source is the only thing keeping
+			 * it in sync, and that link is not re-created by this
+			 * component's setup. Its links are left alone.
+			 */
 			component.data = persistedData;
 			return;
 		}
+
+		this._releaseLinks(persistedData, freshData);
 
 		if (persistedData && persistedData.stage)
 		{
@@ -255,6 +302,10 @@ export class DataResumeHelper
 	 * outright) or refreshState is flagged (then only keys
 	 * missing from fresh are copied).
 	 *
+	 * Whichever instance loses is released, and a persisted
+	 * instance that wins is released too, because the setup that
+	 * minted its links is about to run again. See _releaseLinks.
+	 *
 	 * @protected
 	 * @param {object} component
 	 * @param {Data|null} persistedData
@@ -262,17 +313,23 @@ export class DataResumeHelper
 	 */
 	static _resumeOwned(component, persistedData)
 	{
-		if (!component.data)
+		const freshData = component.data;
+		if (!freshData)
 		{
+			this._releaseLinks(persistedData);
 			component.data = persistedData;
 			return;
 		}
 
 		if (persistedData && persistedData._retainState)
 		{
+			this._releaseLinks(freshData, persistedData);
+			this._releaseLinks(persistedData);
 			component.data = persistedData;
 			return;
 		}
+
+		this._releaseLinks(persistedData, freshData);
 
 		if (persistedData && persistedData.stage)
 		{
