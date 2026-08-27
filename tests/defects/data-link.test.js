@@ -56,11 +56,20 @@ describe('BasicData link teardown', () =>
 	 */
 	it('unlink() empties the links map', () =>
 	{
-		const { local } = createLinkedPair();
+		const { local, remote } = createLinkedPair();
 
 		local.unlink();
 
 		expect(local.links.size).toBe(0);
+
+		/**
+		 * The map emptying is not proof on its own: tokens are numeric
+		 * pub/sub keys, so an unsubscribe that stringified the token
+		 * would leave both callBacks registered while the link record
+		 * still disappeared. Both sides are checked directly.
+		 */
+		expect(countSubscribers(remote)).toBe(0);
+		expect(countSubscribers(local)).toBe(0);
 	});
 
 	/**
