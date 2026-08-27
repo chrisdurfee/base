@@ -8,8 +8,7 @@ import { countSubscribers, createContainer, flush, resetBody } from '../helpers.
 /* Every published entry point registers its directives on import (see
  * src/base.js and src/entries/*.js). Tests import framework modules
  * directly, so the registration has to be requested here. */
-import { registerDefaultDirectives } from '../../src/modules/layout/directives/core/default-directives.js';
-registerDefaultDirectives();
+import '../../src/modules/layout/directives/core/default-directives.js';
 
 /**
  * Every child data instance created by a mount cycle, in mount order.
