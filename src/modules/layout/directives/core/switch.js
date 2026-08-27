@@ -1,5 +1,5 @@
 import { DataTracker } from "../../../../main/data-tracker/data-tracker.js";
-import { router } from "../../../router/router.js";
+import { getRouter } from "../../../router/router-registry.js";
 
 /**
  * This will register the switch system to the data
@@ -13,8 +13,13 @@ DataTracker.addType('switch', (data) =>
 		return false;
 	}
 
-	const id = data.id;
-	router.removeSwitch(id);
+	const router = getRouter();
+	if (!router)
+	{
+		return false;
+	}
+
+	router.removeSwitch(data.id);
 });
 
 /**
@@ -28,13 +33,11 @@ DataTracker.addType('switch', (data) =>
  */
 export const addSwitch = (ele, group, parent) =>
 {
-	let route = group[0];
-	// this will check to resume switch
-	// if (checkResume(route))
-	// {
-	// 	resumeSwitch(ele, group);
-	// 	return;
-	// }
+	const router = getRouter();
+	if (!router)
+	{
+		return;
+	}
 
 	for (let i = 0, len = group.length; i < len; i++)
 	{

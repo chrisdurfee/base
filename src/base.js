@@ -19,8 +19,10 @@ import { Data, Model, SimpleData } from './modules/data/data.js';
 import { DateTime } from "./modules/date/date-time.js";
 import { Html } from './modules/html/html.js';
 import { Import } from './modules/import/import.js';
+import { setupBaseLayoutMethods } from './modules/layout/base-layout-methods.js';
 import { Builder } from './modules/layout/builder.js';
-import './modules/layout/directives/core/default-directives.js';
+import { registerDefaultDirectives } from './modules/layout/directives/core/default-directives.js';
+import { registerDirectives } from './modules/layout/directives/directive-registry.js';
 import { Directives } from './modules/layout/directives/directives.js';
 import { NavLink, router } from './modules/router/router.js';
 import { StateTracker as Store } from './modules/state/state-tracker.js';
@@ -33,7 +35,20 @@ import { Strings } from './shared/strings.js';
 import { Types } from './shared/types.js';
 
 /**
+ * The package root stays the batteries-included path: every built-in
+ * directive is registered on import, exactly as it was before 4.0.
+ */
+registerDefaultDirectives();
+
+/**
+ * `base.buildLayout()` is a root-only convenience. It is wired up here rather
+ * than in the builder so rendering a layout does not drag the base singleton
+ * into the code-split subpath bundles.
+ */
+setupBaseLayoutMethods();
+
+/**
  * This will export base and all the modules.
  */
-export { Ajax, Arrays, Atom, base, Builder, Component, Data, dataBinder, DataTracker, DateTime, Directives, Dom, Encode, EventMethods as Events, Html, Import, Jot, Model, NavLink, Objects, Pod, router, SimpleData, State, Store, Strings, Types, Unit };
+export { Ajax, Arrays, Atom, base, Builder, Component, Data, dataBinder, DataTracker, DateTime, Directives, Dom, Encode, EventMethods as Events, Html, Import, Jot, Model, NavLink, Objects, Pod, registerDirectives, router, SimpleData, State, Store, Strings, Types, Unit };
 

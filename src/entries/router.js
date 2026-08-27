@@ -4,10 +4,16 @@
  * Importing from '@base-framework/base/router' provides the router and
  * NavLink without the rest of the framework surface.
  *
- * The default directives are registered here as a side effect so the
- * route/switch directives used by the router work the same way they do when
- * importing from the package root.
+ * The routing directive set is registered as a side effect so `route` and
+ * `switch` work the same way they do when importing from the package root.
+ * The core and reactive sets are not registered here: pair this subpath with
+ * 'component' (or the package root) when you render layouts.
  */
-import '../modules/layout/directives/core/default-directives.js';
+import { registerDirectives } from '../modules/layout/directives/directive-registry.js';
+import { routerDirectives } from '../modules/layout/directives/core/router-directives.js';
 
+registerDirectives(routerDirectives);
+
+export { routerDirectives } from '../modules/layout/directives/core/router-directives.js';
+export { registerDirectives } from '../modules/layout/directives/directive-registry.js';
 export { NavLink, Router, router } from '../modules/router/router.js';

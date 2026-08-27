@@ -1,7 +1,14 @@
 import { DataTracker } from '../../main/data-tracker/data-tracker.js';
-import { Data } from '../data/data.js';
 import { Html } from '../html/html.js';
-import { StateTarget } from '../state/state-target.js';
+
+/**
+ * `Data` and `StateTarget` are only named in the type annotations below.
+ * Importing them for real would make the data barrel (and through it the
+ * model service) and the state module reachable from every unit.
+ *
+ * @typedef {import('../data/types/deep-data/deep-data.js').Data} Data
+ * @typedef {import('../state/state-target.js').StateTarget} StateTarget
+ */
 
 /**
  * This will register the component system to the data

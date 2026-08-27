@@ -1,5 +1,5 @@
 import { DataTracker } from "../../../../main/data-tracker/data-tracker.js";
-import { router } from "../../../router/router.js";
+import { getRouter } from "../../../router/router-registry.js";
 
 /**
  * This will register the route system to the data
@@ -16,7 +16,11 @@ DataTracker.addType('routes', (data) =>
     const route = data.route;
     if (route)
     {
-        router.removeRoute(route);
+        const router = getRouter();
+        if (router)
+        {
+            router.removeRoute(route);
+        }
     }
 });
 
@@ -72,6 +76,12 @@ const setupRoute = (ele, route, parent) =>
     // 	resumeRoute(ele, route.component.route);
     // 	return;
     // }
+
+    const router = getRouter();
+    if (!router)
+    {
+        return;
+    }
 
     route.container = ele;
     route.parent = parent;

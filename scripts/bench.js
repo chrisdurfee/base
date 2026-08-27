@@ -484,12 +484,13 @@ if (ENV === 'jsdom')
 {
 	const { Component } = await import('../src/modules/component/component.js');
 	const { Builder } = await import('../src/modules/layout/builder.js');
-	await import('../src/modules/layout/directives/core/default-directives.js');
+	const { registerDefaultDirectives } = await import('../src/modules/layout/directives/core/default-directives.js');
+	registerDefaultDirectives();
 
 	/**
 	 * A 1,000 row list rendered through the `for` directive with scoped row
-	 * data left on (the default), which is the configuration that allocates
-	 * a Data instance and two link subscriptions per row.
+	 * data opted in, which is the configuration that allocates a Data
+	 * instance and two link subscriptions per row.
 	 */
 	class BigList extends Component
 	{
@@ -513,7 +514,7 @@ if (ENV === 'jsdom')
 					{
 						tag: 'ul',
 						cache: 'list',
-						for: ['items', (row) => ({ tag: 'li', text: row.label })]
+						for: ['items', (row) => ({ tag: 'li', text: row.label }), true]
 					}
 				]
 			};

@@ -1,6 +1,7 @@
 import { Events } from '../../main/events/events.js';
-import { Data } from '../data/data.js';
+import { Data } from '../data/types/deep-data/deep-data.js';
 import { HistoryController } from './history/history-controller.js';
+import { setRouter } from './router-registry.js';
 import { Route } from './routes/route.js';
 import { setTitle } from './set-title.js';
 import { Utils } from './utils.js';
@@ -1230,3 +1231,9 @@ export class Router
  * @type {Router}
  */
 export const router = new Router();
+
+/**
+ * The routing directives resolve the router through the registry so they do
+ * not have to import this module.
+ */
+setRouter(router);

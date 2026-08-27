@@ -1,3 +1,4 @@
+import { setModelRequestHandler } from '../data/types/model/model-request.js';
 import { setupBaseAjaxMethods } from './base-ajax-methods.js';
 import { XhrRequest } from './xhr-request.js';
 
@@ -36,6 +37,12 @@ export const Ajax = (...args) =>
 	const ajax = new XhrRequest(args);
 	return ajax.xhr;
 };
+
+/**
+ * Model services resolve their transport through the request registry, so
+ * importing this module is what gives `Model` its XHR backing.
+ */
+setModelRequestHandler(Ajax);
 
 /* Re-export XhrRequest for backwards compatibility */
 export { XhrRequest };

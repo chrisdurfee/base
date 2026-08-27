@@ -5,10 +5,11 @@ import { StateTarget } from '../../src/modules/state/state-target.js';
 import { StateTracker } from '../../src/modules/state/state-tracker.js';
 import { createContainer, resetBody } from '../helpers.js';
 
-/* Every published entry point registers the default directives as a side
- * effect (see src/base.js and src/entries/*.js). Tests import framework
- * modules directly, so the registration has to be requested here. */
-import '../../src/modules/layout/directives/core/default-directives.js';
+/* Every published entry point registers its directives on import (see
+ * src/base.js and src/entries/*.js). Tests import framework modules
+ * directly, so the registration has to be requested here. */
+import { registerDefaultDirectives } from '../../src/modules/layout/directives/core/default-directives.js';
+registerDefaultDirectives();
 
 /**
  * A component that registers a local state action with a callback.

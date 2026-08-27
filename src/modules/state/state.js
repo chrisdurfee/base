@@ -1,4 +1,4 @@
-import { SimpleData } from '../data/data.js';
+import { SimpleData } from '../data/types/simple-data.js';
 
  /**
  * State

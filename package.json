@@ -1,23 +1,24 @@
 {
 	"name": "@base-framework/base",
-	"version": "3.9.10",
+	"version": "4.0.0",
 	"description": "This is a javascript framework.",
 	"main": "./dist/base.js",
 	"module": "./dist/base.js",
 	"type": "module",
 	"sideEffects": [
-		"**/default-directives.js",
 		"./dist/base.js",
-		"./dist/modules/*.js",
-		"./dist/chunks/*.js"
+		"./dist/modules/ajax.js",
+		"./dist/modules/component.js",
+		"./dist/modules/router.js"
 	],
 	"scripts": {
 		"build": "node ./esbuild.js && tsc",
-		"prepublishOnly": "node ./esbuild.js",
+		"prepublishOnly": "npm run build",
 		"test": "vitest",
 		"test:run": "vitest run",
 		"size": "node ./scripts/size-report.js",
 		"size:check": "node ./scripts/size-report.js --check",
+		"cache:check": "node ./scripts/chunk-stability.js",
 		"bench": "node --expose-gc ./scripts/bench.js"
 	},
 	"keywords": [
@@ -47,7 +48,8 @@
 		"readme.md",
 		"dist",
 		"copilot.md",
-		"!dist/**/*.map"
+		"!dist/**/*.map",
+		"!dist/meta.json"
 	],
 	"exports": {
 		"./package.json": "./package.json",

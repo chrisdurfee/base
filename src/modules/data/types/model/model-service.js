@@ -1,7 +1,7 @@
 import { Encode } from '../../../../shared/encode/encode.js';
 import { Strings } from '../../../../shared/strings.js';
-import { Ajax } from '../../../ajax/ajax.js';
 import { WatcherHelper } from '../../../layout/watcher-helper.js';
+import { sendModelRequest } from './model-request.js';
 
 /**
  * ModelService
@@ -462,7 +462,7 @@ export class ModelService
 			settings.headers = {};
 		}
 
-		return Ajax(settings);
+		return sendModelRequest(settings);
 	}
 
 	/**

@@ -1,4 +1,3 @@
-import { base } from '../../main/base.js';
 import { Jot } from "../component/jot.js";
 import { RenderController } from './render/render-controller.js';
 
@@ -139,19 +138,3 @@ export class Builder
 		render.removeAll(ele);
 	}
 }
-
-base.augment(
-{
-	/**
-	 * This will build a JSON layout.
-	 *
-	 * @param {object} obj
-	 * @param {object} [container]
-	 * @param {object} [parent]
-	 * @returns {object}
-	 */
-	buildLayout(obj, container, parent)
-	{
-		Builder.build(obj, container, parent);
-	}
-});

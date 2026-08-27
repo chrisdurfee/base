@@ -42,6 +42,11 @@ DataTracker.addType('forScopes', (data) =>
  * This will watch a data attr and update the
  * children to the element when the attr value is updated.
  *
+ * Scoped row data is opt-in. `data.scope()` allocates a Data instance and two
+ * link subscriptions per row per render, and most row callBacks never touch
+ * the third argument, so it is only built when the settings ask for it:
+ * `['items', callBack, true]`.
+ *
  * @param {object} ele
  * @param {Array<any>} settings
  * @param {object} parent
@@ -54,7 +59,7 @@ export const forEach = (ele, settings, parent) =>
 	/**
 	 * Detect the form by the first element's type instead of by
 	 * length so the parent-data form can pass the scope flag:
-	 * `['items', callBack, false]`. Length alone misread that as
+	 * `['items', callBack, true]`. Length alone misread that as
 	 * the explicit-data form `[data, prop, callBack]`.
 	 */
 	if (typeof settings[0] === 'string' || settings.length < 3)
@@ -73,7 +78,7 @@ export const forEach = (ele, settings, parent) =>
 		[data, prop, item, scope] = settings;
 	}
 
-	const scopeData = (scope !== false);
+	const scopeData = (scope === true);
 	const pathPrefix = prop + '[';
 
 	/**
@@ -103,10 +108,6 @@ export const forEach = (ele, settings, parent) =>
 		const children = [];
 		for (let i = 0, len = items.length; i < len; i++)
 		{
-			/* scope() allocates a full Data instance and two link
-			 * subscriptions per top-level key of the row; pass
-			 * `false` as the scope flag to skip it when the row
-			 * callBack does not use scoped data. */
 			const scoped = (scopeData)? data.scope(pathPrefix + i + ']') : null;
 			if (scoped && tracked)
 			{

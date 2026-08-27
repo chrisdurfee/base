@@ -4,10 +4,11 @@ import { Html } from '../../src/modules/html/html.js';
 import { Builder } from '../../src/modules/layout/builder.js';
 import { createContainer, resetBody } from '../helpers.js';
 
-/* Every published entry point registers the default directives as a side
- * effect (see src/base.js and src/entries/*.js). Tests import framework
- * modules directly, so the registration has to be requested here. */
-import '../../src/modules/layout/directives/core/default-directives.js';
+/* Every published entry point registers its directives on import (see
+ * src/base.js and src/entries/*.js). Tests import framework modules
+ * directly, so the registration has to be requested here. */
+import { registerDefaultDirectives } from '../../src/modules/layout/directives/core/default-directives.js';
+registerDefaultDirectives();
 
 /**
  * A host component that owns a context, plus a child element that adds a
