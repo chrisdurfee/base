@@ -12,9 +12,12 @@ const DANGEROUS_SEGMENTS = new Set(['__proto__', 'prototype', 'constructor']);
  * This will split a data path into its segments.
  *
  * Paths are dot separated property names with optional bracketed
- * array indexes, e.g. 'a.b[2].c'. A scanner is smaller and faster
- * than a regex here, and unlike the pattern it replaced it actually
- * understands brackets.
+ * array indexes, e.g. 'a.b[2].c'. A scanner is smaller than a regex
+ * here and, unlike the pattern it replaced, it actually understands
+ * brackets. It reads character codes rather than characters because
+ * indexing a string materializes a one character string per position,
+ * which cost the scan its margin over the pattern on the longer paths
+ * the framework actually builds.
  *
  * @param {string} str
  * @returns {Array<string>|null}
@@ -27,8 +30,9 @@ const parseSegments = (str) =>
 
 	for (let i = 0; i < length; i++)
 	{
-		const c = str[i];
-		if (c !== '.' && c !== '[' && c !== ']')
+		/* '.' (46), '[' (91) and ']' (93) close a segment. */
+		const c = str.charCodeAt(i);
+		if (c !== 46 && c !== 91 && c !== 93)
 		{
 			continue;
 		}

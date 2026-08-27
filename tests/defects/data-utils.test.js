@@ -122,4 +122,62 @@ describe('DataUtils segment LRU cache', () =>
 		expect(cache.get('b')).toBe(undefined);
 		expect(cache.get('a')).toBe(1);
 	});
+
+	/**
+	 * Caches large enough to batch drop a slice of the oldest keys per
+	 * eviction rather than one key per write, so the size lands below
+	 * the limit and the next batch of writes is free of eviction work.
+	 */
+	it('evicts a batch once over capacity and never exceeds the limit', () =>
+	{
+		const cache = new LRUCache(16);
+		for (let i = 0; i < 17; i++)
+		{
+			cache.set(`k${i}`, i);
+		}
+
+		expect(cache.has('k0')).toBe(false);
+		expect(cache.has('k1')).toBe(false);
+		expect(cache.has('k2')).toBe(true);
+		expect(cache.has('k16')).toBe(true);
+
+		for (let i = 17; i < 200; i++)
+		{
+			cache.set(`k${i}`, i);
+			expect(cache.cache.size).toBeLessThanOrEqual(16);
+		}
+
+		expect(cache.get('k199')).toBe(199);
+	});
+
+	/**
+	 * A key read since the last eviction survives the batch that would
+	 * otherwise take it, which is the boundary between the recency flag
+	 * and the plain oldest-first walk.
+	 */
+	it('spares a key read since the last eviction', () =>
+	{
+		const cache = new LRUCache(16);
+		for (let i = 0; i < 16; i++)
+		{
+			cache.set(`k${i}`, i);
+		}
+
+		/* 'k0' and 'k1' are the two the next eviction would drop. */
+		cache.get('k0');
+		cache.set('k16', 16);
+
+		expect(cache.get('k0')).toBe(0);
+		expect(cache.has('k1')).toBe(false);
+		expect(cache.has('k2')).toBe(false);
+	});
+
+	it('caches a null value instead of re-reading it as a miss', () =>
+	{
+		const cache = new LRUCache(4);
+		cache.set('a', null);
+
+		expect(cache.get('a')).toBe(null);
+		expect(cache.has('a')).toBe(true);
+	});
 });

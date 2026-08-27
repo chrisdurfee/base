@@ -145,10 +145,13 @@ is retained and marked deprecated because it is a published property of
 `DataUtils`, and the Phase 0 test that documents its breakage still passes.
 
 **4. `LRUCache.get()` did not promote on read**, making eviction FIFO
-rather than LRU. It promotes now. Promotion is skipped while the cache is
-under capacity, since recency only decides who gets evicted and these
-caches sit on per-publish and per-render paths — exact LRU where it
-matters, no map churn where it cannot.
+rather than LRU. Recency is now tracked with a second chance (CLOCK) flag
+that a read sets on the entry, and eviction drops a batch of the oldest
+entries, sparing anything read since the last eviction. Re-inserting the
+key on every read — the obvious way to promote in a `Map` — put two map
+mutations on every cache hit, and allocating the key iterator per write
+put an eviction walk on every miss. Both were measured and both are gone;
+see the cold cache note under follow-ups.
 
 **5. Deep `delete` did not publish to `dataBinder`.** Elements bound
 through the binder kept rendering a deleted value. It now publishes to both
@@ -227,7 +230,15 @@ the propagation specs mutate the remote and assert silence.
 
 - `bench-baseline.json` needs a clean re-run on an idle machine.
 - `deepData.set.coldCache` read above baseline in every run (66–198 ms vs
-  46.7 ms). The spread overlaps the noise floor of the other benches, so it
-  is unproven either way, but the segment parser rewrite is on that path
-  and is the first place to look if it is real.
+  46.7 ms). Resolved: the regression was real but it was the cache bound,
+  not the parser. Phase 0 and post-phase-2 sources were loaded into one
+  process and alternated A/B for 21–31 rounds per comparison. The bounded
+  caches cost 17–39% on the cold set path and 32% on hot sets once the
+  caches are full, because `set()` allocated a key iterator per write to
+  find the eviction victim and `get()` re-inserted the key on every hit.
+  Batched eviction and the recency flag put both paths back at or under
+  phase 0. The segment scanner was measured innocent — faster than the
+  regex on short paths — though reading `str[i]` rather than
+  `charCodeAt(i)` did cost it 9–16% on the five segment paths the
+  framework actually builds, so it reads codes now.
 - `Unit._cacheRoot` was left alone as instructed.
