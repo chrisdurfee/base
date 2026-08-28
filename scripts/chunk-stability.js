@@ -1,5 +1,5 @@
 /**
- * Core-runtime chunk boundary check.
+ * Chunk cache stability check.
  *
  * The framework ships content-hashed chunks. A chunk's hash covers its own
  * code and the names of the chunks it imports, so an edit propagates to
@@ -9,17 +9,38 @@
  * contains core modules and nothing else. A feature module that drifts into
  * it turns every feature release into a full cache invalidation.
  *
- * This asserts both halves of that:
+ * This asserts three things:
  *
  *   1. The core chunk holds exactly CORE_MODULES.
  *   2. Editing a feature module leaves the core chunk's hash untouched.
+ *   3. Editing any one module invalidates no more outputs than the committed
+ *      budget in `cache-baseline.json` allows.
+ *
+ * The first two only test the harmless direction. Hashes propagate upward, so
+ * "an edit above the core did not change the core" is close to a restatement
+ * of how content hashing works. What a consuming app actually pays is the
+ * upward direction: one module changes and some number of files they had
+ * cached stop matching. That is the third assertion, and it is the one that
+ * regresses when the chunk graph is re-partitioned.
+ *
+ * Two kinds of output are counted, because a filename-only measurement lies:
+ *
+ *   - Chunks (`dist/chunks/chunk-[hash].js`) are named after their contents,
+ *     so a changed chunk is a chunk name that disappeared.
+ *   - Entries (`dist/modules/*.js`) are not hashed. Their bytes change — the
+ *     module's own code, or just the chunk name in an import specifier — while
+ *     their filename stays put. Counting filenames scores these zero and hides
+ *     a real invalidation, so their contents are hashed here instead.
  *
  * Usage:
- *   node ./scripts/chunk-stability.js            check, exit non-zero on drift
- *   node ./scripts/chunk-stability.js --verbose  also list every chunk
+ *   node ./scripts/chunk-stability.js                  check, exit non-zero on drift
+ *   node ./scripts/chunk-stability.js --verbose        also list every chunk
+ *   node ./scripts/chunk-stability.js --update-budget  rewrite cache-baseline.json
  */
 
 import { build } from 'esbuild';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
@@ -55,6 +76,40 @@ const FEATURE_PROBES = [
 	'src/modules/router/router.js',
 	'src/modules/state/state-tracker.js'
 ];
+
+/**
+ * The modules the blast radius is measured against.
+ *
+ * A superset of FEATURE_PROBES, spread deliberately across the depth of the
+ * graph: the core helpers everything reaches, the mid-layer modules several
+ * features share, and the leaf features only one entry reaches. The point of
+ * the spread is that the shape of the numbers is itself the signal — a leaf
+ * module that starts invalidating half the output means the graph has been
+ * flattened.
+ *
+ * @type {Array<string>}
+ */
+const BLAST_PROBES = [
+	'src/shared/strings.js',
+	'src/shared/dom.js',
+	'src/main/events/events.js',
+	'src/main/data-tracker/data-tracker.js',
+	'src/modules/data-binder/data-binder.js',
+	'src/modules/data/types/basic-data.js',
+	'src/modules/html/html.js',
+	'src/modules/state/state-tracker.js',
+	'src/modules/component/component.js',
+	'src/modules/router/router.js',
+	'src/modules/date/date-time.js',
+	'src/modules/ajax/xhr-request.js'
+];
+
+/**
+ * Path of the committed cache budget.
+ *
+ * @type {string}
+ */
+const BUDGET_PATH = path.resolve(process.cwd(), 'cache-baseline.json');
 
 /**
  * This will normalize a path to the forward-slash, cwd-relative form the
@@ -104,12 +159,16 @@ const createProbePlugin = (target) =>
 };
 
 /**
- * This will build the feature graph and return its chunks.
+ * This will build the feature graph.
+ *
+ * One build serves both assertions: `chunks` describes the chunk contents the
+ * boundary check needs, and `chunkNames`/`entryHashes` are the two identities
+ * the blast radius is counted over.
  *
  * @param {string|null} [probe] A source module to perturb.
- * @returns {Promise<Array<{file: string, modules: Array<string>, imports: Array<string>}>>}
+ * @returns {Promise<{chunks: Array<{file: string, modules: Array<string>, imports: Array<string>}>, chunkNames: Set<string>, entryHashes: Map<string, string>}>}
  */
-const buildChunks = async (probe = null) =>
+const buildGraph = async (probe = null) =>
 {
 	const result = await build(createFeatureOptions({
 		write: false,
@@ -132,7 +191,50 @@ const buildChunks = async (probe = null) =>
 		});
 	}
 
-	return chunks;
+	const chunkNames = new Set();
+	const entryHashes = new Map();
+
+	for (const file of result.outputFiles)
+	{
+		const key = toKey(path.relative(process.cwd(), file.path));
+		if (key.endsWith('.map'))
+		{
+			continue;
+		}
+
+		if (key.includes('/chunks/'))
+		{
+			chunkNames.add(key);
+			continue;
+		}
+
+		entryHashes.set(key, createHash('sha256').update(file.contents).digest('hex'));
+	}
+
+	return { chunks, chunkNames, entryHashes };
+};
+
+/**
+ * This will count the outputs a perturbed build invalidated.
+ *
+ * @param {{chunkNames: Set<string>, entryHashes: Map<string, string>}} base
+ * @param {{chunkNames: Set<string>, entryHashes: Map<string, string>}} perturbed
+ * @returns {{chunks: Array<string>, entries: Array<string>}}
+ */
+const measureBlast = (base, perturbed) =>
+{
+	/* A chunk's name is its content hash, so a chunk whose name is gone from
+	 * the perturbed build is a chunk a consumer has to download again. */
+	const chunks = [...base.chunkNames].filter((name) => !perturbed.chunkNames.has(name)).sort();
+
+	/* Entry filenames never move, so the bytes are what tell. An entry changes
+	 * either because its own module changed or because a chunk name in one of
+	 * its import specifiers did. */
+	const entries = [...base.entryHashes.keys()]
+		.filter((file) => perturbed.entryHashes.get(file) !== base.entryHashes.get(file))
+		.sort();
+
+	return { chunks, entries };
 };
 
 /**
@@ -163,9 +265,11 @@ const sameList = (a, b) => (a.length === b.length && a.every((item, index) => it
 const main = async () =>
 {
 	const verbose = process.argv.includes('--verbose');
+	const updateBudget = process.argv.includes('--update-budget');
 	const failures = [];
 
-	const chunks = await buildChunks();
+	const baseline = await buildGraph();
+	const chunks = baseline.chunks;
 	const core = findCoreChunk(chunks);
 
 	console.log('');
@@ -225,9 +329,21 @@ const main = async () =>
 		console.log('');
 	}
 
+	/**
+	 * Every probe is built once and used for both assertions: the core
+	 * boundary needs the perturbed chunk contents, the blast radius needs the
+	 * perturbed output identities.
+	 */
+	const perturbedGraphs = new Map();
+	for (const probe of BLAST_PROBES)
+	{
+		perturbedGraphs.set(probe, await buildGraph(probe));
+	}
+
 	for (const probe of FEATURE_PROBES)
 	{
-		const perturbed = findCoreChunk(await buildChunks(probe));
+		const graph = perturbedGraphs.get(probe) ?? await buildGraph(probe);
+		const perturbed = findCoreChunk(graph.chunks);
 		const stable = (perturbed !== null && perturbed.file === core.file);
 
 		console.log(`  ${stable ? 'ok  ' : 'FAIL'} edit ${probe} -> core chunk ${perturbed ? perturbed.file : 'missing'}`);
@@ -240,9 +356,109 @@ const main = async () =>
 
 	console.log('');
 
+	/**
+	 * Cache blast radius: how much of the output one edited module
+	 * invalidates.
+	 */
+	const chunkCount = baseline.chunkNames.size;
+	const entryCount = baseline.entryHashes.size;
+
+	console.log(`Cache blast radius  (${chunkCount} hashed chunks + ${entryCount} unhashed entries = ${chunkCount + entryCount} outputs)`);
+	console.log('');
+
+	const budget = (existsSync(BUDGET_PATH))
+		? JSON.parse(readFileSync(BUDGET_PATH, 'utf8'))
+		: null;
+
+	if (budget === null && !updateBudget)
+	{
+		console.error(`No cache budget found at ${BUDGET_PATH}. Run "node ./scripts/chunk-stability.js --update-budget" to record one.`);
+		process.exitCode = 1;
+		return;
+	}
+
+	const measured = {};
+	for (const probe of BLAST_PROBES)
+	{
+		const blast = measureBlast(baseline, perturbedGraphs.get(probe));
+		const total = blast.chunks.length + blast.entries.length;
+		measured[probe] = {
+			chunks: blast.chunks.length,
+			entries: blast.entries.length
+		};
+
+		const allowed = budget?.probes?.[probe] ?? null;
+		let status = 'ok  ';
+
+		if (!updateBudget)
+		{
+			if (allowed === null)
+			{
+				status = 'FAIL';
+				failures.push(`${probe} has no entry in ${path.basename(BUDGET_PATH)}; record one with --update-budget after reviewing its blast radius`);
+			}
+			else if (blast.chunks.length > allowed.chunks || blast.entries.length > allowed.entries)
+			{
+				status = 'FAIL';
+				failures.push(
+					`editing ${probe} now invalidates ${blast.chunks.length} of ${chunkCount} chunks and ${blast.entries.length} of ${entryCount} entries, ` +
+					`over the committed budget of ${allowed.chunks} and ${allowed.entries}. Every consumer re-downloads those files on this release. ` +
+					`Chunks: ${blast.chunks.join(', ') || 'none'}. Entries: ${blast.entries.join(', ') || 'none'}.`
+				);
+			}
+		}
+
+		const budgetText = (allowed === null)
+			? 'no budget'
+			: `budget ${allowed.chunks}/${allowed.entries}`;
+
+		console.log(
+			`  ${status} edit ${probe.padEnd(44)} ` +
+			`chunks ${String(blast.chunks.length).padStart(2)}/${chunkCount}  ` +
+			`entries ${String(blast.entries.length).padStart(2)}/${entryCount}  ` +
+			`total ${String(total).padStart(2)}/${chunkCount + entryCount}  (${budgetText})`
+		);
+
+		if (verbose)
+		{
+			for (const file of [...blast.chunks, ...blast.entries])
+			{
+				console.log(`         ${file}`);
+			}
+		}
+	}
+
+	console.log('');
+
+	if (updateBudget)
+	{
+		const record = {
+			generatedAt: new Date().toISOString(),
+			chunkCount,
+			entryCount,
+			probes: measured
+		};
+
+		writeFileSync(BUDGET_PATH, `${JSON.stringify(record, null, '\t')}\n`);
+		console.log(`Wrote ${toKey(path.relative(process.cwd(), BUDGET_PATH))}`);
+		console.log('');
+	}
+	else if (budget.chunkCount !== chunkCount || budget.entryCount !== entryCount)
+	{
+		/**
+		 * Not a failure on its own — re-partitioning the graph is the point of
+		 * the work this guards — but the per-probe counts are read against a
+		 * different denominator once it happens, so it has to be visible.
+		 */
+		console.log(`  NOTE the output count moved since the budget was recorded: ${budget.chunkCount} chunks + ${budget.entryCount} entries -> ${chunkCount} + ${entryCount}.`);
+		console.log('       Re-read the per-probe numbers against the new denominator before trusting them.');
+		console.log('');
+	}
+
 	if (failures.length > 0)
 	{
-		console.error(`Core chunk boundary broken: ${failures.length} problem(s).`);
+		console.error(`Chunk cache stability broken: ${failures.length} problem(s).`);
+		console.error('');
 		for (const failure of failures)
 		{
 			console.error(`  - ${failure}`);
@@ -252,7 +468,8 @@ const main = async () =>
 		return;
 	}
 
-	console.log('The core chunk holds only core modules and survives every feature edit.');
+	console.log('The core chunk holds only core modules, survives every feature edit, and no module');
+	console.log('invalidates more output than the committed budget allows.');
 	console.log('');
 };
 
