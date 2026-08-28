@@ -14,20 +14,28 @@ export const OUT_DIR = 'dist';
 /**
  * Shared esbuild options for every output.
  *
- * `target` is the agreed 4.0 floor. es2020 covers Safari 14 / Chrome 80 /
- * Firefox 74, which is the real-world mobile Safari and Android baseline,
- * and lets esbuild keep optional chaining, nullish coalescing and class
- * fields untranspiled instead of expanding them into helper code.
+ * `target` names the 4.0 floor browsers rather than an es-year. esbuild reads
+ * only this array, so naming browsers keeps the stated floor and the emitted
+ * syntax from drifting apart; a `browserslist` key would be ignored.
+ *
+ * The floor is iOS Safari 14.1 because that is where public static class
+ * fields shipped. Asking for es2020, or for Safari 14.0, makes esbuild lower
+ * every class field into a `__publicField` helper, which becomes its own
+ * chunk that all seven subpaths then import for one extra request each.
+ *
+ * `sourcemap` is 'external' because the `files` whitelist excludes
+ * dist/**\/*.map. Emitting linked maps would append a sourceMappingURL to
+ * every published file pointing at a map that is not in the tarball.
  *
  * @type {import('esbuild').BuildOptions}
  */
 export const shared = {
 	bundle: true,
-	sourcemap: true,
+	sourcemap: 'external',
 	minify: true,
 	treeShaking: true,
 	format: 'esm',
-	target: ['es2020'],
+	target: ['safari14.1', 'chrome84', 'firefox79'],
 	legalComments: 'none',
 	logLevel: 'info',
 	metafile: true,
