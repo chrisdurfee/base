@@ -1,0 +1,55 @@
+{
+	"generatedAt": "2026-08-28T01:41:51.846Z",
+	"chunkCount": 11,
+	"entryCount": 7,
+	"probes": {
+		"src/shared/strings.js": {
+			"chunks": 8,
+			"entries": 6
+		},
+		"src/shared/dom.js": {
+			"chunks": 7,
+			"entries": 5
+		},
+		"src/main/events/events.js": {
+			"chunks": 8,
+			"entries": 6
+		},
+		"src/main/data-tracker/data-tracker.js": {
+			"chunks": 8,
+			"entries": 6
+		},
+		"src/modules/data-binder/data-binder.js": {
+			"chunks": 7,
+			"entries": 5
+		},
+		"src/modules/data/types/basic-data.js": {
+			"chunks": 5,
+			"entries": 4
+		},
+		"src/modules/html/html.js": {
+			"chunks": 3,
+			"entries": 4
+		},
+		"src/modules/state/state-tracker.js": {
+			"chunks": 2,
+			"entries": 3
+		},
+		"src/modules/component/component.js": {
+			"chunks": 1,
+			"entries": 2
+		},
+		"src/modules/router/router.js": {
+			"chunks": 0,
+			"entries": 1
+		},
+		"src/modules/date/date-time.js": {
+			"chunks": 0,
+			"entries": 1
+		},
+		"src/modules/ajax/xhr-request.js": {
+			"chunks": 0,
+			"entries": 1
+		}
+	}
+}

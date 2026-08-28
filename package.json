@@ -20,6 +20,7 @@
 		"size": "node ./scripts/size-report.js",
 		"size:check": "node ./scripts/size-report.js --check",
 		"cache:check": "node ./scripts/chunk-stability.js",
+		"sideeffects:check": "node ./scripts/side-effects-check.js",
 		"bench": "node --expose-gc ./scripts/bench.js"
 	},
 	"keywords": [
