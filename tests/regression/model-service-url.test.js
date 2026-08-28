@@ -165,6 +165,18 @@ describe('ModelService [[param]] interpolation', () =>
 	});
 
 	/**
+	 * `$&`, `$'` and `` $` `` are replacement patterns to String.replace, so a
+	 * substituted value carrying one must not be expanded a second time. This
+	 * holds only while the replacement is a function rather than a string.
+	 */
+	it('does not re-expand a substituted value as a replacement pattern', () =>
+	{
+		expect(createService('/api', { q: '$&' }).replaceUrl('/api/[[q]]')).toBe('/api/$&');
+		expect(createService('/api', { q: "a$'b" }).replaceUrl('/api/[[q]]')).toBe("/api/a$'b");
+		expect(createService('/api', { q: '$1' }).replaceUrl('/api/[[q]]')).toBe('/api/$1');
+	});
+
+	/**
 	 * The trailing slash strip lives in `replaceUrl` beside the substitution,
 	 * so it is part of the same contract. It is what turns
 	 * '/api/users/[[id]]' with no id into '/api/users'.
@@ -211,12 +223,12 @@ describe('ModelService getUrl composition', () =>
 });
 
 /**
- * `isWatching` decides whether `replaceParams` runs at all. The no-token case
- * is the one path where the current code does no work, and a replacement that
- * always runs the substitution would still return the right string — so the
- * predicate is pinned on its own rather than only through its result.
+ * `ModelService` no longer calls these — it carries its own `includes('[[')`
+ * guard and `[[...]]` pattern. `WatcherHelper` is still the layout system's
+ * watcher predicate, and these pin the semantics the inlined guard was copied
+ * from, so the two cannot drift apart unnoticed.
  */
-describe('WatcherHelper.isWatching as used by ModelService', () =>
+describe('WatcherHelper.isWatching, the predicate the guard was copied from', () =>
 {
 	it('is true only for a string containing an opening token', () =>
 	{
@@ -231,5 +243,20 @@ describe('WatcherHelper.isWatching as used by ModelService', () =>
 	{
 		expect(WatcherHelper.isWatching(undefined)).toBe(false);
 		expect(WatcherHelper.isWatching(null)).toBe(false);
+	});
+
+	/**
+	 * The parity that matters is observable: for every input the predicate
+	 * rejects, `replaceUrl` must return the url with nothing substituted.
+	 */
+	it('agrees with the inlined guard on what is not a token', () =>
+	{
+		const service = createService('/api', { id: 5 });
+
+		for (const url of ['/api/users', '/api/[id]', '/api/{{id}}', '/api/[[id'])
+		{
+			expect(WatcherHelper.isWatching(url)).toBe(url.includes('[['));
+			expect(service.replaceUrl(url)).toBe(url);
+		}
 	});
 });

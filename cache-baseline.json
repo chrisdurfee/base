@@ -1,35 +1,35 @@
 {
-	"generatedAt": "2026-08-28T01:41:51.846Z",
-	"chunkCount": 11,
+	"generatedAt": "2026-08-28T02:10:49.378Z",
+	"chunkCount": 9,
 	"entryCount": 7,
 	"probes": {
 		"src/shared/strings.js": {
-			"chunks": 8,
+			"chunks": 7,
 			"entries": 6
 		},
 		"src/shared/dom.js": {
-			"chunks": 7,
+			"chunks": 6,
 			"entries": 5
 		},
 		"src/main/events/events.js": {
-			"chunks": 8,
+			"chunks": 7,
 			"entries": 6
 		},
 		"src/main/data-tracker/data-tracker.js": {
-			"chunks": 8,
+			"chunks": 7,
 			"entries": 6
 		},
 		"src/modules/data-binder/data-binder.js": {
-			"chunks": 7,
+			"chunks": 6,
 			"entries": 5
 		},
 		"src/modules/data/types/basic-data.js": {
-			"chunks": 5,
+			"chunks": 4,
 			"entries": 4
 		},
 		"src/modules/html/html.js": {
-			"chunks": 3,
-			"entries": 4
+			"chunks": 2,
+			"entries": 3
 		},
 		"src/modules/state/state-tracker.js": {
 			"chunks": 2,
