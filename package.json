@@ -1,6 +1,6 @@
 {
 	"name": "@base-framework/base",
-	"version": "4.0.0",
+	"version": "4.0.0-next.0",
 	"description": "This is a javascript framework.",
 	"main": "./dist/base.js",
 	"module": "./dist/base.js",
@@ -13,7 +13,8 @@
 	],
 	"scripts": {
 		"build": "node ./esbuild.js && tsc",
-		"prepublishOnly": "npm run build",
+		"release:guard": "node ./scripts/publish-guard.js",
+		"prepublishOnly": "node ./scripts/publish-guard.js && npm run build",
 		"test": "vitest",
 		"test:run": "vitest run",
 		"size": "node ./scripts/size-report.js",
