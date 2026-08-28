@@ -76,3 +76,88 @@ describe('Model service resolution', () =>
 		expect(() => Model.extend({ url: '/things', service: Custom })).not.toThrow();
 	});
 });
+
+/**
+ * `replaceUrl` interpolates `[[prop]]` tokens out of the model. It used to
+ * borrow `WatcherHelper.isWatching` and `WatcherHelper.replaceParams` to do
+ * it, which dragged the layout watcher, the html helper and the DOM data
+ * binder into every bundle reaching the data entry: 5,445 raw bytes of
+ * element binding to templatise a service URL.
+ *
+ * Two calls justified that whole subtree, so they were inlined. These pin the
+ * semantics the borrowed helpers had, since a divergence here would silently
+ * send requests to the wrong URL.
+ */
+describe('Model service url interpolation', () =>
+{
+	/**
+	 * @param {object} values
+	 * @returns {object}
+	 */
+	const serviceFor = (values) => new ModelService(new Model(values));
+
+	it('substitutes a single token', () =>
+	{
+		expect(serviceFor({ id: 5 }).replaceUrl('/user/[[id]]')).toBe('/user/5');
+	});
+
+	it('substitutes every token in the string', () =>
+	{
+		const service = serviceFor({ group: 'admin', id: 7 });
+
+		expect(service.replaceUrl('/[[group]]/user/[[id]]/edit')).toBe('/admin/user/7/edit');
+	});
+
+	it('leaves a string with no tokens alone', () =>
+	{
+		expect(serviceFor({ id: 5 }).replaceUrl('/user/all')).toBe('/user/all');
+	});
+
+	it('substitutes an empty string for a missing property', () =>
+	{
+		expect(serviceFor({ id: 5 }).replaceUrl('/user/[[missing]]/edit')).toBe('/user//edit');
+	});
+
+	it('substitutes an empty string for a null value', () =>
+	{
+		expect(serviceFor({ id: null }).replaceUrl('/user/[[id]]/edit')).toBe('/user//edit');
+	});
+
+	it('reads a deep path', () =>
+	{
+		expect(serviceFor({ user: { id: 9 } }).replaceUrl('/user/[[user.id]]')).toBe('/user/9');
+	});
+
+	it('reads an indexed path', () =>
+	{
+		expect(serviceFor({ ids: [3, 4] }).replaceUrl('/user/[[ids[1]]]')).toBe('/user/4');
+	});
+
+	it('drops a single trailing slash', () =>
+	{
+		expect(serviceFor({ id: 5 }).replaceUrl('/user/[[id]]/')).toBe('/user/5');
+	});
+
+	it('drops a trailing slash even with no token to replace', () =>
+	{
+		expect(serviceFor({ id: 5 }).replaceUrl('/user/all/')).toBe('/user/all');
+	});
+
+	/**
+	 * A `$&` in a replacement string is a backreference to String.replace, so
+	 * a value carrying one must not be re-expanded into the url.
+	 */
+	it('does not treat a substituted value as a replacement pattern', () =>
+	{
+		expect(serviceFor({ name: '$&x' }).replaceUrl('/user/[[name]]')).toBe('/user/$&x');
+	});
+
+	it('interpolates through getUrl using the model url as the base', () =>
+	{
+		const service = serviceFor({ id: 5 });
+		service.url = '/user/[[id]]';
+
+		expect(service.getUrl('')).toBe('/user/5');
+		expect(service.getUrl('/roles')).toBe('/user/5/roles');
+	});
+});

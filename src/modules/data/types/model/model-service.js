@@ -1,7 +1,18 @@
 import { Encode } from '../../../../shared/encode/encode.js';
 import { Strings } from '../../../../shared/strings.js';
-import { WatcherHelper } from '../../../layout/watcher-helper.js';
 import { sendModelRequest } from './model-request.js';
+
+/**
+ * URL_PARAM_PATTERN
+ *
+ * Matches a `[[prop]]` token, optionally indexed as `[[prop[0]]]`. This
+ * mirrors the layout watcher pattern, but is kept local: borrowing the
+ * watcher pulled the html helper and the DOM data binder into every bundle
+ * that reached the data entry, to templatise a service url.
+ *
+ * @type {RegExp}
+ */
+const URL_PARAM_PATTERN = /\[\[(.*?(?:\[\d+\])?)\]\]/g;
 
 /**
  * ModelService
@@ -633,11 +644,14 @@ export class ModelService
 	 */
 	replaceUrl(url)
 	{
-		// @ts-ignore
-		if (WatcherHelper.isWatching(url))
+		if (typeof url === 'string' && url.includes('[['))
 		{
-			// @ts-ignore
-			url = WatcherHelper.replaceParams(url, this.model);
+			const model = this.model;
+			url = url.replace(URL_PARAM_PATTERN, (match, key) =>
+			{
+				const result = model.get(key);
+				return (result != null) ? result : '';
+			});
 		}
 
 		if (url.endsWith('/'))
