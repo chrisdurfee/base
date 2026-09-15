@@ -2,51 +2,8 @@ import { DataTracker } from "../../../../../main/data-tracker/data-tracker.js";
 import { Events } from "../../../../../main/events/events.js";
 
 /**
- * Active animation per element so a second in/out can cancel the first.
- *
- * @type {WeakMap<object, { complete: function, className: string, timeoutId: (number|null), onEnd: function }>}
- */
-const activeAnimations = new WeakMap();
-
-/**
- * Whether the user asked the OS to reduce motion.
- *
- * @returns {boolean}
- */
-const prefersReducedMotion = () =>
-	typeof globalThis.matchMedia === 'function'
-	&& globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/**
- * Cancel a running animation on an element without firing its callback.
- *
- * @param {object} ele
- * @returns {void}
- */
-const cancelActive = (ele) =>
-{
-	const active = activeAnimations.get(ele);
-	if (!active)
-	{
-		return;
-	}
-
-	activeAnimations.delete(ele);
-	Events.off('animationend', ele, active.onEnd);
-	if (active.timeoutId)
-	{
-		clearTimeout(active.timeoutId);
-	}
-	if (ele && active.className)
-	{
-		ele.classList.remove(active.className);
-	}
-};
-
-/**
- * Add an animation class then remove it when the animation has ended.
- * A second call on the same element interrupts the first. Reduced-motion
- * skips the class and still fires the completion callback.
+ * This will add the aniamtion class then remove it
+ * when the aniamtion has ended.
  *
  * @param {object} ele
  * @param {string} className
@@ -60,8 +17,6 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 		return;
 	}
 
-	cancelActive(ele);
-
 	let timeoutId = null;
 	let hasCompleted = false;
 
@@ -73,7 +28,6 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 		}
 
 		hasCompleted = true;
-		activeAnimations.delete(ele);
 
 		if (timeoutId)
 		{
@@ -83,7 +37,8 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 
 		Events.off('animationend', ele, animateEnd);
 
-		if (ele && className)
+		// Check if element still exists before cleanup
+		if (ele)
 		{
 			ele.classList.remove(className);
 		}
@@ -96,23 +51,19 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 
 	const animateEnd = (event) =>
 	{
+		// Only handle events for this specific element and animation
 		if (event.target === ele)
 		{
 			complete();
 		}
 	};
 
-	if (!className || prefersReducedMotion())
-	{
-		complete();
-		return;
-	}
-
 	Events.on('animationend', ele, animateEnd);
 
+	// Force browser reflow before adding class to ensure animation triggers
 	requestAnimationFrame(() =>
 	{
-		if (!ele || hasCompleted)
+		if (!ele)
 		{
 			complete();
 			return;
@@ -120,24 +71,22 @@ const addAnimationClass = (ele, className, doneCallBack = null) =>
 
 		ele.classList.add(className);
 
+		// Fallback timeout in case animationend doesn't fire
+		// Get animation duration from computed styles or use a safe maximum
 		try
 		{
 			const computedStyle = window.getComputedStyle(ele);
 			const duration = parseFloat(computedStyle.animationDuration) * 1000 || 1000;
 			const delay = parseFloat(computedStyle.animationDelay) * 1000 || 0;
+
+			// Add a buffer of 100ms to account for any delays
 			timeoutId = setTimeout(complete, duration + delay + 100);
 		}
 		catch (e)
 		{
+			// Fallback if getComputedStyle fails
 			timeoutId = setTimeout(complete, 1000);
 		}
-
-		activeAnimations.set(ele, {
-			complete,
-			className,
-			timeoutId,
-			onEnd: animateEnd
-		});
 	});
 };
 
@@ -166,6 +115,7 @@ export const animateOut = (ele, animationClass, parent) =>
 {
 	const remove = () =>
 	{
+		// Only remove if element still exists
 		if (ele && ele.remove)
 		{
 			ele.remove();
